@@ -48,6 +48,20 @@ It records, per logical capability:
 
 Forbidden wording: `probably`, `should work`, `likely supported`.
 
+### Implementation Route Status (per-route, separate from logical capability)
+
+| Route Status | Definition |
+|--------------|------------|
+| **VERIFIED** | This specific implementation path succeeded live with read-back and/or render verification |
+| **AVAILABLE_UNVERIFIED** | Runtime exposes the path; not validated in this project |
+| **FAILED** | Attempted in disposable validation; did not achieve acceptable outcome |
+| **UNSAFE** | Known instability boundary; **do not retry** in automated production |
+| **UNAVAILABLE** | Runtime does not expose this path |
+
+A logical capability (e.g. `subtitle.create`) may be **VERIFIED** via one route while another route on the same capability is **UNSAFE** or **FAILED**.
+
+**Stage 04A-R1 evidence date:** 2026-09-21 · Resolve Studio **21.1.0.14** · MCP **4.8.13**
+
 ---
 
 ## 3. Runtime Identity
@@ -58,7 +72,7 @@ Forbidden wording: `probably`, `should work`, `likely supported`.
 | Current validated backend | `samuelgursky/davinci-resolve-mcp` |
 | Reference Resolve build | DaVinci Resolve Studio **21.1** (per project background) |
 | Discovery method (this stage) | Read-only MCP tool schema + MCP knowledge corpus + project validation records |
-| Live Resolve probe (this stage) | **Not performed** — Resolve was not running during Stage 04 discovery |
+| Live Resolve probe | Stage 04A (terminated by crash) + Stage 04A-R1 (isolated recovery) — 2026-09-21 |
 
 ### Important
 
@@ -211,8 +225,8 @@ Filename alone is **not** semantic evidence.
 
 | Logical ID | Description | Status | N02 V0.1 | Verify Method |
 |------------|-------------|--------|----------|---------------|
-| `clip.scale` | Adjust ZoomX/ZoomY (fill frame) | **AVAILABLE_UNVERIFIED** | **MUST** | `get_transform` read-back + frame capture |
-| `clip.position` | Adjust Pan/Tilt for subject | **AVAILABLE_UNVERIFIED** | **MUST** | `get_transform` read-back + frame capture |
+| `clip.scale` | Adjust ZoomX/ZoomY (fill frame) | **VERIFIED** | **MUST** | `get_transform` read-back (ZoomX/Y=1.35, Stage 04A) |
+| `clip.position` | Adjust Pan/Tilt for subject | **VERIFIED** | **MUST** | `get_transform` read-back (Pan=0.15, Tilt=-0.1, Stage 04A) |
 | `clip.rotation` | Rotation if needed | **AVAILABLE_UNVERIFIED** | Optional | `get_transform` read-back |
 | `clip.crop` | Crop left/right/top/bottom | **AVAILABLE_UNVERIFIED** | Optional | `get_crop` read-back + visual QA |
 
@@ -236,7 +250,7 @@ Filename alone is **not** semantic evidence.
 
 | Logical ID | Description | Status | N02 V0.1 | Verify Method |
 |------------|-------------|--------|----------|---------------|
-| `clip.speed_change` | Apply speed / retime to clip | **AVAILABLE_UNVERIFIED** | **MUST** | `get_speed` read-back; duration change; gap check |
+| `clip.speed_change` | Apply speed / retime to clip | **VERIFIED** | **MUST** | `get_speed` 150% read-back; duration 144→96; gap clean after reposition (Stage 04A) |
 | `clip.retime_mode` | Nearest / optical flow / frame blend | **UNKNOWN** | Optional | `get_retime` read-back |
 
 **L1 responsibility:** implement a speed factor **decided by L2** — not preset 1.4× / 2×.
@@ -262,8 +276,8 @@ Filename alone is **not** semantic evidence.
 | Logical ID | Description | Status | N02 V0.1 | Verify Method |
 |------------|-------------|--------|----------|---------------|
 | `transition.available` | Discover transition types | **UNKNOWN** | Required | MCP/docs enumeration not confirmed this stage |
-| `transition.apply` | Apply transition between adjacent clips | **AVAILABLE_UNVERIFIED** | **MUST** | Transition span read-back; gap/black-frame check |
-| `transition.duration` | Set transition length in frames | **AVAILABLE_UNVERIFIED** | **MUST** | Duration vs timeline fps |
+| `transition.apply` | Apply transition between adjacent clips | **FAILED** | **MUST** | Live `add_transition` failed on disposable timeline (Stage 04A-R1) |
+| `transition.duration` | Set transition length in frames | **FAILED** | **MUST** | Coupled to failed live transition route |
 | `transition.remove_or_replace` | Repair incorrect transition | **UNKNOWN** | Repair | Post-change integrity |
 
 **Preconditions:** Adjacent clips; sufficient handles; known timeline fps.
@@ -274,7 +288,14 @@ Filename alone is **not** semantic evidence.
 
 **Implementation Detail — Not Portable Contract:**
 
-- `timeline_item` `action=add_transition` (Resolve 21.1+ per schema)
+- `timeline_item` `action=add_transition` (Resolve 21.1+ per schema; requires `options` dict wrapper)
+
+**Implementation Routes — `transition.apply`:**
+
+| Route | Status | Evidence / Rule |
+|-------|--------|-----------------|
+| `live_api_add_transition` | **FAILED** | `VEW-R1-Transition-TL01` (2 adjacent clips). Single isolated attempt: `options must be a non-empty dictionary` without retry. Stage 04A prior attempts also `success: false`. |
+| `native_drt_transitions` | **AVAILABLE_UNVERIFIED** | Advanced MCP `drt.assemble` exposes `transitions[]` (offline author → import). Not live-validated in R1. |
 
 ---
 
@@ -302,20 +323,29 @@ Filename alone is **not** semantic evidence.
 | Logical ID | Description | Status | N02 V0.1 | Verify Method |
 |------------|-------------|--------|----------|---------------|
 | `subtitle.generation` | Auto-generate captions from audio | **AVAILABLE_UNVERIFIED** | Optional | Subtitle track populated |
-| `subtitle.import` | Import SRT / external subtitle media | **VERIFIED** | **MUST** | Subtitle items on timeline |
-| `subtitle.track` | Create/manage subtitle track | **VERIFIED** | **MUST** | `add_track` subtitle; items present |
+| `subtitle.import` | Import SRT / external subtitle media | **VERIFIED** | **MUST** | Pool import only; live timeline placement via SRT append is **UNSAFE** |
+| `subtitle.create` | Place subtitles on timeline | **VERIFIED** | **MUST** | Via `native_drt_subtitles` route (R1); not via live SRT append |
+| `subtitle.track` | Create/manage subtitle track | **VERIFIED** | **MUST** | Subtitle track populated after DRT import |
 | `subtitle.style` | Control font/size/emphasis via API | **UNKNOWN** | Optional | Style read-back not confirmed |
 | `subtitle.timing` | Verify cue timing vs narration | **AVAILABLE_UNVERIFIED** | **MUST** | `get_transcript` cues vs plan |
 | `subtitle.edit` | Adjust cue text/timing programmatically | **UNKNOWN** | Repair | No confirmed write surface this stage |
 
 **Do not conflate:** "subtitles can be imported" ≠ "all subtitle styling is API-controllable".
 
-**Prior validated path (project record):** Media Pool SRT import → `append_to_timeline` → subtitle track — **VERIFIED** at workflow level; per-cue style control **UNKNOWN**.
+**Implementation Routes — `subtitle.create`:**
+
+| Route | Status | Evidence / Rule |
+|-------|--------|-----------------|
+| `live_api_srt_append` | **UNSAFE** | Resolve Studio 21.1.0.14 runtime crash on `media_pool.append_to_timeline` with `media_type: 3` (SRT). See `validation/capability-spike/CRASH-20260921.md`. **DO NOT RETRY IN AUTOMATED PRODUCTION.** |
+| `native_auto_caption` | **AVAILABLE_UNVERIFIED** | `timeline_ai` `create_subtitles` / transcription path. Not suitable as default for Frozen Script precise captions. |
+| `native_drt_subtitles` | **VERIFIED** | Advanced MCP `drt.assemble` with `spec.subtitlesSrt` → `timeline.import_timeline_checked` → `get_transcript` read-back (3 cues, 2026-09-21 R1). |
 
 **Implementation Detail — Not Portable Contract:**
 
 - `timeline` `add_track` (track_type=subtitle)
-- `media_pool` `import_media`, `append_to_timeline`
+- `media_pool` `import_media` (SRT to pool only — **not** append to timeline)
+- Advanced MCP `drt` `assemble` (`spec.subtitles` / `spec.subtitlesSrt`)
+- `timeline` `import_timeline_checked`
 - `timeline_ai` `create_subtitles`
 - `timeline` `get_transcript`
 
@@ -348,8 +378,8 @@ V0.1 N02 does not require heavy graphics automation.
 | `audio.import` | Import music/audio to pool | **VERIFIED** | **MUST** | Clip in pool |
 | `audio.place_on_track` | Place audio on timeline track | **VERIFIED** | **MUST** | Item on audio track; range correct |
 | `audio.trim` | Trim music segment | **AVAILABLE_UNVERIFIED** | Required | Source/timeline range read-back |
-| `audio.volume` | Set clip/track volume | **AVAILABLE_UNVERIFIED** | **MUST** | `get_audio` read-back + listen |
-| `audio.fade` | Fade in/out | **AVAILABLE_UNVERIFIED** | **MUST** | `get_fades` read-back |
+| `audio.volume` | Set clip/track volume | **FAILED** | **MUST** | `set_audio` / `safe_set_audio_properties` write+readback false on WAV item (R1) |
+| `audio.fade` | Fade in/out | **VERIFIED** | **MUST** | `set_fades` with `options` dict; read-back FadeIn=12, FadeOut=24 (R1) |
 | `audio.track_management` | Add/manage audio tracks | **VERIFIED** | Required | Track count/names |
 | `audio.mix_readback` | Read levels / mapping | **AVAILABLE_UNVERIFIED** | Required | `probe_audio_item`, listen test |
 | `audio.ducking` | Auto-duck music under voice | **UNKNOWN** | Desired | No reliable auto-duck API confirmed |
@@ -458,9 +488,10 @@ Full matrix spans **39 logical capabilities** in the master table below.
 
 | Status | Count |
 |--------|------:|
-| VERIFIED | 23 |
-| AVAILABLE_UNVERIFIED | 11 |
-| UNKNOWN | 4 |
+| VERIFIED | 28 |
+| AVAILABLE_UNVERIFIED | 5 |
+| FAILED | 3 |
+| UNKNOWN | 3 |
 | UNAVAILABLE | 0 |
 | DEFERRED | 1 |
 
@@ -485,20 +516,21 @@ Full matrix spans **39 logical capabilities** in the master table below.
 | clip.assemble | Append/insert clips | VERIFIED | Yes | item read-back |
 | clip.trim | Trim timeline extent | AVAILABLE_UNVERIFIED | Yes | get_start/end |
 | clip.source_range | Source in/out | VERIFIED | Yes | get_source_* |
-| clip.scale | Zoom for fill frame | AVAILABLE_UNVERIFIED | **MUST** | get_transform + visual |
-| clip.position | Pan/Tilt reposition | AVAILABLE_UNVERIFIED | **MUST** | get_transform + visual |
-| clip.speed | Speed / retime | AVAILABLE_UNVERIFIED | **MUST** | get_speed + visual |
-| transition.apply | Apply transition | AVAILABLE_UNVERIFIED | **MUST** | gap/black-frame QA |
+| clip.scale | Zoom for fill frame | VERIFIED | **MUST** | get_transform ZoomX/Y (Stage 04A) |
+| clip.position | Pan/Tilt reposition | VERIFIED | **MUST** | get_transform Pan/Tilt (Stage 04A) |
+| clip.speed | Speed / retime | VERIFIED | **MUST** | get_speed 150%; duration 144→96 (Stage 04A) |
+| transition.apply | Apply transition | FAILED | **MUST** | live add_transition failed (R1) |
 | transcription.generate | Generate transcription | VERIFIED | Yes | job/segments |
 | transcription.read | Read transcription | VERIFIED | Yes | get_transcription |
 | subtitle.track | Subtitle track | VERIFIED | **MUST** | track + items |
-| subtitle.import | Import SRT/media | VERIFIED | **MUST** | cues on timeline |
+| subtitle.create | Place subtitles on timeline | VERIFIED | **MUST** | native_drt_subtitles route (R1) |
+| subtitle.import | Import SRT to pool | VERIFIED | **MUST** | pool import; live append UNSAFE |
 | subtitle.style | API style control | UNKNOWN | No | — |
 | subtitle.timing | Cue timing verify | AVAILABLE_UNVERIFIED | **MUST** | get_transcript |
 | audio.import | Import music | VERIFIED | **MUST** | pool clip |
 | audio.place | Place on track | VERIFIED | **MUST** | audio item |
-| audio.volume | Volume control | AVAILABLE_UNVERIFIED | **MUST** | get_audio + listen |
-| audio.fade | Fade in/out | AVAILABLE_UNVERIFIED | **MUST** | get_fades |
+| audio.volume | Volume control | FAILED | **MUST** | item-level Volume write/readback false (R1) |
+| audio.fade | Fade in/out | VERIFIED | **MUST** | get_fades 12/24 frames (R1) |
 | audio.ducking | Auto ducking | UNKNOWN | Desired | — |
 | color.basic | Light correction | DEFERRED | No | — |
 | effects.resolvefx | ResolveFX automation | UNKNOWN | No | — |
@@ -514,11 +546,11 @@ Full matrix spans **39 logical capabilities** in the master table below.
 
 | N02 Requirement | Required Capability | Status | Evidence / Note |
 |-----------------|---------------------|--------|-----------------|
-| Motion normalization | `clip.speed` | AVAILABLE_UNVERIFIED | MCP exposes `timeline_item` `set_speed`; N02 still exposed slow-motion defect — not acceptance-verified |
-| 9:16 framing | `clip.scale` + `clip.position` | AVAILABLE_UNVERIFIED | Transform API exposed; N02 framing gap remains — needs visual verify path |
-| Transitions | `transition.apply` | AVAILABLE_UNVERIFIED | `add_transition` in schema; N02 used hard cuts only |
-| Subtitles | `subtitle.track` + `subtitle.import` + `subtitle.timing` | VERIFIED / AVAILABLE_UNVERIFIED | Import path verified; timing QA not fully automated |
-| Background music | `audio.import` + `audio.place` + `audio.volume` + `audio.fade` | VERIFIED / AVAILABLE_UNVERIFIED | Import/place verified; mix levels/fades need acceptance validation |
+| Motion normalization | `clip.speed` | **VERIFIED** | Stage 04A: 150% read-back; duration 144→96; gap clean |
+| 9:16 framing | `clip.scale` + `clip.position` | **VERIFIED** (API) / **AVAILABLE_UNVERIFIED** (visual) | Transform read-back verified; subject-safe framing still needs render/visual QA |
+| Transitions | `transition.apply` | **FAILED** | Live `add_transition` failed; DRT offline route unverified |
+| Subtitles | `subtitle.create` via `native_drt_subtitles` | **VERIFIED** | R1: DRT author → import → 3-cue transcript read-back. `live_api_srt_append` **UNSAFE** |
+| Background music | `audio.import` + `audio.place` + `audio.volume` + `audio.fade` | VERIFIED / **FAILED** / VERIFIED | Place+fade verified (R1); item-level volume **FAILED** |
 | Voice preservation | `audio.place` + timeline control | VERIFIED | Voice Master used in N02 rough cut |
 | Render | `render.configure` + `render.start` | VERIFIED | H.264 1080×1920 24fps AAC profile |
 | Post-render verification | `render.verify` + FFprobe | VERIFIED | `render.verify_output` + external probe |
@@ -526,17 +558,20 @@ Full matrix spans **39 logical capabilities** in the master table below.
 ### N02_CAPABILITY_GATE
 
 ```
-PASS_WITH_UNKNOWNS
+BLOCKED
 ```
 
-**Rationale:**
+**Rationale (post Stage 04A-R1, 2026-09-21):**
 
-- No N02 MUST capability is **UNAVAILABLE** on current Samuel MCP schema
-- Several MUST capabilities remain **AVAILABLE_UNVERIFIED** (motion, framing, transitions, audio mix)
-- `audio.ducking` is **UNKNOWN**
-- N02 Acceptance requires targeted capability validation runs before claiming full automation
+- Safe subtitle route **verified** via `native_drt_subtitles` (SRT live-append remains **UNSAFE**)
+- N02 MUST `transition.apply` live route **FAILED**
+- N02 MUST `audio.volume` item-level control **FAILED** on tested WAV clip
+- R1 render verified H.264 24fps but output was **1920×1080** — target **1080×1920** vertical profile not validated
+- `audio.ducking` remains **UNKNOWN** (probe only; not a gate blocker)
 
-**N02 Acceptance Risk:** Finishing passes (motion, framing, transition, music mix, subtitle timing) need explicit validation iterations — not yet proven end-to-end without Owner hand prompts.
+**Remaining blockers:** transition live route, audio volume API path, vertical deliverable resolution.
+
+**Crash record:** `validation/capability-spike/CRASH-20260921.md`
 
 ---
 
@@ -558,7 +593,8 @@ PASS_WITH_UNKNOWNS
 | 1 | Enumerate `user-davinci-resolve` MCP tools | 40+ tools cataloged from schema |
 | 2 | Read `knowledge` topics index | 22 topics (kernels, guides, reference) |
 | 3 | Read `timeline-edit-kernel` | Transition clone unsupported; transform copy partial |
-| 4 | Live Resolve connection | **Not connected** — no live probe |
-| 5 | Destructive write tests | **None** — per Stage 04 policy |
+| 4 | Stage 04A live spike | CAP-01~03 pass; CAP-04 fail; CAP-05 SRT append → **crash** |
+| 5 | Stage 04A-R1 recovery | Isolated disposable projects; DRT subtitle **VERIFIED**; transition/volume **FAILED** |
+| 6 | Crash evidence | `validation/capability-spike/CRASH-20260921.md` |
 
-Next recommended action before N02 Acceptance: run targeted **AVAILABLE_UNVERIFIED** validation scripts against a disposable Resolve project (motion, framing, transition, music mix) and upgrade statuses with evidence.
+Next recommended action before N02 Acceptance: validate `native_drt_transitions` offline route; resolve `add_transition` `options` contract; find working `audio.volume` path (track-level or Fairlight preset); confirm 1080×1920 render profile.

@@ -61,18 +61,20 @@ Validation 目录**只记录**：
 
 | N02 Requirement | Required Capability | Status | Evidence / Note |
 |-----------------|---------------------|--------|-----------------|
-| Motion normalization | `clip.speed` | AVAILABLE_UNVERIFIED | MCP `timeline_item` `set_speed` exposed; N02 slow-motion defect not yet closed |
-| 9:16 framing | `clip.scale` + `clip.position` | AVAILABLE_UNVERIFIED | Transform API exposed; visual verify required |
-| Transitions | `transition.apply` | AVAILABLE_UNVERIFIED | `add_transition` in schema; N02 used hard cuts only |
-| Subtitles | `subtitle.track` + `subtitle.import` + `subtitle.timing` | VERIFIED / AVAILABLE_UNVERIFIED | SRT import path verified; timing QA partial |
-| Background music | `audio.import` + `audio.place` + `audio.volume` + `audio.fade` | VERIFIED / AVAILABLE_UNVERIFIED | Import/place verified; mix/fade need acceptance run |
+| Motion normalization | `clip.speed` | **VERIFIED** | Stage 04A spike: 150% read-back; duration 144→96 |
+| 9:16 framing | `clip.scale` + `clip.position` | **VERIFIED** (API) | Transform read-back verified; visual QA still recommended |
+| Transitions | `transition.apply` | **FAILED** | Stage 04A-R1: live `add_transition` failed on disposable timeline |
+| Subtitles | `subtitle.create` via DRT | **VERIFIED** | R1: `native_drt_subtitles`; SRT live-append **UNSAFE** (crash) |
+| Background music | `audio.import` + `audio.place` + `audio.volume` + `audio.fade` | VERIFIED / **FAILED** / VERIFIED | Place+fade R1 verified; item volume **FAILED** |
 | Voice preservation | `audio.place` + timeline control | VERIFIED | Voice Master in N02 rough cut |
 | Render | `render.configure` + `render.start` | VERIFIED | H.264 1080×1920 24fps AAC |
 | Post-render verification | `render.verify` + FFprobe | VERIFIED | `verify_output` + external probe |
 
-**N02_CAPABILITY_GATE:** `PASS_WITH_UNKNOWNS`
+**N02_CAPABILITY_GATE:** `BLOCKED`
 
-**N02 Acceptance Risk:** Finishing capabilities (motion, framing, transition, music mix, subtitle timing) require targeted validation before full automation acceptance.
+**Blockers (post Stage 04A-R1):** transition live route FAILED · audio volume FAILED · 1080×1920 deliverable not verified on R1 render.
+
+**Resolved:** safe subtitle route via native DRT authoring. See `validation/capability-spike/`.
 
 ## Requirements → L2 Coverage
 
