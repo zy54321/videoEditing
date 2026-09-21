@@ -84,6 +84,24 @@
 - [V0.1 范围](docs/03-v0.1-scope.md)
 - [N02 验证案例](validation/N02/README.md)
 
+## Quick Start（最终使用方式）
+
+1. 解压 **Release Package**
+2. 双击 `init-video-workflow.bat`
+3. 选择一个 **Cursor Workspace**（本次视频 Production 的工作区）
+4. 用 Cursor 打开该 Workspace
+5. 在对话中输入：
+
+```
+【制作视频】
+```
+
+Agent 会主动询问视频类型、input、output，无需编写复杂 Prompt。
+
+**注意：** Release 可以反复用于初始化**不同** Workspace；但**每一个**已初始化的 Workspace 只对应**一条** Production。制作新视频请重新运行 Release，选择新的 Workspace。
+
+开发阶段 Installer 位于 `source/installer/`；Smoke 测试位于 `source/tests/installer-smoke.ps1`。
+
 ## License
 
 待定。
