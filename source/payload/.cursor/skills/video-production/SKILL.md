@@ -62,8 +62,8 @@ This skill uses **explicit invocation** (`disable-model-invocation: true`).
 On start, the skill must parse:
 
 - `brief path`
-- `production_id`
-- `editing_skill`
+- `production.id`
+- `editing.skill`
 
 ### Brief Path Resolution
 
@@ -77,34 +77,48 @@ If the user does not provide a Brief path:
 
 ## L4 → L3 Brief Contract
 
-Full `production-brief` schema is defined in a later L4 stage.
-L3 still requires the following **minimum runtime information**.
+Full schema: `video-workflow/templates/production-brief.yaml`  
+Reference: `video-workflow/templates/production-brief-reference.md`
 
-### Minimum Required Brief Information
+L3 reads Brief fields by **dot path** (YAML nesting). Do not maintain a parallel flat field naming scheme.
 
-1. **production_id**
-2. **editing_skill**
-3. **media / input location**
-4. **output location**
-5. **target format**
-   - Must be sufficient to determine aspect ratio / resolution and fps
-6. **target runtime / project information**
-   - Required when the task depends on an NLE
-7. **frozen assets**
-   - When they exist
-8. **requested production features**
-   - Examples: subtitles, music, transitions, motion normalization, color, graphics
+### Required Brief Fields
+
+| Field | Purpose |
+|-------|---------|
+| `production.id` | Stable production identity |
+| `editing.skill` | L2 Skill to load |
+| `media.input` | Input media root (resolved in Preflight) |
+| `media.output` | Deliverable output directory |
+| `format.width` | Target deliverable width |
+| `format.height` | Target deliverable height |
+| `format.fps` | Target frame rate |
+| `output.filename` | Final deliverable filename |
+
+### Conditional / Preflight Fields
+
+| Field | When |
+|-------|------|
+| `runtime.type` / `runtime.preferred_backend` | Required when task depends on NLE |
+| `runtime.project_name` / `runtime.timeline_name` | When targeting or creating NLE state |
+| `assets.*.frozen` + `assets.*.path` | Frozen assets must have paths |
+| `features.*` | Gates finishing passes; **overrides L2 defaults** when explicit |
+| `format.orientation` | Must agree with width/height or `BLOCK_BRIEF_CONFLICT` |
+| `format.target_duration_seconds` | Optional; `min` > `max` → `BRIEF_INVALID` |
+
+Brief expresses **what** is needed. L3 selects **how** via L1 / Runtime — never from Brief.
 
 ### Missing Information Policy
 
-If minimum information is insufficient: **do not invent values**.
+If required information is missing: **do not invent values**.
 
-Distinguish:
+| Class | Handling |
+|-------|----------|
+| **Owner authority** | `production.id`, `editing.skill`, frozen flags, format numbers, `features.*`, `output.overwrite_existing` — do not change |
+| **Inspectable** | File existence, current project/timeline — may resolve in Preflight |
+| **Derivable** | Orientation vs width/height consistency — validate only; do not infer empty width/height from orientation |
 
-| Type | Handling |
-|------|----------|
-| **A. Auto-determinable** | May be resolved through inspect / runtime |
-| **B. Owner decision required** | Request Owner only when this is missing |
+Safety Rules cannot be overridden by Brief.
 
 ---
 
@@ -115,18 +129,20 @@ This is the primary contract between L3 and L2.
 ### Brief Field
 
 ```yaml
-editing_skill: <skill-id>
+editing:
+  skill: <skill-id>
 ```
 
 Example:
 
 ```yaml
-editing_skill: observational-info-short
+editing:
+  skill: observational-info-short
 ```
 
 ### Resolution Path
 
-L3 resolves `editing_skill` to:
+L3 resolves `editing.skill` to:
 
 ```
 .cursor/skills/video-editing/<skill-id>/SKILL.md
@@ -143,7 +159,7 @@ source/payload/.cursor/skills/video-editing/<skill-id>/SKILL.md
 ### Loading Rules
 
 1. Read the specified L2 `SKILL.md`.
-2. Verify Skill identity matches the requested `editing_skill`.
+2. Verify Skill identity matches the requested `editing.skill`.
 3. Read that Skill's `references/` as needed.
 4. Use the L2 Skill as strategy authority for:
    - pacing
@@ -239,8 +255,8 @@ Preflight must complete before formal production begins.
 ### Production
 
 - Production Brief read
-- `production_id` confirmed
-- `editing_skill` confirmed
+- `production.id` confirmed
+- `editing.skill` confirmed
 
 ### Paths
 
@@ -645,8 +661,8 @@ Closeout is more than "video generated successfully."
 
 #### Identity
 
-- production_id
-- editing_skill
+- production.id
+- editing.skill
 - runtime
 - project
 - timeline
