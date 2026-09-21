@@ -1,0 +1,28 @@
+{
+    "name":  "video-editing-workflow",
+    "version":  "0.1.0",
+    "runtime":  {
+                    "cursor":  true,
+                    "davinci_resolve":  "external",
+                    "davinci_mcp":  "external"
+                },
+    "components":  {
+                       "rules":  [
+                                     "video-workflow-core",
+                                     "davinci-production",
+                                     "production-entry-intake"
+                                 ],
+                       "skills":  [
+                                      "video-production",
+                                      "observational-info-short"
+                                  ],
+                       "templates":  [
+                                         "production-brief"
+                                     ],
+                       "capabilities":  [
+                                            "davinci-resolve"
+                                        ]
+                   },
+    "instance_model":  "single-production",
+    "entry":  "【制作视频】"
+}
