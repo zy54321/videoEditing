@@ -276,8 +276,8 @@ Filename alone is **not** semantic evidence.
 | Logical ID | Description | Status | N02 V0.1 | Verify Method |
 |------------|-------------|--------|----------|---------------|
 | `transition.available` | Discover transition types | **UNKNOWN** | Required | MCP/docs enumeration not confirmed this stage |
-| `transition.apply` | Apply transition between adjacent clips | **FAILED** | **MUST** | Live `add_transition` failed on disposable timeline (Stage 04A-R1) |
-| `transition.duration` | Set transition length in frames | **FAILED** | **MUST** | Coupled to failed live transition route |
+| `transition.apply` | Apply transition between adjacent clips | **VERIFIED** | **MUST** | Via `native_drt_transition` (Stage 04A-R2) |
+| `transition.duration` | Set transition length in frames | **VERIFIED** | **MUST** | DRT `durationFrames: 6` authored + read-back on import |
 | `transition.remove_or_replace` | Repair incorrect transition | **UNKNOWN** | Repair | Post-change integrity |
 
 **Preconditions:** Adjacent clips; sufficient handles; known timeline fps.
@@ -294,8 +294,8 @@ Filename alone is **not** semantic evidence.
 
 | Route | Status | Evidence / Rule |
 |-------|--------|-----------------|
-| `live_api_add_transition` | **FAILED** | `VEW-R1-Transition-TL01` (2 adjacent clips). Single isolated attempt: `options must be a non-empty dictionary` without retry. Stage 04A prior attempts also `success: false`. |
-| `native_drt_transitions` | **AVAILABLE_UNVERIFIED** | Advanced MCP `drt.assemble` exposes `transitions[]` (offline author → import). Not live-validated in R1. |
+| `live_api_add_transition` | **FAILED** | R1: `options must be a non-empty dictionary`. Not retried in R2 (not N02 gate blocker). |
+| `native_drt_transition` | **VERIFIED** | R2: `drt.assemble` → `media_pool.import_timeline` → Cross Dissolve read-back (6 frames, no gaps) → `transition-test.mp4` 1080×1920 render. |
 
 ---
 
@@ -378,7 +378,8 @@ V0.1 N02 does not require heavy graphics automation.
 | `audio.import` | Import music/audio to pool | **VERIFIED** | **MUST** | Clip in pool |
 | `audio.place_on_track` | Place audio on timeline track | **VERIFIED** | **MUST** | Item on audio track; range correct |
 | `audio.trim` | Trim music segment | **AVAILABLE_UNVERIFIED** | Required | Source/timeline range read-back |
-| `audio.volume` | Set clip/track volume | **FAILED** | **MUST** | `set_audio` / `safe_set_audio_properties` write+readback false on WAV item (R1) |
+| `audio.volume` | Set clip/track volume (DaVinci-native) | **FAILED** | — | `set_audio` / `set_property` / `safe_set_audio_properties` all failed on WAV items (R1–R2) |
+| `background_music_level_control` | Control music level under voice | **VERIFIED** | **MUST** | Via `ffmpeg_pre_attenuation` auxiliary route (R2) — not DaVinci-native automation |
 | `audio.fade` | Fade in/out | **VERIFIED** | **MUST** | `set_fades` with `options` dict; read-back FadeIn=12, FadeOut=24 (R1) |
 | `audio.track_management` | Add/manage audio tracks | **VERIFIED** | Required | Track count/names |
 | `audio.mix_readback` | Read levels / mapping | **AVAILABLE_UNVERIFIED** | Required | `probe_audio_item`, listen test |
@@ -387,6 +388,15 @@ V0.1 N02 does not require heavy graphics automation.
 **Voice Master preservation:** Place voice on dedicated track; music on separate track; verify narration intelligibility after mix.
 
 **Ducking:** L2 may require ducking; L1 reports **UNKNOWN** for automatic ducking — manual volume automation may be required.
+
+**Implementation Routes — `background_music_level_control`:**
+
+| Route | Status | Evidence / Rule |
+|-------|--------|-----------------|
+| `resolve_item_volume` | **FAILED** | `set_audio` / `set_property` / `safe_set_audio_properties` — write+readback false on WAV (R1–R2) |
+| `ffmpeg_pre_attenuation` | **VERIFIED** | FFmpeg `volume=0.15` → `music_attenuated.wav` (mean −21.1 → −37.6 dB); import + place on A3; `integrated-test.mp4` render with voice on A2 (R2) |
+
+**Auxiliary note:** `ffmpeg_pre_attenuation` is an **Auxiliary Runtime Fallback** — original music file remains immutable; derived asset imported to Resolve.
 
 **Implementation Detail — Not Portable Contract:**
 
@@ -436,7 +446,9 @@ V0.1 does not maintain a plugin registry. **Do not auto-install OFX.**
 | `render.status` | Poll render progress | **VERIFIED** | Required | Status transitions |
 | `render.verify` | Verify output file | **VERIFIED** | **MUST** | `verify_output` + FFprobe |
 
-**Verified production profile (project record):** H.264, 1080×1920, 24 fps, AAC — **VERIFIED** for that profile only.
+**Verified production profile:** H.264, **1080×1920**, 24 fps, AAC — **VERIFIED** (Stage 04A-R2: explicit `FormatWidth`/`FormatHeight` in render job settings).
+
+**Render resolution note:** Timeline 1080×1920 alone is insufficient if Deliver page preset differs — R2 proved **explicit** `FormatWidth: 1080`, `FormatHeight: 1920` required in `prepare_render_job` settings.
 
 **Post-render verify must check:**
 
@@ -488,9 +500,9 @@ Full matrix spans **39 logical capabilities** in the master table below.
 
 | Status | Count |
 |--------|------:|
-| VERIFIED | 28 |
-| AVAILABLE_UNVERIFIED | 5 |
-| FAILED | 3 |
+| VERIFIED | 31 |
+| AVAILABLE_UNVERIFIED | 4 |
+| FAILED | 2 |
 | UNKNOWN | 3 |
 | UNAVAILABLE | 0 |
 | DEFERRED | 1 |
@@ -519,7 +531,7 @@ Full matrix spans **39 logical capabilities** in the master table below.
 | clip.scale | Zoom for fill frame | VERIFIED | **MUST** | get_transform ZoomX/Y (Stage 04A) |
 | clip.position | Pan/Tilt reposition | VERIFIED | **MUST** | get_transform Pan/Tilt (Stage 04A) |
 | clip.speed | Speed / retime | VERIFIED | **MUST** | get_speed 150%; duration 144→96 (Stage 04A) |
-| transition.apply | Apply transition | FAILED | **MUST** | live add_transition failed (R1) |
+| transition.apply | Apply transition | VERIFIED | **MUST** | native_drt_transition (R2) |
 | transcription.generate | Generate transcription | VERIFIED | Yes | job/segments |
 | transcription.read | Read transcription | VERIFIED | Yes | get_transcription |
 | subtitle.track | Subtitle track | VERIFIED | **MUST** | track + items |
@@ -529,7 +541,8 @@ Full matrix spans **39 logical capabilities** in the master table below.
 | subtitle.timing | Cue timing verify | AVAILABLE_UNVERIFIED | **MUST** | get_transcript |
 | audio.import | Import music | VERIFIED | **MUST** | pool clip |
 | audio.place | Place on track | VERIFIED | **MUST** | audio item |
-| audio.volume | Volume control | FAILED | **MUST** | item-level Volume write/readback false (R1) |
+| audio.volume | DaVinci-native volume | FAILED | — | item-level write/readback false (R1–R2) |
+| background_music_level_control | Music level under voice | VERIFIED | **MUST** | ffmpeg_pre_attenuation (R2) |
 | audio.fade | Fade in/out | VERIFIED | **MUST** | get_fades 12/24 frames (R1) |
 | audio.ducking | Auto ducking | UNKNOWN | Desired | — |
 | color.basic | Light correction | DEFERRED | No | — |
@@ -548,28 +561,29 @@ Full matrix spans **39 logical capabilities** in the master table below.
 |-----------------|---------------------|--------|-----------------|
 | Motion normalization | `clip.speed` | **VERIFIED** | Stage 04A: 150% read-back; duration 144→96; gap clean |
 | 9:16 framing | `clip.scale` + `clip.position` | **VERIFIED** (API) / **AVAILABLE_UNVERIFIED** (visual) | Transform read-back verified; subject-safe framing still needs render/visual QA |
-| Transitions | `transition.apply` | **FAILED** | Live `add_transition` failed; DRT offline route unverified |
+| Transitions | `transition.apply` | **VERIFIED** | `native_drt_transition` — assemble → import → dissolve read-back → render |
 | Subtitles | `subtitle.create` via `native_drt_subtitles` | **VERIFIED** | R1: DRT author → import → 3-cue transcript read-back. `live_api_srt_append` **UNSAFE** |
-| Background music | `audio.import` + `audio.place` + `audio.volume` + `audio.fade` | VERIFIED / **FAILED** / VERIFIED | Place+fade verified (R1); item-level volume **FAILED** |
+| Background music | `audio.import` + `audio.place` + `background_music_level_control` + `audio.fade` | VERIFIED | Place+fade (R1); level via **ffmpeg_pre_attenuation** (R2); native volume **FAILED** |
 | Voice preservation | `audio.place` + timeline control | VERIFIED | Voice Master used in N02 rough cut |
-| Render | `render.configure` + `render.start` | VERIFIED | H.264 1080×1920 24fps AAC profile |
+| Render | `render.configure` + `render.start` | VERIFIED | H.264 **1080×1920** 24fps AAC — ffprobe verified (R2) |
 | Post-render verification | `render.verify` + FFprobe | VERIFIED | `render.verify_output` + external probe |
 
 ### N02_CAPABILITY_GATE
 
 ```
-BLOCKED
+PASS
 ```
 
-**Rationale (post Stage 04A-R1, 2026-09-21):**
+**Rationale (post Stage 04A-R2, 2026-09-21):**
 
-- Safe subtitle route **verified** via `native_drt_subtitles` (SRT live-append remains **UNSAFE**)
-- N02 MUST `transition.apply` live route **FAILED**
-- N02 MUST `audio.volume` item-level control **FAILED** on tested WAV clip
-- R1 render verified H.264 24fps but output was **1920×1080** — target **1080×1920** vertical profile not validated
-- `audio.ducking` remains **UNKNOWN** (probe only; not a gate blocker)
+- All N02 MUST logical capabilities have at least one **VERIFIED** safe route
+- `transition.apply` → **VERIFIED** via `native_drt_transition` (live route remains **FAILED**, not required)
+- `background_music_level_control` → **VERIFIED** via `ffmpeg_pre_attenuation` (DaVinci-native `audio.volume` remains **FAILED**)
+- Vertical deliverable → **VERIFIED** 1080×1920 @ 24fps (explicit render `FormatWidth`/`FormatHeight`)
+- Subtitles → **VERIFIED** via `native_drt_subtitles` (R1); `live_api_srt_append` **UNSAFE**
+- `audio.ducking` → **UNKNOWN** (optional; not a gate blocker)
 
-**Remaining blockers:** transition live route, audio volume API path, vertical deliverable resolution.
+**Residual unknowns (non-blocking):** subject-safe 9:16 visual QA; `subtitle.timing` automation; DaVinci-native volume automation.
 
 **Crash record:** `validation/capability-spike/CRASH-20260921.md`
 
@@ -594,7 +608,8 @@ BLOCKED
 | 2 | Read `knowledge` topics index | 22 topics (kernels, guides, reference) |
 | 3 | Read `timeline-edit-kernel` | Transition clone unsupported; transform copy partial |
 | 4 | Stage 04A live spike | CAP-01~03 pass; CAP-04 fail; CAP-05 SRT append → **crash** |
-| 5 | Stage 04A-R1 recovery | Isolated disposable projects; DRT subtitle **VERIFIED**; transition/volume **FAILED** |
-| 6 | Crash evidence | `validation/capability-spike/CRASH-20260921.md` |
+| 5 | Stage 04A-R1 recovery | DRT subtitle **VERIFIED**; live transition/volume **FAILED** |
+| 6 | Stage 04A-R2 closure | Vertical 1080×1920 render; DRT transition; FFmpeg music level; integrated render |
+| 7 | Crash evidence | `validation/capability-spike/CRASH-20260921.md` |
 
-Next recommended action before N02 Acceptance: validate `native_drt_transitions` offline route; resolve `add_transition` `options` contract; find working `audio.volume` path (track-level or Fairlight preset); confirm 1080×1920 render profile.
+Next recommended action before N02 Acceptance: end-to-end production run on N02 brief; optional visual framing QA; optional `live_api_add_transition` repair if native live transitions become required.

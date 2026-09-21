@@ -218,3 +218,35 @@ Render 前必须检查。
 - 不得自动改成 GUI 手工假设、未验证脚本、或第二套 MCP
 
 应报告明确 **blocker**。
+
+---
+
+## 14. Runtime Crash / Host Instability
+
+如果执行 Runtime write 时出现：
+
+- Resolve process crash
+- SIGABRT
+- assertion failure
+- scripting API loss
+- host restart
+- fatal exception
+
+则该 operation class：
+
+**立即 Fail Closed。**
+
+**禁止自动 retry。**
+
+普通 Repair Retry Policy 不适用于 Runtime Crash。
+
+必须：
+
+1. 停止当前 capability chain
+2. 保存 evidence
+3. 标记 implementation route：**UNSAFE** 或 **FAILED**
+4. 只有新的明确验证方案才能重新测试
+
+已知：
+
+- `live_api_srt_append` = **UNSAFE** = **DO NOT RETRY**
