@@ -1,0 +1,564 @@
+# DaVinci Resolve Capability Reference
+
+**Layer:** L1 — lightweight capability / operator knowledge  
+**Version:** V0.1  
+**Discovery date:** 2026-09-21
+
+---
+
+## 1. Purpose
+
+This document is the **L1 lightweight capability reference** for Video Editing Workflow V0.1.
+
+It serves:
+
+- L3 Production Workflow
+- L2 Editing Strategy Skills
+
+It does **not**:
+
+- own the Runtime
+- replace MCP documentation
+- define genre editing aesthetics (L2)
+- define production lifecycle (L3)
+
+It records, per logical capability:
+
+| Field | Meaning |
+|-------|---------|
+| Logical capability ID | Stable editorial concept |
+| Current backend | How V0.1 implements it today |
+| Capability status | Evidence-based status label |
+| Preconditions | What must be true before write |
+| Execution guidance | How L3 should request implementation |
+| Verification requirements | Read-back / external checks after write |
+| Fallback / blocker semantics | What to do when unavailable |
+
+---
+
+## 2. Capability Status Vocabulary
+
+| Status | Definition |
+|--------|------------|
+| **VERIFIED** | Successfully executed in current Samuel MCP + Resolve environment with acceptable production outcome |
+| **AVAILABLE_UNVERIFIED** | Current Runtime / tool schema / MCP docs expose the capability; this project has not fully validated end-to-end production effect |
+| **UNKNOWN** | Insufficient evidence to confirm availability or effect |
+| **UNAVAILABLE** | Current Runtime clearly cannot perform the action |
+| **DEFERRED** | Out of V0.1 validation scope |
+
+Forbidden wording: `probably`, `should work`, `likely supported`.
+
+---
+
+## 3. Runtime Identity
+
+| Field | Value |
+|-------|-------|
+| Runtime family | DaVinci Resolve |
+| Current validated backend | `samuelgursky/davinci-resolve-mcp` |
+| Reference Resolve build | DaVinci Resolve Studio **21.1** (per project background) |
+| Discovery method (this stage) | Read-only MCP tool schema + MCP knowledge corpus + project validation records |
+| Live Resolve probe (this stage) | **Not performed** — Resolve was not running during Stage 04 discovery |
+
+### Important
+
+After Release install, **do not assume** every machine shares:
+
+- Resolve version
+- MCP version
+- exposed tool set
+- plugin / OFX set
+
+Production **Preflight** must re-confirm Runtime on each session.
+
+### Auxiliary validators (not DaVinci MCP capabilities)
+
+| Tool | Role |
+|------|------|
+| FFmpeg / FFprobe | External file probe, frame extract, silence detect |
+| Kokoro | External TTS (not in scope of this reference) |
+| Agent vision / media_analysis | Semantic media understanding — **not** Resolve MCP native duty |
+
+---
+
+## 4. Exact Tool Names Policy
+
+Logical capabilities are **portable**. MCP tool/action names are **implementation details**.
+
+When this document records an exact MCP mapping, it is marked:
+
+> **Implementation Detail — Not Portable Contract**
+
+L2 and L3 must **not** depend on these names. Future adapters change L1 only.
+
+Confirmed mappings below come from the **currently installed** `user-davinci-resolve` MCP tool schemas (read-only discovery, 2026-09-21).
+
+---
+
+## 5. Runtime Fallback Rules
+
+When a capability is not available at execution time:
+
+```
+1. Another verified implementation on the same Runtime
+2. Release-allowed auxiliary tool (e.g. FFprobe for render verify)
+3. L2-defined legal degradation
+4. BLOCK
+```
+
+**Forbidden:**
+
+- Auto-install second MCP
+- Auto-switch MCP implementation
+- Auto-install plugins / OFX
+- Unverified GUI automation reported as success
+
+Report blockers as: `CAPABILITY_UNAVAILABLE`
+
+---
+
+## 6. Capability Categories
+
+### A. Project
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `project.inspect` | Read current project identity and snapshot | **VERIFIED** | Required | `project_manager` `get_current`, `snapshot` |
+| `project.create` | Create new project | **VERIFIED** | Required | Project exists, correct name/id |
+| `project.open` | Load project by name | **VERIFIED** | Required | `get_current` matches Brief |
+| `project.save` | Persist project | **VERIFIED** | Required | Save succeeds; re-open state consistent |
+
+**Preconditions:** Resolve connected; correct database/folder context.
+
+**Execution notes:** Use `project_manager.snapshot` before planning destructive work.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `project_manager` `action=get_current|snapshot|create|load|save`
+
+---
+
+### B. Media
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `media.import` | Import files into Media Pool | **VERIFIED** | Required | Imported clip count; clip IDs returned |
+| `media.inspect` | Read clip metadata / properties / duration | **VERIFIED** | Required | `media_pool_item` `get_clip_property`, `probe_clip_properties` |
+| `media.duration` | Determine source duration | **VERIFIED** | Required | Property read-back vs FFprobe |
+| `media.metadata` | Read/write clip metadata | **AVAILABLE_UNVERIFIED** | Optional | Metadata key read-back |
+
+**Semantic media understanding** (content category, slow-motion appearance, subject relevance) is **not** a native Resolve MCP duty. It belongs to:
+
+- `media_analysis` (FFprobe, vision, strata)
+- Agent inspection of extracted frames
+
+Filename alone is **not** semantic evidence.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `media_pool` `safe_import_media` / `import_media`
+- `media_pool_item` `get_clip_property`, `get_metadata`
+- `media_analysis` `analyze_clip`, `extract_frames` (auxiliary)
+
+---
+
+### C. Timeline
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `timeline.inspect` | Read timeline identity, structure, items | **VERIFIED** | Required | `timeline` `get_current`, `probe_timeline_structure` |
+| `timeline.create` | Create new timeline | **VERIFIED** | Required | Timeline name/id; set as current |
+| `timeline.select` | Set current timeline | **VERIFIED** | Required | `get_current` read-back |
+| `timeline.settings` | Read/write timeline settings (resolution, fps) | **AVAILABLE_UNVERIFIED** | Required | Settings read-back; fps used for frame math |
+| `timeline.duration` | Read timeline start/end/duration | **VERIFIED** | Required | `get_start_frame`, `get_end_frame`, gap detection |
+| `timeline.track_inspect` | List tracks and items | **VERIFIED** | Required | `get_items`, `detect_gaps_overlaps` |
+
+**Preconditions (all timeline writes):** Correct project open; correct timeline selected; timeline id/name matches Brief.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `media_pool` `create_timeline`, `create_timeline_from_clips`
+- `timeline` `set_current`, `get_setting`, `set_setting`, `probe_timeline_structure`, `detect_gaps_overlaps`
+
+---
+
+### D. Clip Assembly
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `clip.assemble` | Append/insert clips on timeline | **VERIFIED** | Required | Item count; `timeline_item_id` read-back |
+| `clip.trim` | Adjust clip timeline extent | **AVAILABLE_UNVERIFIED** | Required | `get_start`/`get_end` read-back |
+| `clip.source_range` | Set/read source in/out | **VERIFIED** | Required | `get_source_start_frame`/`get_source_end_frame` |
+| `clip.timeline_range` | Read timeline record range | **VERIFIED** | Required | Frame-accurate read-back at timeline fps |
+| `clip.move` | Reposition clip on timeline | **AVAILABLE_UNVERIFIED** | Optional | Position read-back |
+| `clip.delete_or_replace` | Remove or overwrite clips | **AVAILABLE_UNVERIFIED** | Repair | Gap/overlap inspection after delete |
+
+**Frame alignment:** Always use timeline fps for record frames; source frames use source fps.
+
+**Gap risk:** After assembly/trim/speed, run `detect_gaps_overlaps` and visual QA.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `media_pool` `append_to_timeline` (clip_ids / clip_infos)
+- `timeline` `duplicate_clips`, `ripple_insert`, `lift_range`
+- `timeline_item` `get_start`, `get_end`, `get_source_*`
+
+---
+
+### E. Transform / Framing
+
+**N02 MUST** — 9:16 framing was an exposed production gap.
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `clip.scale` | Adjust ZoomX/ZoomY (fill frame) | **AVAILABLE_UNVERIFIED** | **MUST** | `get_transform` read-back + frame capture |
+| `clip.position` | Adjust Pan/Tilt for subject | **AVAILABLE_UNVERIFIED** | **MUST** | `get_transform` read-back + frame capture |
+| `clip.rotation` | Rotation if needed | **AVAILABLE_UNVERIFIED** | Optional | `get_transform` read-back |
+| `clip.crop` | Crop left/right/top/bottom | **AVAILABLE_UNVERIFIED** | Optional | `get_crop` read-back + visual QA |
+
+**Can current Runtime:**
+
+1. Change Zoom / Scale — **yes** via `timeline_item` `set_transform` (schema exposes ZoomX/ZoomY)
+2. Change Position X/Y — **yes** via Pan/Tilt
+3. Read-back Inspector values — **yes** via `get_transform` / `get_crop`
+
+**Caveat:** API read-back success ≠ subject-safe framing. Visual verification required (`timeline_frame` capture or render sample).
+
+**Implementation Detail — Not Portable Contract:**
+
+- `timeline_item` `action=set_transform|get_transform|set_crop|get_crop`
+
+---
+
+### F. Speed / Motion
+
+**N02 MUST** — stock slow motion was an exposed production gap.
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `clip.speed_change` | Apply speed / retime to clip | **AVAILABLE_UNVERIFIED** | **MUST** | `get_speed` read-back; duration change; gap check |
+| `clip.retime_mode` | Nearest / optical flow / frame blend | **UNKNOWN** | Optional | `get_retime` read-back |
+
+**L1 responsibility:** implement a speed factor **decided by L2** — not preset 1.4× / 2×.
+
+**After speed change verify:**
+
+- clip timeline duration
+- source range integrity
+- timeline gaps
+- audio behavior (if source clip carries audio)
+- motion naturalness (visual QA — not API-only)
+
+**Implementation Detail — Not Portable Contract:**
+
+- `timeline_item` `action=set_speed|get_speed|set_retime|get_retime`
+
+---
+
+### G. Transition
+
+**N02 MUST** — hard-cut stiffness was an exposed gap.
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `transition.available` | Discover transition types | **UNKNOWN** | Required | MCP/docs enumeration not confirmed this stage |
+| `transition.apply` | Apply transition between adjacent clips | **AVAILABLE_UNVERIFIED** | **MUST** | Transition span read-back; gap/black-frame check |
+| `transition.duration` | Set transition length in frames | **AVAILABLE_UNVERIFIED** | **MUST** | Duration vs timeline fps |
+| `transition.remove_or_replace` | Repair incorrect transition | **UNKNOWN** | Repair | Post-change integrity |
+
+**Preconditions:** Adjacent clips; sufficient handles; known timeline fps.
+
+**Verify:** No gap; no black frame; timeline duration integrity.
+
+**Note:** Timeline edit kernel documents **no public transition clone API** — transitions are apply/remove surfaces, not fully introspectable in all builds.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `timeline_item` `action=add_transition` (Resolve 21.1+ per schema)
+
+---
+
+### H. Transcription
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `transcription.generate` | Generate clip/folder transcription | **VERIFIED** | Required | Transcription job success; segments present |
+| `transcription.read` | Read transcription with timestamps | **VERIFIED** | Required | `get_transcription` segments/words |
+
+**Authority rule:** ASR/transcription is **not** Frozen Script authority. Align to frozen text for proper nouns.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `folder` / `media_pool_item` `transcribe_audio`
+- `media_pool_item` `get_transcription`
+- `timeline` `get_transcript` (timeline subtitle track — separate from clip transcription)
+
+---
+
+### I. Subtitle
+
+**N02 MUST** — subtitles were missing from standard production flow.
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `subtitle.generation` | Auto-generate captions from audio | **AVAILABLE_UNVERIFIED** | Optional | Subtitle track populated |
+| `subtitle.import` | Import SRT / external subtitle media | **VERIFIED** | **MUST** | Subtitle items on timeline |
+| `subtitle.track` | Create/manage subtitle track | **VERIFIED** | **MUST** | `add_track` subtitle; items present |
+| `subtitle.style` | Control font/size/emphasis via API | **UNKNOWN** | Optional | Style read-back not confirmed |
+| `subtitle.timing` | Verify cue timing vs narration | **AVAILABLE_UNVERIFIED** | **MUST** | `get_transcript` cues vs plan |
+| `subtitle.edit` | Adjust cue text/timing programmatically | **UNKNOWN** | Repair | No confirmed write surface this stage |
+
+**Do not conflate:** "subtitles can be imported" ≠ "all subtitle styling is API-controllable".
+
+**Prior validated path (project record):** Media Pool SRT import → `append_to_timeline` → subtitle track — **VERIFIED** at workflow level; per-cue style control **UNKNOWN**.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `timeline` `add_track` (track_type=subtitle)
+- `media_pool` `import_media`, `append_to_timeline`
+- `timeline_ai` `create_subtitles`
+- `timeline` `get_transcript`
+
+---
+
+### J. Titles / Graphics
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `title.insert` | Insert basic title/generator | **AVAILABLE_UNVERIFIED** | Optional | Item exists on timeline |
+| `title.text_edit` | Set title text content | **AVAILABLE_UNVERIFIED** | Optional | `set_title_text` read-back |
+| `graphics.fusion` | Fusion comp text/graphics | **AVAILABLE_UNVERIFIED** | DEFERRED | Rendered frame proof required |
+| `graphics.lower_third` | Lower third template | **DEFERRED** | Not N02 MUST | — |
+
+V0.1 N02 does not require heavy graphics automation.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `timeline` `insert_title`, `set_title_text`
+- `fusion_comp`, `timeline_item_fusion`
+
+---
+
+### K. Audio / Music
+
+**N02 MUST** — background music integration was an exposed gap.
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `audio.import` | Import music/audio to pool | **VERIFIED** | **MUST** | Clip in pool |
+| `audio.place_on_track` | Place audio on timeline track | **VERIFIED** | **MUST** | Item on audio track; range correct |
+| `audio.trim` | Trim music segment | **AVAILABLE_UNVERIFIED** | Required | Source/timeline range read-back |
+| `audio.volume` | Set clip/track volume | **AVAILABLE_UNVERIFIED** | **MUST** | `get_audio` read-back + listen |
+| `audio.fade` | Fade in/out | **AVAILABLE_UNVERIFIED** | **MUST** | `get_fades` read-back |
+| `audio.track_management` | Add/manage audio tracks | **VERIFIED** | Required | Track count/names |
+| `audio.mix_readback` | Read levels / mapping | **AVAILABLE_UNVERIFIED** | Required | `probe_audio_item`, listen test |
+| `audio.ducking` | Auto-duck music under voice | **UNKNOWN** | Desired | No reliable auto-duck API confirmed |
+
+**Voice Master preservation:** Place voice on dedicated track; music on separate track; verify narration intelligibility after mix.
+
+**Ducking:** L2 may require ducking; L1 reports **UNKNOWN** for automatic ducking — manual volume automation may be required.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `project_settings` `insert_audio`
+- `media_pool` `append_to_timeline` (audio clip_infos)
+- `timeline_item` `set_audio`, `get_audio`, `set_fades`, `get_fades`
+- `timeline` `probe_audio_item`, `audio_mix_capability_report`
+
+---
+
+### L. Color
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `color.basic` | Light correction / matching | **DEFERRED** | Optional | Grade read-back / frame compare |
+| `color.lut` | Apply LUT | **AVAILABLE_UNVERIFIED** | Optional | Node/LUT state |
+| `color.match` | Shot matching | **DEFERRED** | Not N02 MUST | — |
+
+Resolve Color Page features ≠ MCP automation features. Do not mark VERIFIED without MCP-path validation.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `timeline_item_color` `safe_set_cdl`, `safe_copy_grade`
+
+---
+
+### M. Effects / ResolveFX / Fusion / OFX
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `effects.resolvefx` | ResolveFX via API | **UNKNOWN** | DEFERRED | — |
+| `effects.fusion` | Fusion comp effects on items | **AVAILABLE_UNVERIFIED** | DEFERRED | Rendered frame proof |
+| `effects.ofx` | Third-party OFX | **UNKNOWN** | DEFERRED | No plugin install in V0.1 |
+
+**Boundary:** DaVinci software capability ≠ MCP-exposed capability.
+
+V0.1 does not maintain a plugin registry. **Do not auto-install OFX.**
+
+---
+
+### N. Render
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `render.configure` | Set format/codec/resolution/fps/output | **VERIFIED** | **MUST** | Job settings read-back |
+| `render.start` | Start render job | **VERIFIED** | **MUST** | Job completes |
+| `render.status` | Poll render progress | **VERIFIED** | Required | Status transitions |
+| `render.verify` | Verify output file | **VERIFIED** | **MUST** | `verify_output` + FFprobe |
+
+**Verified production profile (project record):** H.264, 1080×1920, 24 fps, AAC — **VERIFIED** for that profile only.
+
+**Post-render verify must check:**
+
+- file exists
+- duration
+- resolution
+- fps
+- video stream
+- audio stream
+- codec/format
+
+**FFprobe** is an **auxiliary validator**, not a DaVinci MCP capability.
+
+**Implementation Detail — Not Portable Contract:**
+
+- `render` `prepare_render_job`, `safe_set_render_settings`, `start`, `get_job_status`, `verify_output`
+
+---
+
+### O. QA / Inspection
+
+| Logical ID | Description | Status | N02 V0.1 | Verify Method |
+|------------|-------------|--------|----------|---------------|
+| `qa.clip_ranges` | Read clip timeline/source ranges | **VERIFIED** | Required | `timeline_item` getters |
+| `qa.track_state` | Inspect tracks/items | **VERIFIED** | Required | `probe_timeline_structure` |
+| `qa.transform_readback` | Read transform/crop values | **AVAILABLE_UNVERIFIED** | Required | `get_transform` / `get_crop` |
+| `qa.transition_state` | Inspect transitions | **UNKNOWN** | Required | Limited API introspection |
+| `qa.subtitle_state` | Read subtitle cues | **AVAILABLE_UNVERIFIED** | Required | `get_transcript` |
+| `qa.audio_state` | Read audio properties | **AVAILABLE_UNVERIFIED** | Required | `get_audio`, `probe_audio_item` |
+| `qa.gap_detection` | Detect gaps/overlaps | **VERIFIED** | Required | `detect_gaps_overlaps` |
+| `qa.visual_frame` | Capture rendered frame | **AVAILABLE_UNVERIFIED** | Required | `timeline_frame` capture |
+
+**Visual QA not replaceable by Inspector numbers alone:**
+
+- subject cropped out
+- unnatural slow motion
+- visual repetition
+- black frames
+
+Use `timeline_frame` capture and/or short render samples.
+
+---
+
+## 7. Capability Matrix (Summary)
+
+Full matrix spans **39 logical capabilities** in the master table below.
+
+### Status Counts (master matrix)
+
+| Status | Count |
+|--------|------:|
+| VERIFIED | 23 |
+| AVAILABLE_UNVERIFIED | 11 |
+| UNKNOWN | 4 |
+| UNAVAILABLE | 0 |
+| DEFERRED | 1 |
+
+### Master Matrix
+
+| Capability ID | Description | Status | N02 V0.1 | Verify Method |
+|---------------|-------------|--------|----------|---------------|
+| project.inspect | Project identity snapshot | VERIFIED | Yes | project_manager snapshot |
+| project.create | Create project | VERIFIED | Yes | get_current |
+| project.open | Load project | VERIFIED | Yes | get_current |
+| project.save | Save project | VERIFIED | Yes | save + reopen |
+| media.import | Import to Media Pool | VERIFIED | Yes | clip IDs |
+| media.inspect | Clip metadata/properties | VERIFIED | Yes | probe_clip_properties |
+| media.duration | Source duration | VERIFIED | Yes | property vs FFprobe |
+| media.metadata | Metadata read/write | AVAILABLE_UNVERIFIED | No | read-back |
+| timeline.inspect | Timeline structure | VERIFIED | Yes | probe_timeline_structure |
+| timeline.create | Create timeline | VERIFIED | Yes | id/name |
+| timeline.select | Set current timeline | VERIFIED | Yes | get_current |
+| timeline.settings | Resolution/fps settings | AVAILABLE_UNVERIFIED | Yes | get_setting |
+| timeline.duration | Timeline extent | VERIFIED | Yes | start/end frames |
+| timeline.track_inspect | Track/item listing | VERIFIED | Yes | get_items |
+| clip.assemble | Append/insert clips | VERIFIED | Yes | item read-back |
+| clip.trim | Trim timeline extent | AVAILABLE_UNVERIFIED | Yes | get_start/end |
+| clip.source_range | Source in/out | VERIFIED | Yes | get_source_* |
+| clip.scale | Zoom for fill frame | AVAILABLE_UNVERIFIED | **MUST** | get_transform + visual |
+| clip.position | Pan/Tilt reposition | AVAILABLE_UNVERIFIED | **MUST** | get_transform + visual |
+| clip.speed | Speed / retime | AVAILABLE_UNVERIFIED | **MUST** | get_speed + visual |
+| transition.apply | Apply transition | AVAILABLE_UNVERIFIED | **MUST** | gap/black-frame QA |
+| transcription.generate | Generate transcription | VERIFIED | Yes | job/segments |
+| transcription.read | Read transcription | VERIFIED | Yes | get_transcription |
+| subtitle.track | Subtitle track | VERIFIED | **MUST** | track + items |
+| subtitle.import | Import SRT/media | VERIFIED | **MUST** | cues on timeline |
+| subtitle.style | API style control | UNKNOWN | No | — |
+| subtitle.timing | Cue timing verify | AVAILABLE_UNVERIFIED | **MUST** | get_transcript |
+| audio.import | Import music | VERIFIED | **MUST** | pool clip |
+| audio.place | Place on track | VERIFIED | **MUST** | audio item |
+| audio.volume | Volume control | AVAILABLE_UNVERIFIED | **MUST** | get_audio + listen |
+| audio.fade | Fade in/out | AVAILABLE_UNVERIFIED | **MUST** | get_fades |
+| audio.ducking | Auto ducking | UNKNOWN | Desired | — |
+| color.basic | Light correction | DEFERRED | No | — |
+| effects.resolvefx | ResolveFX automation | UNKNOWN | No | — |
+| effects.fusion | Fusion effects | AVAILABLE_UNVERIFIED | No | render frame |
+| effects.ofx | OFX plugins | UNKNOWN | No | — |
+| render.configure | Render settings | VERIFIED | **MUST** | job settings |
+| render.start | Start render | VERIFIED | **MUST** | job complete |
+| render.verify | Output verification | VERIFIED | **MUST** | verify_output + FFprobe |
+
+---
+
+## 8. N02 Capability Gate (L1 Assessment)
+
+| N02 Requirement | Required Capability | Status | Evidence / Note |
+|-----------------|---------------------|--------|-----------------|
+| Motion normalization | `clip.speed` | AVAILABLE_UNVERIFIED | MCP exposes `timeline_item` `set_speed`; N02 still exposed slow-motion defect — not acceptance-verified |
+| 9:16 framing | `clip.scale` + `clip.position` | AVAILABLE_UNVERIFIED | Transform API exposed; N02 framing gap remains — needs visual verify path |
+| Transitions | `transition.apply` | AVAILABLE_UNVERIFIED | `add_transition` in schema; N02 used hard cuts only |
+| Subtitles | `subtitle.track` + `subtitle.import` + `subtitle.timing` | VERIFIED / AVAILABLE_UNVERIFIED | Import path verified; timing QA not fully automated |
+| Background music | `audio.import` + `audio.place` + `audio.volume` + `audio.fade` | VERIFIED / AVAILABLE_UNVERIFIED | Import/place verified; mix levels/fades need acceptance validation |
+| Voice preservation | `audio.place` + timeline control | VERIFIED | Voice Master used in N02 rough cut |
+| Render | `render.configure` + `render.start` | VERIFIED | H.264 1080×1920 24fps AAC profile |
+| Post-render verification | `render.verify` + FFprobe | VERIFIED | `render.verify_output` + external probe |
+
+### N02_CAPABILITY_GATE
+
+```
+PASS_WITH_UNKNOWNS
+```
+
+**Rationale:**
+
+- No N02 MUST capability is **UNAVAILABLE** on current Samuel MCP schema
+- Several MUST capabilities remain **AVAILABLE_UNVERIFIED** (motion, framing, transitions, audio mix)
+- `audio.ducking` is **UNKNOWN**
+- N02 Acceptance requires targeted capability validation runs before claiming full automation
+
+**N02 Acceptance Risk:** Finishing passes (motion, framing, transition, music mix, subtitle timing) need explicit validation iterations — not yet proven end-to-end without Owner hand prompts.
+
+---
+
+## 9. What This Document Does Not Cover
+
+- Second MCP (`CiprianSpiridon/davinci-resolve-mcp`) — research only
+- MCP installation / `mcp.json` changes
+- Plugin / OFX installation
+- Premiere / FFmpeg-only backends (future L1 adapters)
+- L2 editing aesthetics
+- L3 workflow orchestration
+
+---
+
+## 10. Discovery Log (Stage 04)
+
+| Step | Action | Result |
+|------|--------|--------|
+| 1 | Enumerate `user-davinci-resolve` MCP tools | 40+ tools cataloged from schema |
+| 2 | Read `knowledge` topics index | 22 topics (kernels, guides, reference) |
+| 3 | Read `timeline-edit-kernel` | Transition clone unsupported; transform copy partial |
+| 4 | Live Resolve connection | **Not connected** — no live probe |
+| 5 | Destructive write tests | **None** — per Stage 04 policy |
+
+Next recommended action before N02 Acceptance: run targeted **AVAILABLE_UNVERIFIED** validation scripts against a disposable Resolve project (motion, framing, transition, music mix) and upgrade statuses with evidence.

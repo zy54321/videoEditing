@@ -16,6 +16,8 @@
       "observational-info-short"
     ],
     "templates": [],
-    "capabilities": []
+    "capabilities": [
+      "davinci-resolve"
+    ]
   }
 }
