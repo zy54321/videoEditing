@@ -1,0 +1,15 @@
+{
+  "name": "video-editing-workflow",
+  "version": "{{VERSION}}",
+  "runtime": {
+    "cursor": true,
+    "davinci_resolve": "external",
+    "davinci_mcp": "external"
+  },
+  "components": {
+    "rules": [],
+    "skills": [],
+    "templates": [],
+    "capabilities": []
+  }
+}

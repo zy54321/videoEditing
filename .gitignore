@@ -1,0 +1,14 @@
+# Archives & media
+*.zip
+*.mp4
+*.mov
+*.wav
+
+# Logs & caches
+*.log
+__pycache__/
+
+# Build artifacts
+dist/
+temp/
+.tmp/
