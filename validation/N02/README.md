@@ -57,6 +57,20 @@ Validation 目录**只记录**：
 > 系统自动完成完整生产流程，  
 > **不再需要 Owner 手写数百行逐镜头执行 Prompt。**
 
+## Requirements → L2 Coverage
+
+N02 已暴露问题与 `observational-info-short` Skill 的映射关系（验证记录 only；N02 专属规则不得反向写入通用 Skill）：
+
+| N02 问题 | L2 覆盖 |
+|----------|---------|
+| Stock slow motion | Motion Strategy / OBS-QA-01 |
+| Timeline gap / black frame | Transition Integrity + Universal QA |
+| 9:16 framing | Framing Strategy / OBS-QA-08 |
+| Hard-cut stiffness | Transition Strategy |
+| Missing subtitles | Subtitle Strategy / OBS-QA-09 |
+| Missing background music | Music Strategy + Audio Mix Strategy / OBS-QA-12 |
+| Repetition / pacing | Repetition Strategy + Narrative Rhythm / OBS-QA-02, OBS-QA-05 |
+
 ## 记录规范
 
 后续每次验证迭代，在本目录追加：
