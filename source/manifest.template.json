@@ -7,7 +7,10 @@
     "davinci_mcp": "external"
   },
   "components": {
-    "rules": [],
+    "rules": [
+      "video-workflow-core",
+      "davinci-production"
+    ],
     "skills": [],
     "templates": [],
     "capabilities": []

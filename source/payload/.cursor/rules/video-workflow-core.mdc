@@ -1,0 +1,206 @@
+---
+description: Core execution boundaries for AI-assisted video production workflows. Apply these safeguards whenever working on video production, media assets, production briefs, editing plans, QA, repair, or rendering.
+alwaysApply: true
+---
+
+# Video Workflow Core Rules
+
+These constraints govern **video-production work only**.
+They must not interfere with unrelated software-development tasks in the same Cursor workspace.
+
+---
+
+## 1. Authority
+
+- Owner 明确指令和 Production Brief 是当前任务最高业务依据。
+- 不得自行改变：
+  - 视频主题
+  - 目标平台
+  - 成片方向
+  - Frozen Voice
+  - Frozen Script
+  - Frozen Asset
+  - 输出目标
+- 如果 Brief 与 Owner 最新明确指令冲突，以 Owner 最新明确指令为准。
+- 不得靠猜测填补需要 Owner 决策的内容。
+
+---
+
+## 2. Original Media Immutability
+
+默认视所有输入原素材为 **immutable**。
+
+**禁止：**
+
+- 覆盖原视频
+- 覆盖原音频
+- 修改原文件
+- 删除原文件
+- 重命名原素材
+- 原地转码覆盖
+
+任何派生物必须创建为：
+
+- 新文件
+- 新 timeline item
+- 新 render
+- 新 cache / proxy / analysis artifact
+
+除非 Owner 明确授权原地修改。
+
+---
+
+## 3. Frozen Assets
+
+当某资产标记为 **frozen** 时：
+
+**禁止：**
+
+- 内容修改
+- 速度修改
+- 裁切语义内容
+- 替换
+- 重新生成
+- 静默修复
+
+**允许：**
+
+只做不会改变 Frozen Asset 本体的编排行为。
+
+如果完成任务必须改变 frozen asset：停止并请求 Owner 决策。
+
+---
+
+## 4. Inspect Before Write
+
+对已有生产状态执行写操作前，必须先确认适用的信息，例如：
+
+- 当前生产 ID
+- 当前 Resolve Project
+- 当前 Timeline
+- 目标媒体目录
+- 输出路径
+- 已存在版本
+- Frozen assets
+- 当前执行阶段
+
+**不能依赖：**
+
+- 文件名猜测
+- 旧对话假设
+- 过期状态
+- 工具曾经返回过的历史结果
+
+---
+
+## 5. Evidence-Based Editing
+
+选择素材时：
+
+- 优先依据实际媒体内容
+- 文件名只作为提示
+- 不得因为文件名看起来相关就断言画面内容相关
+
+事实型内容：
+
+- 画面不得制造与旁白相反的事实暗示
+- 通用 B-roll 不得伪装为特定现场实拍
+- 不得主动制造人物身份、地点、时间等错误归因
+
+---
+
+## 6. Write → Verify
+
+任何重要写入操作后必须 **read back / inspect**。
+
+例如：
+
+- 创建 Project
+- 创建 Timeline
+- 添加 Clip
+- 修改 Speed
+- Transform
+- Transition
+- Subtitle
+- Audio
+- Render
+
+**「工具返回 success」不等于「最终结果正确」。**
+
+验证必须关注最终状态。
+
+---
+
+## 7. Repair Policy
+
+在 Owner 已授权的生产目标内，普通错误应自动：
+
+```
+Detect → Repair → Re-verify
+```
+
+不要因为以下问题反复等待 Owner 输入「继续」：
+
+- 普通 framing
+- timeline gap
+- subtitle typo
+- source range
+- transition
+- clip speed
+- render retry
+
+**只有以下情况才停：**
+
+- blocker
+- 越出授权范围
+- 改变 Production Brief
+- 修改 Frozen Asset
+- 需要新的业务决定
+- Runtime 缺少必要能力
+- 可能造成不可逆破坏
+
+---
+
+## 8. Version Safety
+
+不得静默覆盖：
+
+- 已通过 Owner 审阅的输出
+- 已明确保留的 Timeline
+- 已存在的 Final 文件
+
+Repair / Iteration 默认产生新版本，除非 Brief 明确允许原位更新。
+
+---
+
+## 9. Workspace vs Media Root
+
+Cursor 控制工作区与媒体生产目录是两个概念。
+
+不得因为安装了本 Workflow，就在媒体目录中随意创建：
+
+- `.cursor`
+- `skills`
+- `rules`
+- `source`
+- `docs`
+- `runtime config`
+
+Production Brief 应引用外部媒体路径。
+
+---
+
+## 10. Runtime Boundary
+
+本项目消费外部 Runtime。
+
+**禁止自动：**
+
+- 修改 Cursor `mcp.json`
+- 安装/卸载 DaVinci MCP
+- 切换到另一套 MCP
+- 修改 DaVinci Resolve 安装
+- 安装 OFX
+- 安装 Python / Node / FFmpeg
+
+除非 Owner 为该操作明确授权。
