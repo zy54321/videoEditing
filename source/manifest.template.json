@@ -11,7 +11,9 @@
       "video-workflow-core",
       "davinci-production"
     ],
-    "skills": [],
+    "skills": [
+      "video-production"
+    ],
     "templates": [],
     "capabilities": []
   }
