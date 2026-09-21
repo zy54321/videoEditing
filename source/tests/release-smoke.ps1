@@ -18,6 +18,13 @@ $Pass = 0
 $Fail = 0
 $TmpRoot = Join-Path $PSScriptRoot '.tmp-release'
 
+$MediaExtensions = @(
+    '.mp4', '.mov', '.mkv', '.avi', '.webm', '.m4v',
+    '.wav', '.mp3', '.m4a', '.aac', '.flac', '.ogg',
+    '.jpg', '.jpeg', '.png', '.webp', '.gif', '.tif', '.tiff', '.bmp',
+    '.srt', '.vtt', '.ass', '.ssa'
+)
+
 function Assert-True {
     param([bool]$Condition, [string]$Name)
     if ($Condition) {
@@ -56,6 +63,14 @@ function Cleanup-Tmp {
     }
 }
 
+function Test-HasMediaExtension {
+    param([string]$Name)
+    foreach ($ext in $MediaExtensions) {
+        if ($Name.EndsWith($ext, [StringComparison]::OrdinalIgnoreCase)) { return $true }
+    }
+    return $false
+}
+
 $ReleasePath = [System.IO.Path]::GetFullPath($ReleasePath)
 if (-not (Test-Path -LiteralPath $ReleasePath -PathType Container)) {
     Write-Error "Release path not found: $ReleasePath"
@@ -85,7 +100,7 @@ if (-not (Test-Path -LiteralPath (Join-Path $ReleasePath 'payload') -PathType Co
 Assert-True $r01 'TEST-R01 required release files exist'
 
 $version = (Get-Content -LiteralPath (Join-Path $ReleasePath 'VERSION') -Raw).Trim()
-Assert-True ($version -eq '0.1.0') 'TEST-R02 VERSION = 0.1.0'
+Assert-True ($version -match '^\d+\.\d+\.\d+(-dev)?$') 'TEST-R02 VERSION format valid'
 
 $manifest = $null
 $manifestOk = $false
@@ -141,67 +156,70 @@ Get-Content -LiteralPath $sumsFile | ForEach-Object {
 }
 Assert-True $shaOk 'TEST-R06 SHA256 checksums verify'
 
-$payloadRelease = Join-Path $ReleasePath 'payload'
-Assert-True (Test-Path -LiteralPath $payloadRelease -PathType Container) 'TEST-R07 payload dir exists for release installer'
+$releasePayload = Join-Path $ReleasePath 'payload'
+Assert-True (Test-Path -LiteralPath $releasePayload -PathType Container) 'TEST-R07 release payload at ./payload'
 
 $ws = New-EmptyWorkspace 'install-target'
 $code = Invoke-ReleaseInstaller -Target $ws
-Assert-ExitCode -Actual $code -Expected 0 -Name 'TEST-R07 release installer installs to empty workspace'
+Assert-ExitCode -Actual $code -Expected 0 -Name 'TEST-R08 release installer installs to empty workspace'
 
 $rulesOk = @(
     'video-workflow-core.mdc',
     'davinci-production.mdc',
     'production-entry-intake.mdc'
 ) | ForEach-Object { Test-Path (Join-Path $ws ".cursor\rules\$_") } | Where-Object { $_ -eq $false } | Measure-Object | Select-Object -ExpandProperty Count
-Assert-True ($rulesOk -eq 0) 'TEST-R08 three rules installed'
+Assert-True ($rulesOk -eq 0) 'TEST-R09 three rules installed'
 
 $skillsOk = (Test-Path (Join-Path $ws '.cursor\skills\video-production\SKILL.md')) -and
     (Test-Path (Join-Path $ws '.cursor\skills\video-editing\observational-info-short\SKILL.md'))
-Assert-True $skillsOk 'TEST-R09 two skills installed'
+Assert-True $skillsOk 'TEST-R10 two skills installed'
 
-Assert-True (Test-Path (Join-Path $ws 'video-workflow\capabilities\davinci-resolve.md')) 'TEST-R10 capability installed'
-Assert-True (Test-Path (Join-Path $ws 'video-workflow\templates\production-brief.yaml')) 'TEST-R11 template installed'
+Assert-True (Test-Path (Join-Path $ws 'video-workflow\capabilities\davinci-resolve.md')) 'TEST-R11 capability installed'
+Assert-True (Test-Path (Join-Path $ws 'video-workflow\templates\production-brief.yaml')) 'TEST-R12 template installed'
 
 $prodDir = Join-Path $ws 'video-workflow\production'
-Assert-True ((Test-Path $prodDir -PathType Container) -and (-not (Test-Path (Join-Path $prodDir 'brief.yaml')))) 'TEST-R12 production dir exists, TEST-R13 brief.yaml absent'
+Assert-True (Test-Path $prodDir -PathType Container) 'TEST-R13 production directory exists'
+Assert-True (-not (Test-Path (Join-Path $prodDir 'brief.yaml'))) 'TEST-R14 brief.yaml absent after install'
 
-$instJson = $null
 $instOk = $false
 try {
     $instJson = Get-Content (Join-Path $ws 'video-workflow\installation.json') -Raw | ConvertFrom-Json
-    $instOk = ($instJson.version -eq '0.1.0')
+    $instOk = ($instJson.version -eq $version)
 } catch { $instOk = $false }
-Assert-True $instOk 'TEST-R14 installation.json version = 0.1.0'
+Assert-True $instOk 'TEST-R15 installation.json version matches release VERSION'
 
-$code15 = Invoke-ReleaseInstaller -Target $ws
-Assert-ExitCode -Actual $code15 -Expected 31 -Name 'TEST-R15 re-install blocked'
+$code16 = Invoke-ReleaseInstaller -Target $ws
+Assert-ExitCode -Actual $code16 -Expected 31 -Name 'TEST-R16 re-install blocked'
 
 $forbiddenNames = @('docs', 'research', 'validation', 'source', 'tests', '.git')
-$r16 = $true
+$r17 = $true
 foreach ($name in $forbiddenNames) {
-    if (Test-Path -LiteralPath (Join-Path $ReleasePath $name)) { $r16 = $false }
+    if (Test-Path -LiteralPath (Join-Path $ReleasePath $name)) { $r17 = $false }
 }
 Get-ChildItem -LiteralPath $ReleasePath -Recurse -Directory | ForEach-Object {
-    if ($forbiddenNames -contains $_.Name) { $r16 = $false }
+    if ($forbiddenNames -contains $_.Name) { $r17 = $false }
 }
-Assert-True $r16 'TEST-R16 release contains no dev materials'
+Assert-True $r17 'TEST-R17 release contains no dev materials'
 
-$mediaPatterns = @('*.mp4', '*.mov', '*.wav', '*.mkv', '*.m4a')
-$r17 = $true
-foreach ($pat in $mediaPatterns) {
-    if (Get-ChildItem -LiteralPath $ReleasePath -Recurse -Filter $pat -ErrorAction SilentlyContinue) {
-        $r17 = $false
-    }
+$r18 = $true
+Get-ChildItem -LiteralPath $ReleasePath -Recurse -File | ForEach-Object {
+    if (Test-HasMediaExtension -Name $_.Name) { $r18 = $false }
 }
-Assert-True $r17 'TEST-R17 release contains no real media'
+Assert-True $r18 'TEST-R18 release contains no production media files'
+
+$r19 = $true
+Get-ChildItem -LiteralPath $ReleasePath -Recurse -File | ForEach-Object {
+    if (-not (Test-HasMediaExtension -Name $_.Name)) { return }
+    $rel = $_.FullName.Substring($ReleasePath.Length).Replace('\', '/')
+    if ($rel -match '(?i)/N02/|/N02[^/]*\.') { $r19 = $false }
+    if ($_.Name -match '(?i)^N02.+\.' ) { $r19 = $false }
+}
+Assert-True $r19 'TEST-R19 no N02 production asset leakage'
 
 $entryRule = Join-Path $ReleasePath 'payload\.cursor\rules\production-entry-intake.mdc'
 $entryContent = Get-Content -LiteralPath $entryRule -Raw -Encoding UTF8
-Assert-True ($entryContent -match '【制作视频】') 'TEST-R18 entry rule contains production entry token'
-Assert-True ($entryContent -match 'alwaysApply:\s*true') 'TEST-R19 production entry rule alwaysApply=true'
-
-$releasePayloadPath = Join-Path $ReleasePath 'payload'
-Assert-True (Test-Path -LiteralPath $releasePayloadPath) 'Release installer primary payload path exists'
+Assert-True ($entryContent -match '【制作视频】') 'TEST-R20 entry rule contains production entry token'
+Assert-True ($entryContent -match 'alwaysApply:\s*true') 'TEST-R21 production entry rule alwaysApply=true'
 
 if ($ZipPath) {
     $ZipPath = [System.IO.Path]::GetFullPath($ZipPath)
@@ -218,9 +236,9 @@ if ($ZipPath) {
             (Test-Path -LiteralPath (Join-Path $top 'payload')) -and
             (Test-Path -LiteralPath (Join-Path $top 'manifest.json'))
     }
-    Assert-True $zipOk 'TEST-R20 ZIP extracts with valid top-level structure'
+    Assert-True $zipOk 'TEST-R22 ZIP extracts with valid top-level structure'
 } else {
-    Write-Host '[SKIP] TEST-R20 ZIP test (no ZipPath)' -ForegroundColor Yellow
+    Write-Host '[SKIP] TEST-R22 ZIP test (no ZipPath)' -ForegroundColor Yellow
 }
 
 Write-Host ''

@@ -327,7 +327,7 @@ Filename alone is **not** semantic evidence.
 | `subtitle.create` | Place subtitles on timeline | **VERIFIED** | **MUST** | Via `native_drt_subtitles` route (R1); not via live SRT append |
 | `subtitle.track` | Create/manage subtitle track | **VERIFIED** | **MUST** | Subtitle track populated after DRT import |
 | `subtitle.style` | Control font/size/emphasis via API | **UNKNOWN** | Optional | Style read-back not confirmed |
-| `subtitle.timing` | Verify cue timing vs narration | **AVAILABLE_UNVERIFIED** | **MUST** | `get_transcript` cues vs plan |
+| `subtitle.timing` | Verify cue timing vs narration | **AVAILABLE_UNVERIFIED** | **PRODUCTION_QA** | `get_transcript` cues vs plan; checked in final QA, not a Capability Gate blocker |
 | `subtitle.edit` | Adjust cue text/timing programmatically | **UNKNOWN** | Repair | No confirmed write surface this stage |
 
 **Do not conflate:** "subtitles can be imported" ≠ "all subtitle styling is API-controllable".
@@ -494,18 +494,20 @@ Use `timeline_frame` capture and/or short render samples.
 
 ## 7. Capability Matrix (Summary)
 
-Full matrix spans **39 logical capabilities** in the master table below.
+Full matrix spans **41 logical capabilities** in the master table below.
 
 ### Status Counts (master matrix)
 
 | Status | Count |
 |--------|------:|
-| VERIFIED | 31 |
-| AVAILABLE_UNVERIFIED | 4 |
-| FAILED | 2 |
-| UNKNOWN | 3 |
+| VERIFIED | 30 |
+| AVAILABLE_UNVERIFIED | 5 |
+| FAILED | 1 |
+| UNKNOWN | 4 |
 | UNAVAILABLE | 0 |
 | DEFERRED | 1 |
+
+Counts are derived from the Master Matrix rows below — do not maintain separate manual totals.
 
 ### Master Matrix
 
@@ -538,7 +540,7 @@ Full matrix spans **39 logical capabilities** in the master table below.
 | subtitle.create | Place subtitles on timeline | VERIFIED | **MUST** | native_drt_subtitles route (R1) |
 | subtitle.import | Import SRT to pool | VERIFIED | **MUST** | pool import; live append UNSAFE |
 | subtitle.style | API style control | UNKNOWN | No | — |
-| subtitle.timing | Cue timing verify | AVAILABLE_UNVERIFIED | **MUST** | get_transcript |
+| subtitle.timing | Cue timing verify | AVAILABLE_UNVERIFIED | PRODUCTION_QA | get_transcript; QA check, not gate blocker |
 | audio.import | Import music | VERIFIED | **MUST** | pool clip |
 | audio.place | Place on track | VERIFIED | **MUST** | audio item |
 | audio.volume | DaVinci-native volume | FAILED | — | item-level write/readback false (R1–R2) |
@@ -583,7 +585,7 @@ PASS
 - Subtitles → **VERIFIED** via `native_drt_subtitles` (R1); `live_api_srt_append` **UNSAFE**
 - `audio.ducking` → **UNKNOWN** (optional; not a gate blocker)
 
-**Residual unknowns (non-blocking):** subject-safe 9:16 visual QA; `subtitle.timing` automation; DaVinci-native volume automation.
+**Residual (non-blocking):** subject-safe 9:16 visual QA; `subtitle.timing` full automation (covered by **PRODUCTION_QA**, not Capability Gate); DaVinci-native volume automation; `audio.ducking`.
 
 **Crash record:** `validation/capability-spike/CRASH-20260921.md`
 

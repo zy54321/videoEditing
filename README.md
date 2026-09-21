@@ -37,13 +37,40 @@
 
 ## 项目当前不负责什么
 
+V0.1 是 **Workflow Installer**，不是 **Full Environment Installer**。
+
+### What this installer installs (PACKAGED)
+
+- Cursor Rules
+- Cursor Skills
+- L1 Capability Reference
+- Production Brief Template
+- Workspace Installer
+
+### What it does NOT install
+
+- DaVinci Resolve
+- DaVinci MCP
+- FFmpeg / ffprobe
+- Kokoro TTS
+- Node / Python runtime
+- 研究用 MCP / Skill 仓库（Plotline、ChaiWithJai、CiprianSpiridon 等）
+
+### Runtime dependency model
+
+| Class | Examples |
+|-------|----------|
+| **PACKAGED** | Rules, Skills, templates, installer |
+| **REQUIRED EXTERNAL** | Cursor, DaVinci Resolve Studio, compatible external DaVinci MCP |
+| **AUXILIARY / CONDITIONAL** | FFmpeg/ffprobe (fallback/verify), Kokoro (TTS only when needed) |
+| **RESEARCH ONLY** | 其他 MCP/Skill 研究项目 — 不进入 Release，不自动下载 |
+
+当前**已验证**（validated ≠ vendor lock）环境：DaVinci Resolve Studio **21.1.0.14** + `samuelgursky/davinci-resolve-mcp` **v4.8.13**。
+
+首次生产输入 **【制作视频】** 后，Agent 在 Preparation / Preflight 检查必要 Runtime 是否就绪；不会自动安装或修改 MCP / Resolve。
+
 本项目**不包含**、**不管理**、**不分发**：
 
-- DaVinci Resolve 本体
-- DaVinci MCP Server（使用外部已安装的 samuelgursky/davinci-resolve-mcp）
-- FFmpeg Runtime
-- Kokoro
-- ASR Model
 - 视频素材
 - 具体 Resolve Project
 - Astra

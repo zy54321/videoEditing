@@ -358,7 +358,89 @@ Current template defaults include vertical 1080×1920 @ 24 fps and feature flags
 
 ---
 
-## 16. Brief Creation Timing — MUST
+## 16. Production ID Resolution — MUST
+
+On **FIRST_RUN**, before Brief creation, resolve `production.id`.
+
+### Default candidate
+
+Use the **leaf directory name** of the current Cursor Workspace:
+
+- Trim leading/trailing whitespace
+- Preserve readable characters as-is
+- **MUST NOT** append date, random GUID, or derive from `media.input` / `media.output`
+
+Example:
+
+```
+Workspace: D:\Productions\N03-austria-shopping
+→ production.id candidate: N03-austria-shopping
+```
+
+### Owner Authority
+
+`production.id` remains **Owner Authority**.
+
+The workspace leaf name is a **candidate only**, not an immutable final authority.
+
+If the workspace name is unsuitable as a Production ID, **MUST** ask Owner:
+
+> 请给这条视频一个简短编号或名称。
+
+Unsuitable examples (non-exhaustive):
+
+- `video`, `project`, `workspace`, `new-folder`, `test`, `temp`
+- empty or illegal identifier
+
+**MUST NOT** invent a business ID.
+
+### After Brief creation
+
+Once `brief.yaml` is written, `production.id` is **fixed**.
+
+On **CONTINUE_EXISTING**, **MUST NOT** regenerate `production.id`.
+
+---
+
+## 17. Output Filename Resolution — MUST
+
+`output.filename` is Required in the Production Brief.
+
+If Owner does **not** explicitly provide an output filename:
+
+### Default
+
+Derive from `production.id`:
+
+```
+<production.id>_V1.mp4
+```
+
+Example: `N03-austria-shopping_V1.mp4`
+
+Set `output.overwrite_existing = false`.
+
+### Collision handling
+
+If `media.output` already contains the candidate filename:
+
+- **MUST NOT** overwrite
+- Try `_V2`, `_V3`, `_V4`, … in order
+- Use the first unused name
+
+Resolve **before** Brief Build. Write the final value to `output.filename`.
+
+**MUST NOT** ask “文件名叫什么？” unless:
+
+1. `production.id` cannot be determined
+2. Owner explicitly requests a custom filename
+3. Auto-generation cannot be resolved safely
+
+Render stage **must** re-verify the target file does not exist before writing.
+
+---
+
+## 18. Brief Creation Timing — MUST
 
 **Installer MUST NOT** create a formal Production Brief.
 
@@ -379,7 +461,7 @@ May be created **only after**:
 
 ---
 
-## 17. Path Binding — MUST
+## 19. Path Binding — MUST
 
 On Brief creation, write **resolved absolute paths** to:
 
@@ -402,7 +484,7 @@ PATH_VALIDATION → ASSET_AUDIT → PREPARATION_GATE
 
 ---
 
-## 18. Date Ownership — MUST
+## 20. Date Ownership — MUST
 
 The workflow **does not** manage date-based media directories.
 
@@ -419,7 +501,7 @@ Production may continue across days.
 
 ---
 
-## 19. Preparation Gate — MUST
+## 21. Preparation Gate — MUST
 
 Preparation state:
 
@@ -429,7 +511,20 @@ Preparation state:
 | `READY` | May enter L3 Preflight |
 | `BLOCKED` | Stop; explain gaps |
 
-**READY** requires:
+**READY** requires all of the following Brief Required fields have **legal values** (not placeholders):
+
+| Field | Requirement |
+|-------|-------------|
+| `production.id` | Resolved per §16; Owner-confirmed if needed |
+| `editing.skill` | Selected L2 Skill ID |
+| `media.input` | Validated absolute path |
+| `media.output` | Validated absolute path |
+| `format.width` | Positive integer |
+| `format.height` | Positive integer |
+| `format.fps` | Positive number |
+| `output.filename` | Resolved per §17; collision-safe |
+
+Also requires:
 
 - Type selected
 - Input PASS
@@ -437,7 +532,10 @@ Preparation state:
 - Asset audit complete
 - No `REQUIRED_NOW` gaps
 - Owner confirmations complete
-- Brief can be fully generated
+
+If any Required field is missing: remain `COLLECTING` or `BLOCKED`.
+
+**MUST NOT** create a formal Brief with missing Required fields.
 
 When **READY**, the Agent **MUST**:
 
@@ -451,7 +549,7 @@ Only **BLOCKED** stops for user action.
 
 ---
 
-## 20. Preparation Summary
+## 22. Preparation Summary
 
 Before READY, output a concise summary:
 
@@ -499,7 +597,7 @@ After READY, continue automatically.
 
 ---
 
-## 21. Repeat Entry — MUST
+## 23. Repeat Entry — MUST
 
 When a valid Brief exists and user sends `【制作视频】`:
 
@@ -516,7 +614,7 @@ If state is `READY_FOR_OWNER_REVIEW`: inform Owner production is complete and aw
 
 ---
 
-## 22. Workspace Layout
+## 24. Workspace Layout
 
 ```
 <workspace>/

@@ -74,7 +74,7 @@ Validation 目录**只记录**：
 
 **Post Stage 04A-R2:** All N02 MUST logical capabilities have a VERIFIED safe route. Native live transition and DaVinci-native volume remain FAILED but are not gate blockers.
 
-**Non-blocking:** ducking UNKNOWN; visual 9:16 subject QA; `live_api_srt_append` UNSAFE (use DRT subtitles).
+**Non-blocking:** ducking UNKNOWN; visual 9:16 subject QA; `subtitle.timing` full automation → **PRODUCTION_QA** (not Capability Gate); `live_api_srt_append` UNSAFE (use DRT subtitles).
 
 See `validation/capability-spike/`.
 

@@ -2,6 +2,11 @@
 <#
 .SYNOPSIS
   Build Video Editing Workflow release package from source.
+
+  Release provenance:
+  - Bump VERSION / release metadata and commit first.
+  - Formal build requires a clean git tree.
+  - Source Commit = unique HEAD at build time (not HEAD + uncommitted changes).
 #>
 [CmdletBinding()]
 param(
@@ -67,7 +72,7 @@ function Write-Utf8WithBom {
 $gitStatus = git -C $ProjectRoot status --porcelain 2>$null
 $head = (git -C $ProjectRoot rev-parse HEAD).Trim()
 if ($gitStatus) {
-    Write-Host 'NOTE: Git working tree has uncommitted changes.' -ForegroundColor Yellow
+    Write-BuildError 'BLOCK_RELEASE_DIRTY_TREE: Git working tree is not clean. Commit release source changes before building.'
 }
 $versionFile = Join-Path $SourceRoot 'VERSION'
 $version = (Get-Content -LiteralPath $versionFile -Raw).Trim()
@@ -136,8 +141,6 @@ Write-Utf8NoBom -Path (Join-Path $releaseDir 'README.md') -Content $readme
 
 $templateJson = Get-Content -LiteralPath $manifestTemplate -Raw -Encoding UTF8
 $manifestObj = $templateJson.Replace('{{VERSION}}', $version) | ConvertFrom-Json
-$manifestObj | Add-Member -NotePropertyName 'instance_model' -NotePropertyValue 'single-production' -Force
-$manifestObj | Add-Member -NotePropertyName 'entry' -NotePropertyValue '【制作视频】' -Force
 $manifestPath = Join-Path $releaseDir 'manifest.json'
 $manifestJson = $manifestObj | ConvertTo-Json -Depth 6
 Write-Utf8NoBom -Path $manifestPath -Content ($manifestJson + [Environment]::NewLine)
@@ -180,9 +183,6 @@ if ($LASTEXITCODE -ne 0) {
 if (Test-Path -LiteralPath $releaseZip) {
     Remove-Item -LiteralPath $releaseZip -Force
 }
-if (Test-Path -LiteralPath $releaseZip) {
-    Remove-Item -LiteralPath $releaseZip -Force
-}
 Compress-Archive -LiteralPath $releaseDir -DestinationPath $releaseZip -CompressionLevel Optimal
 
 # --- Release smoke (ZIP) ---
@@ -210,9 +210,8 @@ $evidence = @"
 | Field | Value |
 |-------|-------|
 | Version | $version |
-| Build commit | $head |
+| Source Commit | $head |
 | Build date/time | $(Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK') |
-| Source HEAD | $head |
 | Release file count | $fileCount |
 | ZIP size (bytes) | $zipSize |
 | ZIP SHA256 | $zipHash |
@@ -239,7 +238,7 @@ Write-Host '========================================' -ForegroundColor Green
 Write-Host 'Build Summary' -ForegroundColor Green
 Write-Host '========================================' -ForegroundColor Green
 Write-Host "Version:        $version"
-Write-Host "Commit:         $head"
+Write-Host "Source Commit:  $head"
 Write-Host "Release dir:    $releaseDir"
 Write-Host "ZIP:            $releaseZip"
 Write-Host "File count:     $fileCount"

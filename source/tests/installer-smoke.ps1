@@ -32,10 +32,14 @@ function Assert-ExitCode {
 function Invoke-Installer {
     param(
         [string]$Target,
-        [switch]$DryRun
+        [string]$PayloadRoot,
+        [switch]$DryRun,
+        [switch]$TestSimulateFailure
     )
     $args = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $Installer, '-TargetPath', $Target, '-NoPause')
     if ($DryRun) { $args += '-DryRun' }
+    if ($PayloadRoot) { $args += @('-PayloadRoot', $PayloadRoot) }
+    if ($TestSimulateFailure) { $args += '-TestSimulateFailure' }
     & powershell.exe @args | Out-Null
     return [int]$LASTEXITCODE
 }
@@ -148,6 +152,33 @@ Assert-True ((Get-Content -LiteralPath $userFile -Raw).Trim() -eq 'owner data') 
 # TEST-12: no workspace-config.yaml
 $ws12 = $ws1
 Assert-True (-not (Test-Path (Join-Path $ws12 'workspace-config.yaml'))) 'TEST-12 no workspace-config.yaml created'
+
+# TEST-13: missing payload file blocks install, target unchanged
+$ws13 = New-EmptyWorkspace 'test13-payload-invalid'
+$payloadCopy = Join-Path $TmpRoot 'payload-copy'
+if (Test-Path $payloadCopy) { Remove-Item -LiteralPath $payloadCopy -Recurse -Force }
+Copy-Item -LiteralPath (Join-Path $Root 'payload') -Destination $payloadCopy -Recurse -Force
+Remove-Item -LiteralPath (Join-Path $payloadCopy '.cursor\rules\video-workflow-core.mdc') -Force
+$before13 = (Get-ChildItem -LiteralPath $ws13 -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object).Count
+$code13 = Invoke-Installer -Target $ws13 -PayloadRoot $payloadCopy
+$after13 = (Get-ChildItem -LiteralPath $ws13 -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object).Count
+Assert-ExitCode -Actual $code13 -Expected 21 -Name 'TEST-13 missing payload file PAYLOAD_INVALID'
+Assert-True ($before13 -eq $after13) 'TEST-13 target unchanged after PAYLOAD_INVALID'
+
+# TEST-14: copy failure rollback cleans empty created dirs
+$ws14 = New-EmptyWorkspace 'test14-rollback'
+$userFile14 = Join-Path $ws14 'owner.txt'
+Set-Content -Path $userFile14 -Value 'keep'
+$code14 = Invoke-Installer -Target $ws14 -TestSimulateFailure
+Assert-ExitCode -Actual $code14 -Expected 40 -Name 'TEST-14 simulated copy failure'
+Assert-True (-not (Test-Path (Join-Path $ws14 '.cursor'))) 'TEST-14 rollback removes created .cursor'
+Assert-True ((Get-Content -LiteralPath $userFile14 -Raw).Trim() -eq 'keep') 'TEST-14 preserves pre-existing user file'
+
+$ws14b = New-EmptyWorkspace 'test14b-rollback-existing'
+New-Item -ItemType Directory -Path (Join-Path $ws14b '.cursor\rules') -Force | Out-Null
+Set-Content -Path (Join-Path $ws14b '.cursor\rules\custom.mdc') -Value 'owner rule' -Encoding UTF8
+Invoke-Installer -Target $ws14b -TestSimulateFailure | Out-Null
+Assert-True (Test-Path (Join-Path $ws14b '.cursor\rules\custom.mdc')) 'TEST-14 preserves pre-existing .cursor'
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })
