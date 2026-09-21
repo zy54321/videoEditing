@@ -8,6 +8,27 @@ disable-model-invocation: true
 
 This is the **L3 Production Workflow** of Video Editing Workflow.
 
+## Governance
+
+**Production Entry / Intake authority** is defined by:
+
+```
+.cursor/rules/production-entry-intake.mdc
+```
+
+L3 **MUST** obey that Rule. L3 must **not** bypass, weaken, or contradict it on:
+
+- Standard entry (`【制作视频】`)
+- Single-Production instance binding
+- What must be asked vs inferred
+- Path binding and date ownership
+- Preparation Gate and auto-continue after READY
+- Repeat entry behavior
+
+This Skill implements execution steps **under** that Rule.
+
+---
+
 ## Responsibilities
 
 - Receive a Production Brief
@@ -41,37 +62,61 @@ L3 does **not** answer:
 
 ## Invocation Contract
 
-### Recommended Invocation
+### Standard Product Entry (governed)
+
+Per `production-entry-intake.mdc`, the standard Owner entry is:
+
+```
+【制作视频】
+```
+
+The Agent **must not** require `/video-production`, Skill names, or Brief paths for normal use.
+
+### Advanced / Developer Invocation
 
 ```
 /video-production
-使用 <brief-path> 开始生产
 ```
 
-Example:
+May be used when explicitly invoking this Skill directly. Still subject to `production-entry-intake.mdc` when the task is governed production.
+
+### Brief Location (Single Production)
 
 ```
-/video-production
-使用 video-workflow/productions/N02/brief.yaml 开始生产
+video-workflow/production/brief.yaml
 ```
 
-This skill uses **explicit invocation** (`disable-model-invocation: true`).
+One workspace → one Production. See `production-entry-intake.mdc` for FIRST_RUN vs CONTINUE_EXISTING.
 
 ### Startup Parsing
 
-On start, the skill must parse:
+After governed Intake or on CONTINUE, parse from Brief:
 
-- `brief path`
 - `production.id`
 - `editing.skill`
+- `media.input` / `media.output`
+- `format.*`, `runtime.*`, `assets.*`, `features.*`, `output.*`
 
-### Brief Path Resolution
+**Do not** ask for Brief YAML fields that Intake already resolved.
 
-If the user does not provide a Brief path:
+---
 
-1. Check whether the current context contains exactly one unambiguous Production Brief.
-2. If multiple candidates exist, or uniqueness cannot be determined: **ask the user**.
-3. **Do not** infer Production from filename alone.
+## Preparation (execution under Rule)
+
+Governed order is defined in `production-entry-intake.mdc`. L3 execution notes:
+
+| Step | L3 action |
+|------|-----------|
+| TYPE_SELECTION | Enumerate `.cursor/skills/video-editing/*/SKILL.md`; map choice to `editing.skill` |
+| PATH_COLLECTION | Parse natural language → `media.input`, `media.output` |
+| PATH_VALIDATION | Verify input dir exists/readable; output parent writable; create empty output if authorized |
+| ASSET_AUDIT | Read-only scan; classify assets; collect metadata |
+| REQUIREMENT_CLASSIFICATION | Apply L2 + `features.*` + audit → REQUIRED_NOW / OPTIONAL / RESOLVABLE_DURING_PRODUCTION |
+| NECESSARY_OWNER_CONFIRMATION | Frozen voice/script; content authority; music choice if needed |
+| BRIEF_BUILD | Fill `production-brief.yaml` template; write absolute paths |
+| PREPARATION_GATE | Emit summary; on READY save Brief and enter Stage 0 automatically |
+
+L3 **must not** enter Stage 0 before `PREPARATION_GATE = READY`.
 
 ---
 
@@ -251,6 +296,8 @@ But they still use this **same L3 workflow**.
 ## Stage 0 — Preflight
 
 Preflight must complete before formal production begins.
+
+**Prerequisite:** `production-entry-intake.mdc` Preparation Gate = **READY** and `video-workflow/production/brief.yaml` exists.
 
 ### Production
 
@@ -726,13 +773,7 @@ Use only:
 
 ## Execution Continuity
 
-Once Owner explicitly starts:
-
-```
-/video-production <brief>
-```
-
-this authorizes completion within that Brief scope through:
+Once Owner starts via `【制作视频】` (or explicit `/video-production` under the same governed Brief), this authorizes completion within that Brief scope through:
 
 ```
 Preflight → Analyze → Plan → Edit → Finish → QA → Repair → Render → Closeout

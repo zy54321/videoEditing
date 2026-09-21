@@ -204,3 +204,21 @@ Production Brief 应引用外部媒体路径。
 - 安装 Python / Node / FFmpeg
 
 除非 Owner 为该操作明确授权。
+
+---
+
+## 11. Production Entry Routing
+
+当用户输入：
+
+```
+【制作视频】
+```
+
+Agent **必须**遵循：
+
+`production-entry-intake.mdc`
+
+然后调用 `video-production` Skill 执行。
+
+生产入口、Intake、Single-Production、Path Binding、Preparation Gate 的治理权威在该 Rule 中定义；本 Rule 不重复其全文。

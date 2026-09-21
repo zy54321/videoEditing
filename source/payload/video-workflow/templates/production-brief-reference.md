@@ -285,6 +285,22 @@ output:
 
 ---
 
+## Governed Intake & Brief Lifecycle
+
+| Principle | Policy |
+|-----------|--------|
+| Creation | Brief is created **only** after governed Intake completes (`production-entry-intake.mdc`) |
+| Location | `video-workflow/production/brief.yaml` |
+| Paths | `media.input` / `media.output` come from **Owner-provided** paths, resolved to absolute at creation |
+| Binding | After creation, paths are **stable** for this Production — not recomputed from date or workspace |
+| Date | Workflow does **not** derive or manage date-based media directories |
+| Instance | **One workspace → one Production**; another video requires a new workspace |
+| Path change | Owner changes input/output → re-run Path Validation, Asset Audit, Preparation Gate |
+
+Installer may create `video-workflow/production/` but **must not** pre-fill `brief.yaml`.
+
+---
+
 ## What Brief Must Not Contain
 
 Brief and this reference must **not** name:

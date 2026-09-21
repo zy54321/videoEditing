@@ -9,7 +9,8 @@
   "components": {
     "rules": [
       "video-workflow-core",
-      "davinci-production"
+      "davinci-production",
+      "production-entry-intake"
     ],
     "skills": [
       "video-production",
