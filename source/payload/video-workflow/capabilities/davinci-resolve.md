@@ -252,6 +252,7 @@ Filename alone is **not** semantic evidence.
 |------------|-------------|--------|----------|---------------|
 | `clip.speed_change` | Apply speed / retime to clip | **VERIFIED** | **MUST** | `get_speed` 150% read-back; duration 144→96; gap clean after reposition (Stage 04A) |
 | `clip.retime_mode` | Nearest / optical flow / frame blend | **UNKNOWN** | Optional | `get_retime` read-back |
+| `mixed_fps.cadence_analyze` | Assess mixed source fps vs timeline cadence risk | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | FFprobe distribution + placement; no safe auto-interpolation route confirmed (08A) |
 
 **L1 responsibility:** implement a speed factor **decided by L2** — not preset 1.4× / 2×.
 
@@ -326,7 +327,10 @@ Filename alone is **not** semantic evidence.
 | `subtitle.import` | Import SRT / external subtitle media | **VERIFIED** | **MUST** | Pool import only; live timeline placement via SRT append is **UNSAFE** |
 | `subtitle.create` | Place subtitles on timeline | **VERIFIED** | **MUST** | Via `native_drt_subtitles` route (R1); not via live SRT append |
 | `subtitle.track` | Create/manage subtitle track | **VERIFIED** | **MUST** | Subtitle track populated after DRT import |
-| `subtitle.style` | Control font/size/emphasis via API | **UNKNOWN** | Optional | Style read-back not confirmed |
+| `subtitle.layout` | Controllable width, line break, position, safe area | **UNKNOWN** | **MUST** (N02 V2) | DRT SRT placement verified; per-cue layout automation not confirmed (Stage 08A) |
+| `subtitle.visual_style` | Font, outline, background, styled text | **UNKNOWN** | Required | `subtitle.create` VERIFIED ≠ visual style VERIFIED |
+| `subtitle.keyword_emphasis` | Per-cue keyword styling | **UNKNOWN** | Optional | Fusion/Text+ route not validated |
+| `subtitle.style` | Legacy alias — prefer `subtitle.visual_style` | **UNKNOWN** | Optional | Style read-back not confirmed |
 | `subtitle.timing` | Verify cue timing vs narration | **AVAILABLE_UNVERIFIED** | **PRODUCTION_QA** | `get_transcript` cues vs plan; checked in final QA, not a Capability Gate blocker |
 | `subtitle.edit` | Adjust cue text/timing programmatically | **UNKNOWN** | Repair | No confirmed write surface this stage |
 
@@ -384,6 +388,13 @@ V0.1 N02 does not require heavy graphics automation.
 | `audio.track_management` | Add/manage audio tracks | **VERIFIED** | Required | Track count/names |
 | `audio.mix_readback` | Read levels / mapping | **AVAILABLE_UNVERIFIED** | Required | `probe_audio_item`, listen test |
 | `audio.ducking` | Auto-duck music under voice | **UNKNOWN** | Desired | No reliable auto-duck API confirmed |
+| `music.library.search` | Search licensed/internal music library | **UNAVAILABLE** | No | No automated library in V0.1 Runtime |
+| `music.library.preview` | Preview library track | **UNAVAILABLE** | No | — |
+| `music.library.select` | Select library track for production | **UNAVAILABLE** | No | — |
+| `voice.eq` | EQ on voice track/item | **AVAILABLE_UNVERIFIED** | Optional | Fairlight/audio MCP surfaces exist; not spike-validated 08A |
+| `voice.compression` | Dynamics on voice | **AVAILABLE_UNVERIFIED** | Optional | — |
+| `voice.pitch` | Pitch/timbre adjustment | **UNKNOWN** | Optional | — |
+| `voice.effect` | Special voice FX | **UNKNOWN** | Optional | Not N02 blocker |
 
 **Voice Master preservation:** Place voice on dedicated track; music on separate track; verify narration intelligibility after mix.
 
@@ -411,7 +422,7 @@ V0.1 N02 does not require heavy graphics automation.
 
 | Logical ID | Description | Status | N02 V0.1 | Verify Method |
 |------------|-------------|--------|----------|---------------|
-| `color.basic` | Light correction / matching | **DEFERRED** | Optional | Grade read-back / frame compare |
+| `color.basic` | Light correction / matching | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2 baseline) | `timeline_item_color.safe_set_cdl` schema exposed; end-to-end grade not spike-validated 08A |
 | `color.lut` | Apply LUT | **AVAILABLE_UNVERIFIED** | Optional | Node/LUT state |
 | `color.match` | Shot matching | **DEFERRED** | Not N02 MUST | — |
 
@@ -480,6 +491,9 @@ V0.1 does not maintain a plugin registry. **Do not auto-install OFX.**
 | `qa.audio_state` | Read audio properties | **AVAILABLE_UNVERIFIED** | Required | `get_audio`, `probe_audio_item` |
 | `qa.gap_detection` | Detect gaps/overlaps | **VERIFIED** | Required | `detect_gaps_overlaps` |
 | `qa.visual_frame` | Capture rendered frame | **AVAILABLE_UNVERIFIED** | Required | `timeline_frame` capture |
+| `final_render.frame_sampling` | Extract representative frames from MP4 (FFmpeg) | **VERIFIED** | **MUST** | Auxiliary: `ffmpeg -ss` frame extract; workflow temp only |
+| `final_render.black_bar_check` | Detect letterbox/pillarbox in rendered frames | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | FFmpeg extract + luminance/edge heuristic or Agent vision |
+| `final_render.subtitle_visual_qa` | Verify subtitle visibility/overflow in MP4 | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | Requires frame sampling + vision; timeline count insufficient |
 
 **Visual QA not replaceable by Inspector numbers alone:**
 
@@ -494,20 +508,11 @@ Use `timeline_frame` capture and/or short render samples.
 
 ## 7. Capability Matrix (Summary)
 
-Full matrix spans **41 logical capabilities** in the master table below.
+Full matrix spans logical capabilities in the master table below (Stage 08A expanded).
 
 ### Status Counts (master matrix)
 
-| Status | Count |
-|--------|------:|
-| VERIFIED | 30 |
-| AVAILABLE_UNVERIFIED | 5 |
-| FAILED | 1 |
-| UNKNOWN | 4 |
-| UNAVAILABLE | 0 |
-| DEFERRED | 1 |
-
-Counts are derived from the Master Matrix rows below — do not maintain separate manual totals.
+Counts are **derived from Master Matrix rows** — do not maintain separate manual totals.
 
 ### Master Matrix
 
@@ -539,15 +544,28 @@ Counts are derived from the Master Matrix rows below — do not maintain separat
 | subtitle.track | Subtitle track | VERIFIED | **MUST** | track + items |
 | subtitle.create | Place subtitles on timeline | VERIFIED | **MUST** | native_drt_subtitles route (R1) |
 | subtitle.import | Import SRT to pool | VERIFIED | **MUST** | pool import; live append UNSAFE |
-| subtitle.style | API style control | UNKNOWN | No | — |
+| subtitle.layout | Width/line break/position | UNKNOWN | **MUST** (V2) | 08A: no safe automated layout route |
+| subtitle.visual_style | Font/outline/background | UNKNOWN | Yes | create ≠ visual VERIFIED |
+| subtitle.keyword_emphasis | Keyword styling | UNKNOWN | Optional | Fusion route not validated |
 | subtitle.timing | Cue timing verify | AVAILABLE_UNVERIFIED | PRODUCTION_QA | get_transcript; QA check, not gate blocker |
+| mixed_fps.cadence_analyze | Mixed fps cadence risk | AVAILABLE_UNVERIFIED | **MUST** (V2) | FFprobe + placement; interpolation UNKNOWN |
+| music.library.search | Music library search | UNAVAILABLE | No | No V0.1 library automation |
+| music.library.preview | Music library preview | UNAVAILABLE | No | — |
+| music.library.select | Music library select | UNAVAILABLE | No | — |
+| voice.eq | Voice EQ | AVAILABLE_UNVERIFIED | Optional | schema exposed |
+| voice.compression | Voice compression | AVAILABLE_UNVERIFIED | Optional | — |
+| voice.pitch | Voice pitch | UNKNOWN | Optional | — |
+| voice.effect | Voice FX | UNKNOWN | Optional | — |
+| final_render.frame_sampling | MP4 frame extract | VERIFIED | **MUST** | FFmpeg auxiliary |
+| final_render.black_bar_check | Black bar detection | AVAILABLE_UNVERIFIED | **MUST** (V2) | extract + heuristic/vision |
+| final_render.subtitle_visual_qa | Subtitle in MP4 | AVAILABLE_UNVERIFIED | **MUST** (V2) | not timeline-only |
 | audio.import | Import music | VERIFIED | **MUST** | pool clip |
 | audio.place | Place on track | VERIFIED | **MUST** | audio item |
 | audio.volume | DaVinci-native volume | FAILED | — | item-level write/readback false (R1–R2) |
 | background_music_level_control | Music level under voice | VERIFIED | **MUST** | ffmpeg_pre_attenuation (R2) |
 | audio.fade | Fade in/out | VERIFIED | **MUST** | get_fades 12/24 frames (R1) |
 | audio.ducking | Auto ducking | UNKNOWN | Desired | — |
-| color.basic | Light correction | DEFERRED | No | — |
+| color.basic | Light correction | AVAILABLE_UNVERIFIED | **MUST** (V2) | CDL schema; not E2E validated 08A |
 | effects.resolvefx | ResolveFX automation | UNKNOWN | No | — |
 | effects.fusion | Fusion effects | AVAILABLE_UNVERIFIED | No | render frame |
 | effects.ofx | OFX plugins | UNKNOWN | No | — |
@@ -613,5 +631,6 @@ PASS
 | 5 | Stage 04A-R1 recovery | DRT subtitle **VERIFIED**; live transition/volume **FAILED** |
 | 6 | Stage 04A-R2 closure | Vertical 1080×1920 render; DRT transition; FFmpeg music level; integrated render |
 | 7 | Crash evidence | `validation/capability-spike/CRASH-20260921.md` |
+| 8 | Stage 08A observational spike | `validation/capability-spike/STAGE-08A-observational-style.md` |
 
-Next recommended action before N02 Acceptance: end-to-end production run on N02 brief; optional visual framing QA; optional `live_api_add_transition` repair if native live transitions become required.
+Next recommended action: **N02 V2** real production acceptance (Stage 08B) with motion normalization enforced and Final Artifact QA.

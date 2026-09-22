@@ -112,7 +112,9 @@ if (Test-Path -LiteralPath $buildScript) {
 # 12. VERSION vs scope release state
 $version = (Get-Content (Join-Path $Root 'VERSION') -Raw).Trim()
 $scopeDoc = Get-Content (Join-Path $ProjectRoot 'docs\03-v0.1-scope.md') -Raw -Encoding UTF8
-if ($scopeDoc -match '\| Release \| RELEASE_CANDIDATE \|') {
+if ($scopeDoc -match 'v0\.1\.1 Observational Style Acceptance Closure \| IN_PROGRESS') {
+    Assert-True ($version -eq '0.1.1-dev') 'C12 VERSION is 0.1.1-dev during v0.1.1 closure'
+} elseif ($scopeDoc -match '\| Release \| RELEASE_CANDIDATE \|') {
     Assert-True ($version -eq '0.1.0') 'C12 VERSION is 0.1.0 for RELEASE_CANDIDATE'
 } elseif ($scopeDoc -match '\| Release \| RELEASED \|') {
     Assert-True ($version -eq '0.1.0') 'C12 VERSION is 0.1.0 for RELEASED'

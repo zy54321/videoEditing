@@ -7,8 +7,10 @@
 | 属性 | 值 |
 |------|-----|
 | Editing Skill | `observational-info-short` |
+| Canonical name | 生活观察 / 轻知识短视频 |
 | 类型 | 观察式信息短视频 |
-| 状态 | 进行中 — Bootstrap 阶段记录基线 |
+| V1 状态 | **VALIDATION EVIDENCE + PARTIAL STYLE ACCEPTANCE** |
+| V2 状态 | **READY_TO_RUN** (Stage 08B) |
 
 ## 资产边界
 
@@ -17,86 +19,94 @@
 - **媒体文件不复制**进本项目
 - **Resolve 工程不复制**进本项目
 
-Validation 目录**只记录**：
+Validation 目录**只记录**输入条件、Skill 行为、问题、修复与 Acceptance 结果。
 
-- 输入条件
-- Skill 行为
-- 发现的问题
-- 修复结果
-- Acceptance 结果
+---
 
-## 当前已验证
+## N02 V1 — First Real Production (2026-09-21)
 
-| 步骤 | 状态 |
-|------|------|
-| Voice Master | ✅ |
-| 素材搜集 | ✅ |
-| Resolve Project Bootstrap | ✅ |
-| Semantic rough cut | ✅ |
-| Render | ✅ |
+### Summary
 
-## 当前暴露的问题
+| Dimension | Result |
+|-----------|--------|
+| Workflow | **PASS** |
+| Editing Quality | **IMPROVED** |
+| Final Acceptance | **NOT ACCEPTED** |
 
-以下问题将成为 `observational-info-short` Skill V0 的**真实需求来源**：
+V1 不是失败——它是真实环境下的**验证证据**与**部分风格验收**。
 
-| 问题 | 描述 |
-|------|------|
-| Stock slow motion | Stock footage 存在明显慢动作，需 Motion Normalization |
-| Timeline gap / black frame | 时间线空隙与黑帧 |
-| 9:16 framing | 竖屏画幅统一策略缺失 |
-| Transition | 仅 Hard Cut，转换生硬 |
-| Subtitle | 字幕未纳入标准流程 |
-| Music | 背景音乐集成未标准化 |
-| Repetition / pacing | 重复镜头与节奏问题 |
+### 正向结果
 
-## Acceptance 目标
+- Source switching 明显更自然
+- Narrative flow 改善
+- Transitions 改善
+- Zero timeline gaps
+- Frozen voice preserved
+- Valid vertical render produced (1080×1920)
 
-在 V0.1 Release 初始化后，针对 N02：
+### 未接受原因（V0.1.1 输入）
 
-> 仅提供 Production Brief + 调用 `video-production` Skill，  
-> 系统自动完成完整生产流程，  
-> **不再需要 Owner 手写数百行逐镜头执行 Prompt。**
+| # | Issue | Category |
+|---|-------|----------|
+| 1 | Motion normalization **skipped** | Motion |
+| 2 | User: walking appears too slow | Motion |
+| 3 | User: some motion appears jerky | Cadence |
+| 4 | Subtitle layout overflow | Subtitle |
+| 5 | Final subtitle visibility needs stronger artifact QA | Final QA |
+| 6 | Framing / black bar artifact risk on final MP4 | Framing |
+| 7 | Color only partial | Color |
+| 8 | Music disabled by Owner — **not a defect** | Music (`OWNER_DISABLED`) |
 
-## L1 Capability Gate
+### Mixed FPS (V1 evidence)
 
-| N02 Requirement | Required Capability | Status | Evidence / Note |
-|-----------------|---------------------|--------|-----------------|
-| Motion normalization | `clip.speed` | **VERIFIED** | Stage 04A spike: 150% read-back; duration 144→96 |
-| 9:16 framing | `clip.scale` + `clip.position` | **VERIFIED** (API) | Transform read-back verified; visual QA still recommended |
-| Transitions | `transition.apply` | **VERIFIED** | R2: `native_drt_transition` — DRT assemble → import → render |
-| Subtitles | `subtitle.create` via DRT | **VERIFIED** | R1: `native_drt_subtitles`; SRT live-append **UNSAFE** (crash) |
-| Background music | `audio.import` + `audio.place` + `background_music_level_control` + `audio.fade` | **VERIFIED** | Level via `ffmpeg_pre_attenuation` (R2); native volume **FAILED** |
-| Voice preservation | `audio.place` + timeline control | VERIFIED | Voice Master in N02 rough cut |
-| Render | `render.configure` + `render.start` | **VERIFIED** | R2 ffprobe: H.264 **1080×1920** 24fps AAC |
-| Post-render verification | `render.verify` + FFprobe | VERIFIED | `verify_output` + external probe |
+Source distribution included **23.976, 25, 29.97, 30** fps → timeline **24 fps**. Cadence risk documented for V2.
 
-**N02_CAPABILITY_GATE:** `PASS`
+---
 
-**Post Stage 04A-R2:** All N02 MUST logical capabilities have a VERIFIED safe route. Native live transition and DaVinci-native volume remain FAILED but are not gate blockers.
+## L1 Capability Gate (unchanged baseline)
 
-**Non-blocking:** ducking UNKNOWN; visual 9:16 subject QA; `subtitle.timing` full automation → **PRODUCTION_QA** (not Capability Gate); `live_api_srt_append` UNSAFE (use DRT subtitles).
+**N02_CAPABILITY_GATE (v0.1.0):** `PASS` — all MUST logical capabilities have a VERIFIED safe route.
 
-See `validation/capability-spike/`.
+Stage 08A adds **capability truth** for layout, visual subtitle, final artifact QA, mixed-fps analyze — see `validation/capability-spike/STAGE-08A-observational-style.md`.
 
-## Requirements → L2 Coverage
+**Non-blocking:** `live_api_srt_append` UNSAFE; use `native_drt_subtitles`; `subtitle.timing` → PRODUCTION_QA.
 
-N02 已暴露问题与 `observational-info-short` Skill 的映射关系（验证记录 only；N02 专属规则不得反向写入通用 Skill）：
+---
 
-| N02 问题 | L2 覆盖 |
+## N02 V2 Acceptance Targets (Stage 08B)
+
+| Check | Required |
+|-------|----------|
+| Narrative | PASS |
+| Shot Selection | PASS |
+| Pacing | PASS |
+| Motion Normalization | PASS |
+| Framing | PASS |
+| Subtitle Functional | PASS |
+| Subtitle Layout | PASS |
+| Voice | PASS |
+| Color / Look | PASS |
+| Final Visual QA | PASS |
+| Final Motion QA | PASS |
+| Render | PASS |
+| Music | OWNER_DISABLED if Owner chose B |
+
+---
+
+## Requirements → L2 Coverage (V0.1.1)
+
+| N02 问题 | L2 / QA |
 |----------|---------|
-| Stock slow motion | Motion Strategy / OBS-QA-01 |
-| Timeline gap / black frame | Transition Integrity + Universal QA |
-| 9:16 framing | Framing Strategy / OBS-QA-08 |
-| Hard-cut stiffness | Transition Strategy |
-| Missing subtitles | Subtitle Strategy / OBS-QA-09 |
-| Missing background music | Music Strategy + Audio Mix Strategy / OBS-QA-12 |
-| Repetition / pacing | Repetition Strategy + Narrative Rhythm / OBS-QA-02, OBS-QA-05 |
+| Stock slow motion | Motion Strategy MUST + OBS-QA-MOTION |
+| Jerky cadence | Mixed FPS + OBS-QA-CADENCE |
+| Subtitle overflow | Subtitle Layout + OBS-QA-SUBTITLE-LAYOUT |
+| Final subtitle QA | Final Artifact QA + OBS-QA-FINAL-RENDER |
+| Black bars | Framing + final_render.black_bar_check |
+| Color partial | Color / Look Strategy |
+| Music off | Music Strategy — OWNER_DISABLED |
+
+---
 
 ## 记录规范
 
-后续每次验证迭代，在本目录追加：
-
-- 输入条件摘要
-- Skill 行为观察
-- 问题与修复记录
-- Acceptance 判定
+后续每次验证迭代，在本目录追加：输入摘要、观察、修复、Acceptance 判定。
