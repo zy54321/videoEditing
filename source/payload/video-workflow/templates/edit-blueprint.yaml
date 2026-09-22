@@ -1,0 +1,38 @@
+# Edit Blueprint — beat-first plan for one production.
+# Reference: video-workflow/templates/edit-blueprint-reference.md
+# Runtime copy: video-workflow/production/edit-blueprint.yaml
+
+version: 1
+
+production_id: "" # Must match brief production.id
+
+style:
+  skill: "" # L2 skill ID
+
+author_intent:
+  global: null # Optional string — whole-piece intent from Owner
+  local: [] # Optional: { beat_id, intent }
+
+review_before_edit: false # true = pause for Owner before Edit stage
+
+beats: []
+# Each beat example:
+# - beat_id: B01
+#   narrative_function: CONTRAST # vocabulary from editing-craft/directing-story.md
+#   source_content_range: "" # narration segment, script section, or time hint
+#   author_intent: null # optional local override
+#   audience_effect: "" # surprise | clarity | empathy | etc.
+#   visual_intent: ""
+#   attention_target: ""
+#   preferred_shot_functions:
+#     - ESTABLISH
+#     - EVIDENCE
+#     - REVEAL
+#   pacing: medium-fast # slow | medium | medium-fast | fast
+#   sound_music_intent: narration dominant
+#   subtitle_graphics_intent: standard caption
+#   color_effect_intent: natural
+#   asset_selection_guidance: ""
+#   shot_plan: null # optional list — expand only when beat requires detail
+
+notes: ""

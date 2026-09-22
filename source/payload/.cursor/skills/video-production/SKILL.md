@@ -209,8 +209,9 @@ source/payload/.cursor/skills/video-editing/<skill-id>/SKILL.md
 
 1. Read the specified L2 `SKILL.md`.
 2. Verify Skill identity matches the requested `editing.skill`.
-3. Read that Skill's `references/` as needed.
-4. Use the L2 Skill as strategy authority for:
+3. Read that Skill's `references/` in the order specified by the L2 Skill (when provided).
+4. Consult `video-workflow/knowledge/editing-craft/` for shared professional principles — Craft does not override Style.
+5. Use the L2 Skill as strategy authority for:
    - pacing
    - shot grammar
    - motion strategy
@@ -271,6 +272,22 @@ If Runtime cannot implement a required action:
 
 ---
 
+## Aesthetic Decision Priority
+
+When two legitimate editorial options conflict (after safety and factual integrity):
+
+1. Author Intent (when provided in Brief)
+2. Emotion / Audience Effect
+3. Story / Information Progression
+4. Rhythm
+5. Visual Attention
+6. Style Consistency
+7. Technical Continuity
+
+See also: `video-workflow/knowledge/editing-craft/aesthetic-qa.md` (four-level hierarchy).
+
+---
+
 ## Production Pipeline
 
 Unified workflow:
@@ -278,7 +295,11 @@ Unified workflow:
 ```
 Preflight
   → Analyze
-  → Plan
+  → Understand Content / Intent
+  → Build Beat Map
+  → Generate Edit Blueprint
+  → Expose Blueprint Summary (default: non-blocking)
+  → Plan Execution
   → Edit
   → Finish
   → QA
@@ -447,12 +468,59 @@ Analyze produces **evidence**, not aesthetic decisions.
 
 ---
 
-## Stage 2 — Plan
+## Stage 2 — Edit Blueprint
+
+**Prerequisite:** Analyze complete.
+
+### Flow
+
+```
+Understand Content / Author Intent
+  → Build Beat Map (beat-first, not default shot storyboard)
+  → Write video-workflow/production/edit-blueprint.yaml
+  → Emit concise Blueprint summary for Owner visibility
+  → Continue unless blocked
+```
+
+### Blueprint Contract
+
+- Template: `video-workflow/templates/edit-blueprint.yaml`
+- Reference: `video-workflow/templates/edit-blueprint-reference.md`
+- **Beat-first, shot-on-demand** — expand `shot_plan` only when beat complexity requires it
+- **Must not** contain MCP method names or exact API calls
+- **Not** a Runtime action plan
+
+### Owner Visibility
+
+Default: **NON_BLOCKING** — show summary, then proceed to Plan Execution.
+
+**Block** only when:
+
+- `production_options.review_before_edit: true`
+- unresolved author intent
+- high-impact ambiguity
+- content authority conflict
+
+### Author Intent
+
+From Brief `content.author_intent` (optional):
+
+- `global` — whole-piece intent
+- `local[]` — per-beat `{ beat_id, intent }`
+
+If absent: derive from Style + content authority + assets.
+
+Local intent affects named beats only — must not silently retarget entire Style.
+
+---
+
+## Stage 3 — Plan (Execution Planning)
 
 Plan is the synthesis of:
 
 ```
 Production Brief
++ Edit Blueprint
 + Analyze Evidence
 + L2 Editing Strategy Skill
 + Runtime Capability
@@ -513,7 +581,7 @@ The plan must come from actual assets and the loaded L2 Skill.
 
 ---
 
-## Stage 3 — Edit
+## Stage 4 — Edit
 
 Edit establishes content structure and base assembly.
 
@@ -544,7 +612,7 @@ All write operations must follow existing Rules: **Write → Verify**.
 
 ---
 
-## Stage 4 — Finish
+## Stage 5 — Finish
 
 Finish executes finishing passes according to:
 
@@ -614,7 +682,7 @@ Examples:
 
 ---
 
-## Stage 5 — QA (Pre-Render)
+## Stage 6 — QA (Pre-Render)
 
 **Pre-Render QA only.** Final Artifact QA runs **after** Render (see below).
 
@@ -665,7 +733,7 @@ Passing execution steps without error is **not** sufficient for QA PASS.
 
 ---
 
-## Stage 6 — Repair
+## Stage 7 — Repair
 
 When QA finds an ordinary defect:
 
@@ -708,7 +776,7 @@ and output evidence.
 
 ---
 
-## Stage 7 — Render
+## Stage 8 — Render
 
 Render only after **Pre-Render QA** (Stage 5 Universal + Genre) reaches render-ready state.
 
@@ -763,7 +831,7 @@ If Agent cannot perform visual review: `FINAL_VISUAL_QA_REQUIRES_OWNER_REVIEW` �
 
 ---
 
-## Stage 8 — Closeout
+## Stage 9 — Closeout
 
 Closeout is more than "video generated successfully."
 

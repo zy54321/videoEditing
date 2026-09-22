@@ -98,6 +98,25 @@ Establishes **content semantics** authority (distinct from subtitle presentation
 
 Resolved during Intake per `production-entry-intake.mdc` §12. Frozen semantics must not be altered; subtitle timing/layout may still adapt for presentation.
 
+### `content.author_intent`
+
+**Optional.** What Owner wants the audience to feel or understand — distinct from Style and from `creative_direction`.
+
+| Field | Meaning |
+|-------|---------|
+| `content.author_intent.global` | Whole-piece intent string, or `null` if omitted |
+| `content.author_intent.local` | Array of `{ beat_id, intent }` — affects named beats only |
+
+If omitted: L3 derives intent from Style + content authority + assets.
+
+Local intent must **not** silently override entire Style identity.
+
+### `production_options.review_before_edit`
+
+When `true`: L3 pauses after Edit Blueprint summary for Owner review before Edit.
+
+Default `false` — Blueprint summary is visible but **non-blocking**.
+
 ### `media.input`
 
 Root directory for input media. Absolute path or workspace-relative.

@@ -1,6 +1,8 @@
-# Observational Info Short — Genre QA
+# Observational Info Short — Style QA
 
-Checklist for L3 QA Stage (Genre layer). Run after Universal QA.
+Checklist for L3 QA Stage (Style layer). Run after Universal QA.
+
+Aesthetic hierarchy: `video-workflow/knowledge/editing-craft/aesthetic-qa.md`
 
 Each item: **PASS** | **FAIL** | **N/A** (with reason).
 

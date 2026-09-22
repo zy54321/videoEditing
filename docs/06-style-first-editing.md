@@ -62,3 +62,43 @@ Frozen Script / Frozen Voice 作为内容权威时：不得改语义，但允许
 Timeline State QA ≠ Final Artifact QA。
 
 Render 技术 verify 通过，不等于成片视觉/运动/字幕布局 PASS。
+
+---
+
+## Architecture Freeze (Stage 08C)
+
+**Frozen:** L2 primary unit = **STYLE** (complete directing / editing / finishing strategy).
+
+Examples: `observational-info-short`, `lifestyle-vlog`, `news-explainer`, `documentary-short`
+
+**Not** first-class L2: subtitle, music, voice, color, transition, effect, sound-design, typography.
+
+### Layer Stack
+
+```
+Common Craft Knowledge  →  video-workflow/knowledge/editing-craft/
+L2 Style Skill          →  .cursor/skills/video-editing/<style>/
+Edit Blueprint          →  beat-first plan (templates/edit-blueprint.yaml)
+L1 Capability           →  video-workflow/capabilities/
+Runtime                 →  external NLE / MCP
+```
+
+See: `docs/07-editing-craft-architecture.md`
+
+### Author Intent vs Creative Direction
+
+| Field | Role |
+|-------|------|
+| `content.author_intent` | What Owner wants to express (optional) |
+| `editing.creative_direction` | How Owner wants it to look/feel (optional) |
+| `editing.skill` | Primary Style system |
+
+Author Intent may be global or local (per beat). Local intent must not silently retarget entire Style.
+
+### Beat-first Blueprint
+
+Planning default = **Beat**, not shot-by-shot storyboard.
+
+Shot Plan expands only when beat complexity requires it.
+
+Blueprint is **non-blocking** unless `production_options.review_before_edit: true` or unresolved ambiguity.

@@ -58,6 +58,12 @@ content:
   authority:
     type: "" # voice | script | subtitle | owner | empty until resolved
     path: "" # Primary content authority file when applicable
+  author_intent:
+    global: null # Optional whole-piece intent; null = Style + content default
+    local: [] # Optional: { beat_id, intent } — affects named beats only
+
+production_options:
+  review_before_edit: false # true = pause after Blueprint for Owner review
 
 output:
   filename: "" # Final deliverable filename (required)
