@@ -109,9 +109,18 @@ if (Test-Path -LiteralPath $buildScript) {
     Write-Host '[SKIP] C11 build-release.ps1 not present' -ForegroundColor Yellow
 }
 
-# 12. VERSION pre-release
+# 12. VERSION vs scope release state
 $version = (Get-Content (Join-Path $Root 'VERSION') -Raw).Trim()
-Assert-True ($version -eq '0.1.0-dev') 'C12 VERSION is 0.1.0-dev before formal release'
+$scopeDoc = Get-Content (Join-Path $ProjectRoot 'docs\03-v0.1-scope.md') -Raw -Encoding UTF8
+if ($scopeDoc -match '\| Release \| RELEASE_CANDIDATE \|') {
+    Assert-True ($version -eq '0.1.0') 'C12 VERSION is 0.1.0 for RELEASE_CANDIDATE'
+} elseif ($scopeDoc -match '\| Release \| RELEASED \|') {
+    Assert-True ($version -eq '0.1.0') 'C12 VERSION is 0.1.0 for RELEASED'
+} elseif ($scopeDoc -match '\| Release \| NOT STARTED \|') {
+    Assert-True ($version -eq '0.1.0-dev') 'C12 VERSION is 0.1.0-dev before formal release'
+} else {
+    Assert-True $false 'C12 unrecognized Release scope state'
+}
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })

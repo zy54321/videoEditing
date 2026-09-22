@@ -100,7 +100,7 @@ if (-not (Test-Path -LiteralPath (Join-Path $ReleasePath 'payload') -PathType Co
 Assert-True $r01 'TEST-R01 required release files exist'
 
 $version = (Get-Content -LiteralPath (Join-Path $ReleasePath 'VERSION') -Raw).Trim()
-Assert-True ($version -match '^\d+\.\d+\.\d+(-dev)?$') 'TEST-R02 VERSION format valid'
+Assert-True ($version -eq '0.1.0') 'TEST-R02 VERSION = 0.1.0'
 
 $manifest = $null
 $manifestOk = $false
