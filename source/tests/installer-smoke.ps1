@@ -188,14 +188,37 @@ Set-Content -Path (Join-Path $ws14b '.cursor\rules\custom.mdc') -Value 'owner ru
 Invoke-Installer -Target $ws14b -TestSimulateFailure | Out-Null
 Assert-True (Test-Path (Join-Path $ws14b '.cursor\rules\custom.mdc')) 'TEST-14 preserves pre-existing .cursor'
 
-# TEST-15: rollback removes nested knowledge dirs after mid-install failure
-$ws15 = New-EmptyWorkspace 'test15-knowledge-rollback'
-$userFile15 = Join-Path $ws15 'owner-notes.txt'
-Set-Content -Path $userFile15 -Value 'keep'
-$code15 = Invoke-Installer -Target $ws15 -TestSimulateFailure -TestSimulateFailureAfter 16
-Assert-ExitCode -Actual $code15 -Expected 40 -Name 'TEST-15 knowledge rollback simulated failure'
-Assert-True (-not (Test-Path (Join-Path $ws15 'video-workflow\knowledge'))) 'TEST-15 rollback removes created knowledge tree'
-Assert-True ((Get-Content -LiteralPath $userFile15 -Raw).Trim() -eq 'keep') 'TEST-15 preserves pre-existing user file'
+# TEST-15A: no pre-existing knowledge/editing-craft — rollback cleans installer-created tree
+$ws15a = New-EmptyWorkspace 'test15a-knowledge-rollback-clean'
+$userFile15a = Join-Path $ws15a 'owner-notes.txt'
+Set-Content -Path $userFile15a -Value 'keep'
+$code15a = Invoke-Installer -Target $ws15a -TestSimulateFailure -TestSimulateFailureAfter 16
+Assert-ExitCode -Actual $code15a -Expected 40 -Name 'TEST-15A knowledge rollback simulated failure'
+Assert-True (-not (Test-Path (Join-Path $ws15a 'video-workflow\knowledge\editing-craft'))) 'TEST-15A rollback removes created editing-craft'
+Assert-True (-not (Test-Path (Join-Path $ws15a 'video-workflow\knowledge'))) 'TEST-15A rollback removes created knowledge'
+Assert-True ((Get-Content -LiteralPath $userFile15a -Raw).Trim() -eq 'keep') 'TEST-15A preserves pre-existing user file'
+
+# TEST-15B: Owner pre-existing empty editing-craft — rollback must not delete it
+$ws15b = New-EmptyWorkspace 'test15b-owner-editing-craft-empty'
+$ownerCraftDir = Join-Path $ws15b 'video-workflow\knowledge\editing-craft'
+New-Item -ItemType Directory -Path $ownerCraftDir -Force | Out-Null
+$code15b = Invoke-Installer -Target $ws15b -TestSimulateFailure -TestSimulateFailureAfter 16
+Assert-ExitCode -Actual $code15b -Expected 40 -Name 'TEST-15B owner empty editing-craft rollback failure'
+Assert-True (Test-Path -LiteralPath $ownerCraftDir -PathType Container) 'TEST-15B preserves Owner empty editing-craft dir'
+Assert-True ((Get-ChildItem -LiteralPath $ownerCraftDir -Force | Measure-Object).Count -eq 0) 'TEST-15B Owner editing-craft remains empty after rollback'
+Assert-True (-not (Test-Path (Join-Path $ownerCraftDir 'README.md'))) 'TEST-15B installer craft files rolled back'
+
+# TEST-15C: Owner pre-existing editing-craft with file — content must survive rollback
+$ws15c = New-EmptyWorkspace 'test15c-owner-editing-craft-file'
+$ownerCraftDirC = Join-Path $ws15c 'video-workflow\knowledge\editing-craft'
+New-Item -ItemType Directory -Path $ownerCraftDirC -Force | Out-Null
+$ownerMarker = Join-Path $ownerCraftDirC 'owner-placeholder.txt'
+Set-Content -Path $ownerMarker -Value 'owner craft marker'
+$code15c = Invoke-Installer -Target $ws15c -TestSimulateFailure -TestSimulateFailureAfter 16
+Assert-ExitCode -Actual $code15c -Expected 40 -Name 'TEST-15C owner editing-craft file rollback failure'
+Assert-True (Test-Path -LiteralPath $ownerMarker) 'TEST-15C Owner marker file still exists'
+Assert-True ((Get-Content -LiteralPath $ownerMarker -Raw).Trim() -eq 'owner craft marker') 'TEST-15C Owner marker content unchanged'
+Assert-True (-not (Test-Path (Join-Path $ownerCraftDirC 'README.md'))) 'TEST-15C installer craft files rolled back'
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })

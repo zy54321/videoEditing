@@ -194,6 +194,7 @@ function Register-PreExistingPaths {
         'video-workflow',
         'video-workflow\capabilities',
         'video-workflow\knowledge',
+        'video-workflow\knowledge\editing-craft',
         'video-workflow\tools',
         'video-workflow\templates',
         'video-workflow\production'
