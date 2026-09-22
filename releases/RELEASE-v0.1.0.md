@@ -3,22 +3,30 @@
 | Field | Value |
 |-------|-------|
 | Version | 0.1.0 |
-| Build commit | 9ff30e73cf60f22ffed4f4d2da0e67bc3f3843d3 |
-| Build date/time | 2026-09-21T21:38:26+08:00 |
-| Source HEAD | 9ff30e73cf60f22ffed4f4d2da0e67bc3f3843d3 |
-| Release file count | 16 |
-| ZIP size (bytes) | 49167 |
-| ZIP SHA256 | 8d928a50d490dc38b623e5d6f1a8c679c426cf1bd9afb513761bdcab5e80620d |
-| Installer smoke | PASS |
-| Release smoke | PASS |
-| N02 capability gate | PASS |
+| Source Commit | 21b92a4a0a93a9e9f9d01878512415f3600e689b |
+| Build Timestamp | 2026-09-22T08:05:06+08:00 |
+| Release Directory | `releases/video-editing-workflow-v0.1.0` |
+| ZIP | `releases/video-editing-workflow-v0.1.0.zip` |
+| ZIP size (bytes) | 51402 |
+| ZIP SHA256 | de9f7f65e39b855d49a1b2bec075338d92affbed640479e6cb5dc24806480803 |
+| Installer Smoke | PASS |
+| Pre-release Consistency | PASS |
+| Release Smoke | PASS |
+| ZIP Independent Install | PASS |
+| N02 Capability Gate | PASS |
+| Runtime Model | external-runtime |
 | Remote status | REMOTE_NOT_CONFIGURED |
 
 ## Known Limitations
 
-1. 当前只有 observational-info-short 一种 L2 剪辑策略。
-2. 当前主要验证 Runtime 为 DaVinci Resolve。
-3. live_api_srt_append route 为 UNSAFE；当前使用安全 DRT route。
-4. live transition route FAILED；当前使用 native_drt_transition route。
-5. DaVinci-native item audio volume FAILED；当前允许 FFmpeg pre-attenuation fallback。
-6. ducking 未实现，非阻塞项。
+1. 当前仅包含 `observational-info-short` 一种 L2 剪辑策略。
+2. 当前主要验证 backend 为 DaVinci Resolve。
+3. `live_api_srt_append`：UNSAFE / DO NOT RETRY。
+4. 字幕安全路径：`native_drt_subtitles`。
+5. live transition route：FAILED。
+6. transition 安全路径：`native_drt_transition`。
+7. Resolve-native item audio volume：FAILED。
+8. 背景音乐电平 fallback：`ffmpeg_pre_attenuation`。
+9. audio ducking：UNKNOWN / OPTIONAL。
+10. subtitle timing：Production QA 责任，非 Capability Gate blocker。
+11. Runtime：Release 不安装、不修改 Resolve / MCP。

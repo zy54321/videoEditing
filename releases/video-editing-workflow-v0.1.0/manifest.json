@@ -1,10 +1,30 @@
 {
     "name":  "video-editing-workflow",
     "version":  "0.1.0",
+    "instance_model":  "single-production",
+    "entry":  "【制作视频】",
     "runtime":  {
+                    "model":  "external-runtime",
                     "cursor":  true,
                     "davinci_resolve":  "external",
-                    "davinci_mcp":  "external"
+                    "davinci_mcp":  "external",
+                    "required":  [
+                                     "cursor",
+                                     "davinci-resolve",
+                                     "compatible-davinci-mcp"
+                                 ],
+                    "validated":  {
+                                      "davinci_resolve":  "21.1.0.14",
+                                      "davinci_mcp":  {
+                                                          "implementation":  "samuelgursky/davinci-resolve-mcp",
+                                                          "version":  "4.8.13"
+                                                      }
+                                  },
+                    "auxiliary":  [
+                                      "ffmpeg",
+                                      "ffprobe",
+                                      "kokoro-tts"
+                                  ]
                 },
     "components":  {
                        "rules":  [
@@ -22,7 +42,5 @@
                        "capabilities":  [
                                             "davinci-resolve"
                                         ]
-                   },
-    "instance_model":  "single-production",
-    "entry":  "【制作视频】"
+                   }
 }

@@ -6,8 +6,10 @@
 [CmdletBinding()]
 param(
     [string]$TargetPath,
+    [string]$PayloadRoot,
     [switch]$DryRun,
-    [switch]$NoPause
+    [switch]$NoPause,
+    [switch]$TestSimulateFailure
 )
 
 Set-StrictMode -Version Latest
@@ -40,17 +42,9 @@ $ProductFiles = @(
     'video-workflow\templates\production-brief-reference.md'
 )
 
-$RequiredPayloadFiles = @(
-    '.cursor\rules\video-workflow-core.mdc',
-    '.cursor\rules\davinci-production.mdc',
-    '.cursor\rules\production-entry-intake.mdc',
-    '.cursor\skills\video-production\SKILL.md',
-    '.cursor\skills\video-editing\observational-info-short\SKILL.md',
-    'video-workflow\capabilities\davinci-resolve.md',
-    'video-workflow\templates\production-brief.yaml'
-)
-
 $CreatedPaths = [System.Collections.Generic.List[string]]::new()
+$PreExistingPaths = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+$CopyStarted = $false
 
 function Write-ErrorAndExit {
     param(
@@ -172,22 +166,81 @@ function Get-InstallationState {
     }
 }
 
-function Rollback-Created {
-    foreach ($p in ($CreatedPaths | Sort-Object { $_.Length } -Descending)) {
+function Register-PreExistingPaths {
+    param([string]$Workspace)
+    $candidates = @(
+        '.cursor',
+        '.cursor\rules',
+        '.cursor\skills',
+        'video-workflow',
+        'video-workflow\capabilities',
+        'video-workflow\templates',
+        'video-workflow\production'
+    )
+    foreach ($rel in $candidates) {
+        $p = Join-Path $Workspace $rel
         if (Test-Path -LiteralPath $p) {
-            try {
-                if ((Get-Item -LiteralPath $p).PSIsContainer) {
-                    if ((Get-ChildItem -LiteralPath $p -Force | Measure-Object).Count -eq 0) {
-                        Remove-Item -LiteralPath $p -Force -Recurse
-                    }
-                } else {
-                    Remove-Item -LiteralPath $p -Force
-                }
-            } catch {
-                # best effort
-            }
+            $PreExistingPaths.Add([System.IO.Path]::GetFullPath($p)) | Out-Null
         }
     }
+}
+
+function Test-PayloadFile {
+    param([string]$Path)
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+    try {
+        $fs = [System.IO.File]::OpenRead($Path)
+        $fs.Close()
+        return $true
+    } catch {
+        return $false
+    }
+}
+
+function Remove-EmptyProductDirs {
+    param([string]$Workspace)
+    $relDirs = @(
+        '.cursor\skills\video-editing\observational-info-short\references',
+        '.cursor\skills\video-editing\observational-info-short',
+        '.cursor\skills\video-editing',
+        '.cursor\skills\video-production',
+        '.cursor\skills',
+        '.cursor\rules',
+        '.cursor',
+        'video-workflow\production',
+        'video-workflow\templates',
+        'video-workflow\capabilities',
+        'video-workflow'
+    )
+    foreach ($rel in $relDirs) {
+        $p = Join-Path $Workspace $rel
+        if (-not (Test-Path -LiteralPath $p)) { continue }
+        $full = [System.IO.Path]::GetFullPath($p)
+        if ($PreExistingPaths.Contains($full)) { continue }
+        if ((Get-ChildItem -LiteralPath $p -Force | Measure-Object).Count -eq 0) {
+            try { Remove-Item -LiteralPath $p -Force -Recurse } catch { }
+        }
+    }
+}
+
+function Rollback-Created {
+    param([string]$Workspace)
+    foreach ($p in ($CreatedPaths | Where-Object { -not (Test-Path -LiteralPath $_ -PathType Container) } | Sort-Object { $_.Length } -Descending)) {
+        if (Test-Path -LiteralPath $p) {
+            try { Remove-Item -LiteralPath $p -Force } catch { }
+        }
+    }
+    foreach ($p in ($CreatedPaths | Where-Object { Test-Path -LiteralPath $_ -PathType Container } | Sort-Object { $_.Length } -Descending)) {
+        $full = [System.IO.Path]::GetFullPath($p)
+        if ($PreExistingPaths.Contains($full)) { continue }
+        if (-not (Test-Path -LiteralPath $p)) { continue }
+        try {
+            if ((Get-ChildItem -LiteralPath $p -Force | Measure-Object).Count -eq 0) {
+                Remove-Item -LiteralPath $p -Force -Recurse
+            }
+        } catch { }
+    }
+    if ($Workspace) { Remove-EmptyProductDirs -Workspace $Workspace }
 }
 
 function Copy-ProductFile {
@@ -237,18 +290,22 @@ function Verify-Installation {
 
 try {
     $version = Get-ProductVersion
-    $payloadRoot = Resolve-PayloadRoot
-    if (-not $payloadRoot) {
+    if ($PayloadRoot) {
+        $payloadRoot = [System.IO.Path]::GetFullPath($PayloadRoot)
+    } else {
+        $payloadRoot = Resolve-PayloadRoot
+    }
+    if (-not $payloadRoot -or -not (Test-Path -LiteralPath $payloadRoot -PathType Container)) {
         Write-ErrorAndExit -Code 'PAYLOAD_NOT_FOUND' -Message 'Could not locate payload directory.' -ExitCode $EXIT_PAYLOAD_NOT_FOUND
     }
 
     $missingPayload = @()
-    foreach ($rel in $RequiredPayloadFiles) {
+    foreach ($rel in $ProductFiles) {
         $p = Join-Path $payloadRoot ($rel -replace '\\', [IO.Path]::DirectorySeparatorChar)
-        if (-not (Test-Path -LiteralPath $p)) { $missingPayload += $rel }
+        if (-not (Test-PayloadFile -Path $p)) { $missingPayload += $rel }
     }
     if ($missingPayload.Count -gt 0) {
-        Write-ErrorAndExit -Code 'PAYLOAD_INVALID' -Message ("Missing: {0}" -f ($missingPayload -join ', ')) -ExitCode $EXIT_PAYLOAD_INVALID
+        Write-ErrorAndExit -Code 'PAYLOAD_INVALID' -Message ("Missing or unreadable: {0}" -f ($missingPayload -join ', ')) -ExitCode $EXIT_PAYLOAD_INVALID
     }
 
     if (-not $TargetPath) {
@@ -321,6 +378,8 @@ try {
         Write-ErrorAndExit -Code 'INSTALL_FILE_CONFLICT' -Message ("Conflicting files:{0}{1}" -f [Environment]::NewLine, ($conflicts -join [Environment]::NewLine)) -ExitCode $EXIT_FILE_CONFLICT
     }
 
+    Register-PreExistingPaths -Workspace $workspace
+
     if ($DryRun) {
         Write-Host 'DRY RUN — no files will be written.'
         Write-Host ''
@@ -335,11 +394,17 @@ try {
         exit $EXIT_SUCCESS
     }
 
+    $CopyStarted = $true
+    $copyIndex = 0
     foreach ($rel in $ProductFiles) {
         try {
             Copy-ProductFile -SourceRoot $payloadRoot -Workspace $workspace -RelativePath $rel
+            $copyIndex++
+            if ($TestSimulateFailure -and $copyIndex -eq 1) {
+                throw 'TestSimulateFailure: simulated copy failure'
+            }
         } catch {
-            Rollback-Created
+            Rollback-Created -Workspace $workspace
             Write-ErrorAndExit -Code 'INSTALL_COPY_FAILED' -Message $_.Exception.Message -ExitCode $EXIT_COPY_FAILED
         }
     }
@@ -365,20 +430,20 @@ try {
         [System.IO.File]::WriteAllText($installJsonPath, $installDoc + [Environment]::NewLine, $utf8NoBom)
         $CreatedPaths.Add($installJsonPath) | Out-Null
     } catch {
-        Rollback-Created
+        Rollback-Created -Workspace $workspace
         Write-ErrorAndExit -Code 'INSTALL_COPY_FAILED' -Message $_.Exception.Message -ExitCode $EXIT_COPY_FAILED
     }
 
     try {
         Verify-Installation -Workspace $workspace -Version $version
     } catch {
-        Rollback-Created
+        Rollback-Created -Workspace $workspace
         if (Test-Path -LiteralPath $installJsonPath) { Remove-Item -LiteralPath $installJsonPath -Force }
         Write-ErrorAndExit -Code 'INSTALL_VERIFY_FAILED' -Message $_.Exception.Message -ExitCode $EXIT_VERIFY_FAILED
     }
 
     Write-SuccessAndExit -Version $version -Workspace $workspace
 } catch {
-    Rollback-Created
+    if ($workspace) { Rollback-Created -Workspace $workspace } else { Rollback-Created }
     Write-ErrorAndExit -Code 'INSTALL_COPY_FAILED' -Message $_.Exception.Message -ExitCode $EXIT_COPY_FAILED
 }

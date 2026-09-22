@@ -40,9 +40,18 @@ It expresses business intent and production requirements. It does **not** decide
 
 Stable production identifier.
 
-Examples: `NEWS-2026-001`, `VLOG-001`
+Examples: `NEWS-2026-001`, `N03-austria-shopping`
 
-Must be assigned by Owner or upstream task. **Do not** invent from folder names.
+**FIRST_RUN resolution** (governed by `production-entry-intake.mdc` §16):
+
+1. Default candidate = Cursor Workspace **leaf directory name** (trimmed)
+2. If unsuitable (`video`, `test`, `temp`, empty, etc.) → ask Owner for a short ID/name
+3. **Do not** append date, GUID, or derive from media paths
+4. **Do not** invent a business ID
+
+Workspace name is a candidate only. Owner may override.
+
+Once Brief is created, `production.id` is fixed. Repeat entry must not regenerate.
 
 ### `production.title`
 
@@ -159,7 +168,16 @@ When `true`: visuals and graphics must not mislead on facts. Typically `true` fo
 
 ### `output.filename`
 
-Final deliverable filename. Include extension or follow Runtime policy for extension.
+Final deliverable filename (Required).
+
+**Resolution** (governed by `production-entry-intake.mdc` §17):
+
+- If Owner did not specify: default `<production.id>_V1.mp4`
+- If `media.output` already has that file: try `_V2`, `_V3`, … (first unused)
+- Set `output.overwrite_existing = false`
+- Do not ask “文件名叫什么？” unless `production.id` is unresolved, Owner requests custom name, or safe auto-resolution fails
+
+Render must re-verify target file does not exist.
 
 ### `output.overwrite_existing`
 

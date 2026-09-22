@@ -113,8 +113,8 @@ Governed order is defined in `production-entry-intake.mdc`. L3 execution notes:
 | ASSET_AUDIT | Read-only scan; classify assets; collect metadata |
 | REQUIREMENT_CLASSIFICATION | Apply L2 + `features.*` + audit → REQUIRED_NOW / OPTIONAL / RESOLVABLE_DURING_PRODUCTION |
 | NECESSARY_OWNER_CONFIRMATION | Frozen voice/script; content authority; music choice if needed |
-| BRIEF_BUILD | Fill `production-brief.yaml` template; write absolute paths |
-| PREPARATION_GATE | Emit summary; on READY save Brief and enter Stage 0 automatically |
+| BRIEF_BUILD | Resolve `production.id` (§16) and `output.filename` (§17); fill `production-brief.yaml`; write absolute paths |
+| PREPARATION_GATE | Verify all Required Brief fields; emit summary; on READY save Brief and enter Stage 0 automatically |
 
 L3 **must not** enter Stage 0 before `PREPARATION_GATE = READY`.
 
@@ -313,11 +313,27 @@ Preflight must complete before formal production begins.
 
 ### Runtime
 
-When the task depends on DaVinci:
+V0.1 Release is a **Workflow Installer** — not a full environment installer. It consumes **existing** external Runtime.
 
-- DaVinci is accessible
+When the task depends on DaVinci / NLE backend:
+
+- DaVinci Resolve is accessible
+- Configured external DaVinci MCP is accessible
 - Current Project identity can be confirmed
-- Current Runtime / MCP is accessible
+
+If unavailable: `BLOCK` → **`RUNTIME_NOT_READY`**
+
+**MUST NOT:**
+
+- Auto-download or install MCP
+- Auto-modify `mcp.json`
+- Auto-install DaVinci
+
+Inform Owner: this Workflow Release only consumes an already-configured Runtime.
+
+**FFmpeg / ffprobe:** check availability only when a capability route actually needs them (e.g. `ffmpeg_pre_attenuation`, render verify). If required and missing → `BLOCK` at that step only.
+
+**Kokoro TTS:** check only when Production explicitly requires TTS. Missing Kokoro must **not** block all Productions.
 
 ### Assets
 
