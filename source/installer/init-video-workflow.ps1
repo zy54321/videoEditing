@@ -39,7 +39,8 @@ $ProductFiles = @(
     '.cursor\skills\video-editing\observational-info-short\references\qa.md',
     'video-workflow\capabilities\davinci-resolve.md',
     'video-workflow\templates\production-brief.yaml',
-    'video-workflow\templates\production-brief-reference.md'
+    'video-workflow\templates\production-brief-reference.md',
+    'video-workflow\tools\final-artifact-qa.ps1'
 )
 
 $CreatedPaths = [System.Collections.Generic.List[string]]::new()
