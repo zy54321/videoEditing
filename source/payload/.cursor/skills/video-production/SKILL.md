@@ -94,6 +94,8 @@ After governed Intake or on CONTINUE, parse from Brief:
 
 - `production.id`
 - `editing.skill`
+- `editing.creative_direction` (optional refinements — not a new Style)
+- `content.authority.*`
 - `media.input` / `media.output`
 - `format.*`, `runtime.*`, `assets.*`, `features.*`, `output.*`
 
@@ -133,6 +135,8 @@ L3 reads Brief fields by **dot path** (YAML nesting). Do not maintain a parallel
 |-------|---------|
 | `production.id` | Stable production identity |
 | `editing.skill` | L2 Skill to load |
+| `editing.creative_direction` | Optional Owner refinements to selected Style (array; may be empty) |
+| `content.authority.type` / `content.authority.path` | Content semantics authority when resolved |
 | `media.input` | Input media root (resolved in Preflight) |
 | `media.output` | Deliverable output directory |
 | `format.width` | Target deliverable width |
@@ -392,6 +396,17 @@ As needed:
 - content category
 - quality problems
 
+### Source FPS Distribution (mixed-source productions)
+
+When multiple video sources exist, **MUST** record:
+
+- per-clip or aggregate source fps distribution
+- target timeline fps (from Brief)
+- cadence / mismatch risk
+- motion-heavy clip list
+
+**MUST NOT** defer cadence assessment to post-render CFR metadata alone.
+
 **Do not** make semantic judgments from filename alone.
 
 ### Voice / Dialogue
@@ -601,37 +616,68 @@ Examples:
 
 ## Stage 5 — QA
 
-QA has two layers.
+QA has **three** layers. **Timeline State QA ≠ Final Artifact QA.**
 
-### Universal QA
+### 5A — Timeline State QA
+
+Inspect current NLE timeline / project state:
+
+- Frozen asset integrity
+- no unintended timeline gaps
+- clip counts / ranges
+- transform read-back (supplementary only)
+- subtitle track population (not sufficient alone)
+
+### 5B — Universal QA
 
 From Cross-cutting Rules:
 
-- Frozen asset integrity
 - output identity
 - no unintended overwrite
-- no unintended gaps
-- no unexplained black frames
-- target resolution
-- target fps
+- no unexplained black frames on timeline
+- target resolution / fps settings
 - expected duration
-- render validity
 - audio presence
 - no destructive source mutation
 
-### Genre QA
+### 5C — Genre / Style QA
 
-From the loaded L2 Editing Skill.
+From the loaded L2 Editing Skill (`references/qa.md`).
 
 Examples:
 
-- pacing
-- allowed shot duration
-- transition grammar
-- subtitle density
-- music behavior
-- motion naturalness
+- pacing, motion normalization (**MUST** when L2 requires)
+- mixed-fps cadence assessment
+- subtitle layout + intentional gaps
+- music behavior (`OWNER_DISABLED` when Owner chose no music)
 - factual visual alignment
+- Style-level extensions (OBS-QA-FINAL-RENDER, etc.)
+
+### Final Artifact QA — MUST (post-render)
+
+After render, verify the **actual MP4** — not timeline-only state.
+
+**Technical:** exists, duration, width/height, fps, codec, audio stream.
+
+**Visual:** black bars, framing, subtitle visibility/overflow, gross crop, unintended blank frames.
+
+**Motion:** abnormal slow motion, judder, retime defects — `MOTION_VISUAL_REVIEW_REQUIRED` if subjective check needed.
+
+**Audio:** voice exists, clipping, gross silence, voice/music balance when music enabled.
+
+**Style:** pacing, repetition, transition excess, observational identity.
+
+`render.verify_output` PASS alone **does not** equal Production PASS.
+
+### Representative Frame Sampling
+
+Lightweight final-render sampling via FFmpeg/ffprobe (or equivalent):
+
+- sample major segments, motion-heavy clips, subtitle sections, intro/end
+- optional QA contact sheet in workflow temp area (not media input/output)
+- clean up after QA when policy allows
+
+If Agent cannot perform visual review: `FINAL_VISUAL_QA_REQUIRES_OWNER_REVIEW` — **no fake PASS**.
 
 QA must be based on **actual results**.
 
@@ -711,6 +757,8 @@ reach render-ready state.
 - video stream
 - audio stream
 - codec / format when relevant
+
+Then run **Final Artifact QA** (Stage 5 Final Artifact section) including frame sampling when applicable.
 
 If render output is invalid: enter Repair.
 

@@ -169,6 +169,74 @@ Must **not** read primarily as:
 
 ---
 
+## Style-Level Extensions (V0.1.1+)
+
+Run after OBS-QA-01–20. Map to Style Contract dimensions. **Timeline QA ≠ Final Artifact QA.**
+
+### OBS-QA-NARRATIVE
+
+Narrative grammar and semantic flow match Style + Content Authority. No drift from frozen meaning.
+
+### OBS-QA-SOURCE
+
+Source selection supports narration; no unjustified repetition; stock not faked as specific evidence.
+
+### OBS-QA-PACING
+
+Pacing matches Style ranges; no stock-slideshow stall (extends OBS-QA-02, OBS-QA-19).
+
+### OBS-QA-MOTION
+
+Motion normalization **MUST** when abnormal slow motion present. `motion = SKIPPED` with slow walking/hands → **FAIL**.
+
+### OBS-QA-CADENCE
+
+Mixed source FPS (23.976/25/29.97/30) analyzed; cadence/judder risk assessed. CFR metadata alone ≠ PASS.
+
+### OBS-QA-FRAMING
+
+9:16 framing on **final MP4** — not only transform read-back (extends OBS-QA-08).
+
+### OBS-QA-SUBTITLE-VISIBILITY
+
+Subtitles visible in **rendered artifact**; not clipped, missing, or wrong-track only on timeline.
+
+### OBS-QA-SUBTITLE-LAYOUT
+
+Max ~80–86% width, ≤2 lines, semantic breaks; no edge overflow. Intentional gaps ≠ defect.
+
+### OBS-QA-VOICE
+
+Natural voice intelligible; Frozen Voice preserved; no destructive master change.
+
+### OBS-QA-MUSIC
+
+When enabled: appropriate level and continuity. When Owner disabled: `OWNER_DISABLED` — **not** SKIPPED defect.
+
+### OBS-QA-SOUND
+
+Sound design restrained; environment/original sound respected; no decorative SFX overload.
+
+### OBS-QA-COLOR
+
+Natural/clean/coherent look; only claims VERIFIED color routes. `PARTIAL` without plan → review.
+
+### OBS-QA-EFFECTS
+
+Restrained effects per Style; no default heavy FX on every shot.
+
+### OBS-QA-ENDING
+
+Natural tail; not abrupt (extends OBS-QA-18).
+
+### OBS-QA-FINAL-RENDER
+
+Final Artifact QA PASS: technical + visual + motion + audio + style checks on **MP4**, not timeline-only.
+
+If automation cannot verify visuals: `FINAL_VISUAL_QA_REQUIRES_OWNER_REVIEW` or `FINAL_SUBTITLE_VISUAL_QA_UNAVAILABLE` — **no fake PASS**.
+
+---
+
 ## QA Summary Template
 
 ```

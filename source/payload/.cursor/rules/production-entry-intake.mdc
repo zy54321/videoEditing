@@ -130,28 +130,54 @@ may the Agent enter **L3 Stage 0 — Preflight**.
 
 On first production, the Agent **MUST** ask:
 
-> 请选择本次视频类型。
+> 请选择本次剪辑类型。
 
-Options **MUST** come from installed L2 Skills only:
+Options **MUST** come from installed L2 Style Skills only:
 
 ```
 .cursor/skills/video-editing/*/SKILL.md
 ```
 
+For each installed Style Skill, read its **canonical display name** from the Skill file (`display_name` in frontmatter or defined Style Identity section). **MUST NOT** invent or rename Styles.
+
 Present:
 
 - Numbered list
-- Human-readable type name
+- Canonical display name
 - `skill-id`
 
-Example (V0.1):
+Example (V0.1.1):
 
-1. 生活观察 / 轻知识短视频 — `observational-info-short`
+```
+请选择本次剪辑类型：
 
-Even with **one** L2 Skill, the Agent **MUST** require explicit Owner selection.
+1. 生活观察 / 轻知识短视频
+   observational-info-short
+
+可选：如果你还有特别要求，也可以一起告诉我。
+例如：“字幕活泼一点，整体暖一些。”
+```
+
+Even with **one** Style Skill, the Agent **MUST** require explicit Owner selection.
 **MUST NOT** silently choose for the user.
 
-Owner may respond by number, human name, or `skill-id`.
+Owner may respond by number, display name, or `skill-id`.
+
+**MUST NOT** treat video topic / subject as Style selection.
+
+---
+
+## 5.1 Creative Direction — OPTIONAL
+
+After Style is selected, if Owner provides additional stylistic preferences in natural language, map to:
+
+```
+editing.creative_direction
+```
+
+Creative Direction refines the selected Style. It is **not** a new Style.
+
+If Owner provides none: `creative_direction = []` — **MUST NOT** force Owner to fill this field.
 
 ---
 
@@ -294,19 +320,42 @@ If no legal automatic music source in V0.1, offer minimal choice:
 
 ## 12. Content Authority Rule
 
-Before formal production, content authority must be established from:
+Establish `content.authority` before formal production.
 
-1. Frozen Voice Master
-2. Frozen Script
-3. Voice / narration
-4. Script / text
-5. Content Owner states during Intake
+### Single Frozen Voice candidate
 
-If none exist, **MUST** ask:
+Example prompt:
 
-> 这条视频要表达的具体内容/主题是什么？
+> 检测到旁白音频：`<filename>`
+>
+> 请选择内容依据：
+> A — 完全以这份旁白内容为准
+> B — 以旁白为主，我还有补充要求
+
+### Single Script / Text
+
+Ask whether that file is the primary content authority.
+
+### Multiple Script / Subtitle candidates
+
+List filenames; Owner selects authority. **MUST NOT** guess.
+
+### No Voice, Script, Subtitle, or Owner content description
+
+Only then ask:
+
+> 这条视频主要想表达什么？
+
+**MUST NOT** ask “请描述视频主题” when a clear Frozen Voice / Script already exists.
 
 **MUST NOT** invent the topic.
+
+Record resolved authority in Brief:
+
+```
+content.authority.type
+content.authority.path
+```
 
 ---
 

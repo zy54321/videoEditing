@@ -75,6 +75,29 @@ L3 loads:
 
 If missing: `EDITING_SKILL_NOT_FOUND` — no fallback.
 
+**Canonical display name** comes from the Skill frontmatter `display_name` (e.g. `生活观察 / 轻知识短视频`). Intake must not invent alternate names.
+
+### `editing.creative_direction`
+
+Optional array of Owner refinements to the **selected Style** — not a new Style.
+
+Examples: `字幕更活泼`, `整体稍暖`, `少用夸张转场`.
+
+- May be empty `[]` — do not force Owner to fill
+- Style remains primary strategy
+- Must not violate Safety Rules, Style identity, or Capability truth
+
+### `content.authority`
+
+Establishes **content semantics** authority (distinct from subtitle presentation).
+
+| Field | Meaning |
+|-------|---------|
+| `content.authority.type` | `voice` \| `script` \| `subtitle` \| `owner` |
+| `content.authority.path` | Primary file when type is voice/script/subtitle |
+
+Resolved during Intake per `production-entry-intake.mdc` §12. Frozen semantics must not be altered; subtitle timing/layout may still adapt for presentation.
+
 ### `media.input`
 
 Root directory for input media. Absolute path or workspace-relative.

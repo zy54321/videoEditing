@@ -1,12 +1,41 @@
 ---
 name: observational-info-short
+display_name: 生活观察 / 轻知识短视频
 description: Editing strategy for short observational and informational videos built around narration, everyday B-roll, cultural or social observations, conversational pacing, readable captions, restrained transitions, natural motion, and light background music.
 ---
 
 # Observational Info Short
 
-**Skill type:** L2 Editing Strategy  
+**Skill type:** L2 Editing Strategy (Style-first)  
+**Canonical display name:** 生活观察 / 轻知识短视频  
+**Skill ID:** `observational-info-short`  
 **Genre ID:** `OBSERVATIONAL_INFO_SHORT`
+
+See also: `docs/06-style-first-editing.md` (project-level Style-first principle).
+
+## Style Contract — 17 Dimensions
+
+| # | Dimension | Section |
+|---|-----------|---------|
+| 1 | Style Identity | below |
+| 2 | Narrative Grammar | §1 Narrative Rhythm |
+| 3 | Pacing | §1 + Repetition |
+| 4 | Shot Grammar | §2 |
+| 5 | Source Selection | §3 |
+| 6 | Motion Strategy | §4 |
+| 7 | Framing Strategy | §5 |
+| 8 | Transition Strategy | §6 |
+| 9 | Subtitle Strategy | §7 |
+| 10 | Voice Treatment | §7A |
+| 11 | Music Strategy | §9 |
+| 12 | Sound Design | §7B |
+| 13 | Graphics / Titles | §8 |
+| 14 | Color / Look | §11 |
+| 15 | Effects Strategy | §12 |
+| 16 | Ending Strategy | §14 |
+| 17 | Style QA | §16 + `references/qa.md` |
+
+Style decides **WHAT / WHEN / WHY**. L1 decides **HOW**. Runtime executes.
 
 ## Purpose
 
@@ -101,21 +130,7 @@ Other genres should use future L2 Skills.
 
 ## Strategy Output Contract
 
-When L3 loads this Skill, it must receive strategy guidance for:
-
-1. Narrative Rhythm
-2. Shot Grammar
-3. Source Selection
-4. Motion Strategy
-5. Framing Strategy
-6. Transition Strategy
-7. Subtitle Strategy
-8. Graphics Strategy
-9. Music Strategy
-10. Audio Mix Strategy
-11. Color Strategy
-12. Effects Strategy
-13. Genre QA
+When L3 loads this Skill, it must receive guidance for all **17 Style Contract dimensions** (table above).
 
 These feed directly into the L3 Editing Plan.
 
@@ -274,6 +289,44 @@ Do **not** decide from frame rate alone. Combine visual action with source timin
 
 Establishing / environment shots may intentionally retain slightly slower rhythm as a conscious style choice.
 
+### Motion Normalization — MUST
+
+**MUST** for this Style. `motion = SKIPPED` is **not** acceptable when abnormal slow motion is present.
+
+If acceleration still looks unnatural: **prefer alternate source** over infinite speed-up.
+
+### Analyze: Source FPS Distribution
+
+Before Plan, L3 Analyze **MUST** record:
+
+- per-clip source fps distribution (e.g. 23.976, 25, 29.97, 30)
+- timeline fps
+- mismatch / cadence risk
+- motion-heavy clips
+
+**MUST NOT** infer Motion PASS from final CFR render metadata alone.
+
+### Timeline FPS
+
+Default follows Brief template (typically 24 fps). If source distribution creates cadence risk, L3 **MUST** evaluate explicitly in Analyze / Plan.
+
+**MUST NOT** silently retime entire timeline mid-edit. FPS decision belongs in Brief Build / Preflight.
+
+### Retime Dimensions
+
+Motion Strategy covers: Apparent Speed, Source FPS, Timeline FPS, Retime Method, Motion Smoothness, Final Motion QA.
+
+### Final Motion QA — MUST
+
+After render, check for:
+
+- walking unnaturally slow
+- dragging gestures
+- horizontal judder
+- jumpy / stutter motion after retime
+
+If subjective smoothness cannot be auto-verified: `MOTION_VISUAL_REVIEW_REQUIRED` — **do not fake PASS**.
+
 Parameter tables: `references/style.md`
 
 ---
@@ -311,6 +364,14 @@ If horizontal source cannot crop reasonably to vertical:
 3. intentional layout only when Skill / Brief allows
 
 Do **not** default to black bars.
+
+### Final Framing / Black-Bar QA — MUST
+
+Framing QA **MUST** include **Final Artifact Visual QA**, not only transform read-back.
+
+Check rendered MP4 for: letterbox, pillarbox, unintended black bars, severe crop, subject off-screen.
+
+Use `final_render.black_bar_check` when available; otherwise representative frame sampling + visual review.
 
 ---
 
@@ -359,38 +420,74 @@ Every transition must ensure:
 
 **Default: subtitles ON** unless Brief disables.
 
-Goals: clear information, mobile-readable, not blocking subject.
+### Content Semantics vs Presentation
 
-### Principles
+**Frozen:** facts, numbers, proper nouns, core meaning — **MUST NOT** change.
 
-- short phrases
-- 1–2 lines per cue
-- do not dump full paragraphs at once
-- follow semantics, not mechanical word-by-word timing
-- maintain natural reading rhythm
+**Allowed for presentation:** re-segment cues, line breaks, timing, merge/split short cues — if semantics unchanged.
 
-### Cue Length
+### Intentional Subtitle Gap
 
-~8–18 Chinese characters per cue (adjust for language rhythm).
+Subtitles need **not** be continuous. Valid: narration pause → original sound (3–6s) → no ordinary captions → narration resumes.
 
-Keywords may be emphasized: place names, numbers, core concepts, contrast words, memory hooks.
+Distinguish in QA: **intentional no-caption section** vs **unintended missing subtitle defect**.
 
-Emphasis methods (prefer in order):
+### Layout (9:16 default)
 
-- font weight
-- size
-- simple highlight
-- subtle pop / fade
+- horizontal safe area ~80–86% frame width
+- max **2 lines**
+- semantic line breaks (punctuation, phrases) — not fixed character-count chop only
+- minimum readable font size; avoid shrinking to fit
+- avoid covering faces/subjects when possible
 
-**Avoid by default:** bouncing text, karaoke-style per-character coloring, flashy animation — unless Brief requests strong social-media motion style.
+If two lines insufficient: split cue, adjust timing — not unlimited shrink.
+
+### Visual Style Types (capability-aware)
+
+| Type | Intent |
+|------|--------|
+| **A. Standard Caption** | High readability, clear separation from picture |
+| **B. Keyword Emphasis** | Key numbers/concepts only — not every line |
+| **C. Title / Section Text** | Hook or mini-chapter; higher hierarchy |
+
+**Prohibit:** all captions as exaggerated 花字.
+
+`subtitle.create` VERIFIED ≠ `subtitle.visual_style` VERIFIED. See L1 capability truth.
+
+### Final Subtitle Render QA — MUST
+
+Timeline subtitle count ≠ final MP4 correctness.
+
+Verify in **rendered artifact**: visibility, clipping, overflow, wrong wraps, long unintended gaps.
+
+If visual automation unavailable: `FINAL_SUBTITLE_VISUAL_QA_UNAVAILABLE` or Owner review — **no fake PASS**.
 
 ### Source Priority
 
-1. Frozen Script
-2. Script-aligned transcription
-3. transcription
+1. Frozen Script → 2. script-aligned transcription → 3. transcription
 
-Proper nouns must align with frozen text when available.
+---
+
+## 7A. Voice Treatment
+
+Default: **Natural Voice** — clear, intelligible, narration-dominant, no gimmicky FX.
+
+Optional when narrative needs: light EQ, compression, warmth, de-ess, mild timbre treatment, radio/phone section.
+
+**Frozen Voice Master:** non-destructive NLE processing or derived audio only — never overwrite master.
+
+---
+
+## 7B. Sound Design
+
+Restrained for this genre:
+
+- environment / original sound
+- transition SFX (sparingly)
+- emphasis SFX (sparingly)
+- intentional silence
+
+Real ambient sound **over** decorative whoosh. Not every cut needs SFX.
 
 ---
 
@@ -410,30 +507,34 @@ Titles / lower thirds: clean, simple, brief.
 
 ## 9. Music Strategy
 
-**Default: music ON** unless Brief disables.
+Music carries **narrative function**, not just on/off.
 
-Music role: **supportive, not dominant.**
+**Default: music ON** unless Owner disables (`OWNER_DISABLED` — not a defect).
 
-### Suitable Directions
+### Section Roles (60–90s typical)
 
-- light lo-fi
-- coffee jazz
-- understated ambient
-- light acoustic
-- subtle modern lifestyle
+| Section | Music role |
+|---------|------------|
+| Hook | light entry |
+| Main information | low-presence bed |
+| Original-sound moment | may duck / drop |
+| Narrative turn | second track allowed |
+| Ending | natural fade |
+
+Multiple tracks, segments, crossfades, intentional silence are allowed.
+
+### Intake when no music in input
+
+Offer only executable options:
+
+- A — Owner adds music to input
+- B — disable background music for this production
+
+**MUST NOT** offer music-library automation unless L1 route is VERIFIED.
 
 ### Avoid
 
-- epic trailer
-- horror tension
-- dramatic cinematic rise
-- sentimental piano overload
-- corporate presentation music
-- aggressive EDM
-
-Music tempo should match overall narration pace.
-
-For 60–90 seconds: usually **one main track**. Section change only when needed.
+Epic trailer, horror tension, corporate bed, aggressive EDM — see `references/style.md`.
 
 ---
 
@@ -457,23 +558,19 @@ Music in/out: short fades preferred over hard cuts.
 
 ---
 
-## 11. Color Strategy
+## 11. Color / Look Strategy
 
-Target: **natural, clean, coherent.**
+Target: **Natural, Clean, Coherent, Slightly polished.**
 
-Prioritize:
+- shot-to-shot consistency
+- reasonable exposure / white balance
+- believable skin tone
+- controlled saturation, mild contrast
+- subtle warmth when appropriate
 
-- exposure consistency
-- white balance consistency
-- reasonable contrast
-- skin tone
-- source matching
+**Natural ≠ no processing.** Use only **VERIFIED** L1 color routes.
 
-Light unified look is allowed.
-
-**Default prohibit:** heavy teal-orange, high-concentration cinematic LUT, heavy grain, exaggerated halation, crushed blacks, oversaturation — unless Brief requests.
-
-For this genre: **believable realism** beats **cinematic look**.
+**Default prohibit:** heavy teal-orange, extreme LUT, heavy grain, crushed blacks — unless Brief requests.
 
 ---
 
@@ -569,17 +666,19 @@ When choosing between:
 
 ---
 
-## 16. Genre QA
+## 16. Style QA
 
-L3 must run Genre QA from `references/qa.md` after Universal QA.
+L3 **MUST** separate **Timeline State QA** from **Final Artifact QA**.
 
-Minimum checklist: **OBS-QA-01 through OBS-QA-20.**
+Run `references/qa.md` after Universal QA. Minimum: **OBS-QA-01 through OBS-QA-20** plus Style-level extensions (OBS-QA-MOTION, OBS-QA-SUBTITLE-LAYOUT, OBS-QA-FINAL-RENDER, etc.).
 
-Key gates:
+Key gates for N02 V2 acceptance target:
 
-- motion naturalness (OBS-QA-01)
-- no stock-slideshow feel (OBS-QA-19)
-- genre fit (OBS-QA-20)
+- Motion Normalization PASS
+- Framing / black-bar PASS (final artifact)
+- Subtitle functional + layout PASS
+- Final Visual + Motion QA PASS
+- Music: `OWNER_DISABLED` when Owner chose B — not SKIPPED defect
 
 ---
 

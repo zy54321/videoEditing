@@ -98,7 +98,21 @@ V0.1 是 **Workflow Installer**，不是 **Full Environment Installer**。
 
 ## 当前阶段
 
-### V0.1
+### V0.1.1-dev（进行中）
+
+正在打磨 **`observational-info-short`** 为完整 Style-first 剪辑策略，修复 N02 V1 暴露的缺口：
+
+- Motion normalization（MUST）与 mixed-FPS cadence 分析
+- Subtitle layout / 语义与呈现解耦 / Final Artifact 字幕 QA
+- Music / Voice / Sound Design / Color / Effects 策略补齐
+- Timeline QA 与 Final Artifact QA 分离
+- Capability truth 显式登记（未验证能力不宣称 VERIFIED）
+
+详见 [Style-first 模型](docs/06-style-first-editing.md)、[Stage 08A spike](validation/capability-spike/STAGE-08A-observational-style.md)。
+
+**未验证**的高级能力（音乐库自动化、高级 Fusion 花字、自动 ducking 等）**不**写入为已支持。
+
+### V0.1（已发布）
 
 以 **N02** 真实生产作为第一条 validation case。
 

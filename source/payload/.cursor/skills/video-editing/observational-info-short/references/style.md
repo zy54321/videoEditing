@@ -57,23 +57,74 @@ Every transition: handles sufficient, no gap, no black frame.
 
 | Parameter | Range |
 |-----------|-------|
-| Lines per cue | 1–2 |
-| CN characters per cue | ~8–18 |
+| Lines per cue | 1–2 max |
+| Horizontal safe width (9:16) | ~80–86% of frame |
+| CN characters per cue | ~8–18 (secondary heuristic) |
 | Keyword emphasis | 1–3 key elements per semantic section |
+| Intentional gap | 3–6 sec during original-sound sections OK |
+
+**Layout:** semantic line breaks (punctuation, phrases); avoid edge hugging; minimum readable font size.
+
+**Visual types:** Standard Caption (default) | Keyword Emphasis (sparse) | Title/Section (hierarchy).
 
 Default: ON unless Brief disables.
 
 ---
 
+## Voice Treatment
+
+| Treatment | Default |
+|-----------|---------|
+| Natural Voice | yes — clear, intelligible, dominant |
+| Light EQ / compression / warmth | optional |
+| Special FX (radio/phone) | narrative-only |
+
+Frozen Voice Master: non-destructive or derived audio only.
+
+---
+
+## Sound Design
+
+| Element | Guidance |
+|---------|----------|
+| Environment / original sound | preferred over decorative SFX |
+| Transition SFX | sparingly |
+| Silence | intentional sections OK |
+
+---
+
 ## Music
+
+| Section | Role |
+|---------|------|
+| Hook | light entry |
+| Main | low-presence bed |
+| Original-sound moment | duck / drop |
+| Narrative turn | second track allowed |
+| Ending | natural fade |
 
 | Parameter | Guidance |
 |-----------|----------|
-| Track count | usually 1 |
+| Track count | 1–2 typical for 60–90s |
 | Presence | low — supportive |
 | Narration | dominant |
 
-Default: ON unless Brief disables.
+Default: ON unless Owner disables (`OWNER_DISABLED`).
+
+---
+
+## Mixed FPS / Cadence
+
+Record in Analyze before Plan:
+
+| Field | Example |
+|-------|---------|
+| Source FPS distribution | 23.976, 25, 29.97, 30 |
+| Timeline FPS | 24 (default) |
+| Mismatch risk | low / medium / high |
+| Motion-heavy clips | list |
+
+Do not infer cadence PASS from CFR render metadata alone.
 
 ---
 
