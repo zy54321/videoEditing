@@ -1,0 +1,13 @@
+schema_version: 1
+style_id: <style-id>
+
+# Logical Capability IDs only. criticality: REQUIRED | PREFERRED | OPTIONAL
+
+example_dimension:
+  example_decision:
+    required: []
+    preferred: []
+    fallback: {}
+    forbidden: []
+    optional: []
+    criticality: OPTIONAL

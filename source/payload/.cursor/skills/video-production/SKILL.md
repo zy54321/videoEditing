@@ -297,8 +297,10 @@ Preflight
   → Analyze
   → Understand Content / Intent
   → Build Beat Map
+  → Apply L2 Style Decisions
   → Generate Edit Blueprint
   → Expose Blueprint Summary (default: non-blocking)
+  → Capability Resolution
   → Plan Execution
   → Edit
   → Finish
@@ -524,13 +526,44 @@ Edit Blueprint `author_intent` fields are a **traceable applied view** of Brief 
 
 ---
 
-## Stage 3 — Plan (Execution Planning)
+## Stage 3 — Capability Resolution
+
+**Prerequisite:** Edit Blueprint complete (including `capability_requirements` where applicable).
+
+### Inputs
+
+- Edit Blueprint (`video-workflow/production/edit-blueprint.yaml`)
+- L2 `capability-policy.yaml`
+- L1 `video-workflow/capabilities/logical-capability-vocabulary.yaml`
+- Analyze evidence
+
+### Process
+
+1. Collect logical capability IDs from Blueprint (global + per-beat)
+2. Merge with L2 `capability-policy.yaml` for this Style
+3. Query L1 status per ID — **UNKNOWN ≠ VERIFIED**
+4. Resolve each requirement:
+   - **REQUIRED** unavailable → `BLOCKED`
+   - **PREFERRED** unavailable → Style `fallback` → `FALLBACK`
+   - **OPTIONAL** unavailable → `OMITTED`
+   - Available → `SELECTED`
+5. Write `video-workflow/production/capability-resolution.yaml`
+6. Emit Capability Coverage summary (inventory only — not aesthetic score)
+
+Template: `video-workflow/templates/capability-resolution-result.yaml`
+
+**Must not** modify Owner Author Intent, silently change Style identity, or contain MCP / API names.
+
+---
+
+## Stage 4 — Plan (Execution Planning)
 
 Plan is the synthesis of:
 
 ```
 Production Brief
 + Edit Blueprint
++ Capability Resolution
 + Analyze Evidence
 + L2 Editing Strategy Skill
 + Runtime Capability
@@ -591,7 +624,7 @@ The plan must come from actual assets and the loaded L2 Skill.
 
 ---
 
-## Stage 4 — Edit
+## Stage 5 — Edit
 
 Edit establishes content structure and base assembly.
 
@@ -622,7 +655,7 @@ All write operations must follow existing Rules: **Write → Verify**.
 
 ---
 
-## Stage 5 — Finish
+## Stage 6 — Finish
 
 Finish executes finishing passes according to:
 
@@ -692,7 +725,7 @@ Examples:
 
 ---
 
-## Stage 6 — QA (Pre-Render)
+## Stage 7 — QA (Pre-Render)
 
 **Pre-Render QA only.** Final Artifact QA runs **after** Render (see below).
 
@@ -722,7 +755,7 @@ From Cross-cutting Rules:
 
 ### 5C — Genre / Style QA
 
-From the loaded L2 Editing Skill (`references/qa.md`).
+From the loaded L2 Editing Skill (`references/08-qa.md` — Style Fidelity; technical QA separate).
 
 Examples:
 
@@ -733,9 +766,9 @@ Examples:
 - factual visual alignment
 - Style-level extensions (OBS-QA-FINAL-RENDER, etc.)
 
-### Final Artifact QA — NOT in Stage 5
+### Final Artifact QA — NOT in Stage 7
 
-Do **not** run Final Artifact QA before Render. See **Post-Render Final Artifact QA** (after Stage 7).
+Do **not** run Final Artifact QA before Render. See **Post-Render Final Artifact QA** (after Stage 9 Render).
 
 QA must be based on **actual results**.
 
@@ -743,7 +776,7 @@ Passing execution steps without error is **not** sufficient for QA PASS.
 
 ---
 
-## Stage 7 — Repair
+## Stage 8 — Repair
 
 When QA finds an ordinary defect:
 
@@ -786,9 +819,9 @@ and output evidence.
 
 ---
 
-## Stage 8 — Render
+## Stage 9 — Render
 
-Render only after **Pre-Render QA** (Stage 5 Universal + Genre) reaches render-ready state.
+Render only after **Pre-Render QA** (Stage 7 Universal + Genre) reaches render-ready state.
 
 ### Pre-Render Confirmation
 
@@ -841,7 +874,7 @@ If Agent cannot perform visual review: `FINAL_VISUAL_QA_REQUIRES_OWNER_REVIEW` �
 
 ---
 
-## Stage 9 — Closeout
+## Stage 10 — Closeout
 
 Closeout is more than "video generated successfully."
 
@@ -921,8 +954,10 @@ Preflight
   → Analyze
   → Understand Content / Intent
   → Build Beat Map
+  → Apply L2 Style Decisions
   → Generate Edit Blueprint
   → Expose Blueprint Summary (default: non-blocking)
+  → Capability Resolution
   → Plan Execution
   → Edit
   → Finish
@@ -932,7 +967,7 @@ Preflight
   → Closeout
 ```
 
-**Analyze must not bypass Edit Blueprint** to reach Plan or Edit.
+**Analyze must not bypass Edit Blueprint or Capability Resolution** to reach Plan or Edit.
 
 Do **not** pause between normal stages to ask "should I continue?"
 

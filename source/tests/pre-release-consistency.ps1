@@ -116,6 +116,11 @@ $manifestHas08c = ($manifestTpl.components.templates -contains 'edit-blueprint')
     ($manifestTpl.components.tools -contains 'final-artifact-qa')
 Assert-True $manifestHas08c 'C12 manifest includes Stage 08C templates/knowledge/tools'
 
+$manifestHas08d = ($manifestTpl.components.templates -contains 'style-skill') -and
+    ($manifestTpl.components.templates -contains 'capability-resolution') -and
+    ($manifestTpl.components.capabilities -contains 'logical-capability-vocabulary')
+Assert-True $manifestHas08d 'C12b manifest includes Stage 08D style contract components'
+
 # 13. build preflight uses installer ProductFiles (including Stage 08C paths)
 $buildScript = Join-Path $Root 'build\build-release.ps1'
 if (Test-Path -LiteralPath $buildScript) {

@@ -93,8 +93,8 @@ Assert-True $rulesOk 'TEST-02 three rules present'
 # TEST-03: skills
 $skillsOk = (Test-Path (Join-Path $ws1 '.cursor\skills\video-production\SKILL.md')) -and
     (Test-Path (Join-Path $ws1 '.cursor\skills\video-editing\observational-info-short\SKILL.md')) -and
-    (Test-Path (Join-Path $ws1 '.cursor\skills\video-editing\observational-info-short\references\style.md')) -and
-    (Test-Path (Join-Path $ws1 '.cursor\skills\video-editing\observational-info-short\references\qa.md'))
+    (Test-Path (Join-Path $ws1 '.cursor\skills\video-editing\observational-info-short\style-profile.yaml')) -and
+    (Test-Path (Join-Path $ws1 '.cursor\skills\video-editing\observational-info-short\references\08-qa.md'))
 Assert-True $skillsOk 'TEST-03 skills and references present'
 
 # TEST-04: capability, templates, knowledge, tools (Stage 08C)
@@ -104,7 +104,9 @@ $capOk = (Test-Path (Join-Path $ws1 'video-workflow\capabilities\davinci-resolve
     (Test-Path (Join-Path $ws1 'video-workflow\templates\edit-blueprint.yaml')) -and
     (Test-Path (Join-Path $ws1 'video-workflow\templates\edit-blueprint-reference.md')) -and
     (Test-Path (Join-Path $ws1 'video-workflow\knowledge\editing-craft\README.md')) -and
-    (Test-Path (Join-Path $ws1 'video-workflow\tools\final-artifact-qa.ps1'))
+    (Test-Path (Join-Path $ws1 'video-workflow\tools\final-artifact-qa.ps1')) -and
+    (Test-Path (Join-Path $ws1 'video-workflow\capabilities\logical-capability-vocabulary.yaml')) -and
+    (Test-Path (Join-Path $ws1 'video-workflow\templates\capability-resolution-result.yaml'))
 Assert-True $capOk 'TEST-04 capability and templates present'
 
 # TEST-05: production dir exists, no brief

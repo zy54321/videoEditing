@@ -73,6 +73,10 @@ Examples: `observational-info-short`, `lifestyle-vlog`, `news-explainer`, `docum
 
 **Not** first-class L2: subtitle, music, voice, color, transition, effect, sound-design, typography.
 
+### Canonical L2 Contract (Stage 08D)
+
+See `docs/08-l2-style-contract-aesthetic-intelligence.md` — `SKILL.md` + `style-profile.yaml` + `capability-policy.yaml` + `references/01–08`.
+
 ### Layer Stack
 
 ```

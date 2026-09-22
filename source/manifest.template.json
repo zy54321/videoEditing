@@ -38,16 +38,19 @@
     ],
     "templates": [
       "production-brief",
-      "edit-blueprint"
+      "edit-blueprint",
+      "capability-resolution",
+      "style-skill"
     ],
     "knowledge": [
       "editing-craft"
     ],
+    "capabilities": [
+      "davinci-resolve",
+      "logical-capability-vocabulary"
+    ],
     "tools": [
       "final-artifact-qa"
-    ],
-    "capabilities": [
-      "davinci-resolve"
     ]
   }
 }

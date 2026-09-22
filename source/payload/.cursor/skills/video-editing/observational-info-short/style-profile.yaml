@@ -1,0 +1,43 @@
+schema_version: 1
+style_id: observational-info-short
+
+identity:
+  name: 生活观察 / 轻知识短视频
+  core_feeling: A friend telling you something interesting they just noticed
+  audience_relationship: conversational peer, not presenter or brand voice
+  primary_goal: make everyday observation feel clear, credible, and lightly engaging
+
+# Scale: low | medium-low | medium | medium-high | high
+# Coordinates express Style position — not quality scores.
+
+taste_profile:
+  naturalism: high
+  polish: medium-low
+  visual_energy: medium-low
+  camera_assertiveness: low
+  camera_stability: medium-high
+  psychological_distance: medium-close
+  shot_variety: medium
+  cut_density: medium
+  breathing_room: medium-high
+  graphic_expressiveness: low
+  subtitle_expressiveness: medium-low
+  music_assertiveness: low
+  ambience_value: high
+  silence_value: high
+  color_stylization: low
+  effects_visibility: very-low
+  realism_priority: high
+
+taste_axes:
+  natural_over_designed: strong
+  authentic_over_spectacular: strong
+  clear_over_clever: strong
+  restrained_over_showy: strong
+  human_over_corporate: strong
+  observation_over_performance: strong
+
+format_adaptation:
+  note: Format (aspect, duration, platform) comes from Production Brief — not fixed to this Style
+  when_vertical_9_16: subject-first framing; fill frame without stretch; attention on face/hands/key object
+  typical_duration_hint: 60-90s soft guidance when Brief has no target

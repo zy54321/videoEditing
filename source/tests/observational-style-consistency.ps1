@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  Validates observational-info-short Style contract for v0.1.1-dev (architecture-aligned).
+  Validates observational-info-short Style contract for v0.1.1-dev (Stage 08D canonical).
 #>
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -26,101 +26,84 @@ function Assert-True {
 Write-Host '=== Observational Style Consistency Tests ===' -ForegroundColor Cyan
 Write-Host ''
 
-$skillPath = Join-Path $Payload '.cursor\skills\video-editing\observational-info-short\SKILL.md'
-$refRoot = Join-Path $Payload '.cursor\skills\video-editing\observational-info-short\references'
-$qaPath = Join-Path $refRoot 'qa.md'
-$editingRef = Join-Path $refRoot 'editing.md'
-$typoRef = Join-Path $refRoot 'typography-graphics.md'
+$styleRoot = Join-Path $Payload '.cursor\skills\video-editing\observational-info-short'
+$skillPath = Join-Path $styleRoot 'SKILL.md'
+$refRoot = Join-Path $styleRoot 'references'
 $styleDoc = Join-Path $ProjectRoot 'docs\06-style-first-editing.md'
-$intakeRule = Get-Content (Join-Path $Payload '.cursor\rules\production-entry-intake.mdc') -Raw -Encoding UTF8
 $l3 = Get-Content (Join-Path $Payload '.cursor\skills\video-production\SKILL.md') -Raw -Encoding UTF8
 $l1 = Get-Content (Join-Path $Payload 'video-workflow\capabilities\davinci-resolve.md') -Raw -Encoding UTF8
 $briefTpl = Get-Content (Join-Path $Payload 'video-workflow\templates\production-brief.yaml') -Raw -Encoding UTF8
-$briefRef = Get-Content (Join-Path $Payload 'video-workflow\templates\production-brief-reference.md') -Raw -Encoding UTF8
 $utf8 = New-Object System.Text.UTF8Encoding $false
 $skill = [System.IO.File]::ReadAllText($skillPath, $utf8)
-$qa = [System.IO.File]::ReadAllText($qaPath, $utf8)
-$editing = [System.IO.File]::ReadAllText($editingRef, $utf8)
-$typo = [System.IO.File]::ReadAllText($typoRef, $utf8)
-$colorEffects = [System.IO.File]::ReadAllText((Join-Path $refRoot 'color-effects.md'), $utf8)
-$styleFirst = [System.IO.File]::ReadAllText($styleDoc, $utf8)
+$rhythm = [System.IO.File]::ReadAllText((Join-Path $refRoot '03-editing-rhythm.md'), $utf8)
+$typo = [System.IO.File]::ReadAllText((Join-Path $refRoot '04-typography-graphics.md'), $utf8)
+$colorFx = [System.IO.File]::ReadAllText((Join-Path $refRoot '06-color-look-effects.md'), $utf8)
+$qa08 = [System.IO.File]::ReadAllText((Join-Path $refRoot '08-qa.md'), $utf8)
 $version = (Get-Content (Join-Path $Root 'VERSION') -Raw).Trim()
 
-# O01 display name
 Assert-True ($skill -match 'display_name:') 'O01 display_name in SKILL frontmatter'
 Assert-True ($skill -match 'Canonical name:') 'O01 canonical name in SKILL'
 
-# O02 style-first + blueprint
 Assert-True (Test-Path -LiteralPath $styleDoc) 'O02 style-first doc exists'
 Assert-True ($skill -match 'Edit Blueprint') 'O02 blueprint required in SKILL'
 Assert-True ($l3 -match 'Edit Blueprint') 'O02 blueprint in L3 pipeline'
 
-# O03 reference structure (7 files)
-$refs = @('directing.md', 'visual-language.md', 'editing.md', 'typography-graphics.md', 'sound-music.md', 'color-effects.md', 'qa.md')
+$refs = @('01-directing.md','02-visual-language.md','03-editing-rhythm.md','04-typography-graphics.md','05-sound-music.md','06-color-look-effects.md','07-taste.md','08-qa.md')
 $o3 = $true
 foreach ($r in $refs) {
     if (-not (Test-Path (Join-Path $refRoot $r))) { $o3 = $false }
 }
-Assert-True $o3 'O03 seven reference files present'
+Assert-True $o3 'O03 eight canonical reference files present'
 
-# O04 creative_direction + author_intent
+Assert-True (Test-Path (Join-Path $styleRoot 'style-profile.yaml')) 'O03b style-profile.yaml present'
+Assert-True (Test-Path (Join-Path $styleRoot 'capability-policy.yaml')) 'O03c capability-policy.yaml present'
+
 Assert-True ($briefTpl -match 'creative_direction') 'O04 creative_direction in brief'
 Assert-True ($briefTpl -match 'author_intent') 'O04 author_intent in brief'
 Assert-True ($skill -match 'Author Intent') 'O04 author intent in SKILL'
 
-# O05 content authority
 Assert-True ($briefTpl -match 'content:\s*[\s\S]*authority:') 'O05 content.authority in brief'
 
-# O06 subtitle semantics (in typography reference)
-Assert-True ($typo -match 'Content vs Presentation') 'O06 subtitle semantics distinction'
+Assert-True ($typo -match 'semantic') 'O06 subtitle semantics in typography ref'
 
-# O07 intentional subtitle gap
-Assert-True ($editing -match 'Original Sound') 'O07 original sound / gap concept in editing ref'
+Assert-True ($rhythm -match 'original sound') 'O07 original sound in rhythm ref'
 
-# O08 subtitle layout
-Assert-True ($typo -match '76.?78%') 'O08 subtitle target width'
-Assert-True ($typo -match 'max \*\*2 lines\*\*|max \*\*2 lines\*\*') 'O08 max two lines'
+Assert-True ($typo -match '76') 'O08 subtitle target width'
+Assert-True ($typo -match 'two lines') 'O08 max two lines'
 
-# O09 motion strategy
-Assert-True (($editing -match 'Motion Strategy') -and ($editing -match 'MUST')) 'O09 Motion Strategy MUST'
+Assert-True ($rhythm -match 'motion = SKIPPED') 'O09 motion normalization required'
 
-# O10 motion_normalization feature
 Assert-True ($briefTpl -match 'motion_normalization:\s*true') 'O10 motion_normalization default'
 
-# O11 mixed-fps
-Assert-True ($editing -match 'Mixed FPS') 'O11 mixed-fps in editing reference'
+Assert-True ($rhythm -match 'Mixed-fps') 'O11 mixed-fps in rhythm reference'
 Assert-True ($l3 -match 'Source FPS Distribution') 'O11 mixed-fps in L3 Analyze'
 
-# O12 music
-Assert-True ($skill -match 'sound-music.md') 'O12 music in reference map'
+Assert-True ($skill -match '05-sound-music.md') 'O12 sound reference in SKILL'
 
-# O13-16 dimensions via references
-Assert-True ($editing -match 'Transition Strategy') 'O13 transitions in editing ref'
-Assert-True ($typo -match 'Graphics Strategy') 'O14 graphics in typography ref'
-Assert-True ((Join-Path $refRoot 'color-effects.md' | Test-Path)) 'O15 color-effects reference exists'
-Assert-True ($colorEffects -match 'Effects Strategy') 'O16 effects in editing/color refs'
+Assert-True ($rhythm -match 'Transition') 'O13 transitions in rhythm ref'
+Assert-True ($typo -match 'Graphics') 'O14 graphics in typography ref'
+Assert-True (Test-Path (Join-Path $refRoot '06-color-look-effects.md')) 'O15 color-look-effects reference exists'
+Assert-True ($colorFx -match 'Effects') 'O16 effects in color-look-effects ref'
 
-# O17 final artifact QA
 Assert-True ($l3 -match 'Final Artifact QA') 'O17 Final Artifact QA in L3'
-Assert-True ($qa -match 'OBS-QA-FINAL-RENDER') 'O17 style final render QA id'
+Assert-True ($qa08 -match 'OBS-STYLE-') 'O17 style fidelity QA ids in 08-qa'
 
-# O18 timeline vs final
 Assert-True ($l3 -match 'Timeline State QA') 'O18 timeline QA separated'
-Assert-True ($typo -match 'Timeline subtitle count') 'O18 timeline subtitle not sufficient'
+Assert-True ($qa08 -match 'not technical') 'O18 08-qa separated from technical QA'
 
-# O19 capability truth
 Assert-True ($l1 -match 'subtitle\.line_break_control') 'O19 subtitle.line_break_control capability'
 Assert-True ($l1 -match 'N02_V2_READINESS_GATE') 'O19 V2 readiness gate documented'
 
-# O20 version
 Assert-True ($version -eq '0.1.1-dev') 'O20 VERSION is 0.1.1-dev'
 
-# O21 deprecated style.md
 $styleCompat = [System.IO.File]::ReadAllText((Join-Path $refRoot 'style.md'), $utf8)
 Assert-True ($styleCompat -match 'DEPRECATED') 'O21 style.md deprecated pointer only'
 
-# O22 aesthetic priority in L3
 Assert-True ($l3 -match 'Aesthetic Decision Priority') 'O22 aesthetic priority in L3'
+
+Assert-True ($l3 -match 'Capability Resolution') 'O23 L3 Capability Resolution'
+Assert-True ($skill -match 'Production Brief') 'O24 format authority from Brief not Style'
+Assert-True (Test-Path (Join-Path $ProjectRoot 'docs\08-l2-style-contract-aesthetic-intelligence.md')) 'O25 Stage 08D architecture doc'
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })

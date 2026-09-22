@@ -34,5 +34,18 @@ beats: []
 #   color_effect_intent: natural
 #   asset_selection_guidance: ""
 #   shot_plan: null # optional list — expand only when beat requires detail
+#   capability_requirements:
+#     required:
+#       - visual.reframe.static
+#     preferred:
+#       - visual.motion.push_in
+#     optional:
+#       - audio.music.duck
+#     fallback:
+#       visual.motion.push_in:
+#         - visual.reframe.static
+
+capability_requirements: {}
+# Global defaults when not set per-beat. Same shape as beat-level block above.
 
 notes: ""

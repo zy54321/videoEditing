@@ -10,7 +10,7 @@ description: Editing strategy for short observational and informational videos b
 **Canonical name:** 生活观察 / 轻知识短视频  
 **Type:** Complete Style (directing + editing + finishing)
 
-See: `docs/06-style-first-editing.md`, `docs/07-editing-craft-architecture.md`
+Architecture: `docs/08-l2-style-contract-aesthetic-intelligence.md`
 
 ---
 
@@ -18,16 +18,13 @@ See: `docs/06-style-first-editing.md`, `docs/07-editing-craft-architecture.md`
 
 **Core feeling:** A friend telling you something interesting they just noticed.
 
-**Audience experience:**
+**Audience experience:** natural, clear, lightly paced — not news-anchor, travel-ad, or promo.
 
-- natural, informationally clear, lightly paced
-- not news-anchor formal, not travel-ado glossy, not ad-like
+**Typical form:** Narration + B-roll + captions + optional light music.
 
-**Typical form:** Narration + B-roll + captions + light music
+**Format / duration:** Defined by **Production Brief** (`format.*`, `format.target_duration_seconds`). This Style adapts composition and rhythm to Brief — it is not permanently bound to 9:16 or 60–90s.
 
-**Primary duration:** ~60–90s (45–120s only when Brief allows)
-
-**Not suitable for:** breaking news, interview-doc dominant, tutorial screencast, music video, trailer
+See `style-profile.yaml` for structured taste coordinates.
 
 ---
 
@@ -37,7 +34,7 @@ See: `docs/06-style-first-editing.md`, `docs/07-editing-craft-architecture.md`
 |----------|----------------|
 | narration-driven observation | breaking news |
 | 3–7 information points | talking-head opinion dominant |
-| cultural / social / light knowledge | product demo, music video |
+| cultural / social / light knowledge | product demo, music video, trailer |
 
 ---
 
@@ -45,27 +42,21 @@ See: `docs/06-style-first-editing.md`, `docs/07-editing-craft-architecture.md`
 
 | Layer | Role |
 |-------|------|
-| **This Style** | Primary creative system — WHAT / WHEN / WHY |
-| **Common Craft** | `video-workflow/knowledge/editing-craft/` — professional defaults |
-| **Author Intent** | Optional (`content.author_intent`) — global or per-beat |
-| **Creative Direction** | Optional (`editing.creative_direction`) — presentation refinements |
-| **L1 / Runtime** | HOW — capability truth and execution |
+| **This Style** | WHAT / WHEN / WHY |
+| **style-profile.yaml** | Taste coordinates |
+| **capability-policy.yaml** | L2 → L1 logical capability policy |
+| **Common Craft** | `video-workflow/knowledge/editing-craft/` |
+| **Owner Author Intent** | `Brief.content.author_intent` (optional, sole Owner authority) |
+| **Creative Direction** | `editing.creative_direction` (optional refinements) |
+| **L1 / Runtime** | HOW |
 
-**Owner Author Intent handling:**
-
-- Brief `content.author_intent` is the sole Owner authority (optional)
-- If Owner did not provide → `global: null`, `local: []` — Owner Author Intent **remains absent**
-- L3 derives editorial / beat intent from Style + content authority + assets — **not** written back as Owner Author Intent
-- **Global** Owner intent shapes whole piece within Style bounds
-- **Local** Owner intent affects named beat only — must not retarget entire Style
+Owner Author Intent absent → `global: null`, `local: []`. L3 derives editorial / beat intent separately — not written back as Owner Author Intent.
 
 ---
 
 ## Aesthetic Decision Priority
 
-When options conflict (after safety / factual integrity):
-
-1. Author Intent (if provided)
+1. Author Intent (when provided in Brief)
 2. Emotion / Audience Effect
 3. Story / Information Progression
 4. Rhythm
@@ -73,65 +64,70 @@ When options conflict (after safety / factual integrity):
 6. Style Consistency
 7. Technical Continuity
 
+(Safety and factual integrity always above aesthetic choices.)
+
 ---
 
 ## Blueprint Requirement
 
-L3 **MUST** produce an **Edit Blueprint** (beat-first) before detailed Edit execution.
+L3 **MUST** produce **Edit Blueprint** (beat-first) before Edit.
 
 - Template: `video-workflow/templates/edit-blueprint.yaml`
 - Runtime: `video-workflow/production/edit-blueprint.yaml`
-- Default: expose concise summary → **continue automatically**
-- Block only if `review_before_edit: true` or unresolved intent / authority conflict
+- Default: concise summary → **non-blocking** continue
+- Blueprint may include `capability_requirements` — semantic only, not Runtime actions
 
-Blueprint is **not** a Runtime action plan.
+---
+
+## Capability Policy Relationship
+
+Load `capability-policy.yaml` during Plan / Capability Resolution.
+
+- REQUIRED missing → BLOCK / review
+- PREFERRED missing → Style-defined fallback
+- OPTIONAL missing → omit
+
+L1 vocabulary: `video-workflow/capabilities/logical-capability-vocabulary.yaml`
 
 ---
 
 ## Reference Loading Order
 
-Load in order when executing this Style:
+1. `style-profile.yaml`
+2. `capability-policy.yaml`
+3. `references/01-directing.md`
+4. `references/02-visual-language.md`
+5. `references/03-editing-rhythm.md`
+6. `references/04-typography-graphics.md`
+7. `references/05-sound-music.md`
+8. `references/06-color-look-effects.md`
+9. `references/07-taste.md`
+10. `references/08-qa.md`
 
-1. `references/directing.md` — beats, shot function, narrative
-2. `references/visual-language.md` — composition, 9:16 framing
-3. `references/editing.md` — pacing, motion, transitions, ending
-4. `references/typography-graphics.md` — captions, graphics
-5. `references/sound-music.md` — voice, music, sound design
-6. `references/color-effects.md` — color, effects restraint
-7. `references/qa.md` — Style acceptance checklist
+Common Craft may be consulted; **Craft does not override Style**.
 
-Common Craft (`video-workflow/knowledge/editing-craft/`) may be consulted; **Craft does not override Style**.
-
-`references/style.md` is **deprecated** — compatibility pointer only.
-
----
-
-## Style Dimensions (17)
-
-| # | Dimension | Reference |
-|---|-----------|-----------|
-| 1 | Style Identity | this file |
-| 2–4 | Narrative / Pacing / Shot grammar | `directing.md`, `editing.md` |
-| 5 | Source selection | `directing.md`, `editing.md` |
-| 6–7 | Motion / Framing | `editing.md`, `visual-language.md` |
-| 8 | Transitions | `editing.md` |
-| 9–10 | Subtitles / Voice | `typography-graphics.md`, `sound-music.md` |
-| 11–12 | Music / Sound design | `sound-music.md` |
-| 13 | Graphics | `typography-graphics.md` |
-| 14–15 | Color / Effects | `color-effects.md` |
-| 16 | Ending | `editing.md` |
-| 17 | Style QA | `qa.md` |
+Deprecated pointers (`directing.md`, `editing.md`, `style.md`, etc.) are **not** authority.
 
 ---
 
 ## Brief Override Policy
 
-Brief may override non-safety stylistic parameters when explicit (subtitles, music, transitions, look, graphics density).
+Brief may override non-safety stylistic parameters when explicit (`features.*`, creative direction).
 
-Safety, factual integrity, and Frozen assets are **not** overridable by Brief alone.
+Frozen assets and factual integrity are not overridable by Brief alone.
+
+---
+
+## QA Relationship
+
+| Layer | Source |
+|-------|--------|
+| Universal Technical QA | L3 + Common Craft structural rules |
+| Common Aesthetic QA | `editing-craft/aesthetic-qa.md` |
+| **Style Fidelity QA** | `references/08-qa.md` |
 
 ---
 
 ## Runtime Independence
 
-Expressed in editorial terms — not bound to DaVinci, MCP, or specific tool names.
+Expressed in editorial and logical capability terms only — no MCP, Resolve API, or implementation route names in this Skill.

@@ -54,7 +54,27 @@ Ordinary beats: **do not** force full shot lists.
 | `subtitle_graphics_intent` | optional | standard caption, keyword emphasis, title |
 | `color_effect_intent` | optional | natural, slightly warm, etc. |
 | `asset_selection_guidance` | optional | Semantic search hints |
+| `capability_requirements` | optional | Semantic L1 logical IDs — required / preferred / optional / fallback |
 | `shot_plan` | optional | Detailed shots when needed |
+
+### `capability_requirements`
+
+Expresses **semantic execution requirements** — not Runtime implementation.
+
+```yaml
+capability_requirements:
+  required:
+    - visual.reframe.static
+  preferred:
+    - visual.motion.push_in
+  optional:
+    - audio.music.duck
+  fallback:
+    visual.motion.push_in:
+      - visual.reframe.static
+```
+
+**Must not** contain MCP method names or Resolve API calls. Resolved in L3 Capability Resolution using L2 `capability-policy.yaml` + L1 vocabulary.
 
 ---
 

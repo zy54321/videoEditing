@@ -1,0 +1,33 @@
+# Capability Resolution Result — static contract (Stage 08D)
+# Runtime: video-workflow/production/capability-resolution.yaml
+# Reference: video-workflow/templates/capability-resolution-reference.md
+
+schema_version: 1
+production_id: ""
+style_id: ""
+
+resolution: {}
+# Example entry:
+#   visual.motion.push_in:
+#     requested_as: preferred
+#     status: FALLBACK
+#     result: visual.reframe.static
+#     selected_capability: visual.reframe.static
+#     fallback_used: true
+#     reason: push-in route AVAILABLE_UNVERIFIED; Style policy allows static reframe
+
+degradation:
+  occurred: false
+  acceptable: true
+  style_impact: none
+
+coverage:
+  required_total: 0
+  required_verified: 0
+  required_unresolved: 0
+  preferred_total: 0
+  preferred_verified: 0
+  preferred_fallback_capable: 0
+  preferred_unresolved: 0
+  optional_total: 0
+  optional_verified: 0

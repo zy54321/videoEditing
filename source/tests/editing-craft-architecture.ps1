@@ -97,13 +97,13 @@ Assert-True (($bpRef -match 'NON_BLOCKING') -and ($l3 -match 'NON_BLOCKING')) 'E
 Assert-True (($briefTpl -match 'review_before_edit') -and ($bpTpl -match 'review_before_edit')) 'E12 review_before_edit support'
 
 # 13 seven style reference files
-$refFiles = @('directing.md', 'visual-language.md', 'editing.md', 'typography-graphics.md', 'sound-music.md', 'color-effects.md', 'qa.md')
+$refFiles = @('01-directing.md', '02-visual-language.md', '03-editing-rhythm.md', '04-typography-graphics.md', '05-sound-music.md', '06-color-look-effects.md', '07-taste.md', '08-qa.md')
 $refsOk = $true
 $refRoot = Join-Path $Payload '.cursor\skills\video-editing\observational-info-short\references'
 foreach ($r in $refFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $refRoot $r))) { $refsOk = $false }
 }
-Assert-True $refsOk 'E13 all seven style reference files exist'
+Assert-True $refsOk 'E13 all eight canonical style reference files exist'
 
 # 14 SKILL load order
 Assert-True ($skill -match 'Reference Loading Order') 'E14 SKILL references load order defined'
