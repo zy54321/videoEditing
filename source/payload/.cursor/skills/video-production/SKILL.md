@@ -614,9 +614,11 @@ Examples:
 
 ---
 
-## Stage 5 — QA
+## Stage 5 — QA (Pre-Render)
 
-QA has **three** layers. **Timeline State QA ≠ Final Artifact QA.**
+**Pre-Render QA only.** Final Artifact QA runs **after** Render (see below).
+
+QA has **two** pre-render layers. **Timeline State QA ≠ Final Artifact QA.**
 
 ### 5A — Timeline State QA
 
@@ -653,31 +655,9 @@ Examples:
 - factual visual alignment
 - Style-level extensions (OBS-QA-FINAL-RENDER, etc.)
 
-### Final Artifact QA — MUST (post-render)
+### Final Artifact QA — NOT in Stage 5
 
-After render, verify the **actual MP4** — not timeline-only state.
-
-**Technical:** exists, duration, width/height, fps, codec, audio stream.
-
-**Visual:** black bars, framing, subtitle visibility/overflow, gross crop, unintended blank frames.
-
-**Motion:** abnormal slow motion, judder, retime defects — `MOTION_VISUAL_REVIEW_REQUIRED` if subjective check needed.
-
-**Audio:** voice exists, clipping, gross silence, voice/music balance when music enabled.
-
-**Style:** pacing, repetition, transition excess, observational identity.
-
-`render.verify_output` PASS alone **does not** equal Production PASS.
-
-### Representative Frame Sampling
-
-Lightweight final-render sampling via FFmpeg/ffprobe (or equivalent):
-
-- sample major segments, motion-heavy clips, subtitle sections, intro/end
-- optional QA contact sheet in workflow temp area (not media input/output)
-- clean up after QA when policy allows
-
-If Agent cannot perform visual review: `FINAL_VISUAL_QA_REQUIRES_OWNER_REVIEW` — **no fake PASS**.
+Do **not** run Final Artifact QA before Render. See **Post-Render Final Artifact QA** (after Stage 7).
 
 QA must be based on **actual results**.
 
@@ -730,12 +710,7 @@ and output evidence.
 
 ## Stage 7 — Render
 
-Render only after:
-
-- Universal QA
-- Required Genre QA
-
-reach render-ready state.
+Render only after **Pre-Render QA** (Stage 5 Universal + Genre) reaches render-ready state.
 
 ### Pre-Render Confirmation
 
@@ -758,9 +733,33 @@ reach render-ready state.
 - audio stream
 - codec / format when relevant
 
-Then run **Final Artifact QA** (Stage 5 Final Artifact section) including frame sampling when applicable.
-
 If render output is invalid: enter Repair.
+
+---
+
+## Post-Render Final Artifact QA — MUST
+
+**Order (mandatory):**
+
+```
+Pre-Render QA → Render → Post-Render Final Artifact QA → Repair (if needed) → Re-render → Post-Render QA
+```
+
+After a valid render file exists, verify the **actual MP4** — not timeline-only state.
+
+Use `video-workflow/tools/final-artifact-qa.ps1` when FFmpeg/ffprobe available. Outputs go to `video-workflow/.qa/` only.
+
+**Technical:** exists, duration, width/height, fps, codec, audio stream.
+
+**Visual:** black bars (`final_render.black_bar_check`), framing, subtitle visibility/overflow (`final_render.subtitle_visual_qa`), gross crop, unintended blank frames.
+
+**Motion:** abnormal slow motion, judder — `MOTION_VISUAL_REVIEW_REQUIRED` when needed.
+
+**Audio:** voice, clipping, silence, voice/music balance.
+
+`render.verify_output` PASS alone **does not** equal Production PASS.
+
+If Agent cannot perform visual review: `FINAL_VISUAL_QA_REQUIRES_OWNER_REVIEW` — **no fake PASS**.
 
 ---
 

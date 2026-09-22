@@ -252,7 +252,8 @@ Filename alone is **not** semantic evidence.
 |------------|-------------|--------|----------|---------------|
 | `clip.speed_change` | Apply speed / retime to clip | **VERIFIED** | **MUST** | `get_speed` 150% read-back; duration 144→96; gap clean after reposition (Stage 04A) |
 | `clip.retime_mode` | Nearest / optical flow / frame blend | **UNKNOWN** | Optional | `get_retime` read-back |
-| `mixed_fps.cadence_analyze` | Assess mixed source fps vs timeline cadence risk | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | FFprobe distribution + placement; no safe auto-interpolation route confirmed (08A) |
+| `mixed_fps.cadence_analyze` | Assess mixed source fps vs timeline cadence risk | **VERIFIED** | **MUST** (N02 V2) | FFprobe per-clip fps/duration + motion-risk classification + Safe Cadence Policy (08A.1) |
+| `mixed_fps.interpolation` | Optical flow / frame interpolation retime | **UNKNOWN** | Optional | **Not** N02 V2 blocker; use Safe Cadence Degradation instead |
 
 **L1 responsibility:** implement a speed factor **decided by L2** — not preset 1.4× / 2×.
 
@@ -327,9 +328,11 @@ Filename alone is **not** semantic evidence.
 | `subtitle.import` | Import SRT / external subtitle media | **VERIFIED** | **MUST** | Pool import only; live timeline placement via SRT append is **UNSAFE** |
 | `subtitle.create` | Place subtitles on timeline | **VERIFIED** | **MUST** | Via `native_drt_subtitles` route (R1); not via live SRT append |
 | `subtitle.track` | Create/manage subtitle track | **VERIFIED** | **MUST** | Subtitle track populated after DRT import |
-| `subtitle.layout` | Controllable width, line break, position, safe area | **UNKNOWN** | **MUST** (N02 V2) | DRT SRT placement verified; per-cue layout automation not confirmed (Stage 08A) |
-| `subtitle.visual_style` | Font, outline, background, styled text | **UNKNOWN** | Required | `subtitle.create` VERIFIED ≠ visual style VERIFIED |
-| `subtitle.keyword_emphasis` | Per-cue keyword styling | **UNKNOWN** | Optional | Fusion/Text+ route not validated |
+| `subtitle.line_break_control` | Explicit cue splits + `\n` line breaks in authored text | **VERIFIED** | **MUST** (N02 V2) | Stage 08A.1: `drt.assemble` `spec.subtitles[]` → 4-cue transcript with 2-line cue → burn-in render visual |
+| `subtitle.safe_text_width` | Avoid horizontal overflow via semantic split + line heuristic | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | No API width box; fallback: semantic segmentation + max 2 lines + split cue (08A.1) |
+| `subtitle.position` | Per-cue position / safe-area API control | **UNKNOWN** | Optional | Not required for functional layout |
+| `subtitle.visual_style` | Font, outline, background, animation | **UNKNOWN** | Optional | **Not** N02 V2 blocker; `subtitle.create` VERIFIED ≠ visual style VERIFIED |
+| `subtitle.keyword_emphasis` | Per-cue keyword styling | **UNKNOWN** | Optional | Fusion/Text+ not validated |
 | `subtitle.style` | Legacy alias — prefer `subtitle.visual_style` | **UNKNOWN** | Optional | Style read-back not confirmed |
 | `subtitle.timing` | Verify cue timing vs narration | **AVAILABLE_UNVERIFIED** | **PRODUCTION_QA** | `get_transcript` cues vs plan; checked in final QA, not a Capability Gate blocker |
 | `subtitle.edit` | Adjust cue text/timing programmatically | **UNKNOWN** | Repair | No confirmed write surface this stage |
@@ -342,7 +345,8 @@ Filename alone is **not** semantic evidence.
 |-------|--------|-----------------|
 | `live_api_srt_append` | **UNSAFE** | Resolve Studio 21.1.0.14 runtime crash on `media_pool.append_to_timeline` with `media_type: 3` (SRT). See `validation/capability-spike/CRASH-20260921.md`. **DO NOT RETRY IN AUTOMATED PRODUCTION.** |
 | `native_auto_caption` | **AVAILABLE_UNVERIFIED** | `timeline_ai` `create_subtitles` / transcription path. Not suitable as default for Frozen Script precise captions. |
-| `native_drt_subtitles` | **VERIFIED** | Advanced MCP `drt.assemble` with `spec.subtitlesSrt` → `timeline.import_timeline_checked` → `get_transcript` read-back (3 cues, 2026-09-21 R1). |
+| `native_drt_subtitles` | **VERIFIED** | `drt.assemble` with `spec.subtitles[]` (`startFrame`, `durationFrames`, `text` with `\n`) → import → transcript + burn-in render (08A.1). `subtitlesSrt` alone may not author cues — prefer `subtitles[]`. |
+| `subtitle_functional_fallback` | **VERIFIED** | Content → semantic segmentation → explicit `\n` → max 2 lines → split cue → render → `final-artifact-qa.ps1` visual check |
 
 **Implementation Detail — Not Portable Contract:**
 
@@ -422,7 +426,7 @@ V0.1 N02 does not require heavy graphics automation.
 
 | Logical ID | Description | Status | N02 V0.1 | Verify Method |
 |------------|-------------|--------|----------|---------------|
-| `color.basic` | Light correction / matching | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2 baseline) | `timeline_item_color.safe_set_cdl` schema exposed; end-to-end grade not spike-validated 08A |
+| `color.basic` | Light correction / matching | **VERIFIED** | **MUST** (N02 V2) | Stage 08A.1: Color page + `timeline_item_color.set_cdl` (array CDL) → node graph read-back (`safe_set_cdl` may fail on same host) |
 | `color.lut` | Apply LUT | **AVAILABLE_UNVERIFIED** | Optional | Node/LUT state |
 | `color.match` | Shot matching | **DEFERRED** | Not N02 MUST | — |
 
@@ -492,8 +496,8 @@ V0.1 does not maintain a plugin registry. **Do not auto-install OFX.**
 | `qa.gap_detection` | Detect gaps/overlaps | **VERIFIED** | Required | `detect_gaps_overlaps` |
 | `qa.visual_frame` | Capture rendered frame | **AVAILABLE_UNVERIFIED** | Required | `timeline_frame` capture |
 | `final_render.frame_sampling` | Extract representative frames from MP4 (FFmpeg) | **VERIFIED** | **MUST** | Auxiliary: `ffmpeg -ss` frame extract; workflow temp only |
-| `final_render.black_bar_check` | Detect letterbox/pillarbox in rendered frames | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | FFmpeg extract + luminance/edge heuristic or Agent vision |
-| `final_render.subtitle_visual_qa` | Verify subtitle visibility/overflow in MP4 | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | Requires frame sampling + vision; timeline count insufficient |
+| `final_render.black_bar_check` | Detect letterbox/pillarbox in rendered frames | **VERIFIED** | **MUST** (N02 V2) | `video-workflow/tools/final-artifact-qa.ps1` edge heuristic + `AUTOMATED_SCREEN + VISUAL_CONFIRM` (08A.1) |
+| `final_render.subtitle_visual_qa` | Verify subtitle visibility/overflow in MP4 | **VERIFIED** | **MUST** (N02 V2) | Frame extract at cue midpoints + Agent vision; pipeline in `final-artifact-qa.ps1` (08A.1) |
 
 **Visual QA not replaceable by Inspector numbers alone:**
 
@@ -544,11 +548,14 @@ Counts are **derived from Master Matrix rows** — do not maintain separate manu
 | subtitle.track | Subtitle track | VERIFIED | **MUST** | track + items |
 | subtitle.create | Place subtitles on timeline | VERIFIED | **MUST** | native_drt_subtitles route (R1) |
 | subtitle.import | Import SRT to pool | VERIFIED | **MUST** | pool import; live append UNSAFE |
-| subtitle.layout | Width/line break/position | UNKNOWN | **MUST** (V2) | 08A: no safe automated layout route |
-| subtitle.visual_style | Font/outline/background | UNKNOWN | Yes | create ≠ visual VERIFIED |
-| subtitle.keyword_emphasis | Keyword styling | UNKNOWN | Optional | Fusion route not validated |
+| subtitle.line_break_control | Explicit line breaks in cues | VERIFIED | **MUST** (V2) | drt.assemble subtitles[] + render burn-in (08A.1) |
+| subtitle.safe_text_width | Semantic width heuristic | AVAILABLE_UNVERIFIED | **MUST** (V2) | split cue fallback; no API box |
+| subtitle.position | Position API | UNKNOWN | Optional | not V2 blocker |
+| subtitle.visual_style | Font/outline/background | UNKNOWN | Optional | not V2 blocker |
+| subtitle.keyword_emphasis | Keyword styling | UNKNOWN | Optional | Fusion not validated |
 | subtitle.timing | Cue timing verify | AVAILABLE_UNVERIFIED | PRODUCTION_QA | get_transcript; QA check, not gate blocker |
-| mixed_fps.cadence_analyze | Mixed fps cadence risk | AVAILABLE_UNVERIFIED | **MUST** (V2) | FFprobe + placement; interpolation UNKNOWN |
+| mixed_fps.cadence_analyze | Mixed fps cadence risk | VERIFIED | **MUST** (V2) | FFprobe + Safe Cadence Policy (08A.1) |
+| mixed_fps.interpolation | Optical flow retime | UNKNOWN | Optional | not V2 blocker |
 | music.library.search | Music library search | UNAVAILABLE | No | No V0.1 library automation |
 | music.library.preview | Music library preview | UNAVAILABLE | No | — |
 | music.library.select | Music library select | UNAVAILABLE | No | — |
@@ -557,15 +564,15 @@ Counts are **derived from Master Matrix rows** — do not maintain separate manu
 | voice.pitch | Voice pitch | UNKNOWN | Optional | — |
 | voice.effect | Voice FX | UNKNOWN | Optional | — |
 | final_render.frame_sampling | MP4 frame extract | VERIFIED | **MUST** | FFmpeg auxiliary |
-| final_render.black_bar_check | Black bar detection | AVAILABLE_UNVERIFIED | **MUST** (V2) | extract + heuristic/vision |
-| final_render.subtitle_visual_qa | Subtitle in MP4 | AVAILABLE_UNVERIFIED | **MUST** (V2) | not timeline-only |
+| final_render.black_bar_check | Black bar detection | VERIFIED | **MUST** (V2) | final-artifact-qa.ps1 (08A.1) |
+| final_render.subtitle_visual_qa | Subtitle in MP4 | VERIFIED | **MUST** (V2) | frame extract + vision (08A.1) |
 | audio.import | Import music | VERIFIED | **MUST** | pool clip |
 | audio.place | Place on track | VERIFIED | **MUST** | audio item |
 | audio.volume | DaVinci-native volume | FAILED | — | item-level write/readback false (R1–R2) |
 | background_music_level_control | Music level under voice | VERIFIED | **MUST** | ffmpeg_pre_attenuation (R2) |
 | audio.fade | Fade in/out | VERIFIED | **MUST** | get_fades 12/24 frames (R1) |
 | audio.ducking | Auto ducking | UNKNOWN | Desired | — |
-| color.basic | Light correction | AVAILABLE_UNVERIFIED | **MUST** (V2) | CDL schema; not E2E validated 08A |
+| color.basic | Light correction | VERIFIED | **MUST** (V2) | set_cdl array CDL on Color page (08A.1) |
 | effects.resolvefx | ResolveFX automation | UNKNOWN | No | — |
 | effects.fusion | Fusion effects | AVAILABLE_UNVERIFIED | No | render frame |
 | effects.ofx | OFX plugins | UNKNOWN | No | — |
@@ -575,37 +582,58 @@ Counts are **derived from Master Matrix rows** — do not maintain separate manu
 
 ---
 
-## 8. N02 Capability Gate (L1 Assessment)
+## 8. N02 Capability Gates (L1 Assessment)
 
-| N02 Requirement | Required Capability | Status | Evidence / Note |
-|-----------------|---------------------|--------|-----------------|
-| Motion normalization | `clip.speed` | **VERIFIED** | Stage 04A: 150% read-back; duration 144→96; gap clean |
-| 9:16 framing | `clip.scale` + `clip.position` | **VERIFIED** (API) / **AVAILABLE_UNVERIFIED** (visual) | Transform read-back verified; subject-safe framing still needs render/visual QA |
-| Transitions | `transition.apply` | **VERIFIED** | `native_drt_transition` — assemble → import → dissolve read-back → render |
-| Subtitles | `subtitle.create` via `native_drt_subtitles` | **VERIFIED** | R1: DRT author → import → 3-cue transcript read-back. `live_api_srt_append` **UNSAFE** |
-| Background music | `audio.import` + `audio.place` + `background_music_level_control` + `audio.fade` | VERIFIED | Place+fade (R1); level via **ffmpeg_pre_attenuation** (R2); native volume **FAILED** |
-| Voice preservation | `audio.place` + timeline control | VERIFIED | Voice Master used in N02 rough cut |
-| Render | `render.configure` + `render.start` | VERIFIED | H.264 **1080×1920** 24fps AAC — ffprobe verified (R2) |
-| Post-render verification | `render.verify` + FFprobe | VERIFIED | `render.verify_output` + external probe |
+### N02_V1_CAPABILITY_GATE (Stage 04A / N02 V1 baseline)
 
-### N02_CAPABILITY_GATE
+Historical gate for **N02 V1** only. Does **not** imply N02 V2 execution readiness.
+
+| N02 V1 Requirement | Required Capability | Status | Evidence / Note |
+|--------------------|---------------------|--------|-----------------|
+| Motion normalization | `clip.speed_change` | **VERIFIED** | Stage 04A: 150% read-back |
+| 9:16 framing | `clip.scale` + `clip.position` | **VERIFIED** (API) | Transform read-back; visual QA separate |
+| Transitions | `transition.apply` | **VERIFIED** | `native_drt_transition` (R2) |
+| Subtitles | `subtitle.create` | **VERIFIED** | `native_drt_subtitles` (R1); `live_api_srt_append` **UNSAFE** |
+| Background music | `audio.*` + `background_music_level_control` | **VERIFIED** | FFmpeg attenuation route (R2) |
+| Render | `render.configure` + `render.start` | **VERIFIED** | 1080×1920 @ 24fps (R2) |
 
 ```
-PASS
+N02_V1_CAPABILITY_GATE = PASS
 ```
 
-**Rationale (post Stage 04A-R2, 2026-09-21):**
+### N02_V2_READINESS_GATE (Stage 08A.1 — execution readiness)
 
-- All N02 MUST logical capabilities have at least one **VERIFIED** safe route
-- `transition.apply` → **VERIFIED** via `native_drt_transition` (live route remains **FAILED**, not required)
-- `background_music_level_control` → **VERIFIED** via `ffmpeg_pre_attenuation` (DaVinci-native `audio.volume` remains **FAILED**)
-- Vertical deliverable → **VERIFIED** 1080×1920 @ 24fps (explicit render `FormatWidth`/`FormatHeight`)
-- Subtitles → **VERIFIED** via `native_drt_subtitles` (R1); `live_api_srt_append` **UNSAFE**
-- `audio.ducking` → **UNKNOWN** (optional; not a gate blocker)
+Must pass **before** real N02 V2 production. Documentation alone is insufficient.
 
-**Residual (non-blocking):** subject-safe 9:16 visual QA; `subtitle.timing` full automation (covered by **PRODUCTION_QA**, not Capability Gate); DaVinci-native volume automation; `audio.ducking`.
+| # | V2 P0 Requirement | Capability | Status | Evidence |
+|---|-------------------|------------|--------|----------|
+| A | Subtitle placement | `subtitle.create` | **VERIFIED** | native_drt_subtitles (R1+) |
+| B | Line breaks / cue split | `subtitle.line_break_control` | **VERIFIED** | 08A.1 DRT `subtitles[]` + MP4 burn-in |
+| C | Functional layout route | `subtitle.safe_text_width` + fallback | **AVAILABLE_UNVERIFIED** + fallback **VERIFIED** | Semantic split; no API width |
+| D | Advanced subtitle style | `subtitle.visual_style` | **UNKNOWN** | **Not** V2 blocker |
+| E | Mixed FPS analysis | `mixed_fps.cadence_analyze` | **VERIFIED** | FFprobe + policy (08A.1) |
+| F | Interpolation | `mixed_fps.interpolation` | **UNKNOWN** | Safe degradation policy; **not** V2 blocker |
+| G | Frame sampling | `final_render.frame_sampling` | **VERIFIED** | FFmpeg + `final-artifact-qa.ps1` |
+| H | Subtitle visual QA pipeline | `final_render.subtitle_visual_qa` | **VERIFIED** | 08A.1 disposable render + vision |
+| I | Black-bar QA pipeline | `final_render.black_bar_check` | **VERIFIED** | 08A.1 heuristic pipeline |
+| J | Baseline color | `color.basic` | **VERIFIED** | `timeline_item_color.set_cdl` (08A.1) |
+| K | Motion normalize | `clip.speed_change` | **VERIFIED** | Stage 04A |
 
-**Crash record:** `validation/capability-spike/CRASH-20260921.md`
+```
+N02_V2_READINESS_GATE = PASS
+```
+
+**Safe Cadence Degradation (no VERIFIED interpolation):**
+
+1. Prefer clips matching timeline FPS
+2. mismatch + low-motion → keep + Final Motion QA
+3. mismatch + motion-heavy → prefer alternate source
+4. abnormal slow motion → `clip.speed_change`
+5. retime still unnatural → replace clip
+6. Do **not** call UNKNOWN interpolation routes
+
+**Crash record:** `validation/capability-spike/CRASH-20260921.md`  
+**08A.1 evidence:** `validation/capability-spike/STAGE-08A1-n02-v2-execution-readiness.md`
 
 ---
 

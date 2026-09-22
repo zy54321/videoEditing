@@ -297,14 +297,28 @@ If acceleration still looks unnatural: **prefer alternate source** over infinite
 
 ### Analyze: Source FPS Distribution
 
-Before Plan, L3 Analyze **MUST** record:
+Before Plan, L3 Analyze **MUST** record (not fps labels alone):
 
-- per-clip source fps distribution (e.g. 23.976, 25, 29.97, 30)
-- timeline fps
-- mismatch / cadence risk
-- motion-heavy clips
+- per-clip source fps
+- clip duration and usable count per fps bucket
+- motion intensity / motion-heavy clip list
+- target timeline fps
+- cadence / mismatch risk
 
 **MUST NOT** infer Motion PASS from final CFR render metadata alone.
+
+### Safe Cadence Degradation (no VERIFIED interpolation)
+
+1. Prefer sources matching timeline FPS
+2. mismatch + low-motion → keep → Final Motion QA
+3. mismatch + motion-heavy → prefer alternate source
+4. abnormal slow motion → normalize speed
+5. still unnatural → replace clip
+6. Do **not** call UNKNOWN interpolation routes
+
+### Motion Plan — per clip
+
+Each motion-risk clip **MUST** receive one of: **KEEP** | **NORMALIZE** | **REPLACE**. No silent skip.
 
 ### Timeline FPS
 
@@ -441,6 +455,8 @@ Distinguish in QA: **intentional no-caption section** vs **unintended missing su
 - avoid covering faces/subjects when possible
 
 If two lines insufficient: split cue, adjust timing — not unlimited shrink.
+
+**Functional fallback (v0.1.1):** semantic segmentation → explicit `\n` → max 2 lines → safe per-line heuristic → render → `final-artifact-qa.ps1` visual check. `subtitle.visual_style` UNKNOWN does **not** block functional captions.
 
 ### Visual Style Types (capability-aware)
 

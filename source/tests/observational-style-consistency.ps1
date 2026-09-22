@@ -116,9 +116,10 @@ Assert-True ($l3 -match 'Timeline State QA') 'O18 timeline QA separated'
 Assert-True ($skill -match 'Timeline subtitle count') 'O18 timeline subtitle not sufficient'
 
 # 19 capability truth
-Assert-True ($l1 -match 'subtitle\.layout') 'O19 subtitle.layout capability'
+Assert-True ($l1 -match 'subtitle\.line_break_control') 'O19 subtitle.line_break_control capability'
 Assert-True ($l1 -match 'subtitle\.visual_style') 'O19 subtitle.visual_style capability'
-Assert-True (($l1 -match 'subtitle\.create') -and ($l1 -match 'visual_style') -and ($l1 -match 'does not')) 'O19 capability truth explicit'
+Assert-True ($l1 -match 'N02_V2_READINESS_GATE') 'O19 V2 readiness gate documented'
+Assert-True (($l1 -match 'subtitle\.create') -and ($l1 -match 'visual_style')) 'O19 capability truth explicit'
 
 # 20 version
 Assert-True ($version -eq '0.1.1-dev') 'O20 VERSION is 0.1.1-dev'

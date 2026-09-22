@@ -65,7 +65,9 @@ Source distribution included **23.976, 25, 29.97, 30** fps → timeline **24 fps
 
 ## L1 Capability Gate (unchanged baseline)
 
-**N02_CAPABILITY_GATE (v0.1.0):** `PASS` — all MUST logical capabilities have a VERIFIED safe route.
+**N02_V1_CAPABILITY_GATE (v0.1.0):** `PASS` — Stage 04A baseline only.
+
+**N02_V2_READINESS_GATE (v0.1.1):** `PASS` — see `validation/capability-spike/STAGE-08A1-n02-v2-execution-readiness.md`. Ready for Stage 08B real V2 acceptance.
 
 Stage 08A adds **capability truth** for layout, visual subtitle, final artifact QA, mixed-fps analyze — see `validation/capability-spike/STAGE-08A-observational-style.md`.
 

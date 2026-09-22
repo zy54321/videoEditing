@@ -61,13 +61,15 @@ See [`CRASH-20260921.md`](./CRASH-20260921.md).
 
 ---
 
-## N02_CAPABILITY_GATE
+## N02_V1_CAPABILITY_GATE
 
 ```
 PASS
 ```
 
-**All N02 MUST logical capabilities have a VERIFIED safe route** (post R2).
+Stage 04A-R2 baseline only. **Not** N02 V2 execution readiness.
+
+See `STAGE-08A1-n02-v2-execution-readiness.md` for `N02_V2_READINESS_GATE`.
 
 **Non-blocking unknowns:** DaVinci-native volume; live transition API; ducking; visual 9:16 QA.
 

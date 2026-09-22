@@ -82,7 +82,7 @@ Assert-True ($sumStatuses -eq $total) "C08 L1 status counts sum to total ($sumSt
 
 # 9. N02 gate: subtitle.timing not MUST blocker
 Assert-True ($l1 -match 'subtitle\.timing.*PRODUCTION_QA') 'C09 subtitle.timing marked PRODUCTION_QA'
-Assert-True ($l1 -match 'N02_CAPABILITY_GATE[\s\S]*PASS') 'C09 N02_CAPABILITY_GATE PASS documented'
+Assert-True (($l1 -match 'N02_V1_CAPABILITY_GATE[\s\S]*PASS') -and ($l1 -match 'N02_V2_READINESS_GATE')) 'C09 N02 V1/V2 capability gates documented'
 $mustRows = [regex]::Matches($l1, '\| \*\*MUST\*\* \|')
 $noVerifiedConflict = $true
 if ($l1 -match 'subtitle\.timing[\s\S]{0,120}\| \*\*MUST\*\*') { $noVerifiedConflict = $false }
