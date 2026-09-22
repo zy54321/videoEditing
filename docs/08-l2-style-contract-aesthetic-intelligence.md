@@ -135,3 +135,15 @@ Stage 08D does **not** create additional Styles or run Production.
 Construction stages (including 08D) follow `BUILD_STAGE_NO_PRODUCTION`.
 
 `CAPABILITY_VALIDATION_REQUIRED` marks designs needing future runtime proof — not validated in 08D.
+
+---
+
+## Acceptance (Owner — 2026-09-23)
+
+| Field | Value |
+|-------|-------|
+| Status | **ACCEPTED** |
+| Baseline HEAD | `81035a7` |
+| Receipt | `validation/stage-08d-acceptance-closeout.md` |
+
+Stage 08D construction foundation is closed. N02 Final Acceptance and v0.1.1 Release remain separate Owner decisions.
