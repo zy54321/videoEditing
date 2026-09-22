@@ -1,27 +1,25 @@
-# Static capability coverage snapshot — observational-info-short (Stage 08D)
-# Inventory only — NOT an aesthetic score. Regenerate when capability-policy or L1 vocabulary changes.
+# GENERATED SNAPSHOT — unit: logical_capability_id
+# Verify: source/tests/verify-capability-coverage.ps1
+# Inventory only — NOT an aesthetic score.
 
 style_id: observational-info-short
-generated_stage: 08D
+generated_stage: 08D.1
+unit: logical_capability_id
 
 required:
-  total: 6
-  verified: 5
+  total: 8
+  verified: 8
+  unresolved: 0
+
+preferred:
+  total: 12
+  verified: 6
+  fallback_capable: 5
   unresolved: 1
   notes:
     unresolved_ids:
-      - subtitle.layout.pixel_width  # AVAILABLE_UNVERIFIED — fallback to semantic segment
-
-preferred:
-  total: 10
-  verified: 6
-  fallback_capable: 8
-  unresolved: 2
-  notes:
-    unresolved_ids:
-      - audio.music.duck  # UNKNOWN — fallback audio.music.place
-      - visual.motion.push_in  # AVAILABLE_UNVERIFIED
+      - visual.trim
 
 optional:
-  total: 3
-  verified: 1
+  total: 4
+  verified: 3

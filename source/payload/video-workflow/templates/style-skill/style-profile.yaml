@@ -3,9 +3,9 @@ style_id: <style-id>
 
 identity:
   name: <display name>
-  core_feeling: ""
-  audience_relationship: ""
-  primary_goal: ""
+  core_feeling: <core feeling>
+  audience_relationship: <audience relationship>
+  primary_goal: <primary goal>
 
 taste_profile:
   naturalism: medium
@@ -13,7 +13,7 @@ taste_profile:
   visual_energy: medium
   camera_assertiveness: medium
   camera_stability: medium
-  psychological_distance: medium
+  psychological_distance: conversational
   shot_variety: medium
   cut_density: medium
   breathing_room: medium

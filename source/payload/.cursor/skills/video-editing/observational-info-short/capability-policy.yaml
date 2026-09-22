@@ -2,125 +2,128 @@ schema_version: 1
 style_id: observational-info-short
 
 # L2 → L1 bridge. Logical Capability IDs only — no Runtime names.
+# Fallback entries MUST include semantic degradation metadata (Stage 08D.1).
 
 visual:
   asset_selection:
-    required:
-      - visual.select_asset
+    required: [visual.select_asset]
     criticality: REQUIRED
 
   static_framing:
-    required:
-      - visual.reframe.static
+    required: [visual.reframe.static]
     criticality: REQUIRED
 
   motivated_motion:
-    preferred:
-      - visual.motion.push_in
-      - visual.motion.pan
+    preferred: [visual.motion.push_in, visual.motion.pan]
     fallback:
       visual.motion.push_in:
-        - visual.reframe.static
+        - target: visual.reframe.static
+          effect_preservation: partial
+          degradation_level: medium
+          style_impact: static framing replaces motivated push-in energy
+          reason: animated push-in AVAILABLE_UNVERIFIED; static reframe VERIFIED
       visual.motion.pan:
-        - visual.reframe.static
-    forbidden:
-      - visual.motion.aggressive_zoom
+        - target: visual.reframe.static
+          effect_preservation: low
+          degradation_level: high
+          style_impact: no true camera pan; subject reframed in frame only
+          reason: clip.position evidence supports static reframe not animated pan
+    forbidden: [visual.motion.aggressive_zoom]
     criticality: PREFERRED
 
   speed_normalization:
-    preferred:
-      - visual.motion.speed_change
+    preferred: [visual.motion.speed_change]
     criticality: PREFERRED
 
   trim:
-    preferred:
-      - visual.trim
+    preferred: [visual.trim]
     criticality: PREFERRED
 
 edit:
   hard_cut:
-    required:
-      - edit.cut
+    required: [edit.cut]
     criticality: REQUIRED
 
   dissolve_transition:
-    preferred:
-      - edit.transition.cross_dissolve
+    preferred: [edit.transition.cross_dissolve]
     fallback:
       edit.transition.cross_dissolve:
-        - edit.transition.basic
+        - target: edit.transition.basic
+          effect_preservation: partial
+          degradation_level: low
+          style_impact: hard cut instead of dissolve soften
+          reason: dissolve route may be unavailable; hard cut preserves continuity
     criticality: PREFERRED
 
 subtitle:
   semantic_cues:
-    required:
-      - subtitle.segment.semantic
-      - subtitle.render.basic
+    required: [subtitle.segment.semantic, subtitle.render.basic]
     criticality: REQUIRED
 
   pixel_layout:
-    preferred:
-      - subtitle.layout.pixel_width
+    preferred: [subtitle.layout.pixel_width]
     fallback:
       subtitle.layout.pixel_width:
-        - subtitle.segment.semantic
+        - target: subtitle.segment.semantic
+          effect_preservation: partial
+          degradation_level: high
+          style_impact: cannot guarantee 76-78% pixel-width layout
+          reason: semantic cue split does not measure rendered text width
     criticality: PREFERRED
 
   keyword_emphasis:
-    optional:
-      - subtitle.style.keyword_emphasis
+    optional: [subtitle.style.keyword_emphasis]
     criticality: OPTIONAL
 
 audio:
   voice:
-    required:
-      - audio.voice.place
+    required: [audio.voice.place]
     criticality: REQUIRED
 
   original_sound:
-    preferred:
-      - audio.original_sound.preserve
+    preferred: [audio.original_sound.preserve]
     criticality: PREFERRED
 
   music_bed:
-    optional:
-      - audio.music.place
-      - audio.music.crossfade
+    optional: [audio.music.place, audio.music.crossfade]
     criticality: OPTIONAL
 
   music_under_voice:
-    preferred:
-      - audio.music.duck
+    preferred: [audio.music.duck]
     fallback:
       audio.music.duck:
-        - audio.music.place
+        - target: audio.music.level_under_voice
+          effect_preservation: high
+          degradation_level: low
+          style_impact: achieves voice-priority music level without auto ducking envelope
+          reason: auto ducking UNKNOWN; pre-attenuation route VERIFIED
     criticality: PREFERRED
 
   ambience:
-    preferred:
-      - audio.ambience.place
+    preferred: [audio.ambience.place]
     criticality: PREFERRED
 
 color:
   correction:
-    preferred:
-      - color.primary_balance
-      - color.shot_match
+    preferred: [color.primary_balance, color.shot_match]
+    fallback:
+      color.shot_match:
+        - target: color.primary_balance
+          effect_preservation: partial
+          degradation_level: medium
+          style_impact: per-shot match may be weaker; primary balance only
+          reason: shot match AVAILABLE_UNVERIFIED; primary balance VERIFIED
     criticality: PREFERRED
 
   look:
-    optional:
-      - color.look.apply
+    optional: [color.look.apply]
     criticality: OPTIONAL
 
 qa:
   deliverable:
-    required:
-      - qa.final_artifact
-      - qa.visual.frame
+    required: [qa.final_artifact, qa.visual.frame]
     criticality: REQUIRED
 
   subtitle_visual:
-    preferred:
-      - qa.subtitle.layout
+    preferred: [qa.subtitle.layout]
     criticality: PREFERRED

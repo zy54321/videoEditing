@@ -120,6 +120,10 @@ $manifestHas08d = ($manifestTpl.components.templates -contains 'style-skill') -a
     ($manifestTpl.components.templates -contains 'capability-resolution') -and
     ($manifestTpl.components.capabilities -contains 'logical-capability-vocabulary')
 Assert-True $manifestHas08d 'C12b manifest includes Stage 08D style contract components'
+Assert-True (Test-Path (Join-Path $Payload 'video-workflow\templates\style-profile-schema.yaml')) 'C12c style-profile-schema in payload'
+$vocabYaml = Get-Content (Join-Path $Payload 'video-workflow\capabilities\logical-capability-vocabulary.yaml') -Raw -Encoding UTF8
+Assert-True ($vocabYaml -match 'canonical_states:') 'C12d logical vocabulary canonical states'
+Assert-True ($vocabYaml -notmatch 'status: UNAVAILABLE') 'C12e vocabulary no UNAVAILABLE state'
 
 # 13. build preflight uses installer ProductFiles (including Stage 08C paths)
 $buildScript = Join-Path $Root 'build\build-release.ps1'

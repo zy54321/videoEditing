@@ -541,14 +541,17 @@ Edit Blueprint `author_intent` fields are a **traceable applied view** of Brief 
 
 1. Collect logical capability IDs from Blueprint (global + per-beat)
 2. Merge with L2 `capability-policy.yaml` for this Style
-3. Query L1 status per ID — **UNKNOWN ≠ VERIFIED**
+3. Query L1 canonical status per ID (see state matrix in `capability-resolution-reference.md`)
 4. Resolve each requirement:
-   - **REQUIRED** unavailable → `BLOCKED`
-   - **PREFERRED** unavailable → Style `fallback` → `FALLBACK`
-   - **OPTIONAL** unavailable → `OMITTED`
-   - Available → `SELECTED`
-5. Write `video-workflow/production/capability-resolution.yaml`
-6. Emit Capability Coverage summary (inventory only — not aesthetic score)
+   - **VERIFIED** → may `SELECTED`
+   - **AVAILABLE_UNVERIFIED** → **must not** direct `SELECTED`; use `CAPABILITY_VALIDATION_REQUIRED` or Style `FALLBACK` with recorded degradation
+   - **UNKNOWN / FAILED / DEFERRED** → unavailable
+   - **UNSAFE** → prohibited
+   - **REQUIRED** + non-VERIFIED without safe path → `BLOCKED`
+   - **PREFERRED** + non-VERIFIED → Style `fallback` with semantic metadata → `FALLBACK`; no fallback → unresolved / omit per policy
+   - **OPTIONAL** + non-VERIFIED → `OMITTED`
+5. Write `video-workflow/production/capability-resolution.yaml` including per-entry `effect_preservation`, `degradation_level`, `style_impact`, `reason` when fallback used
+6. Emit Capability Coverage (mechanical derive from policy + vocabulary — not aesthetic score)
 
 Template: `video-workflow/templates/capability-resolution-result.yaml`
 

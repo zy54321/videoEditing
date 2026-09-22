@@ -1,9 +1,23 @@
-# Logical Capability Vocabulary — L1 canonical IDs (Stage 08D)
-# Maps editorial concepts to implementation status. NOT a quality score.
+# Logical Capability Vocabulary — L1 canonical IDs (Stage 08D.1)
+# Canonical status values ONLY:
+#   VERIFIED | AVAILABLE_UNVERIFIED | UNKNOWN | FAILED | UNSAFE | DEFERRED
 # L2 capability-policy.yaml MUST reference IDs defined here only.
-# Runtime / MCP names belong in davinci-resolve.md implementation detail sections.
 
 schema_version: 1
+
+canonical_states:
+  - VERIFIED
+  - AVAILABLE_UNVERIFIED
+  - UNKNOWN
+  - FAILED
+  - UNSAFE
+  - DEFERRED
+
+# Resolution state matrix (see capability-resolution-reference.md):
+# VERIFIED → SELECTED
+# AVAILABLE_UNVERIFIED → CAPABILITY_VALIDATION_REQUIRED (not direct SELECTED in Production)
+# UNKNOWN / FAILED / DEFERRED → unavailable
+# UNSAFE → prohibited / never select
 
 vocabulary:
 
@@ -15,27 +29,27 @@ vocabulary:
   visual.trim:
     status: AVAILABLE_UNVERIFIED
     l1_aliases: [clip.trim, clip.source_range]
-    notes: Timeline or source extent trim
+    notes: Timeline or source extent trim — limited read-back evidence
 
   visual.reframe.static:
     status: VERIFIED
     l1_aliases: [clip.scale, clip.position]
-    notes: Fill-frame reposition without animated motion
+    notes: Static fill-frame reposition (not animated camera move)
 
   visual.reframe.dynamic:
     status: AVAILABLE_UNVERIFIED
     l1_aliases: [clip.scale, clip.position]
-    notes: Keyframed or animated reframing — CAPABILITY_VALIDATION_REQUIRED for full route
+    notes: Animated reframing — CAPABILITY_VALIDATION_REQUIRED
 
   visual.motion.push_in:
     status: AVAILABLE_UNVERIFIED
     l1_aliases: [clip.scale]
-    notes: Motivated push-in; no dedicated push-in API — map via transform
+    notes: Motivated push-in; no dedicated animated push API verified
 
   visual.motion.pan:
-    status: VERIFIED
+    status: AVAILABLE_UNVERIFIED
     l1_aliases: [clip.position]
-    notes: Pan/Tilt reposition
+    notes: Animated pan not verified; clip.position evidence is static reframe only
 
   visual.motion.speed_change:
     status: VERIFIED
@@ -43,9 +57,9 @@ vocabulary:
     notes: Speed normalization / retime
 
   visual.motion.aggressive_zoom:
-    status: UNAVAILABLE
+    status: FAILED
     l1_aliases: []
-    notes: Editorial anti-pattern ID for Style forbidden lists — not a runtime feature
+    notes: Editorial anti-pattern — Style forbidden list only; never select
 
   edit.cut:
     status: VERIFIED
@@ -70,12 +84,12 @@ vocabulary:
   subtitle.segment.semantic:
     status: VERIFIED
     l1_aliases: [subtitle.create, subtitle.import]
-    notes: Semantic cue placement
+    notes: Semantic cue placement — does NOT guarantee pixel-width layout
 
   subtitle.layout.pixel_width:
     status: AVAILABLE_UNVERIFIED
     l1_aliases: [subtitle.safe_text_width, subtitle.line_break_control]
-    notes: Width-based wrap; full pixel box API UNKNOWN
+    notes: Target width layout — partial evidence; not production-VERIFIED as pixel guarantee
 
   subtitle.render.basic:
     status: VERIFIED
@@ -90,7 +104,7 @@ vocabulary:
   subtitle.style.keyword_emphasis:
     status: UNKNOWN
     l1_aliases: [subtitle.keyword_emphasis]
-    notes: Fusion keyword styling — CAPABILITY_VALIDATION_REQUIRED
+    notes: CAPABILITY_VALIDATION_REQUIRED
 
   audio.voice.place:
     status: VERIFIED
@@ -110,12 +124,17 @@ vocabulary:
   audio.music.place:
     status: VERIFIED
     l1_aliases: [audio.import, audio.place]
-    notes: Music clip placement
+    notes: Music clip placement — not equivalent to ducking
+
+  audio.music.level_under_voice:
+    status: VERIFIED
+    l1_aliases: [background_music_level_control]
+    notes: Music level reduced under voice via verified pre-attenuation route
 
   audio.music.duck:
     status: UNKNOWN
     l1_aliases: [audio.ducking]
-    notes: Auto ducking not implemented; level control via background_music_level_control
+    notes: Auto ducking not implemented
 
   audio.music.crossfade:
     status: VERIFIED
@@ -135,7 +154,7 @@ vocabulary:
   color.shot_match:
     status: AVAILABLE_UNVERIFIED
     l1_aliases: [color.basic]
-    notes: Inter-shot match — partial via CDL
+    notes: Inter-shot match — partial via CDL only
 
   color.look.apply:
     status: VERIFIED
@@ -150,7 +169,7 @@ vocabulary:
   graphics.text.motion:
     status: UNKNOWN
     l1_aliases: [effects.fusion]
-    notes: Animated typography — CAPABILITY_VALIDATION_REQUIRED
+    notes: CAPABILITY_VALIDATION_REQUIRED
 
   qa.visual.frame:
     status: VERIFIED
@@ -165,7 +184,7 @@ vocabulary:
   qa.audio:
     status: AVAILABLE_UNVERIFIED
     l1_aliases: [render.verify]
-    notes: Stream presence; balance QA manual / heuristic
+    notes: Stream presence; balance QA heuristic
 
   qa.final_artifact:
     status: VERIFIED
