@@ -100,16 +100,26 @@ Resolved during Intake per `production-entry-intake.mdc` §12. Frozen semantics 
 
 ### `content.author_intent`
 
-**Optional.** What Owner wants the audience to feel or understand — distinct from Style and from `creative_direction`.
+**Optional. Sole Owner Author Intent authority.**
+
+Only for **Owner-explicit** expression intent — distinct from Style, `creative_direction`, and from L3-derived editorial / beat intent.
 
 | Field | Meaning |
 |-------|---------|
-| `content.author_intent.global` | Whole-piece intent string, or `null` if omitted |
-| `content.author_intent.local` | Array of `{ beat_id, intent }` — affects named beats only |
+| `content.author_intent.global` | Whole-piece Owner intent string, or `null` when Owner did not provide |
+| `content.author_intent.local` | Array of `{ beat_id, intent }` — Owner local intent; affects named beats only |
 
-If omitted: L3 derives intent from Style + content authority + assets.
+When Owner did not provide intent — **Owner Author Intent remains absent**:
 
-Local intent must **not** silently override entire Style identity.
+- `global` remains `null`
+- `local` remains `[]`
+- **Do not** infer Owner Author Intent from Style, content authority, assets, or Agent reasoning
+
+L3 may derive **editorial / beat-level intent** (`visual_intent`, `audience_effect`, etc.) from Style + content authority + assets. That derivation is **not** Owner Author Intent and must not be written into `content.author_intent`.
+
+Edit Blueprint `author_intent` fields are a traceable snapshot / applied view of Brief — not a second authority. **Brief wins** on conflict.
+
+Local Owner intent must **not** silently override entire Style identity.
 
 ### `production_options.review_before_edit`
 

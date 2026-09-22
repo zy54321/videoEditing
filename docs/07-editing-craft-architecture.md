@@ -74,9 +74,12 @@ content:
     local: []
 ```
 
-- `author_intent` is **optional**
-- **Global** intent affects whole piece
-- **Local** intent affects named beat(s) only — must not silently retarget entire Style
+- `content.author_intent` is the **sole Owner Author Intent authority** (optional)
+- If Owner did not provide: `global: null`, `local: []` — do not infer Owner Author Intent from Style or assets
+- L3 derives editorial / beat-level intent separately (`visual_intent`, `audience_effect`, etc.)
+- Blueprint `author_intent` = traceable snapshot / applied view — **Brief wins** on conflict
+- **Global** Owner intent affects whole piece
+- **Local** Owner intent affects named beat(s) only — must not silently retarget entire Style
 
 ---
 

@@ -109,19 +109,37 @@ if (Test-Path -LiteralPath $buildScript) {
     Write-Host '[SKIP] C11 build-release.ps1 not present' -ForegroundColor Yellow
 }
 
-# 12. VERSION vs scope release state
+# 12. manifest Stage 08C components
+$manifestHas08c = ($manifestTpl.components.templates -contains 'edit-blueprint') -and
+    ($manifestTpl.components.knowledge -contains 'editing-craft') -and
+    ($manifestTpl.components.tools -contains 'final-artifact-qa')
+Assert-True $manifestHas08c 'C12 manifest includes Stage 08C templates/knowledge/tools'
+
+# 13. build preflight uses installer ProductFiles (including Stage 08C paths)
+$buildScript = Join-Path $Root 'build\build-release.ps1'
+if (Test-Path -LiteralPath $buildScript) {
+    $buildContent = Get-Content -LiteralPath $buildScript -Raw -Encoding UTF8
+    $c13Installer = ($productFiles -contains 'video-workflow\templates\edit-blueprint.yaml') -and
+        ($productFiles -contains 'video-workflow\knowledge\editing-craft\README.md')
+    Assert-True ($buildContent -match 'Get-InstallerProductFiles') 'C13 build preflight aligned with installer ProductFiles'
+    Assert-True $c13Installer 'C13 installer ProductFiles includes edit-blueprint and editing-craft'
+} else {
+    Write-Host '[SKIP] C13 build-release.ps1 not present' -ForegroundColor Yellow
+}
+
+# 14. VERSION vs scope release state
 $version = (Get-Content (Join-Path $Root 'VERSION') -Raw).Trim()
 $scopeDoc = Get-Content (Join-Path $ProjectRoot 'docs\03-v0.1-scope.md') -Raw -Encoding UTF8
 if ($scopeDoc -match 'v0\.1\.1 Observational Style Acceptance Closure \| IN_PROGRESS') {
-    Assert-True ($version -eq '0.1.1-dev') 'C12 VERSION is 0.1.1-dev during v0.1.1 closure'
+    Assert-True ($version -eq '0.1.1-dev') 'C14 VERSION is 0.1.1-dev during v0.1.1 closure'
 } elseif ($scopeDoc -match '\| Release \| RELEASE_CANDIDATE \|') {
-    Assert-True ($version -eq '0.1.0') 'C12 VERSION is 0.1.0 for RELEASE_CANDIDATE'
+    Assert-True ($version -eq '0.1.0') 'C14 VERSION is 0.1.0 for RELEASE_CANDIDATE'
 } elseif ($scopeDoc -match '\| Release \| RELEASED \|') {
-    Assert-True ($version -eq '0.1.0') 'C12 VERSION is 0.1.0 for RELEASED'
+    Assert-True ($version -eq '0.1.0') 'C14 VERSION is 0.1.0 for RELEASED'
 } elseif ($scopeDoc -match '\| Release \| NOT STARTED \|') {
-    Assert-True ($version -eq '0.1.0-dev') 'C12 VERSION is 0.1.0-dev before formal release'
+    Assert-True ($version -eq '0.1.0-dev') 'C14 VERSION is 0.1.0-dev before formal release'
 } else {
-    Assert-True $false 'C12 unrecognized Release scope state'
+    Assert-True $false 'C14 unrecognized Release scope state'
 }
 
 Write-Host ''

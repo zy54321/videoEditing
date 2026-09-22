@@ -9,7 +9,8 @@ param(
     [string]$PayloadRoot,
     [switch]$DryRun,
     [switch]$NoPause,
-    [switch]$TestSimulateFailure
+    [switch]$TestSimulateFailure,
+    [int]$TestSimulateFailureAfter = 1
 )
 
 Set-StrictMode -Version Latest
@@ -192,6 +193,8 @@ function Register-PreExistingPaths {
         '.cursor\skills',
         'video-workflow',
         'video-workflow\capabilities',
+        'video-workflow\knowledge',
+        'video-workflow\tools',
         'video-workflow\templates',
         'video-workflow\production'
     )
@@ -227,6 +230,9 @@ function Remove-EmptyProductDirs {
         '.cursor',
         'video-workflow\production',
         'video-workflow\templates',
+        'video-workflow\tools',
+        'video-workflow\knowledge\editing-craft',
+        'video-workflow\knowledge',
         'video-workflow\capabilities',
         'video-workflow'
     )
@@ -418,7 +424,7 @@ try {
         try {
             Copy-ProductFile -SourceRoot $payloadRoot -Workspace $workspace -RelativePath $rel
             $copyIndex++
-            if ($TestSimulateFailure -and $copyIndex -eq 1) {
+            if ($TestSimulateFailure -and $copyIndex -eq $TestSimulateFailureAfter) {
                 throw 'TestSimulateFailure: simulated copy failure'
             }
         } catch {

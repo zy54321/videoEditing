@@ -51,11 +51,13 @@ See: `docs/06-style-first-editing.md`, `docs/07-editing-craft-architecture.md`
 | **Creative Direction** | Optional (`editing.creative_direction`) — presentation refinements |
 | **L1 / Runtime** | HOW — capability truth and execution |
 
-**Author Intent handling:**
+**Owner Author Intent handling:**
 
-- If absent → Style + content authority drive decisions
-- **Global** intent shapes whole piece within Style bounds
-- **Local** intent affects named beat only — must not retarget entire Style
+- Brief `content.author_intent` is the sole Owner authority (optional)
+- If Owner did not provide → `global: null`, `local: []` — Owner Author Intent **remains absent**
+- L3 derives editorial / beat intent from Style + content authority + assets — **not** written back as Owner Author Intent
+- **Global** Owner intent shapes whole piece within Style bounds
+- **Local** Owner intent affects named beat only — must not retarget entire Style
 
 ---
 

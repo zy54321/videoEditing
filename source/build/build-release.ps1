@@ -22,18 +22,15 @@ $SourceRoot = Split-Path -Parent $BuildRoot
 $ProjectRoot = Split-Path -Parent $SourceRoot
 $ReleasesRoot = Join-Path $ProjectRoot 'releases'
 
-$RequiredPayloadFiles = @(
-    '.cursor\rules\video-workflow-core.mdc',
-    '.cursor\rules\davinci-production.mdc',
-    '.cursor\rules\production-entry-intake.mdc',
-    '.cursor\skills\video-production\SKILL.md',
-    '.cursor\skills\video-editing\observational-info-short\SKILL.md',
-    '.cursor\skills\video-editing\observational-info-short\references\style.md',
-    '.cursor\skills\video-editing\observational-info-short\references\qa.md',
-    'video-workflow\capabilities\davinci-resolve.md',
-    'video-workflow\templates\production-brief.yaml',
-    'video-workflow\templates\production-brief-reference.md'
-)
+function Get-InstallerProductFiles {
+    param([string]$InstallerScriptPath)
+    $installerContent = Get-Content -LiteralPath $InstallerScriptPath -Raw -Encoding UTF8
+    $pfMatch = [regex]::Match($installerContent, '\$ProductFiles = @\(([^)]+)\)', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    if (-not $pfMatch.Success) {
+        throw 'Could not parse $ProductFiles from installer script.'
+    }
+    return [regex]::Matches($pfMatch.Groups[1].Value, "'([^']+)'") | ForEach-Object { $_.Groups[1].Value }
+}
 
 function Write-BuildError {
     param([string]$Message)
@@ -93,6 +90,8 @@ foreach ($p in @($payloadRoot, $installerBat, $installerPs1, $manifestTemplate, 
         Write-BuildError "Missing required path: $p"
     }
 }
+
+$RequiredPayloadFiles = Get-InstallerProductFiles -InstallerScriptPath $installerPs1
 
 $missingPayload = @()
 foreach ($rel in $RequiredPayloadFiles) {

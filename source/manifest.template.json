@@ -37,7 +37,14 @@
       "observational-info-short"
     ],
     "templates": [
-      "production-brief"
+      "production-brief",
+      "edit-blueprint"
+    ],
+    "knowledge": [
+      "editing-craft"
+    ],
+    "tools": [
+      "final-artifact-qa"
     ],
     "capabilities": [
       "davinci-resolve"

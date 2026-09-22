@@ -44,7 +44,7 @@ Ordinary beats: **do not** force full shot lists.
 | `beat_id` | yes | Stable ID (B01, B02, …) |
 | `narrative_function` | yes | e.g. CONTRAST, EVIDENCE, REVEAL |
 | `source_content_range` | recommended | Script / narration segment |
-| `author_intent` | optional | Local Owner intent |
+| `author_intent` | optional | Traceable snapshot of Brief Owner intent applied to this beat — not new authority |
 | `audience_effect` | recommended | Intended viewer change |
 | `visual_intent` | recommended | What picture should accomplish |
 | `attention_target` | recommended | Primary visual focus |
@@ -71,6 +71,18 @@ shot_plan:
 ```
 
 **Must not** include MCP method names or exact API calls.
+
+---
+
+## Author Intent Provenance
+
+| Source | Role |
+|--------|------|
+| `Brief.content.author_intent` | **Sole Owner Author Intent authority** |
+| Blueprint `author_intent` per beat | Materialized / traceable view for planning — not new Owner authority |
+| `visual_intent`, `audience_effect`, etc. | L3-derived editorial intent — distinct from Owner Author Intent |
+
+If Blueprint `author_intent` conflicts with Brief → **Brief wins**; regenerate or correct Blueprint.
 
 ---
 

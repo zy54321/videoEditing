@@ -108,12 +108,23 @@ Assert-True $refsOk 'E13 all seven style reference files exist'
 # 14 SKILL load order
 Assert-True ($skill -match 'Reference Loading Order') 'E14 SKILL references load order defined'
 
-# 15 aesthetic hierarchy
-Assert-True (($aesthetic -match 'STRUCTURAL_INVARIANT') -and ($aesthetic -match 'TASTE_OPTION')) 'E15 four-level aesthetic hierarchy'
+# 15 aesthetic hierarchy (all four levels explicit)
+Assert-True ($aesthetic -match 'STRUCTURAL_INVARIANT') 'E15a STRUCTURAL_INVARIANT documented'
+Assert-True ($aesthetic -match 'REVIEWED_INVARIANT') 'E15b REVIEWED_INVARIANT documented'
+Assert-True ($aesthetic -match 'CRAFT_DEFAULT') 'E15c CRAFT_DEFAULT documented'
+Assert-True ($aesthetic -match 'TASTE_OPTION') 'E15d TASTE_OPTION documented'
 
-# 16 craft vs style separation (README may cite style as contrast example; topic files must stay generic)
-$directingCraft = [System.IO.File]::ReadAllText((Join-Path $craftDir 'directing-story.md'), $utf8)
-Assert-True (($craftReadme -match 'cannot override Style') -and ($directingCraft -notmatch 'observational-info-short')) 'E16 craft vs style authority separated'
+# 16 craft vs style separation — all topic files (README may use contrast example)
+$styleIds = @('observational-info-short', 'lifestyle-vlog', 'news-explainer', 'documentary-short')
+$topicFiles = $craftFiles | Where-Object { $_ -ne 'README.md' }
+$craftLeakFree = $true
+foreach ($tf in $topicFiles) {
+    $content = [System.IO.File]::ReadAllText((Join-Path $craftDir $tf), $utf8)
+    foreach ($sid in $styleIds) {
+        if ($content -match $sid) { $craftLeakFree = $false }
+    }
+}
+Assert-True (($craftReadme -match 'cannot override Style') -and $craftLeakFree) 'E16 craft topic files free of Style authority leak'
 
 # 17 no runtime actions in blueprint
 Assert-True (($bpRef -notmatch 'timeline_item') -and ($bpTpl -notmatch 'MCP')) 'E17 runtime actions absent from blueprint template'
@@ -126,6 +137,32 @@ Assert-True ($version -eq '0.1.1-dev') 'E19 VERSION is 0.1.1-dev'
 
 # deprecated style.md pointer
 Assert-True ($styleMd -match 'DEPRECATED') 'E20 style.md deprecated compatibility pointer'
+
+# 21 L3 pipeline and execution continuity both require Edit Blueprint
+$pipelineSection = ($l3 -split '## Production Pipeline', 2)[1]
+$continuitySection = ($l3 -split '## Execution Continuity', 2)[1]
+Assert-True (($pipelineSection -match 'Generate Edit Blueprint') -and ($continuitySection -match 'Generate Edit Blueprint')) 'E21 L3 flows include Edit Blueprint'
+Assert-True ($continuitySection -match 'Analyze must not bypass Edit Blueprint') 'E21 Execution Continuity blocks Blueprint bypass'
+
+# 22 Owner Author Intent authority / provenance
+Assert-True ($briefRef -match 'Sole Owner Author Intent authority') 'E22 brief declares sole Owner Author Intent authority'
+Assert-True ($briefRef -match 'remains absent') 'E22 Owner Author Intent absent state explicit'
+Assert-True ($l3 -match 'Owner Author Intent remains absent') 'E22 L3 does not infer Owner Author Intent'
+Assert-True ($bpRef -match 'Brief wins') 'E22 Blueprint defers to Brief on conflict'
+
+# 23 manifest Stage 08C components
+$manifestTpl = [System.IO.File]::ReadAllText((Join-Path $Root 'manifest.template.json'), $utf8)
+$manifestObj = $manifestTpl | ConvertFrom-Json
+$manifestOk = ($manifestObj.components.templates -contains 'edit-blueprint') -and
+    ($manifestObj.components.knowledge -contains 'editing-craft')
+Assert-True $manifestOk 'E23 manifest lists edit-blueprint and editing-craft'
+
+# 24 build required payload aligned with installer ProductFiles
+$buildScript = [System.IO.File]::ReadAllText((Join-Path $Root 'build\build-release.ps1'), $utf8)
+$installerScript = [System.IO.File]::ReadAllText((Join-Path $Root 'installer\init-video-workflow.ps1'), $utf8)
+Assert-True ($buildScript -match 'Get-InstallerProductFiles') 'E24 build uses installer ProductFiles preflight'
+Assert-True ($installerScript -match 'edit-blueprint.yaml') 'E24 installer ProductFiles includes blueprint template'
+Assert-True ($installerScript -match 'editing-craft\\README.md') 'E24 installer ProductFiles includes craft knowledge'
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })

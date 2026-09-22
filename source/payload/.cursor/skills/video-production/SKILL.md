@@ -475,7 +475,9 @@ Analyze produces **evidence**, not aesthetic decisions.
 ### Flow
 
 ```
-Understand Content / Author Intent
+Understand Content
+  → Load Owner Author Intent from Brief (if any)
+  → Derive editorial / beat-level intent from Style + content authority + assets
   → Build Beat Map (beat-first, not default shot storyboard)
   → Write video-workflow/production/edit-blueprint.yaml
   → Emit concise Blueprint summary for Owner visibility
@@ -501,16 +503,24 @@ Default: **NON_BLOCKING** — show summary, then proceed to Plan Execution.
 - high-impact ambiguity
 - content authority conflict
 
-### Author Intent
+### Owner Author Intent (Brief authority)
 
-From Brief `content.author_intent` (optional):
+**Single authority:** `Production Brief.content.author_intent` — only for **Owner-explicit** expression intent.
 
-- `global` — whole-piece intent
-- `local[]` — per-beat `{ beat_id, intent }`
+| Brief state | L3 behavior |
+|-------------|-------------|
+| `global: null`, `local: []` | **Owner Author Intent remains absent** — do not populate Brief fields from inference |
+| Owner provides `global` | Whole-piece Owner intent (within Style bounds) |
+| Owner provides `local[]` | Per-beat `{ beat_id, intent }` — named beats only |
 
-If absent: derive from Style + content authority + assets.
+When Owner Author Intent is absent, L3 **derives editorial / beat-level intent** (`visual_intent`, `audience_effect`, `narrative_function`, etc.) from Style + content authority + assets. These derived fields are **not** Owner Author Intent and must not be written back to Brief as `author_intent`.
 
-Local intent affects named beats only — must not silently retarget entire Style.
+### Blueprint Author Intent fields (traceable snapshot)
+
+Edit Blueprint `author_intent` fields are a **traceable applied view** of Brief (plus beat materialization). They are not a second Owner authority.
+
+- **Brief wins** on conflict → regenerate or correct Blueprint
+- Beat-level `author_intent` in Blueprint = materialized application to that beat, not new Owner authority
 
 ---
 
@@ -907,8 +917,22 @@ Use only:
 Once Owner starts via `【制作视频】` (or explicit `/video-production` under the same governed Brief), this authorizes completion within that Brief scope through:
 
 ```
-Preflight → Analyze → Plan → Edit → Finish → QA → Repair → Render → Closeout
+Preflight
+  → Analyze
+  → Understand Content / Intent
+  → Build Beat Map
+  → Generate Edit Blueprint
+  → Expose Blueprint Summary (default: non-blocking)
+  → Plan Execution
+  → Edit
+  → Finish
+  → QA
+  → Repair
+  → Render
+  → Closeout
 ```
+
+**Analyze must not bypass Edit Blueprint** to reach Plan or Edit.
 
 Do **not** pause between normal stages to ask "should I continue?"
 

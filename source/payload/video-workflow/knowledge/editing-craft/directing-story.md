@@ -2,7 +2,7 @@
 
 ## Core Concepts
 
-- **Author Intent** — what the creator wants the audience to feel or understand (optional in Brief)
+- **Owner Author Intent** — what Owner explicitly wants the audience to feel or understand (`Brief.content.author_intent`, optional). Distinct from L3-derived editorial / beat intent.
 - **Theme** — underlying idea tying beats together
 - **Narrative Function** — what a beat *does* for the story
 - **Narrative Beat** — a unit of narrative progression (not necessarily one shot)

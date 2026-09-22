@@ -34,12 +34,16 @@ function Invoke-Installer {
         [string]$Target,
         [string]$PayloadRoot,
         [switch]$DryRun,
-        [switch]$TestSimulateFailure
+        [switch]$TestSimulateFailure,
+        [int]$TestSimulateFailureAfter = 1
     )
     $args = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $Installer, '-TargetPath', $Target, '-NoPause')
     if ($DryRun) { $args += '-DryRun' }
     if ($PayloadRoot) { $args += @('-PayloadRoot', $PayloadRoot) }
-    if ($TestSimulateFailure) { $args += '-TestSimulateFailure' }
+    if ($TestSimulateFailure) {
+        $args += '-TestSimulateFailure'
+        $args += @('-TestSimulateFailureAfter', $TestSimulateFailureAfter)
+    }
     & powershell.exe @args | Out-Null
     return [int]$LASTEXITCODE
 }
@@ -93,10 +97,14 @@ $skillsOk = (Test-Path (Join-Path $ws1 '.cursor\skills\video-production\SKILL.md
     (Test-Path (Join-Path $ws1 '.cursor\skills\video-editing\observational-info-short\references\qa.md'))
 Assert-True $skillsOk 'TEST-03 skills and references present'
 
-# TEST-04: capability and templates
+# TEST-04: capability, templates, knowledge, tools (Stage 08C)
 $capOk = (Test-Path (Join-Path $ws1 'video-workflow\capabilities\davinci-resolve.md')) -and
     (Test-Path (Join-Path $ws1 'video-workflow\templates\production-brief.yaml')) -and
-    (Test-Path (Join-Path $ws1 'video-workflow\templates\production-brief-reference.md'))
+    (Test-Path (Join-Path $ws1 'video-workflow\templates\production-brief-reference.md')) -and
+    (Test-Path (Join-Path $ws1 'video-workflow\templates\edit-blueprint.yaml')) -and
+    (Test-Path (Join-Path $ws1 'video-workflow\templates\edit-blueprint-reference.md')) -and
+    (Test-Path (Join-Path $ws1 'video-workflow\knowledge\editing-craft\README.md')) -and
+    (Test-Path (Join-Path $ws1 'video-workflow\tools\final-artifact-qa.ps1'))
 Assert-True $capOk 'TEST-04 capability and templates present'
 
 # TEST-05: production dir exists, no brief
@@ -179,6 +187,15 @@ New-Item -ItemType Directory -Path (Join-Path $ws14b '.cursor\rules') -Force | O
 Set-Content -Path (Join-Path $ws14b '.cursor\rules\custom.mdc') -Value 'owner rule' -Encoding UTF8
 Invoke-Installer -Target $ws14b -TestSimulateFailure | Out-Null
 Assert-True (Test-Path (Join-Path $ws14b '.cursor\rules\custom.mdc')) 'TEST-14 preserves pre-existing .cursor'
+
+# TEST-15: rollback removes nested knowledge dirs after mid-install failure
+$ws15 = New-EmptyWorkspace 'test15-knowledge-rollback'
+$userFile15 = Join-Path $ws15 'owner-notes.txt'
+Set-Content -Path $userFile15 -Value 'keep'
+$code15 = Invoke-Installer -Target $ws15 -TestSimulateFailure -TestSimulateFailureAfter 16
+Assert-ExitCode -Actual $code15 -Expected 40 -Name 'TEST-15 knowledge rollback simulated failure'
+Assert-True (-not (Test-Path (Join-Path $ws15 'video-workflow\knowledge'))) 'TEST-15 rollback removes created knowledge tree'
+Assert-True ((Get-Content -LiteralPath $userFile15 -Raw).Trim() -eq 'keep') 'TEST-15 preserves pre-existing user file'
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })
