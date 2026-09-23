@@ -103,7 +103,9 @@ function Invoke-TextPlusLayoutMaterialization {
         [int]$PartIndex = 0,
         [int]$TotalDurationFrames = 120,
         [int]$StartFrame = 0,
-        [string]$FontPolicy = 'allow_fallback'
+        [string]$FontPolicy = 'allow_fallback',
+        [ValidateSet('validation', 'production')]
+        [string]$TimingAuthority = 'validation'
     )
 
     $cue = @($PreflightResult.cue_results | Where-Object { [string]$_.cue_id -eq $CueId } | Select-Object -First 1)
@@ -119,7 +121,26 @@ function Invoke-TextPlusLayoutMaterialization {
     $status = [string]$cue.status
     $materialized = @()
 
+    if ($TimingAuthority -eq 'production') {
+        if ($null -eq $TotalDurationFrames -or $TotalDurationFrames -lt 1) {
+            throw 'PRODUCTION_CUE_TIMING_REQUIRED'
+        }
+        if ($null -eq $StartFrame) {
+            throw 'PRODUCTION_CUE_TIMING_REQUIRED'
+        }
+    }
+
     if ($status -eq 'CUE_SPLIT_REQUIRED') {
+        if ($TimingAuthority -eq 'production') {
+            return @{
+                materialization_status = 'TIMING_ROUTE_NOT_VERIFIED'
+                reason = 'CUE_SPLIT_REQUIRED without L3 timing authority for split parts'
+                cue_id = $CueId
+                l1_status = $status
+                split_candidates = @($cue.split_candidates)
+                materialized_cues = @()
+            }
+        }
         $warnings = @($cue.warnings)
         if ($warnings -contains 'NO_LEGAL_INTERNAL_BREAK') {
             return @{
@@ -211,11 +232,23 @@ function Invoke-TextPlusLayoutMaterialization {
         newline_positions = $newlinePositions
         predicted_line_widths_px = @(Get-PredictedLineWidthsFromL1 -CueResult $cue)
         predicted_max_line_width_px = [double]$cue.max_line_width_px
-        timing = [PSCustomObject]@{
-            method = 'deterministic_equal_split_validation_only'
-            start_frame = $StartFrame
-            duration_frames = $TotalDurationFrames
-            note = 'Not production subtitle timing authority'
+        start_frame = $StartFrame
+        duration_frames = $TotalDurationFrames
+        timing = if ($TimingAuthority -eq 'production') {
+            [PSCustomObject]@{
+                method = 'production_authority'
+                start_frame = $StartFrame
+                duration_frames = $TotalDurationFrames
+                note = 'Timing supplied by L3 / Production authority'
+            }
+        }
+        else {
+            [PSCustomObject]@{
+                method = 'deterministic_equal_split_validation_only'
+                start_frame = $StartFrame
+                duration_frames = $TotalDurationFrames
+                note = 'Not production subtitle timing authority'
+            }
         }
     }
     $materialized += $matCue

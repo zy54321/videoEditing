@@ -332,7 +332,7 @@ Filename alone is **not** semantic evidence.
 | `subtitle.safe_text_width` | Avoid horizontal overflow via semantic split + line heuristic | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | L1 deterministic preflight (`subtitle-layout-preflight.ps1`) exists (08E-A); Resolve burn-in parity not validated |
 | `subtitle.position` | Per-cue position / safe-area API control | **UNKNOWN** | Optional | Not required for functional layout |
 | `subtitle.visual_style` | Font, outline, background, animation | **UNKNOWN** | Optional | **Not** N02 V2 blocker; `subtitle.create` VERIFIED ≠ visual style VERIFIED |
-| `subtitle.keyword_emphasis` | Per-cue keyword styling | **VERIFIED** | Optional | Static inline SIZE via Text+ StyledTextCLS → generated `.setting` → `import_comp` (08E-B B-R1); color/weight not verified |
+| `subtitle.keyword_emphasis` | Per-cue keyword styling | **AVAILABLE_UNVERIFIED** | Optional | Isolated StyledTextCLS SIZE route verified (B-R1); production nested-timeline overlay partial only (08E-FINAL); native DRT fallback VERIFIED |
 | `subtitle.style` | Legacy alias — prefer `subtitle.visual_style` | **UNKNOWN** | Optional | Style read-back not confirmed |
 | `subtitle.timing` | Verify cue timing vs narration | **AVAILABLE_UNVERIFIED** | **PRODUCTION_QA** | `get_transcript` cues vs plan; checked in final QA, not a Capability Gate blocker |
 | `subtitle.edit` | Adjust cue text/timing programmatically | **UNKNOWN** | Repair | No confirmed write surface this stage |
@@ -343,7 +343,9 @@ Filename alone is **not** semantic evidence.
 
 | Route | Status | Evidence / Rule |
 |-------|--------|-----------------|
-| `textplus_styledtextcls_import_comp` | **VERIFIED** | Materialized `lines[].runs` only → `generate-textplus-cls-setting.py` (`generate_setting` executable authority) → `.setting` → `import_comp` (08E-B B10–B12). `textplus-cls-canonical.setting` = golden topology fixture, not runtime input. Font profile requires exact validated `base_font_size_px`. |
+| `textplus_styledtextcls_import_comp` | **VERIFIED (isolated)** | Standalone Text+ title: materialized runs → generator → `.setting` → `import_comp` (B10–B12). **Not** production overlay subtitle route. |
+| `textplus_nested_timeline_overlay` | **PARTIAL** | Nested subtitle timeline on V2 over V1 background composites in `timeline_frame` (08E-FINAL probe). Missing: timing gates, lower-safe-zone final, CLS on overlay, Deliver/reload integrated probe. |
+| `native_drt_subtitle_fallback` | **VERIFIED** | First Production degradation when Text+ overlay not final: semantic segmentation + native DRT subtitles (08A.1). |
 | `fusion_comp.set_input(CharacterLevelStyling)` | **KNOWN_NON_WORKING_ROUTE** | API success but empty read-back, no visual SIZE change (Resolve 21.1.0.14 / MCP 4.8.13). **DO NOT SELECT IN PRODUCTION.** |
 | `cls_color` / `cls_weight` | **NOT_VERIFIED** | Generator fail-closed (`CLS_COLOR_NOT_VERIFIED`, `CLS_WEIGHT_NOT_VERIFIED`) |
 
@@ -562,7 +564,7 @@ Counts are **derived from Master Matrix rows** — do not maintain separate manu
 | subtitle.safe_text_width | Semantic width heuristic | AVAILABLE_UNVERIFIED | **MUST** (V2) | split cue fallback; no API box |
 | subtitle.position | Position API | UNKNOWN | Optional | not V2 blocker |
 | subtitle.visual_style | Font/outline/background | UNKNOWN | Optional | not V2 blocker |
-| subtitle.keyword_emphasis | Keyword styling | VERIFIED | Optional | Text+ StyledTextCLS SIZE emphasis (08E-B) |
+| subtitle.keyword_emphasis | Keyword styling | AVAILABLE_UNVERIFIED | Optional | Isolated CLS verified; production overlay not final |
 | subtitle.timing | Cue timing verify | AVAILABLE_UNVERIFIED | PRODUCTION_QA | get_transcript; QA check, not gate blocker |
 | mixed_fps.cadence_analyze | Mixed fps cadence risk | VERIFIED | **MUST** (V2) | FFprobe + Safe Cadence Policy (08A.1) |
 | mixed_fps.interpolation | Optical flow retime | UNKNOWN | Optional | not V2 blocker |

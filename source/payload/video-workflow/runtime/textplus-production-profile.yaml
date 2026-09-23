@@ -1,0 +1,43 @@
+# Text+ production profile v1 (Stage 08E-B Final Consolidated Closure)
+# Executable authority: textplus_cls_setting.py / generate-textplus-cls-setting.py
+# Golden topology fixture: textplus-cls-canonical.setting (reference only)
+
+schema_version: 1
+
+production_typography:
+  # SIZE-only emphasis — must match runtime StyledTextCLS verified scope
+  emphasis_style_mapping:
+    normal:
+      size_multiplier: 1.0
+      font_style: Regular
+      tracking_px: 0
+    subtle:
+      size_multiplier: 1.0
+      font_style: Regular
+      tracking_px: 0
+    medium:
+      size_multiplier: 1.1
+      font_style: Regular
+      tracking_px: 0
+    strong:
+      size_multiplier: 1.25
+      font_style: Regular
+      tracking_px: 0
+
+  # No verified Text+ outline/stroke runtime evidence in v1
+  stroke_px: 0
+  tracking_px: 0
+
+placement:
+  # Lower safe-zone profile — values applied to Text+ justification inputs
+  # Pending overlay probe visual confirmation; generator reads these constants
+  horizontal_justification_center: 1
+  horizontal_justification_new: 3
+  vertical_justification_center: 1
+  vertical_justification_new: 2
+
+timing:
+  production_requires:
+    - start_frame
+    - duration_frames
+  validation_only_default_global_out: 119

@@ -131,6 +131,8 @@ Assert-True $manifestHas08ebCls 'C12i manifest includes Stage 08E-B CLS generato
 Assert-True ($productFiles -contains 'video-workflow\tools\generate-textplus-cls-setting.py') 'C12j installer ProductFiles includes CLS generator'
 Assert-True ($productFiles -contains 'video-workflow\tools\lib\textplus_cls_setting.py') 'C12k installer ProductFiles includes CLS library'
 Assert-True ($productFiles -contains 'video-workflow\runtime\textplus-cls-canonical.setting') 'C12l installer ProductFiles includes CLS canonical setting'
+Assert-True ($productFiles -contains 'video-workflow\runtime\textplus-production-profile.yaml') 'C12m installer ProductFiles includes textplus production profile'
+Assert-True ($manifestTpl.components.runtime_profiles -contains 'textplus-production-profile') 'C12n manifest includes textplus-production-profile'
 Assert-True (Test-Path (Join-Path $Payload 'video-workflow\templates\style-profile-schema.yaml')) 'C12c style-profile-schema in payload'
 $vocabYaml = Get-Content (Join-Path $Payload 'video-workflow\capabilities\logical-capability-vocabulary.yaml') -Raw -Encoding UTF8
 Assert-True ($vocabYaml -match 'canonical_states:') 'C12d logical vocabulary canonical states'

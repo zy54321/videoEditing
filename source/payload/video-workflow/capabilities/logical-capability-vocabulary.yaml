@@ -102,9 +102,9 @@ vocabulary:
     notes: Font/outline API not validated
 
   subtitle.style.keyword_emphasis:
-    status: VERIFIED
+    status: AVAILABLE_UNVERIFIED
     l1_aliases: [subtitle.keyword_emphasis]
-    notes: "VERIFIED only for static inline SIZE validated Text+ font profiles validated L1 base_font_size_px Resolve Text+ StyledTextCLS generated .setting import_comp. NOT VERIFIED arbitrary font size color weight animation kinetic typography. Evidence 08E-B Experiment B B-R1."
+    notes: "Isolated StyledTextCLS SIZE route verified (08E-B B-R1). Production overlay subtitle route not final-validated (08E-FINAL). Logical production capability requires production-shaped integrated probe. NOT VERIFIED color weight tracking variation arbitrary sizes animation kinetic typography."
 
   audio.voice.place:
     status: VERIFIED

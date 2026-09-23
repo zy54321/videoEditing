@@ -96,6 +96,7 @@ $ProductFiles = @(
     'video-workflow\tools\generate-textplus-cls-setting.py',
     'video-workflow\tools\lib\textplus_cls_setting.py',
     'video-workflow\runtime\textplus-font-profiles.yaml',
+    'video-workflow\runtime\textplus-production-profile.yaml',
     'video-workflow\runtime\textplus-cls-canonical.setting'
 )
 

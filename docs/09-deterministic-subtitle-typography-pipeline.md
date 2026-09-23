@@ -113,7 +113,7 @@ Width bands:
 | Logical ID | Status |
 |------------|--------|
 | `subtitle.layout.pixel_width` | AVAILABLE_UNVERIFIED |
-| `subtitle.style.keyword_emphasis` | VERIFIED (static inline SIZE only) |
+| `subtitle.style.keyword_emphasis` | AVAILABLE_UNVERIFIED (isolated CLS verified; production overlay partial) |
 | `subtitle.segment.semantic` | VERIFIED (no pixel-width guarantee) |
 
 Contract support ≠ full renderer parity. Keyword SIZE route validated; color/weight/animation not.

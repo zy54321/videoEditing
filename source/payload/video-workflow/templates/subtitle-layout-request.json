@@ -18,7 +18,7 @@
     "fallback_font_family": "SimSun",
     "base_font_size_px": 48,
     "tracking_px": 0,
-    "stroke_px": 2,
+    "stroke_px": 0,
     "visual_padding_px": 0,
     "emphasis_style_mapping": {
       "normal": {
@@ -29,16 +29,16 @@
       "subtle": {
         "size_multiplier": 1.0,
         "font_style": "Regular",
-        "tracking_px": 1
+        "tracking_px": 0
       },
       "medium": {
         "size_multiplier": 1.1,
-        "font_style": "Bold",
+        "font_style": "Regular",
         "tracking_px": 0
       },
       "strong": {
         "size_multiplier": 1.25,
-        "font_style": "Bold",
+        "font_style": "Regular",
         "tracking_px": 0
       }
     }

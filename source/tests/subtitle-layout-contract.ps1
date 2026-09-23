@@ -57,13 +57,13 @@ function New-LayoutRequest {
             fallback_font_family = 'SimSun'
             base_font_size_px = $BaseFontSize
             tracking_px = 0
-            stroke_px = 2
+            stroke_px = 0
             visual_padding_px = 0
             emphasis_style_mapping = @{
                 normal = @{ size_multiplier = 1.0; font_style = 'Regular'; tracking_px = 0 }
-                subtle = @{ size_multiplier = 1.0; font_style = 'Regular'; tracking_px = 1 }
-                medium = @{ size_multiplier = 1.1; font_style = 'Bold'; tracking_px = 0 }
-                strong = @{ size_multiplier = 1.25; font_style = 'Bold'; tracking_px = 0 }
+                subtle = @{ size_multiplier = 1.0; font_style = 'Regular'; tracking_px = 0 }
+                medium = @{ size_multiplier = 1.1; font_style = 'Regular'; tracking_px = 0 }
+                strong = @{ size_multiplier = 1.25; font_style = 'Regular'; tracking_px = 0 }
             }
         }
         cues = @(@{
@@ -213,9 +213,9 @@ $fpA = Get-CueLayoutFingerprint -Cue $a.cue_results[0]
 $fpB = Get-CueLayoutFingerprint -Cue $b.cue_results[0]
 Assert-True (($fpA | ConvertTo-Json -Compress) -eq ($fpB | ConvertTo-Json -Compress)) 'T15 deterministic layout structure'
 
-# T16 keyword emphasis VERIFIED (08E-B B-R2 — SIZE only)
+# T16 keyword emphasis AVAILABLE_UNVERIFIED (isolated CLS verified; production overlay not final)
 $vocab = Get-Content (Join-Path $Payload 'video-workflow\capabilities\logical-capability-vocabulary.yaml') -Raw -Encoding UTF8
-Assert-True ($vocab -match 'subtitle.style.keyword_emphasis:[\s\S]{0,120}status: VERIFIED') 'T16 keyword emphasis VERIFIED'
+Assert-True ($vocab -match 'subtitle.style.keyword_emphasis:[\s\S]{0,160}status: AVAILABLE_UNVERIFIED') 'T16 keyword emphasis AVAILABLE_UNVERIFIED'
 
 # T17 pixel_width remains AVAILABLE_UNVERIFIED
 Assert-True ($vocab -match 'subtitle.layout.pixel_width:[\s\S]{0,120}status: AVAILABLE_UNVERIFIED') 'T17 pixel_width AVAILABLE_UNVERIFIED'
@@ -360,8 +360,8 @@ Assert-True (-not ($reqExampleObj.typography.PSObject.Properties.Name -contains 
 $resLim = Invoke-SubtitleLayoutPreflight -Request (New-LayoutRequest -Runs @( (New-Run -Text 'warn' -BreakAfter 'forbid') ))
 Assert-True ($resLim.measurement_limitations.Count -ge 1) 'R1-09 measurement limitations documented'
 
-# R1-10 keyword emphasis upgraded to VERIFIED (SIZE only); pixel_width unchanged
-Assert-True ($vocab -match 'subtitle.style.keyword_emphasis:[\s\S]{0,120}status: VERIFIED') 'R1-10 keyword emphasis VERIFIED'
+# R1-10 keyword emphasis production overlay not final; pixel_width unchanged
+Assert-True ($vocab -match 'subtitle.style.keyword_emphasis:[\s\S]{0,160}status: AVAILABLE_UNVERIFIED') 'R1-10 keyword emphasis AVAILABLE_UNVERIFIED'
 Assert-True ($vocab -match 'subtitle.layout.pixel_width:[\s\S]{0,120}status: AVAILABLE_UNVERIFIED') 'R1-10 pixel_width still AVAILABLE_UNVERIFIED'
 
 # --- Stage 08E-A-R2 tests ---
@@ -453,8 +453,8 @@ else {
     $script:Pass++
 }
 
-# R2-09 keyword emphasis VERIFIED; pixel_width still AVAILABLE_UNVERIFIED
-Assert-True ($vocab -match 'subtitle.style.keyword_emphasis:[\s\S]{0,120}status: VERIFIED') 'R2-09 keyword emphasis VERIFIED'
+# R2-09 keyword emphasis AVAILABLE_UNVERIFIED; pixel_width still AVAILABLE_UNVERIFIED
+Assert-True ($vocab -match 'subtitle.style.keyword_emphasis:[\s\S]{0,160}status: AVAILABLE_UNVERIFIED') 'R2-09 keyword emphasis AVAILABLE_UNVERIFIED'
 Assert-True ($vocab -match 'subtitle.layout.pixel_width:[\s\S]{0,120}status: AVAILABLE_UNVERIFIED') 'R2-09 pixel_width still AVAILABLE_UNVERIFIED'
 
 Write-Host ''

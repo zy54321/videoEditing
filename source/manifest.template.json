@@ -58,6 +58,7 @@
     ],
     "runtime_profiles": [
       "textplus-font-profiles",
+      "textplus-production-profile",
       "textplus-cls-canonical"
     ]
   }

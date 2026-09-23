@@ -43,8 +43,17 @@ GRAPH_TOPOLOGY_MARKERS = (
     'TEMPLATE_ID = "Text+"',
 )
 KNOWN_NON_WORKING_ROUTE = "fusion_comp.set_input(CharacterLevelStyling)"
+PRODUCTION_PROFILE_REL = "video-workflow/runtime/textplus-production-profile.yaml"
 
 CANONICAL_EMPHASIS_LEVELS = ("normal", "subtle", "medium", "strong")
+
+PLAIN_GRAPH_TOPOLOGY_MARKERS = (
+    "Template = TextPlus",
+    "MediaOut1 = Saver",
+    'SourceOp = "Template"',
+    'Source = "Output"',
+    'TEMPLATE_ID = "Text+"',
+)
 
 
 class ClsError(Exception):
@@ -111,6 +120,92 @@ def load_font_profiles(path: Path) -> dict[str, Any]:
     if not data or "profiles" not in data:
         raise ClsError("FONT_PROFILES_INVALID", f"invalid font profiles: {path}")
     return data
+
+
+def default_production_profile_path() -> Path:
+    return Path(__file__).resolve().parents[2] / "runtime" / "textplus-production-profile.yaml"
+
+
+def load_production_profile(path: Path | None = None) -> dict[str, Any]:
+    profile_path = path or default_production_profile_path()
+    data = yaml.safe_load(profile_path.read_text(encoding="utf-8"))
+    if not data or "production_typography" not in data:
+        raise ClsError("PRODUCTION_PROFILE_INVALID", f"invalid production profile: {profile_path}")
+    return data
+
+
+def validate_textplus_v1_typography(typography: dict[str, Any], production_profile: dict[str, Any]) -> None:
+    """Production Text+ v1 = SIZE-only emphasis; Regular font; zero tracking; zero stroke."""
+    expected = production_profile["production_typography"]["emphasis_style_mapping"]
+    mapping = typography.get("emphasis_style_mapping")
+    if not mapping:
+        raise ClsError("EMPHASIS_MAPPING_MISSING", "typography.emphasis_style_mapping is required")
+
+    for level, spec in expected.items():
+        entry = mapping.get(level)
+        if not entry:
+            raise ClsError("EMPHASIS_MAPPING_MISSING", f"missing mapping for {level}")
+        if str(entry.get("font_style", "")) != str(spec["font_style"]):
+            raise ClsError(
+                "CLS_FONT_STYLE_NOT_VERIFIED",
+                f"Text+ v1 production requires font_style={spec['font_style']} for {level}",
+            )
+        if int(entry.get("tracking_px", 0)) != int(spec["tracking_px"]):
+            raise ClsError(
+                "CLS_TRACKING_NOT_VERIFIED",
+                f"Text+ v1 production requires tracking_px={spec['tracking_px']} for {level}",
+            )
+        if float(entry.get("size_multiplier")) != float(spec["size_multiplier"]):
+            raise ClsError(
+                "EMPHASIS_MAPPING_MISMATCH",
+                f"production mapping size_multiplier for {level} must be {spec['size_multiplier']}",
+            )
+
+    prod_stroke = int(production_profile["production_typography"].get("stroke_px", 0))
+    if int(typography.get("stroke_px", 0)) != prod_stroke:
+        raise ClsError(
+            "TEXTPLUS_STROKE_NOT_VERIFIED",
+            f"Text+ v1 production requires stroke_px={prod_stroke}",
+        )
+
+
+def require_production_timing(materialized_cue: dict[str, Any]) -> tuple[int, int]:
+    start = materialized_cue.get("start_frame")
+    duration = materialized_cue.get("duration_frames")
+    if start is None or duration is None:
+        raise ClsError(
+            "PRODUCTION_CUE_TIMING_REQUIRED",
+            "materialized_cue.start_frame and duration_frames are required for production",
+        )
+    start_i = int(start)
+    duration_i = int(duration)
+    if duration_i < 1:
+        raise ClsError("PRODUCTION_CUE_TIMING_INVALID", "duration_frames must be >= 1")
+    return start_i, duration_i
+
+
+def fusion_global_out_from_duration(duration_frames: int) -> int:
+    """Fusion GlobalOut is inclusive end frame index for a comp of duration_frames."""
+    return max(0, int(duration_frames) - 1)
+
+
+def cue_has_size_emphasis(materialized_cue: dict[str, Any], typography: dict[str, Any]) -> bool:
+    for line in materialized_cue.get("lines") or []:
+        for run in line.get("runs") or []:
+            level = resolve_emphasis_level(run.get("emphasis_level"))
+            if get_emphasis_size_multiplier(typography, level) > 1.0:
+                return True
+    return False
+
+
+def placement_inputs(production_profile: dict[str, Any]) -> dict[str, int]:
+    placement = production_profile.get("placement") or {}
+    return {
+        "horizontal_center": int(placement.get("horizontal_justification_center", 1)),
+        "horizontal_new": int(placement.get("horizontal_justification_new", 3)),
+        "vertical_center": int(placement.get("vertical_justification_center", 1)),
+        "vertical_new": int(placement.get("vertical_justification_new", 2)),
+    }
 
 
 def _require_base_font_size_px(typography: dict[str, Any]) -> int:
@@ -266,21 +361,134 @@ def assert_graph_topology(setting_text: str) -> None:
             raise ClsError("GRAPH_TOPOLOGY_MISMATCH", f"missing topology marker: {marker}")
 
 
+def assert_plain_graph_topology(setting_text: str) -> None:
+    for marker in PLAIN_GRAPH_TOPOLOGY_MARKERS:
+        if marker not in setting_text:
+            raise ClsError("GRAPH_TOPOLOGY_MISMATCH", f"missing plain topology marker: {marker}")
+
+
+def _textplus_input_block(
+    *,
+    global_out: int,
+    width: int,
+    height: int,
+    font_family: str,
+    font_style: str,
+    base_size: float,
+    text: str | None = None,
+    styled_text_source: bool = False,
+    placement: dict[str, int] | None = None,
+) -> str:
+    place = placement or {
+        "horizontal_center": 1,
+        "horizontal_new": 3,
+        "vertical_center": 1,
+        "vertical_new": 3,
+    }
+    escaped_font = escape_fusion_string(font_family)
+    escaped_style = escape_fusion_string(font_style)
+    if styled_text_source:
+        styled_text_input = """\t\t\t\tStyledText = Input {
+\t\t\t\t\tSourceOp = "CharacterLevelStyling1",
+\t\t\t\t\tSource = "StyledText",
+\t\t\t\t},"""
+        text_input = ""
+    else:
+        styled_text_input = ""
+        text_input = f'\t\t\t\tText = Input {{ Value = "{escape_fusion_string(text or "")}", }},'
+    return f"""\t\tTemplate = TextPlus {{
+\t\t\tInputs = {{
+\t\t\t\tGlobalOut = Input {{ Value = {global_out}, }},
+\t\t\t\tWidth = Input {{ Value = {width}, }},
+\t\t\t\tHeight = Input {{ Value = {height}, }},
+\t\t\t\tUseFrameFormatSettings = Input {{ Value = 1, }},
+{styled_text_input}
+{text_input}
+\t\t\t\tFont = Input {{ Value = "{escaped_font}", }},
+\t\t\t\tStyle = Input {{ Value = "{escaped_style}", }},
+\t\t\t\tSize = Input {{ Value = {base_size:g}, }},
+\t\t\t\tVerticalJustificationCenter = Input {{ Value = {place["vertical_center"]}, }},
+\t\t\t\tVerticalJustificationNew = Input {{ Value = {place["vertical_new"]}, }},
+\t\t\t\tHorizontalJustificationCenter = Input {{ Value = {place["horizontal_center"]}, }},
+\t\t\t\tHorizontalJustificationNew = Input {{ Value = {place["horizontal_new"]}, }}
+\t\t\t}},
+\t\t\tVersion = 1
+\t\t}}"""
+
+
+def generate_plain_setting(
+    text: str,
+    font_family: str,
+    font_style: str,
+    base_size: float,
+    global_out: int,
+    width: int = 1080,
+    height: int = 1920,
+    placement: dict[str, int] | None = None,
+) -> str:
+    textplus_block = _textplus_input_block(
+        global_out=global_out,
+        width=width,
+        height=height,
+        font_family=font_family,
+        font_style=font_style,
+        base_size=base_size,
+        text=text,
+        styled_text_source=False,
+        placement=placement,
+    )
+    content = f"""Composition {{
+\tCurrentTime = 0,
+\tRenderRange = {{ 0, {global_out} }},
+\tGlobalRange = {{ 0, {global_out} }},
+\tHiQ = true,
+\tPlaybackUpdateMode = 0,
+\tStereoMode = false,
+\tCustomData = {{ TEMPLATE_ID = "Text+" }},
+\tTools = {{
+{textplus_block},
+\t\tMediaOut1 = Saver {{
+\t\t\tInputs = {{
+\t\t\t\tIndex = Input {{ Value = "0", }},
+\t\t\t\tInput = Input {{
+\t\t\t\t\tSourceOp = "Template",
+\t\t\t\t\tSource = "Output",
+\t\t\t\t}}
+\t\t\t}}
+\t\t}}
+\t}},
+\tFrames = {{
+\t}},
+}}"""
+    assert_plain_graph_topology(content)
+    return content
+
+
 def generate_setting(
     text: str,
     font_family: str,
     font_style: str,
     base_size: float,
     spans: list[EmphasisSpan],
-    global_out: int = 119,
+    global_out: int,
     width: int = 1080,
     height: int = 1920,
+    placement: dict[str, int] | None = None,
 ) -> str:
     validate_spans(text, spans)
     escaped_text = escape_fusion_string(text)
-    escaped_font = escape_fusion_string(font_family)
-    escaped_style = escape_fusion_string(font_style)
     array_block = ",\n".join(format_array_entries(spans))
+    textplus_block = _textplus_input_block(
+        global_out=global_out,
+        width=width,
+        height=height,
+        font_family=font_family,
+        font_style=font_style,
+        base_size=base_size,
+        text=text,
+        styled_text_source=True,
+        placement=placement,
+    )
 
     content = f"""Composition {{
 \tCurrentTime = 0,
@@ -306,26 +514,7 @@ def generate_setting(
 \t\t\t\t}}
 \t\t\t}}
 \t\t}},
-\t\tTemplate = TextPlus {{
-\t\t\tInputs = {{
-\t\t\t\tGlobalOut = Input {{ Value = {global_out}, }},
-\t\t\t\tWidth = Input {{ Value = {width}, }},
-\t\t\t\tHeight = Input {{ Value = {height}, }},
-\t\t\t\tUseFrameFormatSettings = Input {{ Value = 1, }},
-\t\t\t\tStyledText = Input {{
-\t\t\t\t\tSourceOp = "CharacterLevelStyling1",
-\t\t\t\t\tSource = "StyledText",
-\t\t\t\t}},
-\t\t\t\tFont = Input {{ Value = "{escaped_font}", }},
-\t\t\t\tStyle = Input {{ Value = "{escaped_style}", }},
-\t\t\t\tSize = Input {{ Value = {base_size:g}, }},
-\t\t\t\tVerticalJustificationCenter = Input {{ Value = 1, }},
-\t\t\t\tVerticalJustificationNew = Input {{ Value = 3, }},
-\t\t\t\tHorizontalJustificationCenter = Input {{ Value = 1, }},
-\t\t\t\tHorizontalJustificationNew = Input {{ Value = 3, }}
-\t\t\t}},
-\t\t\tVersion = 1
-\t\t}},
+{textplus_block},
 \t\tMediaOut1 = Saver {{
 \t\t\tInputs = {{
 \t\t\t\tIndex = Input {{ Value = "0", }},
@@ -346,6 +535,7 @@ def generate_setting(
 def generate_from_materialized_request(
     request: dict[str, Any],
     font_profiles_path: Path,
+    production_profile_path: Path | None = None,
 ) -> str:
     reject_unverified_cls_inputs(request)
     materialized = request.get("materialized_cue")
@@ -353,25 +543,44 @@ def generate_from_materialized_request(
     if not materialized or not typography:
         raise ClsError("REQUEST_INVALID", "materialized_cue and typography are required")
 
+    production_profile = load_production_profile(production_profile_path)
+    validate_textplus_v1_typography(typography, production_profile)
+    _, duration_frames = require_production_timing(materialized)
+    global_out = fusion_global_out_from_duration(duration_frames)
+
     profiles_doc = load_font_profiles(font_profiles_path)
     profile = resolve_font_profile(profiles_doc, typography)
     base_size = float(profile["textplus_size"])
-    spans = spans_from_materialized_cue(materialized, typography, base_size)
+    place = placement_inputs(production_profile)
 
     canvas = request.get("canvas") or {}
     width = int(canvas.get("width_px", 1080))
     height = int(canvas.get("height_px", 1920))
-    global_out = int(request.get("global_out", 119))
+    styled_text = str(materialized.get("styled_text") or build_styled_text_from_lines(materialized["lines"]))
 
-    return generate_setting(
-        text=str(materialized.get("styled_text") or build_styled_text_from_lines(materialized["lines"])),
+    if cue_has_size_emphasis(materialized, typography):
+        spans = spans_from_materialized_cue(materialized, typography, base_size)
+        return generate_setting(
+            text=styled_text,
+            font_family=str(profile["resolve_font_family"]),
+            font_style=str(profile.get("textplus_style", "Regular")),
+            base_size=base_size,
+            spans=spans,
+            global_out=global_out,
+            width=width,
+            height=height,
+            placement=place,
+        )
+
+    return generate_plain_setting(
+        text=styled_text,
         font_family=str(profile["resolve_font_family"]),
         font_style=str(profile.get("textplus_style", "Regular")),
         base_size=base_size,
-        spans=spans,
         global_out=global_out,
         width=width,
         height=height,
+        placement=place,
     )
 
 
@@ -402,13 +611,17 @@ def generate_from_legacy_test_request(request: dict[str, Any]) -> str:
             size = base_size * get_emphasis_size_multiplier(typography, level)
         spans.append(EmphasisSpan(start=start, end=end, size=size))
 
+    legacy_global_out = int(
+        request.get("global_out")
+        or load_production_profile()["timing"]["validation_only_default_global_out"]
+    )
     return generate_setting(
         text=text,
         font_family=str(typography.get("font_family", "Microsoft YaHei UI")),
         font_style=str(typography.get("font_style", "Regular")),
         base_size=base_size,
         spans=spans,
-        global_out=int(request.get("global_out", 119)),
+        global_out=legacy_global_out,
         width=int(request.get("width", 1080)),
         height=int(request.get("height", 1920)),
     )
