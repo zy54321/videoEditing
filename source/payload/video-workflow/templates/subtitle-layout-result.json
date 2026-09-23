@@ -2,12 +2,17 @@
   "schema_version": 1,
   "measurement_backend": "System.Drawing",
   "graphics_unit": "Pixel",
+  "measurement_limitations": [
+    "Per-run stroke/padding may conservatively over-estimate composite line bounds",
+    "Preflight PASS does not prove Resolve/Fusion/Text+ renderer parity"
+  ],
   "font_resolution": {
     "requested_family": "Microsoft YaHei",
     "resolved_family": "Microsoft YaHei",
     "resolved_from": "primary",
     "fallback_used": false
   },
+  "warnings": [],
   "cue_results": [
     {
       "cue_id": "C01",
@@ -16,18 +21,64 @@
       "lines": [
         {
           "line_index": 1,
-          "runs": [],
-          "width_px": 0,
-          "width_ratio": 0
+          "width_px": 612.5,
+          "width_ratio_frame": 0.5662,
+          "width_ratio_safe_area": 0.6317,
+          "runs": [
+            {
+              "text": "这件事",
+              "semantic_role": "phrase",
+              "emphasis_level": "normal",
+              "break_after": "prefer",
+              "width_px": 192.0
+            },
+            {
+              "text": "真正离谱",
+              "semantic_role": "contrast_word",
+              "emphasis_level": "strong",
+              "break_after": "prefer",
+              "width_px": 420.5
+            }
+          ]
+        },
+        {
+          "line_index": 2,
+          "width_px": 498.2,
+          "width_ratio_frame": 0.4613,
+          "width_ratio_safe_area": 0.5136,
+          "runs": [
+            {
+              "text": "的，是价格直接涨了",
+              "semantic_role": "phrase",
+              "emphasis_level": "normal",
+              "break_after": "allow",
+              "width_px": 410.0
+            },
+            {
+              "text": "40%",
+              "semantic_role": "key_number",
+              "emphasis_level": "strong",
+              "break_after": "forbid",
+              "width_px": 88.2
+            }
+          ]
         }
       ],
-      "max_line_width_px": 0,
-      "max_line_width_ratio": 0,
+      "frame_width_px": 1080,
+      "safe_area_width_px": 972,
+      "style_target_width_px": 831.6,
+      "style_hard_ceiling_px": 864,
+      "effective_ceiling_px": 864,
+      "max_line_width_px": 612.5,
+      "max_line_width_ratio_frame": 0.5662,
+      "max_line_width_ratio_safe_area": 0.6317,
+      "max_line_width_ratio": 0.5662,
       "target_width_ratio": 0.77,
       "hard_ceiling_ratio": 0.8,
       "width_band": "WITHIN_TARGET",
       "overflow": false,
       "split_required": false,
+      "split_candidates": [],
       "warnings": [],
       "content_preserved": true
     }

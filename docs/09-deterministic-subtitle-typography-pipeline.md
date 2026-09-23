@@ -47,19 +47,37 @@ Composite line width = sum of per-run measurements (+ stroke / tracking allowanc
 
 ---
 
+## Frame width vs safe area (R1 authority)
+
+Style width ratios use **frame width** as denominator — not safe-area width:
+
+```
+style_target_width_px   = frame_width_px × target_width_ratio
+style_hard_ceiling_px   = frame_width_px × hard_ceiling_ratio
+safe_area_width_px      = frame_width_px - left_margin - right_margin
+effective_ceiling_px    = min(style_hard_ceiling_px, safe_area_width_px)
+```
+
+Result fields expose `max_line_width_ratio_frame` (canonical) and optional `max_line_width_ratio_safe_area` (informational).
+
 ## Wrap & split
 
-1. Break only at run boundaries honoring `break_after`
-2. No indefinite font shrinking
-3. No Frozen Script content mutation
-4. `> hard ceiling` → overflow / wrap path
-5. Cannot fit in `max_lines` → `CUE_SPLIT_REQUIRED` (L1 detect + evidence; L3 re-segments timing)
+1. `Resolve-SubtitleLineLayout` searches legal break subsets (not greedy prev-boundary only)
+2. Break only at run boundaries honoring `break_after` (`prefer` | `allow` | `forbid`)
+3. Unknown `emphasis_level` / `break_after` / unsupported `font_style` → **fail closed**
+4. No indefinite font shrinking; no Frozen Script content mutation
+5. `> effective_ceiling_px` → overflow / wrap path
+6. Cannot fit in `max_lines` → `CUE_SPLIT_REQUIRED` with `split_candidates[]` (prefer/allow only); atomic oversized run → `NO_LEGAL_INTERNAL_BREAK`
 
 Width bands:
 
-- `WITHIN_TARGET`
-- `ABOVE_TARGET_WITHIN_CEILING` (warning — e.g. 79% when target 76–78%)
-- `ABOVE_CEILING` (overflow)
+- `WITHIN_TARGET` (vs frame-based style target)
+- `ABOVE_TARGET_WITHIN_CEILING` (warning — e.g. 79% frame when target 76–78%)
+- `ABOVE_CEILING` (overflow vs effective ceiling)
+
+**Typography authority:** `emphasis_style_mapping.normal.font_style` is the base style — no duplicate `typography.font_style` field.
+
+**Measurement honesty:** System.Drawing per-run measurement; stroke/padding may conservatively over-estimate. `subtitle.layout.pixel_width` remains `AVAILABLE_UNVERIFIED` until 08E-B.
 
 ---
 
