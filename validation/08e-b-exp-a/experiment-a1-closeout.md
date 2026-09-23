@@ -215,7 +215,7 @@ Subtitle layout must not bind to a single renderer. Current candidates:
 | Backend | Role | Status |
 |---------|------|--------|
 | **Native Subtitle** (`drt.assemble` + burn-in) | Deliver-measurable on host | BR1 R3 verified |
-| **Resolve Text+** (`insert_fusion_title`) | Planned typography route | A1 blocked; A2 Deliver blocked |
+| **Resolve Text+** (`insert_fusion_title`) | Planned typography route | A1 geometry partial; **A2 Deliver PASS** (R1, correct MarkIn) |
 | **External Rich-text** | Research / future | **NOT IMPLEMENTED** |
 
 ---
@@ -303,5 +303,26 @@ EXPERIMENT_A1 = PARTIAL (historical; superseded classification in A1.1)
 EXPERIMENT_A1_1 = LAYOUT_MATERIALIZATION_PASS
 EXPERIMENT_A1_A00_SMOKE = PASSED
 EXPERIMENT_A1_MATRIX = EXECUTED
-EXPERIMENT_A2 = OPEN (NOT EXECUTED)
+EXPERIMENT_A2 = TEXTPLUS_DELIVERY_PASS (see experiment-a2-textplus-delivery-survivability.md)
+```
+
+---
+
+## Experiment A2 — Text+ Delivery Survivability (2026-09-23)
+
+**Full report:** `experiment-a2-textplus-delivery-survivability.md`
+
+```
+A2_OUTCOME = TEXTPLUS_DELIVERY_PASS
+```
+
+| Item | Result |
+|------|--------|
+| Timeline | `A20-TEXTPLUS-DELIVER-SMOKE` |
+| Route | R1 `insert_fusion_title` → Text+ |
+| Deliver MP4/H.264 @ MarkIn=86580 | **TEXTPLUS_PRESENT** (255 px) ×3 + post-reload |
+| Deliver PNG/RGB8 @ MarkIn=86580 | **TEXTPLUS_PRESENT** (255 px) |
+| Negative @ MarkIn=86400 | **NO_VISIBLE_TEXT** (BR1 reproduction) |
+| Root cause | **A. RESOLVE_DELIVER_CONFIGURATION** (render range) |
+| GUI control (R3) | SKIPPED |
 ```

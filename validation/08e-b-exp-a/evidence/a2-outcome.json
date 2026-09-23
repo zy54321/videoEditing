@@ -1,0 +1,143 @@
+{
+  "experiment": "A2 — Text+ Delivery Survivability",
+  "date": "2026-09-23",
+  "starting_head": "29f4c9b84ab3d458597993a5ab5970e86b0999c1",
+  "ending_head": "29f4c9b84ab3d458597993a5ab5970e86b0999c1",
+  "commits": [],
+  "a2_outcome": "TEXTPLUS_DELIVERY_PASS",
+  "experiment_08e_b_a2": "PASS",
+  "textplus_delivery_survivability": "PASS",
+  "root_cause_classification": "A. RESOLVE_DELIVER_CONFIGURATION",
+  "root_cause_detail": "Deliver MarkIn/MarkOut must target frames inside the Text+ clip span. BR1 NO_VISIBLE_TEXT reproduced when MarkIn=86400 (solid-color segment only); TEXTPLUS_PRESENT when MarkIn=86580 (inside Text+ 86520–86640). Not an MCP creation-route or Fusion-graph persistence defect on the validated path.",
+  "stable_resolve_native_route": {
+    "route_id": "R1_insert_fusion_title",
+    "creation_method": "timeline.insert_fusion_title",
+    "generator_name": "Text+",
+    "deliver_formats_verified": ["mp4/H264", "png/RGB8"],
+    "deliver_prerequisite": "MarkIn/MarkOut within Text+ record range"
+  },
+  "environment": {
+    "resolve": "DaVinci Resolve Studio 21.1.0.14",
+    "mcp": "Samuel davinci-resolve-mcp 4.8.13",
+    "project": "Astra-08E-B-Subtitle-Validation",
+    "timeline": "A20-TEXTPLUS-DELIVER-SMOKE",
+    "timeline_id": "17d46e6e-6957-45d7-9640-bcd4486cdc54",
+    "resolution": "1080x1920",
+    "fps": 24,
+    "timeline_start_frame": 86400,
+    "timeline_start_timecode": "01:00:00:00"
+  },
+  "a20_setup": {
+    "text": "HELLO A20",
+    "font": "Arial",
+    "style": "Regular",
+    "textplus_size": 0.064,
+    "clip_id": "eb9d144f-01af-4535-8b8a-8d6c4711cefd",
+    "layout_note": "Intended V1 background + V2 Text+ overlap; actual MCP insert placed solid color 86400–86520 and Text+ 86520–86640 sequentially on V1 track 1. V2 empty. Does not block Deliver when range targets Text+ span.",
+    "items": [
+      {"name": "纯色", "track": 1, "start": 86400, "end": 86520},
+      {"name": "Text+", "track": 1, "start": 86520, "end": 86640}
+    ]
+  },
+  "route_identity": {
+    "route_id": "R1_insert_fusion_title",
+    "mcp_operation": "timeline.insert_fusion_title",
+    "timeline_item_type": "generator",
+    "fusion_comp_count": 1,
+    "fusion_tools": ["Template (TextPlus)", "MediaOut1 (MediaOut)"],
+    "template_to_mediaout_connected": true,
+    "styled_text_readback": "HELLO A20"
+  },
+  "control_matrix": {
+    "mcp_textplus": {
+      "timeline_frame_at_86580": "VISIBLE",
+      "deliver_mp4_h264_mark_86580": "TEXTPLUS_PRESENT",
+      "deliver_png_rgb8_mark_86580": "TEXTPLUS_PRESENT",
+      "deliver_mp4_h264_mark_86400": "TEXTPLUS_MISSING"
+    },
+    "gui_textplus": {
+      "status": "SKIPPED",
+      "reason": "Requires Owner manual GUI action; not executed in this authorization window"
+    }
+  },
+  "deliver_runs": [
+    {
+      "id": "A20-MCP-run1",
+      "format": "mp4",
+      "codec": "H264",
+      "mark_in": 86580,
+      "mark_out": 86580,
+      "measurable": true,
+      "actual_width_px": 255
+    },
+    {
+      "id": "A20-MCP-run2",
+      "format": "mp4",
+      "codec": "H264",
+      "mark_in": 86580,
+      "mark_out": 86580,
+      "measurable": true,
+      "actual_width_px": 255
+    },
+    {
+      "id": "A20-MCP-run3-post-reload",
+      "format": "mp4",
+      "codec": "H264",
+      "mark_in": 86580,
+      "mark_out": 86580,
+      "after": "project save/close/load",
+      "measurable": true,
+      "actual_width_px": 255
+    },
+    {
+      "id": "A20-MCP-png-control",
+      "format": "png",
+      "codec": "RGB8",
+      "mark_in": 86580,
+      "mark_out": 86580,
+      "measurable": true,
+      "actual_width_px": 255
+    },
+    {
+      "id": "A20-negative-mark86400",
+      "format": "mp4",
+      "codec": "H264",
+      "mark_in": 86400,
+      "mark_out": 86400,
+      "measurable": false,
+      "error": "NO_VISIBLE_TEXT",
+      "purpose": "BR1 reproduction — wrong deliver range"
+    }
+  ],
+  "save_reload": {
+    "tested": true,
+    "result": "PASS",
+    "persistence_defect": false,
+    "post_reload_styled_text": "HELLO A20",
+    "post_reload_deliver_measurable": true
+  },
+  "route_matrix": {
+    "R1_insert_fusion_title": "PASS (timeline + deliver when range correct)",
+    "R2_insert_title": "NOT_TESTED",
+    "R3_gui_control": "SKIPPED"
+  },
+  "historical_br1_preserved": {
+    "original_outcome": "NO_VISIBLE_TEXT at MarkIn=86400 (not erased)",
+    "new_root_cause_truth": "WRONG_DELIVER_RANGE / MARKIN_OUTSIDE_TEXTPLUS_ACTIVE_SPAN",
+    "note": "BR1 historical evidence preserved in blocker-resolution.md. A2 addendum: failure reproduced only when Deliver range misses Text+ active span.",
+    "reference": "validation/08e-b-exp-a/blocker-resolution.md"
+  },
+  "git_evidence_policy": {
+    "committed": "md + a2-outcome.json + deliver-a2/*.measurement.json",
+    "excluded": "deliver-a2/*.png",
+    "exclusion_reason": "measurement JSON sufficient for audit; PNGs kept local"
+  },
+  "capability_truth": {
+    "subtitle.layout.pixel_width": "AVAILABLE_UNVERIFIED",
+    "subtitle.style.keyword_emphasis": "UNKNOWN",
+    "subtitle.segment.semantic": "VERIFIED"
+  },
+  "capability_recommendation": "Do not auto-upgrade subtitle.layout.pixel_width. A2 closes Text+ Deliver survivability for R1 when Deliver range includes active Text+ frames. Production adapter should set MarkIn/MarkOut (or full timeline export) to cover subtitle clip span; document deliver-range authority separately from timeline_frame preview authority.",
+  "n02_touched": false,
+  "experiment_b_executed": false
+}

@@ -1,0 +1,14 @@
+{
+  "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\deliver-a2\\A20-MCP-run2-frame.png",
+  "image_width_px": 1080,
+  "image_height_px": 1920,
+  "measurable": true,
+  "bbox_left_px": 413,
+  "bbox_right_px": 667,
+  "bbox_top_px": 944,
+  "bbox_bottom_px": 979,
+  "actual_width_px": 255,
+  "actual_height_px": 36,
+  "actual_frame_ratio": 0.236111,
+  "lum_threshold": 180
+}
