@@ -102,9 +102,9 @@ vocabulary:
     notes: Font/outline API not validated
 
   subtitle.style.keyword_emphasis:
-    status: UNKNOWN
+    status: VERIFIED
     l1_aliases: [subtitle.keyword_emphasis]
-    notes: Styled-run semantic/layout contract exists; actual styled rendering route not validated (08E-A)
+    notes: "Verified static inline SIZE emphasis only. Backend Resolve Text+ StyledTextCLS dynamic canonical .setting timeline_item_fusion.import_comp. Evidence Stage 08E-B Experiment B B-R1. Not included color weight animation kinetic typography."
 
   audio.voice.place:
     status: VERIFIED

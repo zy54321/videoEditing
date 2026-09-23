@@ -114,6 +114,12 @@ $matOk = (Test-Path (Join-Path $ws1 'video-workflow\tools\lib\textplus-layout-ma
     (Test-Path (Join-Path $ws1 'video-workflow\runtime\textplus-font-profiles.yaml'))
 Assert-True $matOk 'TEST-04b textplus materializer and font profiles present'
 
+# TEST-04c: Stage 08E-B B-R2 CLS generator + canonical setting installed
+$clsOk = (Test-Path (Join-Path $ws1 'video-workflow\tools\generate-textplus-cls-setting.py')) -and
+    (Test-Path (Join-Path $ws1 'video-workflow\tools\lib\textplus_cls_setting.py')) -and
+    (Test-Path (Join-Path $ws1 'video-workflow\runtime\textplus-cls-canonical.setting'))
+Assert-True $clsOk 'TEST-04c textplus CLS generator and canonical setting present'
+
 # TEST-05: production dir exists, no brief
 $prodDir = Join-Path $ws1 'video-workflow\production'
 $test05 = (Test-Path $prodDir -PathType Container) -and (-not (Test-Path (Join-Path $prodDir 'brief.yaml')))

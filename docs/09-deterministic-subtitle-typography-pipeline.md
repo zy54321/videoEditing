@@ -15,7 +15,7 @@ N02 history: `subtitle.layout.pixel_width` → `subtitle.segment.semantic` with 
 | **L2 Style** | Width band (e.g. 76–78% target, 80% ceiling), max lines, semantic wrap rules, sparse emphasis policy |
 | **L3 Blueprint** | `subtitle_typography_intent` — caption mode, emphasis targets (`text`, `semantic_role`, `intensity`) |
 | **L1** | Styled runs, typography resolution, System.Drawing measurement, line layout, preflight QA |
-| **L0 Runtime** | Resolve / Fusion / Text+ render — **parity requires 08E-B validation** |
+| **L0 Runtime** | Resolve / Fusion / Text+ render — keyword SIZE emphasis route **VERIFIED** (08E-B); pixel-width parity still **AVAILABLE_UNVERIFIED** |
 
 **Frozen principle:** L2 decides emphasis semantics. L1 resolves concrete typography and layout. L0 renderer parity requires Runtime Validation.
 
@@ -108,15 +108,37 @@ Width bands:
 
 ---
 
-## Capability truth (08E-A — unchanged status)
+## Capability truth (post 08E-B B-R2)
 
 | Logical ID | Status |
 |------------|--------|
 | `subtitle.layout.pixel_width` | AVAILABLE_UNVERIFIED |
-| `subtitle.style.keyword_emphasis` | UNKNOWN |
+| `subtitle.style.keyword_emphasis` | VERIFIED (static inline SIZE only) |
 | `subtitle.segment.semantic` | VERIFIED (no pixel-width guarantee) |
 
-Contract support ≠ Runtime VERIFIED.
+Contract support ≠ full renderer parity. Keyword SIZE route validated; color/weight/animation not.
+
+---
+
+## Keyword Emphasis Runtime Backend v1 (08E-B)
+
+**Production chain:**
+
+```
+L2 semantic emphasis → L1 styled runs → layout preflight → textplus-layout-materializer
+→ materialized cue lines[].runs → generate-textplus-cls-setting.py → import_comp
+```
+
+| Artifact | Path |
+|----------|------|
+| Generator | `video-workflow/tools/generate-textplus-cls-setting.py` |
+| Library | `video-workflow/tools/lib/textplus_cls_setting.py` |
+| Canonical graph | `video-workflow/runtime/textplus-cls-canonical.setting` |
+| Font base size | `video-workflow/runtime/textplus-font-profiles.yaml` |
+
+CLS character indices use **final materialized `styled_text`** (Python Unicode codepoints), recomputed after newline/split.
+
+**Do not use in production:** `fusion_comp.set_input(CharacterLevelStyling)` — known non-working route.
 
 ---
 
@@ -124,8 +146,8 @@ Contract support ≠ Runtime VERIFIED.
 
 | Stage | Scope |
 |-------|-------|
-| **08E-A** (this) | Contract, deterministic preflight tool, tests, documentation — **BUILD only** |
-| **08E-B** (future) | Runtime Capability Validation — Resolve burn-in parity, styled render route, possible status upgrades |
+| **08E-A** | Contract, deterministic preflight tool, tests, documentation |
+| **08E-B** | Runtime validation — keyword SIZE emphasis VERIFIED; pixel-width parity deferred to Final Review |
 
 ---
 

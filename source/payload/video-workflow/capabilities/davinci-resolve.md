@@ -332,12 +332,22 @@ Filename alone is **not** semantic evidence.
 | `subtitle.safe_text_width` | Avoid horizontal overflow via semantic split + line heuristic | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | L1 deterministic preflight (`subtitle-layout-preflight.ps1`) exists (08E-A); Resolve burn-in parity not validated |
 | `subtitle.position` | Per-cue position / safe-area API control | **UNKNOWN** | Optional | Not required for functional layout |
 | `subtitle.visual_style` | Font, outline, background, animation | **UNKNOWN** | Optional | **Not** N02 V2 blocker; `subtitle.create` VERIFIED ≠ visual style VERIFIED |
-| `subtitle.keyword_emphasis` | Per-cue keyword styling | **UNKNOWN** | Optional | Styled-run L1 contract exists (08E-A); Fusion/Text+ render route not validated |
+| `subtitle.keyword_emphasis` | Per-cue keyword styling | **VERIFIED** | Optional | Static inline SIZE via Text+ StyledTextCLS → generated `.setting` → `import_comp` (08E-B B-R1); color/weight not verified |
 | `subtitle.style` | Legacy alias — prefer `subtitle.visual_style` | **UNKNOWN** | Optional | Style read-back not confirmed |
 | `subtitle.timing` | Verify cue timing vs narration | **AVAILABLE_UNVERIFIED** | **PRODUCTION_QA** | `get_transcript` cues vs plan; checked in final QA, not a Capability Gate blocker |
 | `subtitle.edit` | Adjust cue text/timing programmatically | **UNKNOWN** | Repair | No confirmed write surface this stage |
 
 **Do not conflate:** "subtitles can be imported" ≠ "all subtitle styling is API-controllable".
+
+**Implementation Routes — `subtitle.keyword_emphasis` (v1 — SIZE only):**
+
+| Route | Status | Evidence / Rule |
+|-------|--------|-----------------|
+| `textplus_styledtextcls_import_comp` | **VERIFIED** | Materialized styled runs → `generate-textplus-cls-setting.py` → canonical `.setting` → `timeline_item_fusion.import_comp` (08E-B B10–B12, save/reload) |
+| `fusion_comp.set_input(CharacterLevelStyling)` | **KNOWN_NON_WORKING_ROUTE** | API success but empty read-back, no visual SIZE change (Resolve 21.1.0.14 / MCP 4.8.13). **DO NOT SELECT IN PRODUCTION.** |
+| `cls_color` / `cls_weight` | **NOT_VERIFIED** | Generator fail-closed (`CLS_COLOR_NOT_VERIFIED`, `CLS_WEIGHT_NOT_VERIFIED`) |
+
+**Authority:** L2 decides *which* words to emphasize. L1 resolves layout + concrete size multipliers. Runtime backend serializes materialized `lines[].runs` only — no parallel substring/start/end truth.
 
 **Implementation Routes — `subtitle.create`:**
 
@@ -552,7 +562,7 @@ Counts are **derived from Master Matrix rows** — do not maintain separate manu
 | subtitle.safe_text_width | Semantic width heuristic | AVAILABLE_UNVERIFIED | **MUST** (V2) | split cue fallback; no API box |
 | subtitle.position | Position API | UNKNOWN | Optional | not V2 blocker |
 | subtitle.visual_style | Font/outline/background | UNKNOWN | Optional | not V2 blocker |
-| subtitle.keyword_emphasis | Keyword styling | UNKNOWN | Optional | Fusion not validated |
+| subtitle.keyword_emphasis | Keyword styling | VERIFIED | Optional | Text+ StyledTextCLS SIZE emphasis (08E-B) |
 | subtitle.timing | Cue timing verify | AVAILABLE_UNVERIFIED | PRODUCTION_QA | get_transcript; QA check, not gate blocker |
 | mixed_fps.cadence_analyze | Mixed fps cadence risk | VERIFIED | **MUST** (V2) | FFprobe + Safe Cadence Policy (08A.1) |
 | mixed_fps.interpolation | Optical flow retime | UNKNOWN | Optional | not V2 blocker |

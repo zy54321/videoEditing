@@ -700,9 +700,10 @@ Production Brief features
 - subtitle segmentation (`subtitle.segment.semantic`)
 - Blueprint `subtitle_typography_intent` → styled runs (semantic emphasis targets only)
 - L1 **subtitle layout preflight** (`video-workflow/tools/subtitle-layout-preflight.ps1`) when pixel-width discipline applies
-- keyword emphasis intent (logical `subtitle.style.keyword_emphasis` remains **UNKNOWN** until Runtime validation — contract support ≠ VERIFIED)
+- keyword emphasis (logical `subtitle.style.keyword_emphasis` **VERIFIED** for static inline SIZE only): materialized styled runs → `generate-textplus-cls-setting.py` → Text+ StyledTextCLS `.setting` → `timeline_item_fusion.import_comp`
+- do **not** use `fusion_comp.set_input(CharacterLevelStyling)` — **KNOWN_NON_WORKING_ROUTE**
 
-**Layer split:** L2 / Blueprint decide *which words* deserve emphasis. L1 resolves font metrics and measures composite width per run. L0 renderer parity is **not** assumed by preflight PASS.
+**Layer split:** L2 / Blueprint decide *which words* deserve emphasis. L1 resolves font metrics, size multipliers, and layout. Runtime backend serializes materialized runs — not L2 Style details. Preflight PASS ≠ pixel-width renderer parity (`subtitle.layout.pixel_width` still AVAILABLE_UNVERIFIED).
 
 #### Graphics Pass
 

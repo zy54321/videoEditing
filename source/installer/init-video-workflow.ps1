@@ -93,7 +93,10 @@ $ProductFiles = @(
     'video-workflow\tools\subtitle-layout-preflight.ps1',
     'video-workflow\tools\lib\subtitle-layout-engine.ps1',
     'video-workflow\tools\lib\textplus-layout-materializer.ps1',
-    'video-workflow\runtime\textplus-font-profiles.yaml'
+    'video-workflow\tools\generate-textplus-cls-setting.py',
+    'video-workflow\tools\lib\textplus_cls_setting.py',
+    'video-workflow\runtime\textplus-font-profiles.yaml',
+    'video-workflow\runtime\textplus-cls-canonical.setting'
 )
 
 $CreatedPaths = [System.Collections.Generic.List[string]]::new()

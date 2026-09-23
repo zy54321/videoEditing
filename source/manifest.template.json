@@ -53,10 +53,12 @@
     "tools": [
       "final-artifact-qa",
       "subtitle-layout-preflight",
-      "textplus-layout-materializer"
+      "textplus-layout-materializer",
+      "generate-textplus-cls-setting"
     ],
     "runtime_profiles": [
-      "textplus-font-profiles"
+      "textplus-font-profiles",
+      "textplus-cls-canonical"
     ]
   }
 }

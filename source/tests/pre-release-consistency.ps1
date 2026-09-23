@@ -125,6 +125,12 @@ $manifestHas08eb = ($manifestTpl.components.tools -contains 'textplus-layout-mat
 Assert-True $manifestHas08eb 'C12f manifest includes Stage 08E-B A1.1 materializer and font profiles'
 Assert-True ($productFiles -contains 'video-workflow\tools\lib\textplus-layout-materializer.ps1') 'C12g installer ProductFiles includes textplus-layout-materializer'
 Assert-True ($productFiles -contains 'video-workflow\runtime\textplus-font-profiles.yaml') 'C12h installer ProductFiles includes textplus-font-profiles'
+$manifestHas08ebCls = ($manifestTpl.components.tools -contains 'generate-textplus-cls-setting') -and
+    ($manifestTpl.components.runtime_profiles -contains 'textplus-cls-canonical')
+Assert-True $manifestHas08ebCls 'C12i manifest includes Stage 08E-B CLS generator and canonical setting'
+Assert-True ($productFiles -contains 'video-workflow\tools\generate-textplus-cls-setting.py') 'C12j installer ProductFiles includes CLS generator'
+Assert-True ($productFiles -contains 'video-workflow\tools\lib\textplus_cls_setting.py') 'C12k installer ProductFiles includes CLS library'
+Assert-True ($productFiles -contains 'video-workflow\runtime\textplus-cls-canonical.setting') 'C12l installer ProductFiles includes CLS canonical setting'
 Assert-True (Test-Path (Join-Path $Payload 'video-workflow\templates\style-profile-schema.yaml')) 'C12c style-profile-schema in payload'
 $vocabYaml = Get-Content (Join-Path $Payload 'video-workflow\capabilities\logical-capability-vocabulary.yaml') -Raw -Encoding UTF8
 Assert-True ($vocabYaml -match 'canonical_states:') 'C12d logical vocabulary canonical states'
