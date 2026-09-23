@@ -1,0 +1,61 @@
+{
+  "experiment": "A1 — Text+ Rendered-Frame Geometry Parity",
+  "project": "Astra-08E-B-Subtitle-Validation",
+  "primary_timeline": "A1-EXP-A",
+  "route_identity": {
+    "creation_method": "timeline.insert_fusion_title",
+    "mcp_operation": "timeline.insert_fusion_title",
+    "generator_name": "Text+",
+    "route_class": "live_standalone_fusion_title",
+    "route_id": "R1_insert_fusion_title",
+    "not": [
+      "AddFusionComp on media-backed clip",
+      "offline DRT place_fusion_title",
+      "native subtitle burn-in"
+    ]
+  },
+  "timeline_item": {
+    "clip_id": "ea145b87-f280-47ea-b959-5a9ec29e775e",
+    "name": "Text+",
+    "track_type": "video",
+    "track_index": 1,
+    "item_index": 0,
+    "kind": "generator",
+    "start": 86400,
+    "end": 86520,
+    "duration_frames": 120,
+    "get_type": "video",
+    "fusion_comp_count": 1
+  },
+  "fusion_comp": {
+    "tool_count": 2,
+    "tools": [
+      {
+        "name": "Template",
+        "type": "TextPlus",
+        "reg_id": "TextPlus"
+      },
+      {
+        "name": "MediaOut1",
+        "type": "MediaOut",
+        "reg_id": "MediaOut",
+        "input_connected_from": "Template"
+      }
+    ],
+    "textplus_tool_identity": "Template",
+    "media_out_identity": "MediaOut1"
+  },
+  "readback_after_configure": {
+    "Font": "Arial",
+    "StyledText": "HELLO TEST",
+    "Size": 0.05,
+    "Center": {"x": 0.5, "y": 0.5}
+  },
+  "legacy_v2_reference": {
+    "timeline": "08E-B-EXP-A-v2",
+    "clip_id": "373d200b-7a91-45d7-b016-5b8bf9e6bd78",
+    "structure": "black still (86400-86520) + Text+ (86520-86640) sequential on V1",
+    "styled_text_readback": "你好世界",
+    "note": "Same R1 route; sequential layout complicates playhead targeting"
+  }
+}

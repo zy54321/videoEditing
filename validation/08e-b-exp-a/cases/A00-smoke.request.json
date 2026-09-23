@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "canvas": { "width_px": 1080, "height_px": 1920 },
+  "layout": {
+    "target_width_ratio": 0.77,
+    "hard_ceiling_ratio": 0.8,
+    "max_lines": 2,
+    "safe_margins": { "left_px": 54, "right_px": 54 }
+  },
+  "typography": {
+    "font_family": "Arial",
+    "fallback_font_family": "Segoe UI",
+    "base_font_size_px": 48,
+    "tracking_px": 0,
+    "stroke_px": 2,
+    "visual_padding_px": 0,
+    "emphasis_style_mapping": {
+      "normal": { "size_multiplier": 1.0, "font_style": "Regular", "tracking_px": 0 },
+      "subtle": { "size_multiplier": 1.0, "font_style": "Regular", "tracking_px": 1 },
+      "medium": { "size_multiplier": 1.1, "font_style": "Bold", "tracking_px": 0 },
+      "strong": { "size_multiplier": 1.25, "font_style": "Bold", "tracking_px": 0 }
+    }
+  },
+  "cues": [
+    {
+      "cue_id": "A00",
+      "runs": [
+        {
+          "text": "HELLO TEST",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "allow"
+        }
+      ]
+    }
+  ]
+}

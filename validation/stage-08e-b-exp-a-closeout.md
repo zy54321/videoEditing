@@ -161,8 +161,23 @@ A01 L1 preflight now produces `max_line_width_px=196` (alias → `Microsoft YaHe
 
 ---
 
+## Experiment A1 (Text+ rendered-frame geometry) — 2026-09-23
+
+| Field | Value |
+|-------|-------|
+| Starting HEAD | `73d0f53` |
+| Document | `validation/08e-b-exp-a/experiment-a1-closeout.md` |
+| Outcome | **INCONCLUSIVE** — A00 smoke **BLOCKED** |
+
+Authority shift: `timeline_frame quality=frame` is the A1 actual-width source (not Deliver). A00 could not produce a saved measurable PNG; `timeline_frame` later failed with poisoned PNG/RGB16 render state after `fusion_comp.render()`.
+
+**A01–A10 not run.** A2 (Deliver survivability) remains open.
+
+---
+
 ## Next entry (Owner)
 
-1. Resolve **Text+ Deliver graph** on disposable timelines (Experiment A route), or re-scope renderer under test.
-2. Re-run A01–A10 only when the **same route** supports L1 prediction + Deliver `actual_width_px`.
-3. Only after full paired matrix: choose among `PARITY_SUPPORTED`, `CALIBRATION_REQUIRED`, or `PARITY_NOT_SUPPORTED`.
+1. **Restart Resolve** or reset Deliver format, then retry A1 A00 smoke (`experiment-a1-closeout.md`).
+2. Resolve **Text+ Deliver graph** (A2) separately from A1 geometry.
+3. Re-run A01–A10 only after A00 smoke + font-size calibration pass.
+4. Only after full paired matrix: choose among `PARITY_SUPPORTED`, `CALIBRATION_REQUIRED`, or `PARITY_NOT_SUPPORTED`.
