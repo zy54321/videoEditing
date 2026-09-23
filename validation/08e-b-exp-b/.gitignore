@@ -1,0 +1,8 @@
+# Local scratch / pre-B-R1 artifacts (not part of committed evidence)
+generated/B10.repeat*.setting
+evidence/B-MCP-*
+evidence/B00-gui-export-retry.setting
+cases/B02.*
+evidence/B02-*
+measurements/B02-*
+measurements/B-MCP-*
