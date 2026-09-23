@@ -21,6 +21,7 @@ function Assert-True {
 $utf8 = New-Object System.Text.UTF8Encoding $false
 . (Join-Path $PSScriptRoot 'lib\style-profile-schema.ps1')
 . (Join-Path $PSScriptRoot 'lib\capability-fallback-contract.ps1')
+. (Join-Path $PSScriptRoot 'lib\style-reference-capability-consistency.ps1')
 
 $vocabText = [System.IO.File]::ReadAllText((Join-Path $Payload 'video-workflow\capabilities\logical-capability-vocabulary.yaml'), $utf8)
 $vocabStatusMap = Get-VocabularyStatusMap -VocabPath (Join-Path $Payload 'video-workflow\capabilities\logical-capability-vocabulary.yaml')
@@ -203,6 +204,17 @@ foreach ($ref in $canonicalRefs) {
 
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'verify-capability-coverage.ps1') | Out-Null
 Assert-True ($LASTEXITCODE -eq 0) 'S38 coverage snapshot matches policy+vocabulary'
+
+# Reference explicit fallback declarations must match capability-policy authority
+foreach ($dir in $styleDirs) {
+    $sid = $dir.Name
+    $refConsistency = Test-StyleReferenceCapabilityConsistency `
+        -PolicyPath (Join-Path $dir.FullName 'capability-policy.yaml') `
+        -ReferencesDir (Join-Path $dir.FullName 'references') `
+        -VocabMap $vocabStatusMap `
+        -Label $sid
+    Assert-True ($refConsistency.Errors.Count -eq 0) "S39 $sid reference fallback matches policy ($($refConsistency.Errors -join '; '))"
+}
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })

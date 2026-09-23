@@ -90,16 +90,21 @@ Unit: `logical_capability_id` (generated snapshot: `capability-coverage.yaml`)
 | `visual.trim` | PREFERRED | AVAILABLE_UNVERIFIED | No VERIFIED fallback; resolution may omit or require validation |
 | `subtitle.style.keyword_emphasis` | OPTIONAL | UNKNOWN | CAPABILITY_VALIDATION_REQUIRED if selected |
 
-### PREFERRED with VERIFIED fallback (not unresolved)
+### Primary non-VERIFIED with VERIFIED fallback (not unresolved)
 
-Primary non-VERIFIED but production-degradable via documented fallback:
+Production-degradable when primary is not VERIFIED:
 
 - `visual.motion.push_in` → `visual.reframe.static`
 - `visual.motion.pan` → `visual.reframe.static`
-- `edit.transition.cross_dissolve` → `edit.transition.basic`
 - `subtitle.layout.pixel_width` → `subtitle.segment.semantic` (partial; no pixel-width guarantee)
 - `audio.music.duck` → `audio.music.level_under_voice`
 - `color.shot_match` → `color.primary_balance`
+
+### Primary VERIFIED with documented fallback policy
+
+Primary is VERIFIED; policy documents optional runtime degrade path:
+
+- `edit.transition.cross_dissolve` → `edit.transition.basic`
 
 ---
 

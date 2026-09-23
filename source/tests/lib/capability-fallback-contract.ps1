@@ -48,6 +48,17 @@ function Get-FallbackEntries {
     return $entries
 }
 
+function Get-PolicyFallbackMap {
+    param([string]$PolicyPath)
+
+    $text = [System.IO.File]::ReadAllText($PolicyPath, (New-Object System.Text.UTF8Encoding $false))
+    $map = @{}
+    foreach ($entry in (Get-FallbackEntries -PolicyText $text)) {
+        $map[$entry.Source] = $entry.Target
+    }
+    return $map
+}
+
 function Test-FallbackContract {
     param(
         [string]$PolicyPath,

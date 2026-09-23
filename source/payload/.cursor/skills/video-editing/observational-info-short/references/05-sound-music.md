@@ -75,7 +75,7 @@ This Style defines Voice / Original / Ambience / Music / SFX / Silence roles and
 
 - Brief disables background music → `OWNER_DISABLED`; do not fail Style QA for absence
 - Brief requests stronger music presence for specific platform — honor explicit override within voice intelligibility floor
-- No verified duck route: fall back to lower music gain manually in mix intent; flag if `audio.music.duck` unavailable
+- Automatic ducking (`audio.music.duck`) is not VERIFIED; resolution uses `audio.music.level_under_voice` per capability-policy — static / pre-attenuated music under voice, not equivalent to dynamic ducking envelope
 - Single continuous track when only one legal asset provided — still vary effective presence via ducking and sectional gain automation intent
 
 ## Trade-offs
@@ -96,7 +96,7 @@ This Style defines Voice / Original / Ambience / Music / SFX / Silence roles and
 | Preserve diegetic original | `audio.original_sound.preserve` |
 | Place music bed | `audio.music.place` |
 | Crossfade between music segments | `audio.music.crossfade` |
-| Duck music under voice or original | `audio.music.duck` → fallback gain intent via `audio.music.place` |
+| Duck music under voice or original | `audio.music.duck` → fallback `audio.music.level_under_voice` (pre-attenuated level; not dynamic auto-duck) |
 | Ambience bed | `audio.ambience.place` |
 
 ## Blueprint Mapping

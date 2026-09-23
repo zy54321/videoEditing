@@ -7,7 +7,7 @@ identity:
   audience_relationship: conversational peer, not presenter or brand voice
   primary_goal: make everyday observation feel clear, credible, and lightly engaging
 
-# Scale: low | medium-low | medium | medium-high | high
+# Allowed values: video-workflow/templates/style-profile-schema.yaml (sole schema authority)
 # Coordinates express Style position — not quality scores.
 
 taste_profile:
