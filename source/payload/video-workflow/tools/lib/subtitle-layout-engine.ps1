@@ -255,22 +255,42 @@ function Score-LineLayoutCandidate {
 
     $preferBreaks = 0
     $allowBreaks = 0
+    $linesAboveTarget = 0
     $imbalance = 0.0
     foreach ($line in $Lines) {
         $lineRuns = @($line)
         $lw = Get-LineWidth -Runs $lineRuns
         $imbalance += [math]::Abs($lw - $StyleTargetPx)
+        if ($lw -gt $StyleTargetPx) { $linesAboveTarget++ }
         $last = $lineRuns[$lineRuns.Count - 1]
         if ($last.break_after -eq 'prefer') { $preferBreaks++ }
         elseif ($last.break_after -eq 'allow') { $allowBreaks++ }
     }
+
+    # Tier 0 = every line within style target; tier 1 = some line above target but legal (<= ceiling).
+    $targetTier = if ($linesAboveTarget -eq 0) { 0 } else { 1 }
+
     return [pscustomobject]@{
+        target_tier = $targetTier
+        lines_above_target = $linesAboveTarget
         line_count = $Lines.Count
         prefer_breaks = $preferBreaks
         allow_breaks = $allowBreaks
         imbalance = [math]::Round($imbalance, 4)
         max_width = ($Lines | ForEach-Object { Get-LineWidth -Runs $_ } | Measure-Object -Maximum).Maximum
     }
+}
+
+function Get-SelectedBreakPolicies {
+    param([array]$ResolvedRuns, [int[]]$BreakIndices)
+
+    $policies = @()
+    foreach ($idx in @($BreakIndices | Sort-Object)) {
+        if ($idx -ge 0 -and $idx -lt $ResolvedRuns.Count) {
+            $policies += [string]$ResolvedRuns[$idx].break_after
+        }
+    }
+    return $policies
 }
 
 function Build-SplitCandidates {
@@ -345,7 +365,9 @@ function Resolve-SubtitleLineLayout {
         }
         if ($ok) {
             $score = Score-LineLayoutCandidate -Lines $lines -StyleTargetPx $StyleTargetPx -EffectiveCeilingPx $EffectiveCeilingPx
-            $valid += [pscustomobject]@{ breaks = @($breakSet); lines = $lines; score = $score }
+            $breakStore = New-Object 'System.Collections.Generic.List[int]'
+            foreach ($b in @([int[]]$breakSet)) { $breakStore.Add([int]$b) | Out-Null }
+            $valid += [pscustomobject]@{ breaks = $breakStore; lines = $lines; score = $score }
         }
     }
 
@@ -363,15 +385,25 @@ function Resolve-SubtitleLineLayout {
         }
     }
 
+    # Ranking: target-band tier > target fit > prefer boundary > line count (tie-break only) > fixed break-index order.
+    # line_count is a legality constraint, not "fewer lines is always better".
     $best = $valid | Sort-Object `
-        @{ Expression = { $_.score.line_count } }, `
+        @{ Expression = { $_.score.target_tier } }, `
+        @{ Expression = { $_.score.lines_above_target } }, `
+        @{ Expression = { $_.score.imbalance } }, `
         @{ Expression = { - $_.score.prefer_breaks } }, `
         @{ Expression = { $_.score.allow_breaks } }, `
-        @{ Expression = { $_.score.imbalance } }, `
+        @{ Expression = { $_.score.line_count } }, `
         @{ Expression = { ($_.breaks | ForEach-Object { '{0:D4}' -f $_ }) -join ',' } } `
         | Select-Object -First 1
 
     $lines = $best.lines
+    $selectedBreakIndices = [int[]]@($best.breaks.ToArray())
+    $policyList = New-Object 'System.Collections.Generic.List[string]'
+    foreach ($p in (Get-SelectedBreakPolicies -ResolvedRuns $ResolvedRuns -BreakIndices $selectedBreakIndices)) {
+        $policyList.Add([string]$p) | Out-Null
+    }
+    $selectedBreakPolicies = $policyList
     $maxLineWidth = ($lines | ForEach-Object { Get-LineWidth -Runs $_ } | Measure-Object -Maximum).Maximum
     $overflow = $maxLineWidth -gt $EffectiveCeilingPx
     $widthBand = 'WITHIN_TARGET'
@@ -391,6 +423,8 @@ function Resolve-SubtitleLineLayout {
         warnings = @($warnings)
         width_band = $widthBand
         max_line_width_px = [math]::Round([double]$maxLineWidth, 2)
+        selected_break_indices = $selectedBreakIndices
+        selected_break_policies = $selectedBreakPolicies
     }
 }
 
@@ -527,6 +561,11 @@ function Invoke-SubtitleLayoutPreflight {
             overflow = [bool]$layoutResult.overflow
             split_required = [bool]$layoutResult.split_required
             split_candidates = @($layoutResult.split_candidates)
+            selected_break_indices = if ($layoutResult.ContainsKey('selected_break_indices')) { [int[]]@($layoutResult.selected_break_indices) } else { @() }
+            selected_break_policies = if ($layoutResult.ContainsKey('selected_break_policies')) {
+                [string[]]@($layoutResult.selected_break_policies.ToArray())
+            }
+            else { @() }
             warnings = $cueWarnings
             content_preserved = $contentPreserved
         }

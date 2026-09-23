@@ -69,6 +69,21 @@ Result fields expose `max_line_width_ratio_frame` (canonical) and optional `max_
 5. `> effective_ceiling_px` → overflow / wrap path
 6. Cannot fit in `max_lines` → `CUE_SPLIT_REQUIRED` with `split_candidates[]` (prefer/allow only); atomic oversized run → `NO_LEGAL_INTERNAL_BREAK`
 
+### Layout selection semantics (R2)
+
+- **Hard ceiling** = legality boundary (must not exceed)
+- **Target band** = preferred layout objective (76–78% frame width for observational Style)
+- **`prefer`** = semantic preference at a boundary — **not** a mandatory break
+- **`line_count ≤ max_lines`** is a constraint, not “fewer lines is always better”
+- A single line already **WITHIN_TARGET** should normally remain a single line
+- When a legal `prefer` split yields all lines within target while a one-line layout is only `ABOVE_TARGET_WITHIN_CEILING`, the split is preferred
+
+Candidate ranking tiers (deterministic):
+
+1. All lines within target band
+2. Some lines above target but all ≤ effective ceiling
+3. Within tier: target fit → `prefer` boundary satisfaction → line count (tie-break) → fixed break-index order
+
 Width bands:
 
 - `WITHIN_TARGET` (vs frame-based style target)

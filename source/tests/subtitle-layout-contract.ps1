@@ -83,6 +83,23 @@ function New-Run {
     }
 }
 
+function Get-CueLayoutFingerprint {
+    param($Cue)
+    $lineCompositions = @($Cue.lines | ForEach-Object {
+            @($_.runs | ForEach-Object { $_.text }) -join '+'
+        })
+    return [ordered]@{
+        status = [string]$Cue.status
+        line_count = [int]$Cue.line_count
+        line_compositions = $lineCompositions
+        selected_break_indices = @($Cue.selected_break_indices)
+        selected_break_policies = @($Cue.selected_break_policies)
+        width_band = [string]$Cue.width_band
+        max_line_width_px = [double]$Cue.max_line_width_px
+        split_required = [bool]$Cue.split_required
+    }
+}
+
 Write-Host '=== Subtitle Layout Contract Tests ===' -ForegroundColor Cyan
 Write-Host ''
 
@@ -189,10 +206,12 @@ catch {
 }
 Assert-True $fontFail 'T14 missing font fails closed'
 
-# T15 deterministic same input same result
+# T15 deterministic same input same structural result
 $a = Invoke-SubtitleLayoutPreflight -Request $r3
 $b = Invoke-SubtitleLayoutPreflight -Request $r3
-Assert-True ($a.cue_results[0].max_line_width_px -eq $b.cue_results[0].max_line_width_px) 'T15 deterministic layout'
+$fpA = Get-CueLayoutFingerprint -Cue $a.cue_results[0]
+$fpB = Get-CueLayoutFingerprint -Cue $b.cue_results[0]
+Assert-True (($fpA | ConvertTo-Json -Compress) -eq ($fpB | ConvertTo-Json -Compress)) 'T15 deterministic layout structure'
 
 # T16 keyword emphasis remains UNKNOWN
 $vocab = Get-Content (Join-Path $Payload 'video-workflow\capabilities\logical-capability-vocabulary.yaml') -Raw -Encoding UTF8
@@ -344,6 +363,85 @@ Assert-True ($resLim.measurement_limitations.Count -ge 1) 'R1-09 measurement lim
 # R1-10 capability status unchanged
 Assert-True ($vocab -match 'subtitle.style.keyword_emphasis:[\s\S]{0,120}status: UNKNOWN') 'R1-10 keyword emphasis still UNKNOWN'
 Assert-True ($vocab -match 'subtitle.layout.pixel_width:[\s\S]{0,120}status: AVAILABLE_UNVERIFIED') 'R1-10 pixel_width still AVAILABLE_UNVERIFIED'
+
+# --- Stage 08E-A-R2 tests ---
+
+# R2-03 above-target single line vs prefer split within target → choose prefer split
+$synthR23 = @(
+    [pscustomobject]@{ text = 'A'; semantic_role = 'p'; emphasis_level = 'normal'; break_after = 'prefer'; width_px = 45 }
+    [pscustomobject]@{ text = 'B'; semantic_role = 'p'; emphasis_level = 'normal'; break_after = 'forbid'; width_px = 40 }
+)
+$lrR23 = Resolve-SubtitleLineLayout -ResolvedRuns $synthR23 -StyleTargetPx 60 -StyleCeilingPx 100 -EffectiveCeilingPx 100 -MaxLines 2 -FrameWidthPx 100 -SafeAreaWidthPx 100
+Assert-True ($lrR23.lines.Count -eq 2) 'R2-03 chooses two-line prefer split'
+Assert-True ($lrR23.lines[0].Count -eq 1 -and $lrR23.lines[0][0].text -eq 'A') 'R2-03 line1 is A'
+Assert-True ($lrR23.lines[1].Count -eq 1 -and $lrR23.lines[1][0].text -eq 'B') 'R2-03 line2 is B'
+Assert-True ($lrR23.selected_break_indices.Count -eq 1 -and $lrR23.selected_break_indices[0] -eq 0) 'R2-03 break after run A'
+Assert-True ($lrR23.selected_break_policies[0] -eq 'prefer') 'R2-03 selected prefer boundary'
+
+# R2-04 single line already within target → do not force prefer split
+$synthR24 = @(
+    [pscustomobject]@{ text = 'A'; semantic_role = 'p'; emphasis_level = 'normal'; break_after = 'prefer'; width_px = 40 }
+    [pscustomobject]@{ text = 'B'; semantic_role = 'p'; emphasis_level = 'normal'; break_after = 'forbid'; width_px = 30 }
+)
+$lrR24 = Resolve-SubtitleLineLayout -ResolvedRuns $synthR24 -StyleTargetPx 100 -StyleCeilingPx 120 -EffectiveCeilingPx 120 -MaxLines 2 -FrameWidthPx 100 -SafeAreaWidthPx 100
+Assert-True ($lrR24.lines.Count -eq 1) 'R2-04 keeps single line within target'
+Assert-True ($lrR24.selected_break_indices.Count -eq 0) 'R2-04 no forced break'
+
+# R2-05 prefer beats allow when target-tier equal
+$synthR25 = @(
+    [pscustomobject]@{ text = 'A'; semantic_role = 'p'; emphasis_level = 'normal'; break_after = 'prefer'; width_px = 25 }
+    [pscustomobject]@{ text = 'B'; semantic_role = 'p'; emphasis_level = 'normal'; break_after = 'allow'; width_px = 25 }
+    [pscustomobject]@{ text = 'C'; semantic_role = 'p'; emphasis_level = 'normal'; break_after = 'allow'; width_px = 25 }
+)
+$lrR25 = Resolve-SubtitleLineLayout -ResolvedRuns $synthR25 -StyleTargetPx 30 -StyleCeilingPx 100 -EffectiveCeilingPx 100 -MaxLines 2 -FrameWidthPx 100 -SafeAreaWidthPx 100
+Assert-True ($lrR25.lines[0][0].text -eq 'A') 'R2-05 prefer boundary chosen over allow'
+Assert-True ($lrR25.selected_break_policies[0] -eq 'prefer') 'R2-05 selected policy is prefer'
+
+# R2-06 deterministic structural output (preflight path)
+$detReq = New-LayoutRequest -Runs @(
+    (New-Run -Text '涨了' -BreakAfter 'prefer'),
+    (New-Run -Text '40%' -Role 'key_number' -Emphasis 'strong' -BreakAfter 'forbid')
+)
+$detA = Invoke-SubtitleLayoutPreflight -Request $detReq
+$detB = Invoke-SubtitleLayoutPreflight -Request $detReq
+Assert-True (($detA.cue_results[0] | ConvertTo-Json -Depth 12 -Compress) -eq ($detB.cue_results[0] | ConvertTo-Json -Depth 12 -Compress)) 'R2-06 deterministic preflight cue structure'
+
+# R2-07 unsupported contract font style
+$badFontStyle = $false
+try {
+    $rFs = New-LayoutRequest -Runs @( (New-Run -Text 'x' -BreakAfter 'forbid') )
+    $rFs.typography.emphasis_style_mapping.normal.font_style = 'Heavy'
+    Invoke-SubtitleLayoutPreflight -Request $rFs | Out-Null
+}
+catch { if ($_.Exception.Message -match 'FONT_STYLE_UNSUPPORTED') { $badFontStyle = $true } }
+Assert-True $badFontStyle 'R2-07 unsupported contract font style fail closed'
+
+# R2-07b canonical style unavailable on resolved FontFamily
+Add-Type -AssemblyName System.Drawing
+$singleStyleFont = $null
+foreach ($ff in [System.Drawing.FontFamily]::Families) {
+    if ($ff.IsStyleAvailable([System.Drawing.FontStyle]::Regular) -and -not $ff.IsStyleAvailable([System.Drawing.FontStyle]::Bold)) {
+        $singleStyleFont = $ff.Name
+        break
+    }
+}
+if ($singleStyleFont) {
+    $badFontAvail = $false
+    try {
+        $rFa = New-LayoutRequest -Runs @( (New-Run -Text 'x' -BreakAfter 'forbid') ) -FontFamily $singleStyleFont
+        Invoke-SubtitleLayoutPreflight -Request $rFa | Out-Null
+    }
+    catch { if ($_.Exception.Message -match 'FONT_STYLE_UNAVAILABLE') { $badFontAvail = $true } }
+    Assert-True $badFontAvail 'R2-07b unavailable font style on family fail closed'
+}
+else {
+    Write-Host '[SKIP] R2-07b no Regular-only font family on host' -ForegroundColor Yellow
+    $script:Pass++
+}
+
+# R2-09 capability status unchanged
+Assert-True ($vocab -match 'subtitle.style.keyword_emphasis:[\s\S]{0,120}status: UNKNOWN') 'R2-09 keyword emphasis still UNKNOWN'
+Assert-True ($vocab -match 'subtitle.layout.pixel_width:[\s\S]{0,120}status: AVAILABLE_UNVERIFIED') 'R2-09 pixel_width still AVAILABLE_UNVERIFIED'
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })
