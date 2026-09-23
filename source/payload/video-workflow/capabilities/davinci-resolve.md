@@ -343,7 +343,7 @@ Filename alone is **not** semantic evidence.
 
 | Route | Status | Evidence / Rule |
 |-------|--------|-----------------|
-| `textplus_styledtextcls_import_comp` | **VERIFIED** | Materialized styled runs → `generate-textplus-cls-setting.py` → canonical `.setting` → `timeline_item_fusion.import_comp` (08E-B B10–B12, save/reload) |
+| `textplus_styledtextcls_import_comp` | **VERIFIED** | Materialized `lines[].runs` only → `generate-textplus-cls-setting.py` (`generate_setting` executable authority) → `.setting` → `import_comp` (08E-B B10–B12). `textplus-cls-canonical.setting` = golden topology fixture, not runtime input. Font profile requires exact validated `base_font_size_px`. |
 | `fusion_comp.set_input(CharacterLevelStyling)` | **KNOWN_NON_WORKING_ROUTE** | API success but empty read-back, no visual SIZE change (Resolve 21.1.0.14 / MCP 4.8.13). **DO NOT SELECT IN PRODUCTION.** |
 | `cls_color` / `cls_weight` | **NOT_VERIFIED** | Generator fail-closed (`CLS_COLOR_NOT_VERIFIED`, `CLS_WEIGHT_NOT_VERIFIED`) |
 

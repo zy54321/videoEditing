@@ -136,7 +136,7 @@ Base style authority: `emphasis_style_mapping.normal.font_style` only (no `typog
 | Logical ID | Status | Notes |
 |------------|--------|-------|
 | `subtitle.layout.pixel_width` | AVAILABLE_UNVERIFIED | Deterministic preflight foundation exists; Resolve renderer parity not validated |
-| `subtitle.style.keyword_emphasis` | VERIFIED | Static inline SIZE via Text+ StyledTextCLS + generated `.setting` + `import_comp` (08E-B); color/weight not verified |
+| `subtitle.style.keyword_emphasis` | VERIFIED | Static inline SIZE only; validated font profile + exact `base_font_size_px`; materialized runs → generator (executable authority) → `import_comp`; golden `textplus-cls-canonical.setting` is topology reference only |
 | `subtitle.segment.semantic` | VERIFIED | Does NOT guarantee pixel width |
 
 ---

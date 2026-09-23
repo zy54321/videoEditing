@@ -129,12 +129,14 @@ L2 semantic emphasis → L1 styled runs → layout preflight → textplus-layout
 → materialized cue lines[].runs → generate-textplus-cls-setting.py → import_comp
 ```
 
-| Artifact | Path |
+| Artifact | Role |
 |----------|------|
-| Generator | `video-workflow/tools/generate-textplus-cls-setting.py` |
-| Library | `video-workflow/tools/lib/textplus_cls_setting.py` |
-| Canonical graph | `video-workflow/runtime/textplus-cls-canonical.setting` |
-| Font base size | `video-workflow/runtime/textplus-font-profiles.yaml` |
+| Generator CLI | `video-workflow/tools/generate-textplus-cls-setting.py` — **materialized_cue only** |
+| Executable graph authority | `textplus_cls_setting.generate_setting()` |
+| Golden topology fixture | `video-workflow/runtime/textplus-cls-canonical.setting` — reference only, not read at runtime |
+| Font profiles | `video-workflow/runtime/textplus-font-profiles.yaml` — exact `font_family` + `base_font_size_px` match |
+
+Production CLI rejects flat legacy requests (`MATERIALIZED_CUE_REQUIRED`). `generate_from_legacy_test_request` is TEST_ONLY.
 
 CLS character indices use **final materialized `styled_text`** (Python Unicode codepoints), recomputed after newline/split.
 

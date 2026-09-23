@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 """Production Text+ StyledTextCLS .setting generator (v1: static inline SIZE emphasis only).
 
-Canonical runtime route:
-  materialized styled runs → CLS spans → .setting → timeline_item_fusion.import_comp
+Executable graph authority:
+  textplus_cls_setting.generate_setting() in this module.
+
+Golden reference fixture (structural topology only — NOT a runtime dependency):
+  video-workflow/runtime/textplus-cls-canonical.setting
+
+Production request authority:
+  materialized_cue.lines[].runs + typography → CLS spans → .setting → import_comp
+
+TEST_ONLY / VALIDATION_ONLY:
+  generate_from_legacy_test_request() — B10–B12 historical replay; not for Production CLI.
 
 NOT production-safe:
   fusion_comp.set_input(CharacterLevelStyling)  # KNOWN_NON_WORKING_ROUTE
@@ -20,6 +29,18 @@ PARAM_SIZE = 102
 
 CANONICAL_GRAPH = (
     "CharacterLevelStyling1 (StyledTextCLS) → Template (TextPlus) → MediaOut1"
+)
+EXECUTABLE_GRAPH_AUTHORITY = "textplus_cls_setting.generate_setting"
+GOLDEN_GRAPH_FIXTURE = "video-workflow/runtime/textplus-cls-canonical.setting"
+GRAPH_TOPOLOGY_MARKERS = (
+    "CharacterLevelStyling1 = StyledTextCLS",
+    "Template = TextPlus",
+    "MediaOut1 = Saver",
+    'SourceOp = "CharacterLevelStyling1"',
+    'Source = "StyledText"',
+    'SourceOp = "Template"',
+    'Source = "Output"',
+    'TEMPLATE_ID = "Text+"',
 )
 KNOWN_NON_WORKING_ROUTE = "fusion_comp.set_input(CharacterLevelStyling)"
 
@@ -92,27 +113,59 @@ def load_font_profiles(path: Path) -> dict[str, Any]:
     return data
 
 
+def _require_base_font_size_px(typography: dict[str, Any]) -> int:
+    raw = typography.get("base_font_size_px")
+    if raw is None:
+        raise ClsError("BASE_FONT_SIZE_MISSING", "typography.base_font_size_px is required")
+    try:
+        return int(raw)
+    except (TypeError, ValueError):
+        raise ClsError(
+            "BASE_FONT_SIZE_INVALID",
+            f"typography.base_font_size_px must be an integer, got {raw!r}",
+        )
+
+
 def resolve_font_profile(
     profiles_doc: dict[str, Any],
     typography: dict[str, Any],
 ) -> dict[str, Any]:
+    """Match font family AND exact validated l1_base_font_size_px — no scaling or interpolation."""
+    base_px = _require_base_font_size_px(typography)
     candidates = [
         typography.get("font_family"),
         typography.get("fallback_font_family"),
     ]
     profiles = profiles_doc.get("profiles", {})
+    family_match: dict[str, Any] | None = None
+    family_key: str | None = None
     for name, profile in profiles.items():
         for cand in candidates:
             if not cand:
                 continue
             if profile.get("l1_font_family") == cand or profile.get("resolve_font_family") == cand:
-                out = dict(profile)
-                out["profile_key"] = name
-                return out
-    raise ClsError(
-        "FONT_PROFILE_NOT_FOUND",
-        f"no Text+ font profile for typography.font_family={typography.get('font_family')!r}",
-    )
+                family_match = profile
+                family_key = name
+                break
+        if family_match is not None:
+            break
+    if family_match is None:
+        raise ClsError(
+            "FONT_PROFILE_NOT_FOUND",
+            f"no Text+ font profile for typography.font_family={typography.get('font_family')!r}",
+        )
+    validated_px = int(family_match.get("l1_base_font_size_px", -1))
+    if base_px != validated_px:
+        raise ClsError(
+            "TEXTPLUS_FONT_SIZE_PROFILE_NOT_VALIDATED",
+            (
+                f"typography.base_font_size_px={base_px} is not validated for "
+                f"{typography.get('font_family')!r} (validated: {validated_px}px only)"
+            ),
+        )
+    out = dict(family_match)
+    out["profile_key"] = family_key
+    return out
 
 
 def build_styled_text_from_lines(lines: list[dict[str, Any]]) -> str:
@@ -206,6 +259,13 @@ def format_array_entries(spans: list[EmphasisSpan]) -> list[str]:
     ]
 
 
+def assert_graph_topology(setting_text: str) -> None:
+    """Verify generator output matches golden fixture graph topology (not byte-equal)."""
+    for marker in GRAPH_TOPOLOGY_MARKERS:
+        if marker not in setting_text:
+            raise ClsError("GRAPH_TOPOLOGY_MISMATCH", f"missing topology marker: {marker}")
+
+
 def generate_setting(
     text: str,
     font_family: str,
@@ -222,7 +282,7 @@ def generate_setting(
     escaped_style = escape_fusion_string(font_style)
     array_block = ",\n".join(format_array_entries(spans))
 
-    return f"""Composition {{
+    content = f"""Composition {{
 \tCurrentTime = 0,
 \tRenderRange = {{ 0, {global_out} }},
 \tGlobalRange = {{ 0, {global_out} }},
@@ -279,6 +339,8 @@ def generate_setting(
 \tFrames = {{
 \t}},
 }}"""
+    assert_graph_topology(content)
+    return content
 
 
 def generate_from_materialized_request(
@@ -314,7 +376,10 @@ def generate_from_materialized_request(
 
 
 def generate_from_legacy_test_request(request: dict[str, Any]) -> str:
-    """Flat request — tests only; production uses materialized_cue authority."""
+    """TEST_ONLY / VALIDATION_ONLY — flat text + manual spans for B10–B12 replay.
+
+    Production CLI must NOT call this. Use generate_from_materialized_request only.
+    """
     reject_unverified_cls_inputs(request)
     text = str(request["text"])
     typography = request.get("typography") or {}
@@ -349,8 +414,12 @@ def generate_from_legacy_test_request(request: dict[str, Any]) -> str:
     )
 
 
-def generate_from_request_file(request_path: Path, font_profiles_path: Path) -> str:
+def generate_from_production_request_file(request_path: Path, font_profiles_path: Path) -> str:
+    """Production CLI entry — materialized_cue authority only."""
     request = json.loads(request_path.read_text(encoding="utf-8"))
-    if request.get("materialized_cue"):
-        return generate_from_materialized_request(request, font_profiles_path)
-    return generate_from_legacy_test_request(request)
+    if not request.get("materialized_cue"):
+        raise ClsError(
+            "MATERIALIZED_CUE_REQUIRED",
+            "production route requires materialized_cue; legacy flat requests are TEST_ONLY",
+        )
+    return generate_from_materialized_request(request, font_profiles_path)
