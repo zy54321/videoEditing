@@ -182,10 +182,29 @@ validation/08e-b-exp-a/
 
 ---
 
+## Retry after Resolve restart (2026-09-23)
+
+| Step | Result |
+|------|--------|
+| Load `Astra-08E-B-Subtitle-Validation` | ✓ |
+| `render get_format_and_codec` on load | **png / RGB16** (persisted in project DB) |
+| `render set_format_and_codec png RGB8` | ✓ success |
+| `timeline_frame` on `A1-EXP-A` / `08E-B-EXP-A-v2` Text+ | Returns image but **pixel analysis = uniform black** |
+| `gallery_stills grab_and_export` @ Text+ playhead | 1080×1920 PNG, **max_lum = 0** |
+| `measure_subtitle_width.py` on BR1 `A00-drt-burnin.png` | ✓ still **969px** (tool OK) |
+| A00 smoke | **STILL BLOCKED** |
+
+**Conclusion:** Restart clears process state but **not** project Deliver format (RGB16). RGB8 can be reset via MCP, yet **Text+ rendered-frame capture still produces empty/black frames** on this host — separate from codec poison.
+
+Owner GUI check needed: on `A1-EXP-A` @ `01:00:02:12`, is white `HELLO TEST` visible in the Resolve viewer?
+
+---
+
 ## Recommended next entry
 
-1. **Restart Resolve** (or reset Deliver format) to clear RGB16 poison.
-2. Re-run A00 smoke only:
+1. **Owner GUI verify** Text+ visible on `A1-EXP-A` at playhead (if not, Fusion comp / clip issue).
+2. On each A1 session: `render set_format_and_codec png RGB8` (see `a1-resolve-preflight.ps1`).
+3. Re-run A00 smoke only:
    - `A1-EXP-A` + `insert_fusion_title`
    - `timeline_markers.set_current_timecode` → `gallery_stills` **or** recovered `timeline_frame`
    - Verify **pixel** content matches `StyledText` (not just API readback).
