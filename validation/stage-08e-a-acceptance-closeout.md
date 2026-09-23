@@ -4,71 +4,91 @@
 
 | Field | Value |
 |-------|-------|
-| Stage | **08E-A — Subtitle Typography Contract + Deterministic Layout Foundation** |
+| Stage | **08E-A — Deterministic Subtitle & Typography Pipeline Foundation** |
 | Parent | Stage 08E — Deterministic Subtitle & Typography Pipeline Closure |
 | Owner decision | **ACCEPTED** |
 | Acceptance date | **2026-09-23** |
-| Acceptance baseline HEAD | `63b441f` |
+| `ACCEPTED_IMPLEMENTATION_HEAD` | **`63b441f`** |
+| Closeout receipt HEAD | *(this document commit)* |
 | VERSION | `0.1.1-dev` |
 | Production actions executed | **NONE** |
 | N02 status | **UNCHANGED** |
-| Stage 08D Acceptance | **PRESERVED** (`35bd046`) |
+| Stage 08D Acceptance | **PRESERVED** (`35bd046`) — not reopened |
+| Stage 08D-R1 | **CLOSED** — not reopened |
 
 ---
 
-## Construction Chain
+## Formal Sign-Off
 
-| Sub-stage | HEAD | Summary |
-|-----------|------|---------|
-| 08E-A (initial) | `1c6a544` | Contract, preflight tool, layout engine, docs/09 |
-| 08E-A-R1 | `b443a65` | Frame-width authority, search-based line layout, fail-closed validation, split evidence |
-| 08E-A-R2 | `63b441f` | Target-band / prefer-boundary candidate ranking repair |
+```
+STAGE_08E_A = ACCEPTED
+STAGE_08E_A_R1 = CLOSED
+STAGE_08E_A_R2 = CLOSED
+STAGE_08E_A_FORMAL_REVIEW = PASS
+STAGE_08E_A_COMPLETION_ELIGIBILITY = ELIGIBLE
+OWNER_ACCEPTANCE = CONFIRMED
+FORMAL_REVIEW = PASS
+ACCEPTED_IMPLEMENTATION_HEAD = 63b441f
+STAGE_08E_A_CLOSEOUT = COMPLETE
+```
+
+**Not declared:** `STAGE_08E = ACCEPTED` (parent stage includes 08E-B).
 
 ---
 
-## Established Artifacts
+## Prior Closeout Chain (preserved, not overwritten)
 
-| Flag | Status |
-|------|--------|
-| `SUBTITLE_LAYOUT_REQUEST_CONTRACT` | **ESTABLISHED** |
-| `SUBTITLE_LAYOUT_RESULT_CONTRACT` | **ESTABLISHED** |
-| `SUBTITLE_LAYOUT_REFERENCE` | **ESTABLISHED** |
-| `SUBTITLE_LAYOUT_PREFLIGHT_TOOL` | **ESTABLISHED** |
-| `SUBTITLE_LAYOUT_ENGINE` | **ESTABLISHED** |
-| `BLUEPRINT_SUBTITLE_TYPOGRAPHY_INTENT` | **ESTABLISHED** |
-| `DOCS_09_SUBTITLE_PIPELINE` | **ESTABLISHED** |
-| `SUBTITLE_LAYOUT_CONTRACT_TESTS` | **ESTABLISHED** (63 assertions at acceptance) |
-| `BUILD_STAGE_NO_PRODUCTION` | **PRESERVED** |
+| Document | HEAD | Role |
+|----------|------|------|
+| `validation/stage-08e-a-build-closeout.md` | `1c6a544` | Initial 08E-A build |
+| `validation/stage-08e-a-r1-repair-closeout.md` | `b443a65` | Layout correctness repair |
+| `validation/stage-08e-a-r2-repair-closeout.md` | `63b441f` | Target-band / prefer ranking repair |
+| `validation/stage-08e-a-acceptance-closeout.md` | *(this)* | **Owner formal acceptance** |
+
+---
+
+## What 08E-A Acceptance Covers
+
+08E-A acceptance is for the **build foundation**, not Runtime renderer parity:
+
+| In scope (ACCEPTED) | Out of scope (08E-B) |
+|---------------------|----------------------|
+| Semantic typography contract | Resolve renderer parity |
+| Styled runs model | Actual inline keyword-emphasis render route |
+| Deterministic measurement / preflight | Burn-in pixel truth vs preflight |
+| Semantic line layout resolver | Capability status upgrades without evidence |
+| Target / ceiling / safe-area handling | N02 Production final artifact |
+| Split evidence & fail-closed contract | |
+| QA architecture (preflight ≠ artifact) | |
 
 ---
 
 ## Owner-Confirmed Properties
 
-- **Frame width authority:** Style target / hard ceiling ratios use **frame width** as denominator; `effective_ceiling_px = min(style_hard_ceiling_px, safe_area_width_px)`.
-- **Line layout:** `Resolve-SubtitleLineLayout` searches legal break subsets (not greedy-only); deterministic scoring with target-band tiers.
-- **Prefer semantics:** `prefer` is a semantic preference — not a mandatory break; single line within target is not forced to split.
-- **Fail-closed validation:** Unknown `emphasis_level`, `break_after`, unsupported `font_style` → explicit errors; no silent downgrade.
-- **Typography authority:** `emphasis_style_mapping.normal.font_style` is the sole base style authority (no duplicate `typography.font_style`).
-- **Split evidence:** `split_candidates[]` (prefer/allow only); `NO_LEGAL_INTERNAL_BREAK` for atomic oversized runs.
-- **Measurement honesty:** System.Drawing per-run measurement; conservative bound documented; preflight PASS ≠ Resolve renderer parity.
-- **Observational Style frozen:** 76–78% target / 80% ceiling frame-width authority **unchanged**.
-- **L2 / L3 / L1 ownership boundary** preserved per docs/09.
+- **Frame width authority:** Style ratios use frame width; `effective_ceiling_px = min(style_hard_ceiling_px, safe_area_width_px)`.
+- **Line layout:** `Resolve-SubtitleLineLayout` — legal break-subset search; target-band tier ranking (R2).
+- **Prefer semantics:** `prefer` is preference, not mandatory break; single line within target is not forced to split.
+- **Fail-closed validation:** Unknown enums → explicit errors; no silent downgrade.
+- **Typography authority:** `emphasis_style_mapping.normal.font_style` only (no duplicate `typography.font_style`).
+- **Split evidence:** `split_candidates[]`, `NO_LEGAL_INTERNAL_BREAK` for atomic oversized runs.
+- **Measurement honesty:** System.Drawing per-run; conservative bound documented.
+- **Observational Style frozen:** 76–78% target / 80% ceiling frame-width authority unchanged.
 
 ---
 
-## Capability Truth at Acceptance (unchanged)
+## Capability Truth (unchanged by acceptance)
 
-| Logical ID | Status | Note |
-|------------|--------|------|
-| `subtitle.layout.pixel_width` | AVAILABLE_UNVERIFIED | Contract + preflight exist; Resolve parity **not** validated |
-| `subtitle.style.keyword_emphasis` | UNKNOWN | Styled-run contract exists; render route **not** validated |
-| `subtitle.segment.semantic` | VERIFIED | No pixel-width guarantee |
+| Logical ID | Status | Acceptance note |
+|------------|--------|-----------------|
+| `subtitle.layout.pixel_width` | **AVAILABLE_UNVERIFIED** | Contract + preflight exist; Resolve parity **not** validated |
+| `subtitle.style.keyword_emphasis` | **UNKNOWN** | Styled-run contract exists; render route **not** validated |
+| `subtitle.segment.semantic` | **VERIFIED** | Does not guarantee pixel width |
 
-Acceptance does **not** upgrade any capability state.
+**Acceptance does not upgrade** `subtitle.layout.pixel_width` or `subtitle.style.keyword_emphasis`.
 
 ---
 
-## Regression Snapshot (acceptance baseline `63b441f`)
+## Regression Evidence (`63b441f`)
 
 | Script | Result |
 |--------|--------|
@@ -84,38 +104,32 @@ Acceptance does **not** upgrade any capability state.
 
 ---
 
-## Explicit Non-Actions (Acceptance)
+## Remaining Gaps
 
-This acceptance does **not**:
-
-- Enter Production or N02 execution
-- Execute Resolve / MCP writes or Render
-- Start **08E-B** Runtime Capability Validation
-- Publish v0.1.1 Release
-- Declare `STAGE_08E = ACCEPTED` (parent stage includes 08E-B)
-- Upgrade `subtitle.layout.pixel_width` or `subtitle.style.keyword_emphasis` capability status
-
-**08E-B remains Owner decision only.**
+| Gap | Next legal stage |
+|-----|------------------|
+| Resolve / Fusion / Text+ burn-in width parity vs preflight | **08E-B** |
+| `subtitle.style.keyword_emphasis` actual render route | **08E-B** |
+| Route truth (planned vs executed subtitle path) | **08E-B** |
+| Possible `subtitle.layout.pixel_width` → VERIFIED | **08E-B only after evidence** |
 
 ---
 
-## Legal Next Actions (Owner Authority)
+## Explicit Non-Actions (This Acceptance)
 
-| Action | Gate / prerequisite |
-|--------|---------------------|
-| **08E-B Runtime Validation** | Owner authorizes spike for Resolve burn-in parity, styled render route |
-| **N02 V2 Production run** | Owner authorizes `【制作视频】` in bound workspace |
-| **v0.1.1 Release build** | Owner authorizes release stage |
-| **No action** | Valid — Stage 08E-A closed at `63b441f` until Owner directs |
+- No Production / N02 execution
+- No Resolve / MCP writes during 08E-A acceptance closeout
+- No Render
+- No capability state upgrades
+- No v0.1.1 Release
+- No reopening of 08D / 08D-R1 / closed 08E-A findings
 
 ---
 
-## Sign-Off
+## Next Legal Stage
 
-```
-STAGE_08E_A = ACCEPTED
-STAGE_08E_A_CLOSEOUT = COMPLETE
-OWNER_ACCEPTANCE_08E_A = RECORDED
-```
+**Stage 08E-B — Runtime Typography Capability Validation** (Owner-authorized after this acceptance).
 
-*This receipt records Owner acceptance of the **08E-A build foundation** (contract + deterministic preflight). It does not constitute Resolve renderer parity acceptance, N02 Final Acceptance, or `STAGE_08E` parent-stage acceptance.*
+---
+
+*This receipt records Owner acceptance of the 08E-A **build foundation**. It does not constitute Resolve renderer parity acceptance, N02 Final Acceptance, or `STAGE_08E` parent-stage acceptance.*
