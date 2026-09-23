@@ -1,0 +1,26 @@
+{
+  "case_id": "B11",
+  "text": "AI 让效率提升了 35%",
+  "typography": {
+    "font_family": "Microsoft YaHei UI",
+    "font_style": "Regular",
+    "base_size": 0.073
+  },
+  "emphasis_spans": [
+    {
+      "substring": "AI",
+      "semantic_role": "medium"
+    },
+    {
+      "substring": "35%",
+      "semantic_role": "strong"
+    }
+  ],
+  "unicode_index_truth": {
+    "algorithm": "python_unicode_codepoint",
+    "expected_spans": [
+      { "substring": "AI", "start": 0, "end": 1 },
+      { "substring": "35%", "start": 10, "end": 12 }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "experiment": "B — Inline Keyword Emphasis Runtime Validation",
+  "date": "2026-09-23",
+  "experiment_b_outcome": "INLINE_KEYWORD_EMPHASIS_PASS",
+  "br1_reference": "evidence/br1-outcome.json",
+  "resolve_native_route_gui": {
+    "route_id": "R1_CLS_size_emphasis_gui",
+    "verified": true,
+    "timeline": "B00-KEYWORD-EMPHASIS-SMOKE",
+    "evidence_setting": "evidence/B00-gui-cls-working.setting"
+  },
+  "production_backend_v1": {
+    "route_id": "R2_dynamic_setting_import_comp",
+    "steps": [
+      "helpers/generate_cls_setting.py (JSON request → .setting)",
+      "timeline_item_fusion.import_comp(track_type, track_index, item_index, path)"
+    ],
+    "verified_cases": ["B10", "B11", "B12"],
+    "status": "PASS"
+  },
+  "mcp_automation_routes": {
+    "set_input_character_level_styling": {
+      "status": "KNOWN_NON_WORKING_ROUTE",
+      "do_not_use_in_production": true,
+      "mcp_version": "4.8.13",
+      "resolve_version": "21.1.0.14"
+    },
+    "import_comp_from_generated_setting": {
+      "status": "PASS",
+      "tool": "timeline_item_fusion.import_comp"
+    }
+  },
+  "unicode_index_semantics": "python_unicode_codepoint",
+  "capability_recommendation": {
+    "subtitle.style.keyword_emphasis": "VERIFIED",
+    "scope": "static inline size emphasis; Text+ StyledTextCLS template backend",
+    "not_verified": ["color", "weight", "animation", "kinetic typography"]
+  },
+  "research_backlog": "research/backlog/mcp-cls-automation-research.md",
+  "n02_touched": false,
+  "production_executed": false
+}

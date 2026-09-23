@@ -1,0 +1,93 @@
+Composition {
+	CurrentTime = 0,
+	RenderRange = { 0, 119 },
+	GlobalRange = { 0, 119 },
+	CurrentID = 4,
+	HiQ = true,
+	PlaybackUpdateMode = 0,
+	StereoMode = false,
+	Version = "DaVinci Resolve Studio 21.1.0.0014",
+	SavedOutputs = 0,
+	HeldTools = 0,
+	DisabledTools = 0,
+	LockedTools = 0,
+	AudioOffset = 0,
+	Resumable = true,
+	OutputClips = {
+	},
+	CustomData = { TEMPLATE_ID = "Text+" },
+	Tools = {
+		MediaOut1 = Saver {
+			Inputs = {
+				Index = Input { Value = "0", },
+				Input = Input {
+					SourceOp = "Template",
+					Source = "Output",
+				}
+			},
+		},
+		Template = TextPlus {
+			Inputs = {
+				GlobalOut = Input { Value = 119, },
+				Width = Input { Value = 1080, },
+				Height = Input { Value = 1920, },
+				UseFrameFormatSettings = Input { Value = 1, },
+				StyledText = Input {
+					SourceOp = "CharacterLevelStyling1",
+					Source = "StyledText",
+				},
+				Font = Input { Value = "Microsoft YaHei UI", },
+				Style = Input { Value = "Regular", },
+				Size = Input { Value = 0.073, },
+				VerticalJustificationCenter = Input { Value = 1, },
+				VerticalJustificationNew = Input { Value = 3, },
+				HorizontalJustificationCenter = Input { Value = 1, },
+				HorizontalJustificationNew = Input { Value = 3, }
+			},
+			Version = 1
+		},
+		CharacterLevelStyling1 = StyledTextCLS {
+			CtrlWZoom = false,
+			Inputs = {
+				TransformRotation = Input { Value = 1, },
+				Softness = Input { Value = 1, },
+				Text = Input { Value = "价格上涨了 40%", },
+				CharacterLevelStyling = Input {
+					Value = StyledText {
+						Array = {
+							{ 102, 6, 8, Value = 0.09125 }
+						},
+						Value = ""
+					},
+				}
+			},
+		}
+	},
+	Frames = {
+	},
+	Prefs = {
+		Comp = {
+			Interactive = {
+				Proxy = {
+					Scale = 1,
+				},
+			},
+			Paths = {
+				Map = {
+					["ResolveCaches:"] = "E:\\03_Media\\02_Video\\Davinci\\Astra\\CacheClip\\04eda99c-a33a-45dd-b91d-0bb4ee2fbf8d\\a5968272-c302-4c3b-ad5e-6482b9af5116\\b012b03e-d03d-467d-ab9d-e7071792fd78\\Fusion",
+				},
+			},
+			FrameFormat = {
+				Width = 1080,
+				Height = 1920,
+				Rate = 24,
+				DepthFull = 3,
+				DepthPreview = 3,
+				DepthInteractive = 3,
+			},
+			Unsorted = {
+				GlobalEnd = 119
+			},
+		}
+	},
+}

@@ -1,0 +1,20 @@
+{
+  "case_id": "B10",
+  "text": "价格上涨了 40%",
+  "typography": {
+    "font_family": "Microsoft YaHei UI",
+    "font_style": "Regular",
+    "base_size": 0.073
+  },
+  "emphasis_spans": [
+    {
+      "substring": "40%",
+      "semantic_role": "strong"
+    }
+  ],
+  "unicode_index_truth": {
+    "algorithm": "python_unicode_codepoint",
+    "expected_span": { "substring": "40%", "start": 6, "end": 8 },
+    "verified_by": "B00_gui_gold_standard"
+  }
+}

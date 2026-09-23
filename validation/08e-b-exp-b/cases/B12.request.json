@@ -1,0 +1,26 @@
+{
+  "case_id": "B12",
+  "text": "今年增长 18%，成本下降 7%",
+  "typography": {
+    "font_family": "Microsoft YaHei UI",
+    "font_style": "Regular",
+    "base_size": 0.073
+  },
+  "emphasis_spans": [
+    {
+      "substring": "18%",
+      "semantic_role": "strong"
+    },
+    {
+      "substring": "7%",
+      "semantic_role": "strong"
+    }
+  ],
+  "unicode_index_truth": {
+    "algorithm": "python_unicode_codepoint",
+    "expected_spans": [
+      { "substring": "18%", "start": 5, "end": 7 },
+      { "substring": "7%", "start": 14, "end": 15 }
+    ]
+  }
+}

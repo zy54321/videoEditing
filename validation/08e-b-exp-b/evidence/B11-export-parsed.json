@@ -1,0 +1,18 @@
+{
+  "setting": "validation\\08e-b-exp-b\\evidence\\B11-export.setting",
+  "text": "AI 让效率提升了 35%",
+  "cls_array": [
+    {
+      "parameter": 102,
+      "first": 0,
+      "last": 1,
+      "value": 0.0803
+    },
+    {
+      "parameter": 102,
+      "first": 10,
+      "last": 12,
+      "value": 0.09125
+    }
+  ]
+}

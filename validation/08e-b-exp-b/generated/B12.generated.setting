@@ -1,0 +1,58 @@
+Composition {
+	CurrentTime = 0,
+	RenderRange = { 0, 119 },
+	GlobalRange = { 0, 119 },
+	HiQ = true,
+	PlaybackUpdateMode = 0,
+	StereoMode = false,
+	CustomData = { TEMPLATE_ID = "Text+" },
+	Tools = {
+		CharacterLevelStyling1 = StyledTextCLS {
+			Inputs = {
+				TransformRotation = Input { Value = 1, },
+				Softness = Input { Value = 1, },
+				Text = Input { Value = "今年增长 18%，成本下降 7%", },
+				CharacterLevelStyling = Input {
+					Value = StyledText {
+						Array = {
+						{ 102, 5, 7, Value = 0.09125 },
+						{ 102, 14, 15, Value = 0.09125 }
+						},
+						Value = ""
+					},
+				}
+			}
+		},
+		Template = TextPlus {
+			Inputs = {
+				GlobalOut = Input { Value = 119, },
+				Width = Input { Value = 1080, },
+				Height = Input { Value = 1920, },
+				UseFrameFormatSettings = Input { Value = 1, },
+				StyledText = Input {
+					SourceOp = "CharacterLevelStyling1",
+					Source = "StyledText",
+				},
+				Font = Input { Value = "Microsoft YaHei UI", },
+				Style = Input { Value = "Regular", },
+				Size = Input { Value = 0.073, },
+				VerticalJustificationCenter = Input { Value = 1, },
+				VerticalJustificationNew = Input { Value = 3, },
+				HorizontalJustificationCenter = Input { Value = 1, },
+				HorizontalJustificationNew = Input { Value = 3, }
+			},
+			Version = 1
+		},
+		MediaOut1 = Saver {
+			Inputs = {
+				Index = Input { Value = "0", },
+				Input = Input {
+					SourceOp = "Template",
+					Source = "Output",
+				}
+			}
+		}
+	},
+	Frames = {
+	},
+}

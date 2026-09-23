@@ -1,0 +1,14 @@
+{
+  "image": "validation\\08e-b-exp-b\\renders\\B12-deliver00086580.png",
+  "image_width_px": 1080,
+  "image_height_px": 1920,
+  "measurable": true,
+  "bbox_left_px": 193,
+  "bbox_right_px": 884,
+  "bbox_top_px": 935,
+  "bbox_bottom_px": 989,
+  "actual_width_px": 692,
+  "actual_height_px": 55,
+  "actual_frame_ratio": 0.640741,
+  "lum_threshold": 180
+}
