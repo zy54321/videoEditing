@@ -138,8 +138,31 @@ STAGE_08E_B_EXP_A_CLOSEOUT = COMPLETE
 
 ---
 
+## BR1 rerun (blocker resolution)
+
+| Field | Value |
+|-------|-------|
+| Sub-stage | **BR1 — Runtime Measurement Blocker Resolution** |
+| Starting HEAD | `ed04506` |
+| Document | `validation/08e-b-exp-a/blocker-resolution.md` |
+
+**first_run = INCONCLUSIVE** (preserved above)
+
+**rerun_result = NOT_EXECUTED (A01–A10)**
+
+| Blocker | BR1 status |
+|---------|------------|
+| B1 Font Authority | **CLOSED** — GDI+ family alias fix; BR1-01 regression pass |
+| B2 Render / Measurement | **CLOSED (R3 burn-in Deliver)**; **Text+ Deliver still BLOCKED** |
+
+A01 L1 preflight now produces `max_line_width_px=196` (alias → `Microsoft YaHei UI`), but Text+ Deliver PNG remains `NO_VISIBLE_TEXT` — no paired parity data.
+
+`EXPERIMENT_A_CONCLUSION` remains **INCONCLUSIVE**.
+
+---
+
 ## Next entry (Owner)
 
-1. Install / enable L1 measurement fonts on validation host **or** authorize a Latin-only subset with matching Resolve font.
-2. Re-run Experiment A with a **proven** render→measure loop (frame capture export or verified burn-in).
-3. Only after full A01–A10 paired matrix: choose among `PARITY_SUPPORTED`, `CALIBRATION_REQUIRED`, or `PARITY_NOT_SUPPORTED`.
+1. Resolve **Text+ Deliver graph** on disposable timelines (Experiment A route), or re-scope renderer under test.
+2. Re-run A01–A10 only when the **same route** supports L1 prediction + Deliver `actual_width_px`.
+3. Only after full paired matrix: choose among `PARITY_SUPPORTED`, `CALIBRATION_REQUIRED`, or `PARITY_NOT_SUPPORTED`.

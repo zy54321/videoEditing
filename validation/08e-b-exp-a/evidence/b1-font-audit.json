@@ -1,0 +1,365 @@
+{
+  "fonts_dir": "C:\\Windows\\Fonts",
+  "font_files": [
+    {
+      "pattern": "*msyh*",
+      "file": "msyh.ttc",
+      "path": "C:\\Windows\\Fonts\\msyh.ttc"
+    },
+    {
+      "pattern": "*msyh*",
+      "file": "msyhbd.ttc",
+      "path": "C:\\Windows\\Fonts\\msyhbd.ttc"
+    },
+    {
+      "pattern": "*msyh*",
+      "file": "msyhl.ttc",
+      "path": "C:\\Windows\\Fonts\\msyhl.ttc"
+    },
+    {
+      "pattern": "*simsun*",
+      "file": "simsun.ttc",
+      "path": "C:\\Windows\\Fonts\\simsun.ttc"
+    },
+    {
+      "pattern": "*simsun*",
+      "file": "simsunb.ttf",
+      "path": "C:\\Windows\\Fonts\\simsunb.ttf"
+    },
+    {
+      "pattern": "*simsun*",
+      "file": "SimsunExtG.ttf",
+      "path": "C:\\Windows\\Fonts\\SimsunExtG.ttf"
+    },
+    {
+      "pattern": "*simhei*",
+      "file": "simhei.ttf",
+      "path": "C:\\Windows\\Fonts\\simhei.ttf"
+    },
+    {
+      "pattern": "*mingliu*",
+      "file": "mingliub.ttc",
+      "path": "C:\\Windows\\Fonts\\mingliub.ttc"
+    },
+    {
+      "pattern": "*arial*",
+      "file": "arial.ttf",
+      "path": "C:\\Windows\\Fonts\\arial.ttf"
+    },
+    {
+      "pattern": "*arial*",
+      "file": "arialbd.ttf",
+      "path": "C:\\Windows\\Fonts\\arialbd.ttf"
+    },
+    {
+      "pattern": "*arial*",
+      "file": "arialbi.ttf",
+      "path": "C:\\Windows\\Fonts\\arialbi.ttf"
+    },
+    {
+      "pattern": "*arial*",
+      "file": "ariali.ttf",
+      "path": "C:\\Windows\\Fonts\\ariali.ttf"
+    },
+    {
+      "pattern": "*arial*",
+      "file": "ARIALN.TTF",
+      "path": "C:\\Windows\\Fonts\\ARIALN.TTF"
+    },
+    {
+      "pattern": "*arial*",
+      "file": "ARIALNB.TTF",
+      "path": "C:\\Windows\\Fonts\\ARIALNB.TTF"
+    },
+    {
+      "pattern": "*arial*",
+      "file": "ARIALNBI.TTF",
+      "path": "C:\\Windows\\Fonts\\ARIALNBI.TTF"
+    },
+    {
+      "pattern": "*arial*",
+      "file": "ARIALNI.TTF",
+      "path": "C:\\Windows\\Fonts\\ARIALNI.TTF"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "SegoeIcons.ttf",
+      "path": "C:\\Windows\\Fonts\\SegoeIcons.ttf"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "segoepr.ttf",
+      "path": "C:\\Windows\\Fonts\\segoepr.ttf"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "segoeprb.ttf",
+      "path": "C:\\Windows\\Fonts\\segoeprb.ttf"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "segoesc.ttf",
+      "path": "C:\\Windows\\Fonts\\segoesc.ttf"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "segoescb.ttf",
+      "path": "C:\\Windows\\Fonts\\segoescb.ttf"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "segoeui.ttf",
+      "path": "C:\\Windows\\Fonts\\segoeui.ttf"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "segoeuib.ttf",
+      "path": "C:\\Windows\\Fonts\\segoeuib.ttf"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "segoeuii.ttf",
+      "path": "C:\\Windows\\Fonts\\segoeuii.ttf"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "segoeuil.ttf",
+      "path": "C:\\Windows\\Fonts\\segoeuil.ttf"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "segoeuisl.ttf",
+      "path": "C:\\Windows\\Fonts\\segoeuisl.ttf"
+    },
+    {
+      "pattern": "*segoe*",
+      "file": "segoeuiz.ttf",
+      "path": "C:\\Windows\\Fonts\\segoeuiz.ttf"
+    }
+  ],
+  "registry_entries": [
+    {
+      "display_name": "Arial (TrueType)",
+      "file": "arial.ttf"
+    },
+    {
+      "display_name": "Arial Black (TrueType)",
+      "file": "ariblk.ttf"
+    },
+    {
+      "display_name": "Arial Bold (TrueType)",
+      "file": "arialbd.ttf"
+    },
+    {
+      "display_name": "Arial Bold Italic (TrueType)",
+      "file": "arialbi.ttf"
+    },
+    {
+      "display_name": "Arial Italic (TrueType)",
+      "file": "ariali.ttf"
+    },
+    {
+      "display_name": "Microsoft YaHei & Microsoft YaHei UI (TrueType)",
+      "file": "msyh.ttc"
+    },
+    {
+      "display_name": "Microsoft YaHei Bold & Microsoft YaHei UI Bold (TrueType)",
+      "file": "msyhbd.ttc"
+    },
+    {
+      "display_name": "Microsoft YaHei Light & Microsoft YaHei UI Light (TrueType)",
+      "file": "msyhl.ttc"
+    },
+    {
+      "display_name": "MingLiU-ExtB & PMingLiU-ExtB & MingLiU_HKSCS-ExtB (TrueType)",
+      "file": "mingliub.ttc"
+    },
+    {
+      "display_name": "Segoe Fluent Icons (TrueType)",
+      "file": "SegoeIcons.ttf"
+    },
+    {
+      "display_name": "Segoe MDL2 Assets (TrueType)",
+      "file": "segmdl2.ttf"
+    },
+    {
+      "display_name": "Segoe Print (TrueType)",
+      "file": "segoepr.ttf"
+    },
+    {
+      "display_name": "Segoe Print Bold (TrueType)",
+      "file": "segoeprb.ttf"
+    },
+    {
+      "display_name": "Segoe Script (TrueType)",
+      "file": "segoesc.ttf"
+    },
+    {
+      "display_name": "Segoe Script Bold (TrueType)",
+      "file": "segoescb.ttf"
+    },
+    {
+      "display_name": "Segoe UI (TrueType)",
+      "file": "segoeui.ttf"
+    },
+    {
+      "display_name": "Segoe UI Black (TrueType)",
+      "file": "seguibl.ttf"
+    },
+    {
+      "display_name": "Segoe UI Black Italic (TrueType)",
+      "file": "seguibli.ttf"
+    },
+    {
+      "display_name": "Segoe UI Bold (TrueType)",
+      "file": "segoeuib.ttf"
+    },
+    {
+      "display_name": "Segoe UI Bold Italic (TrueType)",
+      "file": "segoeuiz.ttf"
+    },
+    {
+      "display_name": "Segoe UI Emoji (TrueType)",
+      "file": "seguiemj.ttf"
+    },
+    {
+      "display_name": "Segoe UI Historic (TrueType)",
+      "file": "seguihis.ttf"
+    },
+    {
+      "display_name": "Segoe UI Italic (TrueType)",
+      "file": "segoeuii.ttf"
+    },
+    {
+      "display_name": "Segoe UI Light (TrueType)",
+      "file": "segoeuil.ttf"
+    },
+    {
+      "display_name": "Segoe UI Light Italic (TrueType)",
+      "file": "seguili.ttf"
+    },
+    {
+      "display_name": "Segoe UI Semibold (TrueType)",
+      "file": "seguisb.ttf"
+    },
+    {
+      "display_name": "Segoe UI Semibold Italic (TrueType)",
+      "file": "seguisbi.ttf"
+    },
+    {
+      "display_name": "Segoe UI Semilight (TrueType)",
+      "file": "segoeuisl.ttf"
+    },
+    {
+      "display_name": "Segoe UI Semilight Italic (TrueType)",
+      "file": "seguisli.ttf"
+    },
+    {
+      "display_name": "Segoe UI Symbol (TrueType)",
+      "file": "seguisym.ttf"
+    },
+    {
+      "display_name": "Segoe UI Variable (TrueType)",
+      "file": "SegUIVar.ttf"
+    },
+    {
+      "display_name": "SimSun & NSimSun (TrueType)",
+      "file": "simsun.ttc"
+    },
+    {
+      "display_name": "SimSun-ExtB (TrueType)",
+      "file": "simsunb.ttf"
+    },
+    {
+      "display_name": "SimSun-ExtG (TrueType)",
+      "file": "SimsunExtG.ttf"
+    },
+    {
+      "display_name": "SimHei (TrueType)",
+      "file": "simhei.ttf"
+    },
+    {
+      "display_name": "Arial Narrow (TrueType)",
+      "file": "ARIALN.TTF"
+    },
+    {
+      "display_name": "Arial Narrow Bold (TrueType)",
+      "file": "ARIALNB.TTF"
+    },
+    {
+      "display_name": "Arial Narrow Bold Italic (TrueType)",
+      "file": "ARIALNBI.TTF"
+    },
+    {
+      "display_name": "Arial Narrow Italic (TrueType)",
+      "file": "ARIALNI.TTF"
+    }
+  ],
+  "system_drawing": {
+    "total_families": 197,
+    "candidates": [
+      {
+        "family": "Microsoft YaHei",
+        "enumerated": false,
+        "instantiate_regular": "SKIP"
+      },
+      {
+        "family": "Microsoft YaHei UI",
+        "enumerated": true,
+        "instantiate_regular": "OK"
+      },
+      {
+        "family": "SimSun",
+        "enumerated": false,
+        "instantiate_regular": "SKIP"
+      },
+      {
+        "family": "NSimSun",
+        "enumerated": false,
+        "instantiate_regular": "SKIP"
+      },
+      {
+        "family": "SimHei",
+        "enumerated": false,
+        "instantiate_regular": "SKIP"
+      },
+      {
+        "family": "Malgun Gothic",
+        "enumerated": true,
+        "instantiate_regular": "OK"
+      },
+      {
+        "family": "Arial",
+        "enumerated": true,
+        "instantiate_regular": "OK"
+      },
+      {
+        "family": "Segoe UI",
+        "enumerated": true,
+        "instantiate_regular": "OK"
+      },
+      {
+        "family": "Tahoma",
+        "enumerated": true,
+        "instantiate_regular": "OK"
+      },
+      {
+        "family": "Times New Roman",
+        "enumerated": true,
+        "instantiate_regular": "OK"
+      }
+    ]
+  },
+  "candidates": [
+    "Microsoft YaHei",
+    "Microsoft YaHei UI",
+    "SimSun",
+    "NSimSun",
+    "SimHei",
+    "Malgun Gothic",
+    "Arial",
+    "Segoe UI",
+    "Tahoma",
+    "Times New Roman"
+  ]
+}

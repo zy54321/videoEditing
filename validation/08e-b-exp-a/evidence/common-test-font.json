@@ -1,0 +1,57 @@
+{
+  "primary_common_font": {
+    "font_file": "C:\\Windows\\Fonts\\arial.ttf",
+    "display_name_registry": "Arial (TrueType)",
+    "font_family": "Arial",
+    "style": "Regular",
+    "system_drawing": {
+      "enumerated": true,
+      "instantiate_regular": "OK",
+      "l1_resolve": {
+        "requested": "Arial",
+        "resolved_family": "Arial",
+        "resolved_from": "primary"
+      }
+    },
+    "resolve_textplus": {
+      "timeline": "A00-TextOnly",
+      "clip_id": "a741fb51-9677-4439-a489-8b0604a1d57b",
+      "set_font": "Arial",
+      "readback_font": "Arial",
+      "timeline_frame_capture": {
+        "frame_param": 60,
+        "text_visible": true,
+        "styled_text": "A00 RENDER TRUTH"
+      },
+      "deliver_png": {
+        "mark_in_job": 86400,
+        "output": "A00-textonly-deliver-f60_00086400.png",
+        "measurable": false,
+        "error": "NO_VISIBLE_TEXT"
+      }
+    }
+  },
+  "chinese_common_font": {
+    "font_file": "C:\\Windows\\Fonts\\msyh.ttc",
+    "display_name_registry": "Microsoft YaHei & Microsoft YaHei UI (TrueType)",
+    "contract_family": "Microsoft YaHei",
+    "system_drawing_family": "Microsoft YaHei UI",
+    "style": "Regular",
+    "system_drawing": {
+      "enumerated_contract_name": false,
+      "enumerated_ui_name": true,
+      "instantiate_ui_regular": "OK",
+      "l1_resolve": {
+        "requested": "Microsoft YaHei",
+        "resolved_family": "Microsoft YaHei UI",
+        "resolved_from": "alias"
+      }
+    },
+    "resolve_textplus": {
+      "set_font": "Microsoft YaHei UI",
+      "readback_font": "Microsoft YaHei UI",
+      "note": "Resolve also accepted 'Microsoft YaHei' string in prior Experiment A probe; UI name readback exact."
+    }
+  },
+  "parity_note": "L1 + Resolve Text+ font authority aligned for Arial and Microsoft YaHei (via alias). Deliver final renderer for Text+ generator clips does not expose visible text on this host — common font does not close Text+ measurement parity."
+}

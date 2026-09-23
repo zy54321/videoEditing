@@ -1,0 +1,70 @@
+{
+    "font_resolution":  {
+                            "resolved_from":  "alias",
+                            "requested_family":  "Microsoft YaHei",
+                            "alias_from":  "Microsoft YaHei UI",
+                            "resolved_family":  "Microsoft YaHei UI",
+                            "fallback_used":  false
+                        },
+    "graphics_unit":  "Pixel",
+    "schema_version":  1,
+    "measurement_backend":  "System.Drawing",
+    "cue_results":  [
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.2016,
+                            "safe_area_width_px":  972,
+                            "max_line_width_px":  196,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.2016,
+                                              "width_ratio_frame":  0.1815,
+                                              "width_px":  196,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  196,
+                                                               "break_after":  "allow",
+                                                               "text":  "你好世界"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "A01",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.1815,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.1815,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        }
+                    ],
+    "warnings":  [
+                     "MEASUREMENT_CONSERVATIVE_BOUND: stroke/padding applied per-run may over-estimate composite line bounds; not Resolve renderer parity"
+                 ],
+    "measurement_limitations":  [
+                                    "Per-run stroke/padding may conservatively over-estimate composite bounds",
+                                    "Preflight PASS does not prove Resolve/Fusion/Text+ renderer parity"
+                                ]
+}

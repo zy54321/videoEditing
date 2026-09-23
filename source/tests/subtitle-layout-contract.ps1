@@ -439,6 +439,20 @@ else {
     $script:Pass++
 }
 
+# BR1-01 contract font family aliases to System.Drawing-enumerated identity
+$yaheiUiAvail = (Get-InstalledFontNames).Contains('Microsoft YaHei UI')
+if ($yaheiUiAvail) {
+    $br1Req = New-LayoutRequest -Runs @( (New-Run -Text '测试' -BreakAfter 'forbid') ) -FontFamily 'Microsoft YaHei'
+    $br1Res = Invoke-SubtitleLayoutPreflight -Request $br1Req
+    Assert-True ($br1Res.font_resolution.resolved_family -eq 'Microsoft YaHei UI') 'BR1-01 YaHei resolves to YaHei UI'
+    Assert-True ($br1Res.font_resolution.resolved_from -eq 'alias') 'BR1-01 alias provenance'
+    Assert-True (-not $br1Res.font_resolution.fallback_used) 'BR1-01 alias is not fallback'
+}
+else {
+    Write-Host '[SKIP] BR1-01 Microsoft YaHei UI not enumerated on host' -ForegroundColor Yellow
+    $script:Pass++
+}
+
 # R2-09 capability status unchanged
 Assert-True ($vocab -match 'subtitle.style.keyword_emphasis:[\s\S]{0,120}status: UNKNOWN') 'R2-09 keyword emphasis still UNKNOWN'
 Assert-True ($vocab -match 'subtitle.layout.pixel_width:[\s\S]{0,120}status: AVAILABLE_UNVERIFIED') 'R2-09 pixel_width still AVAILABLE_UNVERIFIED'

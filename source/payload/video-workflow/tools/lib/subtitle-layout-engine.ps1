@@ -14,6 +14,22 @@ function Get-InstalledFontNames {
     return $names
 }
 
+function Get-SubtitleFontAliases {
+    param([string]$Primary)
+
+    $aliases = [ordered]@{
+        'Microsoft YaHei' = @('Microsoft YaHei UI', 'Microsoft YaHei')
+        'Microsoft YaHei UI' = @('Microsoft YaHei', 'Microsoft YaHei UI')
+        'SimSun' = @('NSimSun', 'SimSun', 'SimSun-ExtB', 'SimSun-ExtG')
+        'NSimSun' = @('SimSun', 'NSimSun', 'SimSun-ExtB', 'SimSun-ExtG')
+        'SimHei' = @('SimHei', 'Microsoft YaHei UI')
+    }
+    if ($aliases.Contains($Primary)) {
+        return @($Primary) + [string[]]$aliases[$Primary]
+    }
+    return @($Primary)
+}
+
 function Resolve-SubtitleFont {
     param(
         [string]$Primary,
@@ -22,21 +38,29 @@ function Resolve-SubtitleFont {
     )
 
     $installed = Get-InstalledFontNames
-    if ($installed.Contains($Primary)) {
-        return @{
-            requested_family = $Primary
-            resolved_family = $Primary
-            resolved_from = 'primary'
-            fallback_used = $false
+    foreach ($candidate in (Get-SubtitleFontAliases -Primary $Primary)) {
+        if ($installed.Contains($candidate)) {
+            $from = if ($candidate -eq $Primary) { 'primary' } else { 'alias' }
+            return @{
+                requested_family = $Primary
+                resolved_family = $candidate
+                resolved_from = $from
+                fallback_used = $false
+                alias_from = if ($from -eq 'alias') { $candidate } else { $null }
+            }
         }
     }
-    if ($FontPolicy -eq 'allow_fallback' -and $Fallback -and $installed.Contains($Fallback)) {
-        return @{
-            requested_family = $Primary
-            resolved_family = $Fallback
-            resolved_from = 'fallback'
-            fallback_used = $true
-            warning = "FONT_FALLBACK: $Primary -> $Fallback"
+    if ($FontPolicy -eq 'allow_fallback' -and $Fallback -and $Fallback -ne $Primary) {
+        foreach ($candidate in (Get-SubtitleFontAliases -Primary $Fallback)) {
+            if ($installed.Contains($candidate)) {
+                return @{
+                    requested_family = $Primary
+                    resolved_family = $candidate
+                    resolved_from = 'fallback'
+                    fallback_used = $true
+                    warning = "FONT_FALLBACK: $Primary -> $candidate"
+                }
+            }
         }
     }
     throw "FONT_NOT_FOUND: $Primary"

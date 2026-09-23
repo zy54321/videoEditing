@@ -1,0 +1,24 @@
+{
+  "route": "R3_native_drt_subtitle_burnin",
+  "timeline": "A00-DRT-Subtitle",
+  "render_artifact": "validation/08e-b-exp-a/renders/A00-drt-burnin.png",
+  "source_temp": "C:\\Users\\the_z\\AppData\\Local\\Temp\\08e-b-exp-a\\A00-drt-burnin00086460.png",
+  "mark_in_requested": 86460,
+  "mark_in_job": 86460,
+  "repeat_runs": [
+    {
+      "run": 1,
+      "actual_width_px": 969,
+      "actual_frame_ratio": 0.897222,
+      "measurable": true
+    },
+    {
+      "run": 2,
+      "actual_width_px": 969,
+      "actual_frame_ratio": 0.897222,
+      "measurable": true
+    }
+  ],
+  "stable": true,
+  "note": "Smoke test only; R3 uses native subtitle burn-in renderer, not Text+ parity route."
+}
