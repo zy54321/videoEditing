@@ -1,0 +1,62 @@
+﻿{
+    "materialized_cues":  [
+                              {
+                                  "cue_id":  "A11",
+                                  "part_index":  0,
+                                  "l1_status":  "PASS",
+                                  "line_count":  2,
+                                  "lines":  [
+                                                {
+                                                    "width_ratio_safe_area":  0.4979,
+                                                    "width_ratio_frame":  0.4481,
+                                                    "width_px":  484,
+                                                    "runs":  [
+                                                                 {
+                                                                     "semantic_role":  "phrase",
+                                                                     "emphasis_level":  "normal",
+                                                                     "width_px":  484,
+                                                                     "break_after":  "prefer",
+                                                                     "text":  "观察观察观察观察观察"
+                                                                 }
+                                                             ],
+                                                    "line_index":  1
+                                                },
+                                                {
+                                                    "width_ratio_safe_area":  0.4979,
+                                                    "width_ratio_frame":  0.4481,
+                                                    "width_px":  484,
+                                                    "runs":  [
+                                                                 {
+                                                                     "semantic_role":  "phrase",
+                                                                     "emphasis_level":  "normal",
+                                                                     "width_px":  484,
+                                                                     "break_after":  "forbid",
+                                                                     "text":  "记录记录记录记录记录"
+                                                                 }
+                                                             ],
+                                                    "line_index":  2
+                                                }
+                                            ],
+                                  "selected_break_indices":  0,
+                                  "selected_break_policies":  "prefer",
+                                  "styled_text":  "观察观察观察观察观察\n记录记录记录记录记录",
+                                  "newline_positions":  [
+                                                            10
+                                                        ],
+                                  "predicted_line_widths_px":  [
+                                                                   484,
+                                                                   484
+                                                               ],
+                                  "predicted_max_line_width_px":  484,
+                                  "timing":  {
+                                                 "method":  "deterministic_equal_split_validation_only",
+                                                 "start_frame":  0,
+                                                 "duration_frames":  120,
+                                                 "note":  "Not production subtitle timing authority"
+                                             }
+                              }
+                          ],
+    "l1_status":  "PASS",
+    "materialization_status":  "READY",
+    "cue_id":  "A11"
+}

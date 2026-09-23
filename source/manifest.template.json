@@ -52,7 +52,11 @@
     ],
     "tools": [
       "final-artifact-qa",
-      "subtitle-layout-preflight"
+      "subtitle-layout-preflight",
+      "textplus-layout-materializer"
+    ],
+    "runtime_profiles": [
+      "textplus-font-profiles"
     ]
   }
 }

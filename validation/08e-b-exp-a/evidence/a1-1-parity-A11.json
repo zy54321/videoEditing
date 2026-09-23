@@ -1,0 +1,31 @@
+{
+  "case_id": "A11",
+  "materialization_status": "READY",
+  "l1_status": "PASS",
+  "measurable": true,
+  "line_count_detected": 2,
+  "pairs": [
+    {
+      "line_index": 1,
+      "predicted_px": 484,
+      "actual_px": 493,
+      "abs_error_px": 9,
+      "relative_error": 0.01859504132231405,
+      "pass": true
+    },
+    {
+      "line_index": 2,
+      "predicted_px": 484,
+      "actual_px": 494,
+      "abs_error_px": 10,
+      "relative_error": 0.02066115702479339,
+      "pass": true
+    }
+  ],
+  "parity": "PASS",
+  "line_count_l1": 2,
+  "newline_positions": [
+    10
+  ],
+  "styled_text_readback_expected": "观察观察观察观察观察\n记录记录记录记录记录"
+}

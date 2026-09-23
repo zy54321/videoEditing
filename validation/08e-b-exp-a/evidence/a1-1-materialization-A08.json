@@ -1,0 +1,12 @@
+﻿{
+    "materialization_status":  "BLOCKED_NO_LEGAL_INTERNAL_BREAK",
+    "materialized_cues":  [
+
+                          ],
+    "cue_id":  "A08",
+    "l1_status":  "CUE_SPLIT_REQUIRED",
+    "reason":  "Atomic run exceeds ceiling; no split_candidates",
+    "split_candidates":  [
+
+                         ]
+}

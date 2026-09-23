@@ -1,0 +1,60 @@
+{
+  "calibrated_textplus_size": 0.073,
+  "font": "Microsoft YaHei UI",
+  "case_count": 3,
+  "measurable_count": 3,
+  "overflow_mismatch_count": 3,
+  "cases": [
+    {
+      "case_id": "A07",
+      "l1_status": "CUE_SPLIT_REQUIRED",
+      "l1_max_line_width_px": 0,
+      "l1_effective_ceiling_px": 864,
+      "l1_split_required": true,
+      "l1_overflow": true,
+      "actual_width_px": 1080.0,
+      "actual_frame_ratio": 1.0,
+      "exceeds_hard_ceiling_px": true,
+      "delta_vs_ceiling_px": 216.0,
+      "parity_class": "OVERFLOW_BEHAVIOR_MISMATCH",
+      "parity_within_tolerance": false,
+      "status": "FAIL_OVERFLOW",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A07-yahei.png",
+      "note": "L1 refuses unsplit layout (max_line_width_px=0); Text+ renders single full-bleed line"
+    },
+    {
+      "case_id": "A08",
+      "l1_status": "CUE_SPLIT_REQUIRED",
+      "l1_max_line_width_px": 0,
+      "l1_effective_ceiling_px": 864,
+      "l1_split_required": true,
+      "l1_overflow": true,
+      "actual_width_px": 1080.0,
+      "actual_frame_ratio": 1.0,
+      "exceeds_hard_ceiling_px": true,
+      "delta_vs_ceiling_px": 216.0,
+      "parity_class": "OVERFLOW_BEHAVIOR_MISMATCH",
+      "parity_within_tolerance": false,
+      "status": "FAIL_OVERFLOW",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A08-yahei.png",
+      "note": "L1 refuses unsplit layout (max_line_width_px=0); Text+ renders single full-bleed line"
+    },
+    {
+      "case_id": "A09",
+      "l1_status": "CUE_SPLIT_REQUIRED",
+      "l1_max_line_width_px": 0,
+      "l1_effective_ceiling_px": 864,
+      "l1_split_required": true,
+      "l1_overflow": true,
+      "actual_width_px": 1080.0,
+      "actual_frame_ratio": 1.0,
+      "exceeds_hard_ceiling_px": true,
+      "delta_vs_ceiling_px": 216.0,
+      "parity_class": "OVERFLOW_BEHAVIOR_MISMATCH",
+      "parity_within_tolerance": false,
+      "status": "FAIL_OVERFLOW",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A09-yahei.png",
+      "note": "L1 refuses unsplit layout (max_line_width_px=0); Text+ renders single full-bleed line"
+    }
+  ]
+}

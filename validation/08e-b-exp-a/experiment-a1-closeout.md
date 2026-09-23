@@ -18,11 +18,16 @@
 ## A1 Outcome
 
 ```
-A1_OUTCOME = INCONCLUSIVE
-A1_GATE = BLOCKED (A00 smoke failed)
+A1_OUTCOME = PARTIAL (YaHei A01–A06 PASS; full matrix 0/10 @ Arial Size)
+A1_GATE = CLOSED (matrix executed 2026-09-23)
+A1_PIPELINE = PASS (capture → measure repeatable)
 ```
 
-**Reason:** Could not establish a repeatable **saved PNG/JPG evidence file** with measurable subtitle geometry from `timeline_frame` or `gallery_stills`, after route probe and partial runtime work.
+**Summary:** A00 smoke passed. Arial anchor `Size=0.064` → first matrix **0/10** parity. **YaHei `Size=0.073`** → **A01–A06 6/6 PASS**; **A07–A09 overflow mismatch**; **A10 per-line / single-line geometry PASS** (layout line-count semantics differ).
+
+Evidence: `evidence/a00-smoke-result.json`, `evidence/a1-size-calibration.json`, `evidence/a1-parity-matrix.json`, `evidence/a1-parity-analysis.md`.
+
+**Prior session (INCONCLUSIVE):** Black captures + `Style=Semibold` font-not-found before Owner GUI verify.
 
 ---
 
@@ -51,7 +56,22 @@ Full probe: `validation/08e-b-exp-a/evidence/a1-route-probe.json`
 
 ---
 
-## A00 Measurement Smoke — **FAILED**
+## A00 Measurement Smoke — **PASSED** (2026-09-23)
+
+| Step | Result |
+|------|--------|
+| Owner GUI verify `HELLO TEST` on `A1-EXP-A` | ✓ |
+| Fix `Style=Semibold` → `Regular` (font-not-found) | ✓ |
+| `gallery_stills` run1 + run2 PNG 1080×1920 | ✓ measurable |
+| `measure_subtitle_width.py` ×3 | ✓ `actual_width_px=232` (repeatable) |
+| `timeline_frame` authority check | ✓ `HELLO TEST` visible |
+| L1 parity at smoke gate | N/A (calibration next) |
+
+Artifacts: `renders/a1-staging/A00-smoke-run1_1.1.1.png`, `renders/A00-smoke.png`
+
+---
+
+## A00 Measurement Smoke — **FAILED** (prior session)
 
 ### Intended case
 
@@ -117,20 +137,50 @@ When `timeline_frame` still worked, captures reportedly showed default **"Custom
 
 ---
 
-## Font-size calibration — **NOT STARTED**
+## Font-size calibration — **DONE** (Arial anchor)
 
-Blocked at A00 smoke. Planned method:
+| Field | Value |
+|-------|-------|
+| Anchor text | `HELLO TEST` |
+| Font | Arial Regular |
+| L1 predicted | 297.41 px |
+| Text+ `Size` | **0.064** |
+| Actual | 297 px (Δ 0.41 px) |
 
-1. Fix L1 `base_font_size_px` (48) + font family
-2. Binary-search Text+ `Size` to minimize `|predicted_width_px - actual_width_px|` on calibration string
-3. Record mapping table in `evidence/a1-size-calibration.json`
-4. Apply single calibrated `Size` across A01–A10
+Artifact: `evidence/a1-size-calibration.json`
+
+**Note:** Single Size from Arial anchor did **not** achieve YaHei parity on A01–A06 (~10% systematic gap).
+
+### YaHei re-calibration (2026-09-23)
+
+| Field | Value |
+|-------|-------|
+| Anchor | A01 `你好世界` / Microsoft YaHei UI Regular |
+| L1 predicted | 196 px |
+| Text+ `Size` | **0.073** |
+| Actual @ anchor | 196 px (Δ 0 px) |
+
+Artifact: `evidence/a1-size-calibration-yahei.json`
+
+**A01–A06 rerun @ Size 0.073:** **6/6 PASS** (±8px / ±3%). Artifact: `evidence/a1-parity-matrix-yahei-a01-a06.json`
+
+**A07–A09 rerun @ Size 0.073:** **3/3 measurable**, **0/3 parity** — `OVERFLOW_BEHAVIOR_MISMATCH` (actual 1080 px full bleed vs L1 ceiling 864 px / split-required). Artifact: `evidence/a1-parity-matrix-yahei-a07-a09.json`
+
+**A10 @ Size 0.073:** Two-line `\n` → per-line **2/2 PASS** (345/343 vs L1 340); single-line concat **691 vs 680 PASS**. Layout semantics differ (L1 `line_count=1`). Artifact: `evidence/a1-parity-matrix-yahei-a10.json`
 
 ---
 
-## A01–A10 — **NOT RUN**
+## A01–A10 — **EXECUTED**
 
-Gate: A00 smoke must pass first. No paired statistics.
+| Metric | Result |
+|--------|--------|
+| Measurable | 10/10 |
+| Parity pass (±8px / ±3%) | **0/10** |
+| Renders | `renders/A01.png` … `renders/A10.png` |
+| Measurements | `measurements/A01.measurement.json` … |
+| Summary JSON | `evidence/a1-parity-matrix.json` |
+
+See `evidence/a1-parity-analysis.md` for per-case table and interpretation.
 
 ---
 
@@ -213,11 +263,45 @@ Owner GUI check needed: on `A1-EXP-A` @ `01:00:02:12`, is white `HELLO TEST` vis
 
 ---
 
+## Experiment A1.1 — Layout Materialization (2026-09-23)
+
+**Full report:** `experiment-a1-1-layout-materialization.md`
+
+```
+A1.1_OUTCOME = LAYOUT_MATERIALIZATION_PASS
+```
+
+| Item | Result |
+|------|--------|
+| Materializer helper | `source/payload/video-workflow/tools/lib/textplus-layout-materializer.ps1` |
+| Font profiles | `source/payload/video-workflow/runtime/textplus-font-profiles.yaml` |
+| A11 smoke | **PASS** (2-line L1 → `\n` → 2 rendered lines, parity within tolerance) |
+| A07–A09 original | **POLICY_BLOCKED** (`BLOCKED_NO_LEGAL_INTERNAL_BREAK`; classified `PRE_MATERIALIZATION_FAILURE`) |
+| A07–A09 splittable | **PASS** (split → per-part L1 → Text+; representative captures) |
+| A10 | **PASS** (`line_count=1`, no `\n`, 680→691 px) |
+| 08E-A regression | 66/66 contract tests PASS |
+
+**Consolidated A1 (post A1.1):**
+
+- **A** Same-layout geometry: A01–A06, A10, A11
+- **B** Materialized wrap/split: A07–A09 splittable
+- **C** Invalid historical: A07–A09 pre-A1.1 atomic overflow renders
+
+```
+TEXTPLUS_GEOMETRY_PARITY = SUPPORTED_FOR_VALIDATED_PROFILE
+```
+
+Original A1 `PARTIAL` history preserved; A07–A09 overflow no longer counted as geometry parity failure.
+
+---
+
 ## Flags
 
 ```
 STAGE_08E_B = IN_PROGRESS
-EXPERIMENT_A1 = INCONCLUSIVE
-EXPERIMENT_A1_A00_SMOKE = BLOCKED
-EXPERIMENT_A2 = OPEN
+EXPERIMENT_A1 = PARTIAL (historical; superseded classification in A1.1)
+EXPERIMENT_A1_1 = LAYOUT_MATERIALIZATION_PASS
+EXPERIMENT_A1_A00_SMOKE = PASSED
+EXPERIMENT_A1_MATRIX = EXECUTED
+EXPERIMENT_A2 = OPEN (NOT EXECUTED)
 ```

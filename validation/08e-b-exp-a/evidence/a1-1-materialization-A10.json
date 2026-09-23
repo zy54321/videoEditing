@@ -1,0 +1,57 @@
+﻿{
+    "materialized_cues":  [
+                              {
+                                  "cue_id":  "A10",
+                                  "part_index":  0,
+                                  "l1_status":  "PASS",
+                                  "line_count":  1,
+                                  "lines":  [
+                                                {
+                                                    "width_ratio_safe_area":  0.6996,
+                                                    "width_ratio_frame":  0.6296,
+                                                    "width_px":  680,
+                                                    "runs":  [
+                                                                 {
+                                                                     "semantic_role":  "phrase",
+                                                                     "emphasis_level":  "normal",
+                                                                     "width_px":  340,
+                                                                     "break_after":  "prefer",
+                                                                     "text":  "第一行字幕内容"
+                                                                 },
+                                                                 {
+                                                                     "semantic_role":  "phrase",
+                                                                     "emphasis_level":  "normal",
+                                                                     "width_px":  340,
+                                                                     "break_after":  "forbid",
+                                                                     "text":  "第二行继续说明"
+                                                                 }
+                                                             ],
+                                                    "line_index":  1
+                                                }
+                                            ],
+                                  "selected_break_indices":  {
+
+                                                             },
+                                  "selected_break_policies":  {
+
+                                                              },
+                                  "styled_text":  "第一行字幕内容第二行继续说明",
+                                  "newline_positions":  [
+
+                                                        ],
+                                  "predicted_line_widths_px":  [
+                                                                   680
+                                                               ],
+                                  "predicted_max_line_width_px":  680,
+                                  "timing":  {
+                                                 "method":  "deterministic_equal_split_validation_only",
+                                                 "start_frame":  0,
+                                                 "duration_frames":  120,
+                                                 "note":  "Not production subtitle timing authority"
+                                             }
+                              }
+                          ],
+    "l1_status":  "PASS",
+    "materialization_status":  "READY",
+    "cue_id":  "A10"
+}

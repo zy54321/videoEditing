@@ -1,0 +1,24 @@
+# Staging / intermediate validation artifacts (not formal evidence)
+renders/
+predictions/
+_probe.prediction.json
+cases-manifest.json
+batch_measure_matrix.py
+summarize_*.py
+evidence/a1-1-cues-*.json
+
+# A1 full-matrix intermediate measurements (summarized in evidence/*.json)
+measurements/A00-smoke-*.measurement.json
+measurements/A02*.measurement.json
+measurements/A03*.measurement.json
+measurements/A04*.measurement.json
+measurements/A05*.measurement.json
+measurements/A06*.measurement.json
+measurements/A07-yahei.measurement.json
+measurements/A07.measurement.json
+measurements/A08-yahei.measurement.json
+measurements/A08.measurement.json
+measurements/A09-yahei.measurement.json
+measurements/A09.measurement.json
+measurements/A10-yahei*.json
+measurements/A10.measurement.json

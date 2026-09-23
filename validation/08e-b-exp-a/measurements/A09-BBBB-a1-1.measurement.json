@@ -1,0 +1,25 @@
+{
+  "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\a1-staging\\A09-BBBB-a1-1_1.1.1.png",
+  "image_width_px": 1080,
+  "image_height_px": 1920,
+  "measurable": true,
+  "line_count_detected": 2,
+  "lines": [
+    {
+      "top_px": 908,
+      "bottom_px": 952,
+      "left_px": 169,
+      "right_px": 910,
+      "width_px": 742
+    },
+    {
+      "top_px": 971,
+      "bottom_px": 1015,
+      "left_px": 417,
+      "right_px": 662,
+      "width_px": 246
+    }
+  ],
+  "max_line_width_px": 742,
+  "lum_threshold": 180
+}

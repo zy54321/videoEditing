@@ -5,10 +5,24 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$CasesDir = (Join-Path $PSScriptRoot 'cases'),
-    [string]$PredictionsDir = (Join-Path $PSScriptRoot 'predictions'),
-    [string]$PreflightScript = (Join-Path (Split-Path $PSScriptRoot -Parent -Parent) 'source\payload\video-workflow\tools\subtitle-layout-preflight.ps1')
+    [string]$RootDir,
+    [string]$CasesDir,
+    [string]$PredictionsDir,
+    [string]$PreflightScript
 )
+
+if (-not $RootDir) {
+    $RootDir = $PSScriptRoot
+    if (-not $RootDir) {
+        $RootDir = 'E:\01_Work\01_PersonalProjects\011-video-editing-workflow\validation\08e-b-exp-a'
+    }
+}
+if (-not $CasesDir) { $CasesDir = Join-Path $RootDir 'cases' }
+if (-not $PredictionsDir) { $PredictionsDir = Join-Path $RootDir 'predictions' }
+if (-not $PreflightScript) {
+    $repoRoot = (Resolve-Path -LiteralPath (Join-Path $RootDir '..\..')).Path
+    $PreflightScript = Join-Path $repoRoot 'source\payload\video-workflow\tools\subtitle-layout-preflight.ps1'
+}
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'

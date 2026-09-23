@@ -1,0 +1,45 @@
+{
+  "case_id": "A00-smoke",
+  "timeline": "A1-EXP-A",
+  "playhead": "01:00:02:12",
+  "textplus_clip_id": "ea145b87-f280-47ea-b959-5a9ec29e775e",
+  "configured": {
+    "font": "Arial",
+    "style": "Regular",
+    "size": 0.05,
+    "styled_text": "HELLO TEST"
+  },
+  "preflight": {
+    "render_format": "png",
+    "render_codec": "RGB8"
+  },
+  "capture_authority": "timeline_frame quality=frame + gallery_stills grab_and_export",
+  "artifacts": {
+    "gallery_run1": "validation/08e-b-exp-a/renders/a1-staging/A00-smoke-run1_1.1.1.png",
+    "gallery_run2": "validation/08e-b-exp-a/renders/a1-staging/A00-smoke-run2_1.1.1.png"
+  },
+  "measurements": {
+    "run1": {
+      "actual_width_px": 232,
+      "actual_frame_ratio": 0.214815,
+      "measurable": true
+    },
+    "run1_repeat": {
+      "actual_width_px": 232,
+      "actual_frame_ratio": 0.214815,
+      "measurable": true
+    },
+    "run2": {
+      "actual_width_px": 232,
+      "actual_frame_ratio": 0.214815,
+      "measurable": true
+    },
+    "repeatable": true
+  },
+  "l1_prediction": {
+    "max_line_width_px": 297.41,
+    "note": "Not a smoke gate; font-size calibration required before parity matrix"
+  },
+  "smoke_outcome": "PASS",
+  "blocker_resolved": "Text+ default Style=Semibold caused Font Not Found; set Style=Regular for visible render"
+}

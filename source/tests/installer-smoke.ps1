@@ -109,6 +109,11 @@ $capOk = (Test-Path (Join-Path $ws1 'video-workflow\capabilities\davinci-resolve
     (Test-Path (Join-Path $ws1 'video-workflow\templates\capability-resolution-result.yaml'))
 Assert-True $capOk 'TEST-04 capability and templates present'
 
+# TEST-04b: Stage 08E-B A1.1 materializer + font profiles installed
+$matOk = (Test-Path (Join-Path $ws1 'video-workflow\tools\lib\textplus-layout-materializer.ps1')) -and
+    (Test-Path (Join-Path $ws1 'video-workflow\runtime\textplus-font-profiles.yaml'))
+Assert-True $matOk 'TEST-04b textplus materializer and font profiles present'
+
 # TEST-05: production dir exists, no brief
 $prodDir = Join-Path $ws1 'video-workflow\production'
 $test05 = (Test-Path $prodDir -PathType Container) -and (-not (Test-Path (Join-Path $prodDir 'brief.yaml')))

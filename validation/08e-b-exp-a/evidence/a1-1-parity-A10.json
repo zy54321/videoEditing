@@ -1,0 +1,21 @@
+{
+  "case_id": "A10",
+  "materialization_status": "READY",
+  "l1_status": "PASS",
+  "measurable": true,
+  "line_count_detected": null,
+  "pairs": [
+    {
+      "line_index": 1,
+      "predicted_px": 680.0,
+      "actual_px": 691.0,
+      "abs_error_px": 11.0,
+      "relative_error": 0.016176470588235296,
+      "pass": true
+    }
+  ],
+  "parity": "PASS",
+  "line_count_l1": 1,
+  "newline_positions": [],
+  "styled_text_readback_expected": "第一行字幕内容第二行继续说明"
+}

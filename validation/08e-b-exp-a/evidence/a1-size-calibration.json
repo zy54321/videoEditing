@@ -1,0 +1,19 @@
+{
+  "calibration_case": "A00-smoke",
+  "timeline": "A1-EXP-A",
+  "text": "HELLO TEST",
+  "font": "Arial",
+  "style": "Regular",
+  "l1_base_font_size_px": 48,
+  "l1_predicted_width_px": 297.41,
+  "search": {
+    "method": "linear_estimate_then_verify",
+    "candidates": [
+      {"textplus_size": 0.05, "actual_width_px": 232},
+      {"textplus_size": 0.064, "actual_width_px": 297}
+    ]
+  },
+  "selected_textplus_size": 0.064,
+  "calibration_residual_px": 0.41,
+  "applied_to_matrix": "A01-A10"
+}

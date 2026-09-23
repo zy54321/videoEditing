@@ -1,0 +1,118 @@
+{
+  "stage": "08E-B A1.1",
+  "outcome": "LAYOUT_MATERIALIZATION_PASS",
+  "starting_head": "55797439e8f114efa20185c23e7e29200117a598",
+  "tolerance": {
+    "abs_px": 8,
+    "relative": 0.03
+  },
+  "materialization_helper": "source/payload/video-workflow/tools/lib/textplus-layout-materializer.ps1",
+  "font_profiles": "source/payload/video-workflow/runtime/textplus-font-profiles.yaml",
+  "runtime_route": "fusion_comp.safe_set_inputs + gallery_stills.grab_and_export",
+  "cases": {
+    "A11": {
+      "result": "PASS",
+      "l1_line_count": 2,
+      "newline_positions": [10],
+      "styled_text_readback_match": true,
+      "rendered_line_count": 2,
+      "pairs": [
+        { "predicted_px": 484, "actual_px": 493, "pass": true },
+        { "predicted_px": 484, "actual_px": 494, "pass": true }
+      ],
+      "evidence": [
+        "validation/08e-b-exp-a/evidence/a1-1-materialization-A11.json",
+        "validation/08e-b-exp-a/measurements/A11-materialization-smoke.measurement.json",
+        "validation/08e-b-exp-a/evidence/a1-1-parity-A11.json"
+      ]
+    },
+    "A07": {
+      "original": {
+        "result": "POLICY_BLOCKED",
+        "materialization_status": "BLOCKED_NO_LEGAL_INTERNAL_BREAK",
+        "classification": "PRE_MATERIALIZATION_FAILURE",
+        "note": "Atomic 80-char run; no split_candidates; ultra-wide Text+ not rendered"
+      },
+      "splittable_validation": {
+        "result": "PASS",
+        "materialized_part_count": 5,
+        "captured_parts": ["A07-A", "A07-B-B-B-B"],
+        "pairs": {
+          "A07-A": { "predicted_px": 724, "actual_px": 741, "pass": true },
+          "A07-B-B-B-B": [
+            { "predicted_px": 724, "actual_px": 741, "pass": true },
+            { "predicted_px": 244, "actual_px": 244, "pass": true }
+          ]
+        },
+        "note": "Middle parts A07-B-A/B-B-A/B-B-B-A share identical 15-char chunk geometry with A07-A"
+      }
+    },
+    "A08": {
+      "original": {
+        "result": "POLICY_BLOCKED",
+        "materialization_status": "BLOCKED_NO_LEGAL_INTERNAL_BREAK"
+      },
+      "splittable_validation": {
+        "result": "PASS",
+        "captured_parts": ["A08-A", "A08-B-B-B-B"],
+        "pairs": {
+          "A08-A": { "predicted_px": 724, "actual_px": 742, "pass": true },
+          "A08-B-B-B-B": [
+            { "predicted_px": 724, "actual_px": 742, "pass": true },
+            { "predicted_px": 244, "actual_px": 246, "pass": true }
+          ]
+        }
+      }
+    },
+    "A09": {
+      "original": {
+        "result": "POLICY_BLOCKED",
+        "materialization_status": "BLOCKED_NO_LEGAL_INTERNAL_BREAK"
+      },
+      "splittable_validation": {
+        "result": "PASS",
+        "captured_parts": ["A09-A", "A09-B-B-B-B"],
+        "pairs": {
+          "A09-A": { "predicted_px": 724, "actual_px": 742, "pass": true },
+          "A09-B-B-B-B": [
+            { "predicted_px": 724, "actual_px": 742, "pass": true },
+            { "predicted_px": 244, "actual_px": 246, "pass": true }
+          ]
+        }
+      }
+    },
+    "A10": {
+      "result": "PASS",
+      "l1_line_count": 1,
+      "newline_in_styled_text": false,
+      "styled_text": "第一行字幕内容第二行继续说明",
+      "pairs": [
+        { "predicted_px": 680, "actual_px": 691, "pass": true }
+      ],
+      "evidence": [
+        "validation/08e-b-exp-a/evidence/a1-1-materialization-A10.json",
+        "validation/08e-b-exp-a/evidence/a1-1-parity-A10.json"
+      ]
+    }
+  },
+  "consolidated_a1": {
+    "a_pipeline": "PASS",
+    "a1_original": "PARTIAL",
+    "a1_1_materialization": "PASS",
+    "textplus_geometry_parity": "SUPPORTED_FOR_VALIDATED_PROFILE",
+    "validated_profiles": ["microsoft_yahei_ui", "arial"],
+    "categories": {
+      "A_same_layout_geometry": ["A01", "A02", "A03", "A04", "A05", "A06", "A10", "A11"],
+      "B_materialized_wrap_split": ["A07-splittable", "A08-splittable", "A09-splittable"],
+      "C_invalid_historical_comparisons": ["A07-pre", "A08-pre", "A09-pre"]
+    }
+  },
+  "capability_recommendation": {
+    "subtitle.layout.pixel_width": "AVAILABLE_UNVERIFIED",
+    "subtitle.style.keyword_emphasis": "UNKNOWN",
+    "note": "Even with A1.1 PASS, capability upgrade deferred pending 08E-B review and A2 deliver survivability"
+  },
+  "a2_status": "NOT_EXECUTED",
+  "n02_touched": false,
+  "experiment_b_executed": false
+}

@@ -120,6 +120,11 @@ $manifestHas08d = ($manifestTpl.components.templates -contains 'style-skill') -a
     ($manifestTpl.components.templates -contains 'capability-resolution') -and
     ($manifestTpl.components.capabilities -contains 'logical-capability-vocabulary')
 Assert-True $manifestHas08d 'C12b manifest includes Stage 08D style contract components'
+$manifestHas08eb = ($manifestTpl.components.tools -contains 'textplus-layout-materializer') -and
+    ($manifestTpl.components.runtime_profiles -contains 'textplus-font-profiles')
+Assert-True $manifestHas08eb 'C12f manifest includes Stage 08E-B A1.1 materializer and font profiles'
+Assert-True ($productFiles -contains 'video-workflow\tools\lib\textplus-layout-materializer.ps1') 'C12g installer ProductFiles includes textplus-layout-materializer'
+Assert-True ($productFiles -contains 'video-workflow\runtime\textplus-font-profiles.yaml') 'C12h installer ProductFiles includes textplus-font-profiles'
 Assert-True (Test-Path (Join-Path $Payload 'video-workflow\templates\style-profile-schema.yaml')) 'C12c style-profile-schema in payload'
 $vocabYaml = Get-Content (Join-Path $Payload 'video-workflow\capabilities\logical-capability-vocabulary.yaml') -Raw -Encoding UTF8
 Assert-True ($vocabYaml -match 'canonical_states:') 'C12d logical vocabulary canonical states'

@@ -1,0 +1,20 @@
+{
+  "calibration_case": "A01",
+  "font": "Microsoft YaHei UI",
+  "style": "Regular",
+  "text": "你好世界",
+  "l1_base_font_size_px": 48,
+  "l1_predicted_width_px": 196,
+  "search": {
+    "method": "linear_estimate_from_arial_matrix_residual",
+    "prior_size_arial_anchor": 0.064,
+    "prior_actual_at_064": 172,
+    "candidates": [
+      {"textplus_size": 0.064, "actual_width_px": 172},
+      {"textplus_size": 0.073, "actual_width_px": 196}
+    ]
+  },
+  "selected_textplus_size": 0.073,
+  "calibration_residual_px": 0,
+  "rerun_scope": "A01-A06"
+}

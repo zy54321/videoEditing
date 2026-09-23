@@ -1,0 +1,76 @@
+{
+  "calibrated_textplus_size": 0.073,
+  "font": "Microsoft YaHei UI",
+  "tolerance_px": 8.0,
+  "tolerance_ratio": 0.03,
+  "pass_count": 6,
+  "fail_count": 0,
+  "cases": [
+    {
+      "case_id": "A01",
+      "predicted_width_px": 196.0,
+      "actual_width_px": 196.0,
+      "delta_px": 0.0,
+      "abs_delta_px": 0.0,
+      "relative_delta": 0.0,
+      "parity_within_tolerance": true,
+      "status": "PASS",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A01-yahei.png"
+    },
+    {
+      "case_id": "A02",
+      "predicted_width_px": 676.0,
+      "actual_width_px": 694.0,
+      "delta_px": 18.0,
+      "abs_delta_px": 18.0,
+      "relative_delta": 0.0266,
+      "parity_within_tolerance": true,
+      "status": "PASS",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A02-yahei.png"
+    },
+    {
+      "case_id": "A03",
+      "predicted_width_px": 843.11,
+      "actual_width_px": 860.0,
+      "delta_px": 16.89,
+      "abs_delta_px": 16.89,
+      "relative_delta": 0.02,
+      "parity_within_tolerance": true,
+      "status": "PASS",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A03-yahei.png"
+    },
+    {
+      "case_id": "A04",
+      "predicted_width_px": 674.48,
+      "actual_width_px": 686.0,
+      "delta_px": 11.52,
+      "abs_delta_px": 11.52,
+      "relative_delta": 0.0171,
+      "parity_within_tolerance": true,
+      "status": "PASS",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A04-yahei.png"
+    },
+    {
+      "case_id": "A05",
+      "predicted_width_px": 357.2,
+      "actual_width_px": 362.0,
+      "delta_px": 4.8,
+      "abs_delta_px": 4.8,
+      "relative_delta": 0.0134,
+      "parity_within_tolerance": true,
+      "status": "PASS",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A05-yahei.png"
+    },
+    {
+      "case_id": "A06",
+      "predicted_width_px": 820.0,
+      "actual_width_px": 841.0,
+      "delta_px": 21.0,
+      "abs_delta_px": 21.0,
+      "relative_delta": 0.0256,
+      "parity_within_tolerance": true,
+      "status": "PASS",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A06-yahei.png"
+    }
+  ]
+}

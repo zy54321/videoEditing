@@ -1,0 +1,25 @@
+{
+  "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\a1-staging\\A11-materialization-smoke_1.1.1.png",
+  "image_width_px": 1080,
+  "image_height_px": 1920,
+  "measurable": true,
+  "line_count_detected": 2,
+  "lines": [
+    {
+      "top_px": 906,
+      "bottom_px": 952,
+      "left_px": 293,
+      "right_px": 785,
+      "width_px": 493
+    },
+    {
+      "top_px": 970,
+      "bottom_px": 1015,
+      "left_px": 293,
+      "right_px": 786,
+      "width_px": 494
+    }
+  ],
+  "max_line_width_px": 494,
+  "lum_threshold": 180
+}

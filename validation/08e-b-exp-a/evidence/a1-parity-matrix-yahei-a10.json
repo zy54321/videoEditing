@@ -1,0 +1,49 @@
+{
+  "case_id": "A10",
+  "calibrated_textplus_size": 0.073,
+  "font": "Microsoft YaHei UI",
+  "tolerance_px": 8.0,
+  "tolerance_ratio": 0.03,
+  "l1_prediction": {
+    "status": "PASS",
+    "line_count": 1,
+    "max_line_width_px": 680,
+    "per_run_width_px": [340, 340],
+    "runs": ["第一行字幕内容", "第二行继续说明"],
+    "note": "L1 laid out both runs on one logical line despite break_after prefer"
+  },
+  "variants": [
+    {
+      "variant_id": "two_line_newline",
+      "styled_text": "第一行字幕内容\\n第二行继续说明",
+      "render": "validation/08e-b-exp-a/renders/A10-yahei.png",
+      "line_count_detected": 2,
+      "lines": [
+        {"line_index": 1, "actual_width_px": 345, "l1_predicted_run_px": 340, "delta_px": 5, "parity_within_tolerance": true},
+        {"line_index": 2, "actual_width_px": 343, "l1_predicted_run_px": 340, "delta_px": 3, "parity_within_tolerance": true}
+      ],
+      "max_line_width_px": 345,
+      "parity_class": "PER_LINE_PASS",
+      "status": "PASS"
+    },
+    {
+      "variant_id": "single_line_concat",
+      "styled_text": "第一行字幕内容第二行继续说明",
+      "render": "validation/08e-b-exp-a/renders/A10-yahei-singleline.png",
+      "actual_width_px": 691,
+      "l1_max_line_width_px": 680,
+      "delta_px": 11,
+      "relative_delta": 0.0162,
+      "parity_within_tolerance": true,
+      "parity_class": "SINGLE_LINE_L1_LAYOUT_PASS",
+      "status": "PASS",
+      "note": "Matches L1 single-line layout (line_count=1)"
+    }
+  ],
+  "layout_semantics": {
+    "l1_line_count": 1,
+    "textplus_two_line_intent": 2,
+    "mismatch": "L1 did not break between runs; Text+ newline produces 2 lines. Per-line widths still parity-pass."
+  },
+  "outcome": "PASS (geometry per line or per L1 single-line width)"
+}

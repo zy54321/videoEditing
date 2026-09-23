@@ -91,7 +91,9 @@ $ProductFiles = @(
     'video-workflow\templates\subtitle-layout-result.json',
     'video-workflow\tools\final-artifact-qa.ps1',
     'video-workflow\tools\subtitle-layout-preflight.ps1',
-    'video-workflow\tools\lib\subtitle-layout-engine.ps1'
+    'video-workflow\tools\lib\subtitle-layout-engine.ps1',
+    'video-workflow\tools\lib\textplus-layout-materializer.ps1',
+    'video-workflow\runtime\textplus-font-profiles.yaml'
 )
 
 $CreatedPaths = [System.Collections.Generic.List[string]]::new()

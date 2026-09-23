@@ -1,0 +1,14 @@
+{
+  "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A01-yahei.png",
+  "image_width_px": 1080,
+  "image_height_px": 1920,
+  "measurable": true,
+  "bbox_left_px": 442,
+  "bbox_right_px": 637,
+  "bbox_top_px": 937,
+  "bbox_bottom_px": 984,
+  "actual_width_px": 196,
+  "actual_height_px": 48,
+  "actual_frame_ratio": 0.181481,
+  "lum_threshold": 180
+}

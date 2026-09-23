@@ -1,0 +1,121 @@
+{
+  "tolerance_px": 8.0,
+  "tolerance_ratio": 0.03,
+  "calibrated_textplus_size": 0.064,
+  "case_count": 10,
+  "pass_count": 0,
+  "fail_count": 10,
+  "other_count": 0,
+  "cases": [
+    {
+      "case_id": "A01",
+      "predicted_width_px": 196.0,
+      "actual_width_px": 172.0,
+      "delta_px": -24.0,
+      "abs_delta_px": 24.0,
+      "relative_delta": 0.1224,
+      "parity_within_tolerance": false,
+      "status": "FAIL",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A01.png"
+    },
+    {
+      "case_id": "A02",
+      "predicted_width_px": 676.0,
+      "actual_width_px": 608.0,
+      "delta_px": -68.0,
+      "abs_delta_px": 68.0,
+      "relative_delta": 0.1006,
+      "parity_within_tolerance": false,
+      "status": "FAIL",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A02.png"
+    },
+    {
+      "case_id": "A03",
+      "predicted_width_px": 843.11,
+      "actual_width_px": 754.0,
+      "delta_px": -89.11,
+      "abs_delta_px": 89.11,
+      "relative_delta": 0.1057,
+      "parity_within_tolerance": false,
+      "status": "FAIL",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A03.png"
+    },
+    {
+      "case_id": "A04",
+      "predicted_width_px": 674.48,
+      "actual_width_px": 601.0,
+      "delta_px": -73.48,
+      "abs_delta_px": 73.48,
+      "relative_delta": 0.1089,
+      "parity_within_tolerance": false,
+      "status": "FAIL",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A04.png"
+    },
+    {
+      "case_id": "A05",
+      "predicted_width_px": 357.2,
+      "actual_width_px": 317.0,
+      "delta_px": -40.2,
+      "abs_delta_px": 40.2,
+      "relative_delta": 0.1125,
+      "parity_within_tolerance": false,
+      "status": "FAIL",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A05.png"
+    },
+    {
+      "case_id": "A06",
+      "predicted_width_px": 820.0,
+      "actual_width_px": 738.0,
+      "delta_px": -82.0,
+      "abs_delta_px": 82.0,
+      "relative_delta": 0.1,
+      "parity_within_tolerance": false,
+      "status": "FAIL",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A06.png"
+    },
+    {
+      "case_id": "A07",
+      "predicted_width_px": 0.0,
+      "actual_width_px": 1079.0,
+      "delta_px": 1079.0,
+      "abs_delta_px": 1079.0,
+      "relative_delta": Infinity,
+      "parity_within_tolerance": false,
+      "status": "FAIL",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A07.png"
+    },
+    {
+      "case_id": "A08",
+      "predicted_width_px": 0.0,
+      "actual_width_px": 1080.0,
+      "delta_px": 1080.0,
+      "abs_delta_px": 1080.0,
+      "relative_delta": Infinity,
+      "parity_within_tolerance": false,
+      "status": "FAIL",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A08.png"
+    },
+    {
+      "case_id": "A09",
+      "predicted_width_px": 0.0,
+      "actual_width_px": 1080.0,
+      "delta_px": 1080.0,
+      "abs_delta_px": 1080.0,
+      "relative_delta": Infinity,
+      "parity_within_tolerance": false,
+      "status": "FAIL",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A09.png"
+    },
+    {
+      "case_id": "A10",
+      "predicted_width_px": 680.0,
+      "actual_width_px": 303.0,
+      "delta_px": -377.0,
+      "abs_delta_px": 377.0,
+      "relative_delta": 0.5544,
+      "parity_within_tolerance": false,
+      "status": "FAIL",
+      "render": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\A10.png"
+    }
+  ]
+}

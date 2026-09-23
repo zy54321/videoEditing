@@ -1,0 +1,14 @@
+{
+  "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\08e-b-exp-a\\renders\\a1-staging\\A07-A-a1-1_1.1.1.png",
+  "image_width_px": 1080,
+  "image_height_px": 1920,
+  "measurable": true,
+  "bbox_left_px": 170,
+  "bbox_right_px": 910,
+  "bbox_top_px": 938,
+  "bbox_bottom_px": 984,
+  "actual_width_px": 741,
+  "actual_height_px": 47,
+  "actual_frame_ratio": 0.686111,
+  "lum_threshold": 180
+}

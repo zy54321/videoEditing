@@ -1,0 +1,976 @@
+﻿{
+    "child":  [
+                  {
+                      "materialized_cues":  [
+                                                {
+                                                    "cue_id":  "A09-A",
+                                                    "part_index":  0,
+                                                    "l1_status":  "PASS",
+                                                    "line_count":  1,
+                                                    "lines":  [
+                                                                  {
+                                                                      "width_ratio_safe_area":  0.7449,
+                                                                      "width_ratio_frame":  0.6704,
+                                                                      "width_px":  724,
+                                                                      "runs":  [
+                                                                                   {
+                                                                                       "semantic_role":  "phrase",
+                                                                                       "emphasis_level":  "normal",
+                                                                                       "width_px":  724,
+                                                                                       "break_after":  "prefer",
+                                                                                       "text":  "界界界界界界界界界界界界界界界"
+                                                                                   }
+                                                                               ],
+                                                                      "line_index":  1
+                                                                  }
+                                                              ],
+                                                    "selected_break_indices":  {
+
+                                                                               },
+                                                    "selected_break_policies":  {
+
+                                                                                },
+                                                    "styled_text":  "界界界界界界界界界界界界界界界",
+                                                    "newline_positions":  [
+
+                                                                          ],
+                                                    "predicted_line_widths_px":  [
+                                                                                     724
+                                                                                 ],
+                                                    "predicted_max_line_width_px":  724,
+                                                    "timing":  {
+                                                                   "method":  "deterministic_equal_split_validation_only",
+                                                                   "start_frame":  0,
+                                                                   "duration_frames":  60,
+                                                                   "note":  "Not production subtitle timing authority"
+                                                               }
+                                                }
+                                            ],
+                      "l1_status":  "PASS",
+                      "materialization_status":  "READY",
+                      "cue_id":  "A09-A"
+                  },
+                  {
+                      "child":  [
+                                    {
+                                        "materialized_cues":  [
+                                                                  {
+                                                                      "cue_id":  "A09-B-A",
+                                                                      "part_index":  1,
+                                                                      "l1_status":  "PASS",
+                                                                      "line_count":  1,
+                                                                      "lines":  [
+                                                                                    {
+                                                                                        "width_ratio_safe_area":  0.7449,
+                                                                                        "width_ratio_frame":  0.6704,
+                                                                                        "width_px":  724,
+                                                                                        "runs":  [
+                                                                                                     {
+                                                                                                         "semantic_role":  "phrase",
+                                                                                                         "emphasis_level":  "normal",
+                                                                                                         "width_px":  724,
+                                                                                                         "break_after":  "prefer",
+                                                                                                         "text":  "界界界界界界界界界界界界界界界"
+                                                                                                     }
+                                                                                                 ],
+                                                                                        "line_index":  1
+                                                                                    }
+                                                                                ],
+                                                                      "selected_break_indices":  {
+
+                                                                                                 },
+                                                                      "selected_break_policies":  {
+
+                                                                                                  },
+                                                                      "styled_text":  "界界界界界界界界界界界界界界界",
+                                                                      "newline_positions":  [
+
+                                                                                            ],
+                                                                      "predicted_line_widths_px":  [
+                                                                                                       724
+                                                                                                   ],
+                                                                      "predicted_max_line_width_px":  724,
+                                                                      "timing":  {
+                                                                                     "method":  "deterministic_equal_split_validation_only",
+                                                                                     "start_frame":  60,
+                                                                                     "duration_frames":  30,
+                                                                                     "note":  "Not production subtitle timing authority"
+                                                                                 }
+                                                                  }
+                                                              ],
+                                        "l1_status":  "PASS",
+                                        "materialization_status":  "READY",
+                                        "cue_id":  "A09-B-A"
+                                    },
+                                    {
+                                        "child":  [
+                                                      {
+                                                          "materialized_cues":  [
+                                                                                    {
+                                                                                        "cue_id":  "A09-B-B-A",
+                                                                                        "part_index":  2,
+                                                                                        "l1_status":  "PASS",
+                                                                                        "line_count":  1,
+                                                                                        "lines":  [
+                                                                                                      {
+                                                                                                          "width_ratio_safe_area":  0.7449,
+                                                                                                          "width_ratio_frame":  0.6704,
+                                                                                                          "width_px":  724,
+                                                                                                          "runs":  [
+                                                                                                                       {
+                                                                                                                           "semantic_role":  "phrase",
+                                                                                                                           "emphasis_level":  "normal",
+                                                                                                                           "width_px":  724,
+                                                                                                                           "break_after":  "prefer",
+                                                                                                                           "text":  "界界界界界界界界界界界界界界界"
+                                                                                                                       }
+                                                                                                                   ],
+                                                                                                          "line_index":  1
+                                                                                                      }
+                                                                                                  ],
+                                                                                        "selected_break_indices":  {
+
+                                                                                                                   },
+                                                                                        "selected_break_policies":  {
+
+                                                                                                                    },
+                                                                                        "styled_text":  "界界界界界界界界界界界界界界界",
+                                                                                        "newline_positions":  [
+
+                                                                                                              ],
+                                                                                        "predicted_line_widths_px":  [
+                                                                                                                         724
+                                                                                                                     ],
+                                                                                        "predicted_max_line_width_px":  724,
+                                                                                        "timing":  {
+                                                                                                       "method":  "deterministic_equal_split_validation_only",
+                                                                                                       "start_frame":  90,
+                                                                                                       "duration_frames":  15,
+                                                                                                       "note":  "Not production subtitle timing authority"
+                                                                                                   }
+                                                                                    }
+                                                                                ],
+                                                          "l1_status":  "PASS",
+                                                          "materialization_status":  "READY",
+                                                          "cue_id":  "A09-B-B-A"
+                                                      },
+                                                      {
+                                                          "child":  [
+                                                                        {
+                                                                            "materialized_cues":  [
+                                                                                                      {
+                                                                                                          "cue_id":  "A09-B-B-B-A",
+                                                                                                          "part_index":  3,
+                                                                                                          "l1_status":  "PASS",
+                                                                                                          "line_count":  1,
+                                                                                                          "lines":  [
+                                                                                                                        {
+                                                                                                                            "width_ratio_safe_area":  0.7449,
+                                                                                                                            "width_ratio_frame":  0.6704,
+                                                                                                                            "width_px":  724,
+                                                                                                                            "runs":  [
+                                                                                                                                         {
+                                                                                                                                             "semantic_role":  "phrase",
+                                                                                                                                             "emphasis_level":  "normal",
+                                                                                                                                             "width_px":  724,
+                                                                                                                                             "break_after":  "prefer",
+                                                                                                                                             "text":  "界界界界界界界界界界界界界界界"
+                                                                                                                                         }
+                                                                                                                                     ],
+                                                                                                                            "line_index":  1
+                                                                                                                        }
+                                                                                                                    ],
+                                                                                                          "selected_break_indices":  {
+
+                                                                                                                                     },
+                                                                                                          "selected_break_policies":  {
+
+                                                                                                                                      },
+                                                                                                          "styled_text":  "界界界界界界界界界界界界界界界",
+                                                                                                          "newline_positions":  [
+
+                                                                                                                                ],
+                                                                                                          "predicted_line_widths_px":  [
+                                                                                                                                           724
+                                                                                                                                       ],
+                                                                                                          "predicted_max_line_width_px":  724,
+                                                                                                          "timing":  {
+                                                                                                                         "method":  "deterministic_equal_split_validation_only",
+                                                                                                                         "start_frame":  105,
+                                                                                                                         "duration_frames":  7,
+                                                                                                                         "note":  "Not production subtitle timing authority"
+                                                                                                                     }
+                                                                                                      }
+                                                                                                  ],
+                                                                            "l1_status":  "PASS",
+                                                                            "materialization_status":  "READY",
+                                                                            "cue_id":  "A09-B-B-B-A"
+                                                                        },
+                                                                        {
+                                                                            "materialized_cues":  [
+                                                                                                      {
+                                                                                                          "cue_id":  "A09-B-B-B-B",
+                                                                                                          "part_index":  4,
+                                                                                                          "l1_status":  "PASS",
+                                                                                                          "line_count":  2,
+                                                                                                          "lines":  [
+                                                                                                                        {
+                                                                                                                            "width_ratio_safe_area":  0.7449,
+                                                                                                                            "width_ratio_frame":  0.6704,
+                                                                                                                            "width_px":  724,
+                                                                                                                            "runs":  [
+                                                                                                                                         {
+                                                                                                                                             "semantic_role":  "phrase",
+                                                                                                                                             "emphasis_level":  "normal",
+                                                                                                                                             "width_px":  724,
+                                                                                                                                             "break_after":  "prefer",
+                                                                                                                                             "text":  "界界界界界界界界界界界界界界界"
+                                                                                                                                         }
+                                                                                                                                     ],
+                                                                                                                            "line_index":  1
+                                                                                                                        },
+                                                                                                                        {
+                                                                                                                            "width_ratio_safe_area":  0.3498,
+                                                                                                                            "width_ratio_frame":  0.3148,
+                                                                                                                            "width_px":  340,
+                                                                                                                            "runs":  [
+                                                                                                                                         {
+                                                                                                                                             "semantic_role":  "phrase",
+                                                                                                                                             "emphasis_level":  "normal",
+                                                                                                                                             "width_px":  340,
+                                                                                                                                             "break_after":  "forbid",
+                                                                                                                                             "text":  "界界界界界超限"
+                                                                                                                                         }
+                                                                                                                                     ],
+                                                                                                                            "line_index":  2
+                                                                                                                        }
+                                                                                                                    ],
+                                                                                                          "selected_break_indices":  0,
+                                                                                                          "selected_break_policies":  "prefer",
+                                                                                                          "styled_text":  "界界界界界界界界界界界界界界界\n界界界界界超限",
+                                                                                                          "newline_positions":  [
+                                                                                                                                    15
+                                                                                                                                ],
+                                                                                                          "predicted_line_widths_px":  [
+                                                                                                                                           724,
+                                                                                                                                           340
+                                                                                                                                       ],
+                                                                                                          "predicted_max_line_width_px":  724,
+                                                                                                          "timing":  {
+                                                                                                                         "method":  "deterministic_equal_split_validation_only",
+                                                                                                                         "start_frame":  112,
+                                                                                                                         "duration_frames":  8,
+                                                                                                                         "note":  "Not production subtitle timing authority"
+                                                                                                                     }
+                                                                                                      }
+                                                                                                  ],
+                                                                            "l1_status":  "PASS",
+                                                                            "materialization_status":  "READY",
+                                                                            "cue_id":  "A09-B-B-B-B"
+                                                                        }
+                                                                    ],
+                                                          "materialization_status":  "SPLIT",
+                                                          "cue_id":  "A09-B-B-B",
+                                                          "l1_status":  "CUE_SPLIT_REQUIRED",
+                                                          "materialized_cues":  [
+                                                                                    {
+                                                                                        "cue_id":  "A09-B-B-B-A",
+                                                                                        "part_index":  3,
+                                                                                        "l1_status":  "PASS",
+                                                                                        "line_count":  1,
+                                                                                        "lines":  [
+                                                                                                      {
+                                                                                                          "width_ratio_safe_area":  0.7449,
+                                                                                                          "width_ratio_frame":  0.6704,
+                                                                                                          "width_px":  724,
+                                                                                                          "runs":  [
+                                                                                                                       {
+                                                                                                                           "semantic_role":  "phrase",
+                                                                                                                           "emphasis_level":  "normal",
+                                                                                                                           "width_px":  724,
+                                                                                                                           "break_after":  "prefer",
+                                                                                                                           "text":  "界界界界界界界界界界界界界界界"
+                                                                                                                       }
+                                                                                                                   ],
+                                                                                                          "line_index":  1
+                                                                                                      }
+                                                                                                  ],
+                                                                                        "selected_break_indices":  {
+
+                                                                                                                   },
+                                                                                        "selected_break_policies":  {
+
+                                                                                                                    },
+                                                                                        "styled_text":  "界界界界界界界界界界界界界界界",
+                                                                                        "newline_positions":  [
+
+                                                                                                              ],
+                                                                                        "predicted_line_widths_px":  [
+                                                                                                                         724
+                                                                                                                     ],
+                                                                                        "predicted_max_line_width_px":  724,
+                                                                                        "timing":  {
+                                                                                                       "method":  "deterministic_equal_split_validation_only",
+                                                                                                       "start_frame":  105,
+                                                                                                       "duration_frames":  7,
+                                                                                                       "note":  "Not production subtitle timing authority"
+                                                                                                   }
+                                                                                    },
+                                                                                    {
+                                                                                        "cue_id":  "A09-B-B-B-B",
+                                                                                        "part_index":  4,
+                                                                                        "l1_status":  "PASS",
+                                                                                        "line_count":  2,
+                                                                                        "lines":  [
+                                                                                                      {
+                                                                                                          "width_ratio_safe_area":  0.7449,
+                                                                                                          "width_ratio_frame":  0.6704,
+                                                                                                          "width_px":  724,
+                                                                                                          "runs":  [
+                                                                                                                       {
+                                                                                                                           "semantic_role":  "phrase",
+                                                                                                                           "emphasis_level":  "normal",
+                                                                                                                           "width_px":  724,
+                                                                                                                           "break_after":  "prefer",
+                                                                                                                           "text":  "界界界界界界界界界界界界界界界"
+                                                                                                                       }
+                                                                                                                   ],
+                                                                                                          "line_index":  1
+                                                                                                      },
+                                                                                                      {
+                                                                                                          "width_ratio_safe_area":  0.3498,
+                                                                                                          "width_ratio_frame":  0.3148,
+                                                                                                          "width_px":  340,
+                                                                                                          "runs":  [
+                                                                                                                       {
+                                                                                                                           "semantic_role":  "phrase",
+                                                                                                                           "emphasis_level":  "normal",
+                                                                                                                           "width_px":  340,
+                                                                                                                           "break_after":  "forbid",
+                                                                                                                           "text":  "界界界界界超限"
+                                                                                                                       }
+                                                                                                                   ],
+                                                                                                          "line_index":  2
+                                                                                                      }
+                                                                                                  ],
+                                                                                        "selected_break_indices":  0,
+                                                                                        "selected_break_policies":  "prefer",
+                                                                                        "styled_text":  "界界界界界界界界界界界界界界界\n界界界界界超限",
+                                                                                        "newline_positions":  [
+                                                                                                                  15
+                                                                                                              ],
+                                                                                        "predicted_line_widths_px":  [
+                                                                                                                         724,
+                                                                                                                         340
+                                                                                                                     ],
+                                                                                        "predicted_max_line_width_px":  724,
+                                                                                        "timing":  {
+                                                                                                       "method":  "deterministic_equal_split_validation_only",
+                                                                                                       "start_frame":  112,
+                                                                                                       "duration_frames":  8,
+                                                                                                       "note":  "Not production subtitle timing authority"
+                                                                                                   }
+                                                                                    }
+                                                                                ],
+                                                          "selected_split_candidate":  {
+                                                                                           "right_text_preview":  "界界界界界界界界界界界界界界界界界界界界超限",
+                                                                                           "after_run_index":  0,
+                                                                                           "left_text_preview":  "界界界界界界界界界界界界界界界",
+                                                                                           "boundary_policy":  "prefer",
+                                                                                           "reason":  "legal semantic boundary for L3 re-segmentation"
+                                                                                       }
+                                                      }
+                                                  ],
+                                        "materialization_status":  "SPLIT",
+                                        "cue_id":  "A09-B-B",
+                                        "l1_status":  "CUE_SPLIT_REQUIRED",
+                                        "materialized_cues":  [
+                                                                  {
+                                                                      "cue_id":  "A09-B-B-A",
+                                                                      "part_index":  2,
+                                                                      "l1_status":  "PASS",
+                                                                      "line_count":  1,
+                                                                      "lines":  [
+                                                                                    {
+                                                                                        "width_ratio_safe_area":  0.7449,
+                                                                                        "width_ratio_frame":  0.6704,
+                                                                                        "width_px":  724,
+                                                                                        "runs":  [
+                                                                                                     {
+                                                                                                         "semantic_role":  "phrase",
+                                                                                                         "emphasis_level":  "normal",
+                                                                                                         "width_px":  724,
+                                                                                                         "break_after":  "prefer",
+                                                                                                         "text":  "界界界界界界界界界界界界界界界"
+                                                                                                     }
+                                                                                                 ],
+                                                                                        "line_index":  1
+                                                                                    }
+                                                                                ],
+                                                                      "selected_break_indices":  {
+
+                                                                                                 },
+                                                                      "selected_break_policies":  {
+
+                                                                                                  },
+                                                                      "styled_text":  "界界界界界界界界界界界界界界界",
+                                                                      "newline_positions":  [
+
+                                                                                            ],
+                                                                      "predicted_line_widths_px":  [
+                                                                                                       724
+                                                                                                   ],
+                                                                      "predicted_max_line_width_px":  724,
+                                                                      "timing":  {
+                                                                                     "method":  "deterministic_equal_split_validation_only",
+                                                                                     "start_frame":  90,
+                                                                                     "duration_frames":  15,
+                                                                                     "note":  "Not production subtitle timing authority"
+                                                                                 }
+                                                                  },
+                                                                  {
+                                                                      "cue_id":  "A09-B-B-B-A",
+                                                                      "part_index":  3,
+                                                                      "l1_status":  "PASS",
+                                                                      "line_count":  1,
+                                                                      "lines":  [
+                                                                                    {
+                                                                                        "width_ratio_safe_area":  0.7449,
+                                                                                        "width_ratio_frame":  0.6704,
+                                                                                        "width_px":  724,
+                                                                                        "runs":  [
+                                                                                                     {
+                                                                                                         "semantic_role":  "phrase",
+                                                                                                         "emphasis_level":  "normal",
+                                                                                                         "width_px":  724,
+                                                                                                         "break_after":  "prefer",
+                                                                                                         "text":  "界界界界界界界界界界界界界界界"
+                                                                                                     }
+                                                                                                 ],
+                                                                                        "line_index":  1
+                                                                                    }
+                                                                                ],
+                                                                      "selected_break_indices":  {
+
+                                                                                                 },
+                                                                      "selected_break_policies":  {
+
+                                                                                                  },
+                                                                      "styled_text":  "界界界界界界界界界界界界界界界",
+                                                                      "newline_positions":  [
+
+                                                                                            ],
+                                                                      "predicted_line_widths_px":  [
+                                                                                                       724
+                                                                                                   ],
+                                                                      "predicted_max_line_width_px":  724,
+                                                                      "timing":  {
+                                                                                     "method":  "deterministic_equal_split_validation_only",
+                                                                                     "start_frame":  105,
+                                                                                     "duration_frames":  7,
+                                                                                     "note":  "Not production subtitle timing authority"
+                                                                                 }
+                                                                  },
+                                                                  {
+                                                                      "cue_id":  "A09-B-B-B-B",
+                                                                      "part_index":  4,
+                                                                      "l1_status":  "PASS",
+                                                                      "line_count":  2,
+                                                                      "lines":  [
+                                                                                    {
+                                                                                        "width_ratio_safe_area":  0.7449,
+                                                                                        "width_ratio_frame":  0.6704,
+                                                                                        "width_px":  724,
+                                                                                        "runs":  [
+                                                                                                     {
+                                                                                                         "semantic_role":  "phrase",
+                                                                                                         "emphasis_level":  "normal",
+                                                                                                         "width_px":  724,
+                                                                                                         "break_after":  "prefer",
+                                                                                                         "text":  "界界界界界界界界界界界界界界界"
+                                                                                                     }
+                                                                                                 ],
+                                                                                        "line_index":  1
+                                                                                    },
+                                                                                    {
+                                                                                        "width_ratio_safe_area":  0.3498,
+                                                                                        "width_ratio_frame":  0.3148,
+                                                                                        "width_px":  340,
+                                                                                        "runs":  [
+                                                                                                     {
+                                                                                                         "semantic_role":  "phrase",
+                                                                                                         "emphasis_level":  "normal",
+                                                                                                         "width_px":  340,
+                                                                                                         "break_after":  "forbid",
+                                                                                                         "text":  "界界界界界超限"
+                                                                                                     }
+                                                                                                 ],
+                                                                                        "line_index":  2
+                                                                                    }
+                                                                                ],
+                                                                      "selected_break_indices":  0,
+                                                                      "selected_break_policies":  "prefer",
+                                                                      "styled_text":  "界界界界界界界界界界界界界界界\n界界界界界超限",
+                                                                      "newline_positions":  [
+                                                                                                15
+                                                                                            ],
+                                                                      "predicted_line_widths_px":  [
+                                                                                                       724,
+                                                                                                       340
+                                                                                                   ],
+                                                                      "predicted_max_line_width_px":  724,
+                                                                      "timing":  {
+                                                                                     "method":  "deterministic_equal_split_validation_only",
+                                                                                     "start_frame":  112,
+                                                                                     "duration_frames":  8,
+                                                                                     "note":  "Not production subtitle timing authority"
+                                                                                 }
+                                                                  }
+                                                              ],
+                                        "selected_split_candidate":  {
+                                                                         "right_text_preview":  "界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界超限",
+                                                                         "after_run_index":  0,
+                                                                         "left_text_preview":  "界界界界界界界界界界界界界界界",
+                                                                         "boundary_policy":  "prefer",
+                                                                         "reason":  "legal semantic boundary for L3 re-segmentation"
+                                                                     }
+                                    }
+                                ],
+                      "materialization_status":  "SPLIT",
+                      "cue_id":  "A09-B",
+                      "l1_status":  "CUE_SPLIT_REQUIRED",
+                      "materialized_cues":  [
+                                                {
+                                                    "cue_id":  "A09-B-A",
+                                                    "part_index":  1,
+                                                    "l1_status":  "PASS",
+                                                    "line_count":  1,
+                                                    "lines":  [
+                                                                  {
+                                                                      "width_ratio_safe_area":  0.7449,
+                                                                      "width_ratio_frame":  0.6704,
+                                                                      "width_px":  724,
+                                                                      "runs":  [
+                                                                                   {
+                                                                                       "semantic_role":  "phrase",
+                                                                                       "emphasis_level":  "normal",
+                                                                                       "width_px":  724,
+                                                                                       "break_after":  "prefer",
+                                                                                       "text":  "界界界界界界界界界界界界界界界"
+                                                                                   }
+                                                                               ],
+                                                                      "line_index":  1
+                                                                  }
+                                                              ],
+                                                    "selected_break_indices":  {
+
+                                                                               },
+                                                    "selected_break_policies":  {
+
+                                                                                },
+                                                    "styled_text":  "界界界界界界界界界界界界界界界",
+                                                    "newline_positions":  [
+
+                                                                          ],
+                                                    "predicted_line_widths_px":  [
+                                                                                     724
+                                                                                 ],
+                                                    "predicted_max_line_width_px":  724,
+                                                    "timing":  {
+                                                                   "method":  "deterministic_equal_split_validation_only",
+                                                                   "start_frame":  60,
+                                                                   "duration_frames":  30,
+                                                                   "note":  "Not production subtitle timing authority"
+                                                               }
+                                                },
+                                                {
+                                                    "cue_id":  "A09-B-B-A",
+                                                    "part_index":  2,
+                                                    "l1_status":  "PASS",
+                                                    "line_count":  1,
+                                                    "lines":  [
+                                                                  {
+                                                                      "width_ratio_safe_area":  0.7449,
+                                                                      "width_ratio_frame":  0.6704,
+                                                                      "width_px":  724,
+                                                                      "runs":  [
+                                                                                   {
+                                                                                       "semantic_role":  "phrase",
+                                                                                       "emphasis_level":  "normal",
+                                                                                       "width_px":  724,
+                                                                                       "break_after":  "prefer",
+                                                                                       "text":  "界界界界界界界界界界界界界界界"
+                                                                                   }
+                                                                               ],
+                                                                      "line_index":  1
+                                                                  }
+                                                              ],
+                                                    "selected_break_indices":  {
+
+                                                                               },
+                                                    "selected_break_policies":  {
+
+                                                                                },
+                                                    "styled_text":  "界界界界界界界界界界界界界界界",
+                                                    "newline_positions":  [
+
+                                                                          ],
+                                                    "predicted_line_widths_px":  [
+                                                                                     724
+                                                                                 ],
+                                                    "predicted_max_line_width_px":  724,
+                                                    "timing":  {
+                                                                   "method":  "deterministic_equal_split_validation_only",
+                                                                   "start_frame":  90,
+                                                                   "duration_frames":  15,
+                                                                   "note":  "Not production subtitle timing authority"
+                                                               }
+                                                },
+                                                {
+                                                    "cue_id":  "A09-B-B-B-A",
+                                                    "part_index":  3,
+                                                    "l1_status":  "PASS",
+                                                    "line_count":  1,
+                                                    "lines":  [
+                                                                  {
+                                                                      "width_ratio_safe_area":  0.7449,
+                                                                      "width_ratio_frame":  0.6704,
+                                                                      "width_px":  724,
+                                                                      "runs":  [
+                                                                                   {
+                                                                                       "semantic_role":  "phrase",
+                                                                                       "emphasis_level":  "normal",
+                                                                                       "width_px":  724,
+                                                                                       "break_after":  "prefer",
+                                                                                       "text":  "界界界界界界界界界界界界界界界"
+                                                                                   }
+                                                                               ],
+                                                                      "line_index":  1
+                                                                  }
+                                                              ],
+                                                    "selected_break_indices":  {
+
+                                                                               },
+                                                    "selected_break_policies":  {
+
+                                                                                },
+                                                    "styled_text":  "界界界界界界界界界界界界界界界",
+                                                    "newline_positions":  [
+
+                                                                          ],
+                                                    "predicted_line_widths_px":  [
+                                                                                     724
+                                                                                 ],
+                                                    "predicted_max_line_width_px":  724,
+                                                    "timing":  {
+                                                                   "method":  "deterministic_equal_split_validation_only",
+                                                                   "start_frame":  105,
+                                                                   "duration_frames":  7,
+                                                                   "note":  "Not production subtitle timing authority"
+                                                               }
+                                                },
+                                                {
+                                                    "cue_id":  "A09-B-B-B-B",
+                                                    "part_index":  4,
+                                                    "l1_status":  "PASS",
+                                                    "line_count":  2,
+                                                    "lines":  [
+                                                                  {
+                                                                      "width_ratio_safe_area":  0.7449,
+                                                                      "width_ratio_frame":  0.6704,
+                                                                      "width_px":  724,
+                                                                      "runs":  [
+                                                                                   {
+                                                                                       "semantic_role":  "phrase",
+                                                                                       "emphasis_level":  "normal",
+                                                                                       "width_px":  724,
+                                                                                       "break_after":  "prefer",
+                                                                                       "text":  "界界界界界界界界界界界界界界界"
+                                                                                   }
+                                                                               ],
+                                                                      "line_index":  1
+                                                                  },
+                                                                  {
+                                                                      "width_ratio_safe_area":  0.3498,
+                                                                      "width_ratio_frame":  0.3148,
+                                                                      "width_px":  340,
+                                                                      "runs":  [
+                                                                                   {
+                                                                                       "semantic_role":  "phrase",
+                                                                                       "emphasis_level":  "normal",
+                                                                                       "width_px":  340,
+                                                                                       "break_after":  "forbid",
+                                                                                       "text":  "界界界界界超限"
+                                                                                   }
+                                                                               ],
+                                                                      "line_index":  2
+                                                                  }
+                                                              ],
+                                                    "selected_break_indices":  0,
+                                                    "selected_break_policies":  "prefer",
+                                                    "styled_text":  "界界界界界界界界界界界界界界界\n界界界界界超限",
+                                                    "newline_positions":  [
+                                                                              15
+                                                                          ],
+                                                    "predicted_line_widths_px":  [
+                                                                                     724,
+                                                                                     340
+                                                                                 ],
+                                                    "predicted_max_line_width_px":  724,
+                                                    "timing":  {
+                                                                   "method":  "deterministic_equal_split_validation_only",
+                                                                   "start_frame":  112,
+                                                                   "duration_frames":  8,
+                                                                   "note":  "Not production subtitle timing authority"
+                                                               }
+                                                }
+                                            ],
+                      "selected_split_candidate":  {
+                                                       "right_text_preview":  "界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界超限",
+                                                       "after_run_index":  0,
+                                                       "left_text_preview":  "界界界界界界界界界界界界界界界",
+                                                       "boundary_policy":  "prefer",
+                                                       "reason":  "legal semantic boundary for L3 re-segmentation"
+                                                   }
+                  }
+              ],
+    "materialization_status":  "SPLIT",
+    "cue_id":  "A09",
+    "l1_status":  "CUE_SPLIT_REQUIRED",
+    "materialized_cues":  [
+                              {
+                                  "cue_id":  "A09-A",
+                                  "part_index":  0,
+                                  "l1_status":  "PASS",
+                                  "line_count":  1,
+                                  "lines":  [
+                                                {
+                                                    "width_ratio_safe_area":  0.7449,
+                                                    "width_ratio_frame":  0.6704,
+                                                    "width_px":  724,
+                                                    "runs":  [
+                                                                 {
+                                                                     "semantic_role":  "phrase",
+                                                                     "emphasis_level":  "normal",
+                                                                     "width_px":  724,
+                                                                     "break_after":  "prefer",
+                                                                     "text":  "界界界界界界界界界界界界界界界"
+                                                                 }
+                                                             ],
+                                                    "line_index":  1
+                                                }
+                                            ],
+                                  "selected_break_indices":  {
+
+                                                             },
+                                  "selected_break_policies":  {
+
+                                                              },
+                                  "styled_text":  "界界界界界界界界界界界界界界界",
+                                  "newline_positions":  [
+
+                                                        ],
+                                  "predicted_line_widths_px":  [
+                                                                   724
+                                                               ],
+                                  "predicted_max_line_width_px":  724,
+                                  "timing":  {
+                                                 "method":  "deterministic_equal_split_validation_only",
+                                                 "start_frame":  0,
+                                                 "duration_frames":  60,
+                                                 "note":  "Not production subtitle timing authority"
+                                             }
+                              },
+                              {
+                                  "cue_id":  "A09-B-A",
+                                  "part_index":  1,
+                                  "l1_status":  "PASS",
+                                  "line_count":  1,
+                                  "lines":  [
+                                                {
+                                                    "width_ratio_safe_area":  0.7449,
+                                                    "width_ratio_frame":  0.6704,
+                                                    "width_px":  724,
+                                                    "runs":  [
+                                                                 {
+                                                                     "semantic_role":  "phrase",
+                                                                     "emphasis_level":  "normal",
+                                                                     "width_px":  724,
+                                                                     "break_after":  "prefer",
+                                                                     "text":  "界界界界界界界界界界界界界界界"
+                                                                 }
+                                                             ],
+                                                    "line_index":  1
+                                                }
+                                            ],
+                                  "selected_break_indices":  {
+
+                                                             },
+                                  "selected_break_policies":  {
+
+                                                              },
+                                  "styled_text":  "界界界界界界界界界界界界界界界",
+                                  "newline_positions":  [
+
+                                                        ],
+                                  "predicted_line_widths_px":  [
+                                                                   724
+                                                               ],
+                                  "predicted_max_line_width_px":  724,
+                                  "timing":  {
+                                                 "method":  "deterministic_equal_split_validation_only",
+                                                 "start_frame":  60,
+                                                 "duration_frames":  30,
+                                                 "note":  "Not production subtitle timing authority"
+                                             }
+                              },
+                              {
+                                  "cue_id":  "A09-B-B-A",
+                                  "part_index":  2,
+                                  "l1_status":  "PASS",
+                                  "line_count":  1,
+                                  "lines":  [
+                                                {
+                                                    "width_ratio_safe_area":  0.7449,
+                                                    "width_ratio_frame":  0.6704,
+                                                    "width_px":  724,
+                                                    "runs":  [
+                                                                 {
+                                                                     "semantic_role":  "phrase",
+                                                                     "emphasis_level":  "normal",
+                                                                     "width_px":  724,
+                                                                     "break_after":  "prefer",
+                                                                     "text":  "界界界界界界界界界界界界界界界"
+                                                                 }
+                                                             ],
+                                                    "line_index":  1
+                                                }
+                                            ],
+                                  "selected_break_indices":  {
+
+                                                             },
+                                  "selected_break_policies":  {
+
+                                                              },
+                                  "styled_text":  "界界界界界界界界界界界界界界界",
+                                  "newline_positions":  [
+
+                                                        ],
+                                  "predicted_line_widths_px":  [
+                                                                   724
+                                                               ],
+                                  "predicted_max_line_width_px":  724,
+                                  "timing":  {
+                                                 "method":  "deterministic_equal_split_validation_only",
+                                                 "start_frame":  90,
+                                                 "duration_frames":  15,
+                                                 "note":  "Not production subtitle timing authority"
+                                             }
+                              },
+                              {
+                                  "cue_id":  "A09-B-B-B-A",
+                                  "part_index":  3,
+                                  "l1_status":  "PASS",
+                                  "line_count":  1,
+                                  "lines":  [
+                                                {
+                                                    "width_ratio_safe_area":  0.7449,
+                                                    "width_ratio_frame":  0.6704,
+                                                    "width_px":  724,
+                                                    "runs":  [
+                                                                 {
+                                                                     "semantic_role":  "phrase",
+                                                                     "emphasis_level":  "normal",
+                                                                     "width_px":  724,
+                                                                     "break_after":  "prefer",
+                                                                     "text":  "界界界界界界界界界界界界界界界"
+                                                                 }
+                                                             ],
+                                                    "line_index":  1
+                                                }
+                                            ],
+                                  "selected_break_indices":  {
+
+                                                             },
+                                  "selected_break_policies":  {
+
+                                                              },
+                                  "styled_text":  "界界界界界界界界界界界界界界界",
+                                  "newline_positions":  [
+
+                                                        ],
+                                  "predicted_line_widths_px":  [
+                                                                   724
+                                                               ],
+                                  "predicted_max_line_width_px":  724,
+                                  "timing":  {
+                                                 "method":  "deterministic_equal_split_validation_only",
+                                                 "start_frame":  105,
+                                                 "duration_frames":  7,
+                                                 "note":  "Not production subtitle timing authority"
+                                             }
+                              },
+                              {
+                                  "cue_id":  "A09-B-B-B-B",
+                                  "part_index":  4,
+                                  "l1_status":  "PASS",
+                                  "line_count":  2,
+                                  "lines":  [
+                                                {
+                                                    "width_ratio_safe_area":  0.7449,
+                                                    "width_ratio_frame":  0.6704,
+                                                    "width_px":  724,
+                                                    "runs":  [
+                                                                 {
+                                                                     "semantic_role":  "phrase",
+                                                                     "emphasis_level":  "normal",
+                                                                     "width_px":  724,
+                                                                     "break_after":  "prefer",
+                                                                     "text":  "界界界界界界界界界界界界界界界"
+                                                                 }
+                                                             ],
+                                                    "line_index":  1
+                                                },
+                                                {
+                                                    "width_ratio_safe_area":  0.3498,
+                                                    "width_ratio_frame":  0.3148,
+                                                    "width_px":  340,
+                                                    "runs":  [
+                                                                 {
+                                                                     "semantic_role":  "phrase",
+                                                                     "emphasis_level":  "normal",
+                                                                     "width_px":  340,
+                                                                     "break_after":  "forbid",
+                                                                     "text":  "界界界界界超限"
+                                                                 }
+                                                             ],
+                                                    "line_index":  2
+                                                }
+                                            ],
+                                  "selected_break_indices":  0,
+                                  "selected_break_policies":  "prefer",
+                                  "styled_text":  "界界界界界界界界界界界界界界界\n界界界界界超限",
+                                  "newline_positions":  [
+                                                            15
+                                                        ],
+                                  "predicted_line_widths_px":  [
+                                                                   724,
+                                                                   340
+                                                               ],
+                                  "predicted_max_line_width_px":  724,
+                                  "timing":  {
+                                                 "method":  "deterministic_equal_split_validation_only",
+                                                 "start_frame":  112,
+                                                 "duration_frames":  8,
+                                                 "note":  "Not production subtitle timing authority"
+                                             }
+                              }
+                          ],
+    "selected_split_candidate":  {
+                                     "right_text_preview":  "界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界超限",
+                                     "after_run_index":  0,
+                                     "left_text_preview":  "界界界界界界界界界界界界界界界",
+                                     "boundary_policy":  "prefer",
+                                     "reason":  "legal semantic boundary for L3 re-segmentation"
+                                 }
+}
