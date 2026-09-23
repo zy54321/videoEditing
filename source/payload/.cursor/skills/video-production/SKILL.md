@@ -557,6 +557,20 @@ Template: `video-workflow/templates/capability-resolution-result.yaml`
 
 **Must not** modify Owner Author Intent, silently change Style identity, or contain MCP / API names.
 
+### Route truth (execution record)
+
+Resolution and Plan must be able to distinguish:
+
+| Field | Meaning |
+|-------|---------|
+| requested capability | Logical ID from Blueprint / policy |
+| resolved capability | After Capability Resolution |
+| planned route | Intended L1 / Runtime implementation path |
+| actual executed route | What Runtime actually ran |
+| route evidence | Read-back / artifact proof |
+
+**Silent drift is a defect.** Example: planned `native_drt_subtitles` but executed `timeline_ai.create_subtitles` must be recorded and must not silent PASS.
+
 ---
 
 ## Stage 4 — Plan (Execution Planning)
@@ -683,8 +697,12 @@ Production Brief features
 #### Subtitle Pass
 
 - transcript / script alignment
-- subtitle segmentation
-- keyword emphasis
+- subtitle segmentation (`subtitle.segment.semantic`)
+- Blueprint `subtitle_typography_intent` → styled runs (semantic emphasis targets only)
+- L1 **subtitle layout preflight** (`video-workflow/tools/subtitle-layout-preflight.ps1`) when pixel-width discipline applies
+- keyword emphasis intent (logical `subtitle.style.keyword_emphasis` remains **UNKNOWN** until Runtime validation — contract support ≠ VERIFIED)
+
+**Layer split:** L2 / Blueprint decide *which words* deserve emphasis. L1 resolves font metrics and measures composite width per run. L0 renderer parity is **not** assumed by preflight PASS.
 
 #### Graphics Pass
 
@@ -732,7 +750,15 @@ Examples:
 
 **Pre-Render QA only.** Final Artifact QA runs **after** Render (see below).
 
-QA has **two** pre-render layers. **Timeline State QA ≠ Final Artifact QA.**
+QA has **three** subtitle-relevant layers when captions are enabled:
+
+1. **Pre-render Layout Preflight** — L1 measured width, line count, safe width, content preservation, emphasis width impact, `CUE_SPLIT_REQUIRED`, font resolution (see `subtitle-layout-reference.md`)
+2. **Timeline / Route QA** — timeline state + planned vs actual route identity
+3. **Post-render Artifact QA** — actual pixels in deliverable (`final-artifact-qa.ps1` + vision where applicable)
+
+**Preflight PASS ≠ Final Artifact PASS.** Timeline subtitle population alone is **not** deliverable subtitle PASS.
+
+Pre-render also has **two** general layers. **Timeline State QA ≠ Final Artifact QA.**
 
 ### 5A — Timeline State QA
 

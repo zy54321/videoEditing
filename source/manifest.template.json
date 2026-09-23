@@ -40,7 +40,8 @@
       "production-brief",
       "edit-blueprint",
       "capability-resolution",
-      "style-skill"
+      "style-skill",
+      "subtitle-layout"
     ],
     "knowledge": [
       "editing-craft"
@@ -50,7 +51,8 @@
       "logical-capability-vocabulary"
     ],
     "tools": [
-      "final-artifact-qa"
+      "final-artifact-qa",
+      "subtitle-layout-preflight"
     ]
   }
 }

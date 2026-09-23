@@ -329,10 +329,10 @@ Filename alone is **not** semantic evidence.
 | `subtitle.create` | Place subtitles on timeline | **VERIFIED** | **MUST** | Via `native_drt_subtitles` route (R1); not via live SRT append |
 | `subtitle.track` | Create/manage subtitle track | **VERIFIED** | **MUST** | Subtitle track populated after DRT import |
 | `subtitle.line_break_control` | Explicit cue splits + `\n` line breaks in authored text | **VERIFIED** | **MUST** (N02 V2) | Stage 08A.1: `drt.assemble` `spec.subtitles[]` → 4-cue transcript with 2-line cue → burn-in render visual |
-| `subtitle.safe_text_width` | Avoid horizontal overflow via semantic split + line heuristic | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | No API width box; fallback: semantic segmentation + max 2 lines + split cue (08A.1) |
+| `subtitle.safe_text_width` | Avoid horizontal overflow via semantic split + line heuristic | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | L1 deterministic preflight (`subtitle-layout-preflight.ps1`) exists (08E-A); Resolve burn-in parity not validated |
 | `subtitle.position` | Per-cue position / safe-area API control | **UNKNOWN** | Optional | Not required for functional layout |
 | `subtitle.visual_style` | Font, outline, background, animation | **UNKNOWN** | Optional | **Not** N02 V2 blocker; `subtitle.create` VERIFIED ≠ visual style VERIFIED |
-| `subtitle.keyword_emphasis` | Per-cue keyword styling | **UNKNOWN** | Optional | Fusion/Text+ not validated |
+| `subtitle.keyword_emphasis` | Per-cue keyword styling | **UNKNOWN** | Optional | Styled-run L1 contract exists (08E-A); Fusion/Text+ render route not validated |
 | `subtitle.style` | Legacy alias — prefer `subtitle.visual_style` | **UNKNOWN** | Optional | Style read-back not confirmed |
 | `subtitle.timing` | Verify cue timing vs narration | **AVAILABLE_UNVERIFIED** | **PRODUCTION_QA** | `get_transcript` cues vs plan; checked in final QA, not a Capability Gate blocker |
 | `subtitle.edit` | Adjust cue text/timing programmatically | **UNKNOWN** | Repair | No confirmed write surface this stage |

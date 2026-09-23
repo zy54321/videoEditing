@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "measurement_backend": "System.Drawing",
+  "graphics_unit": "Pixel",
+  "font_resolution": {
+    "requested_family": "Microsoft YaHei",
+    "resolved_family": "Microsoft YaHei",
+    "resolved_from": "primary",
+    "fallback_used": false
+  },
+  "cue_results": [
+    {
+      "cue_id": "C01",
+      "status": "PASS",
+      "line_count": 2,
+      "lines": [
+        {
+          "line_index": 1,
+          "runs": [],
+          "width_px": 0,
+          "width_ratio": 0
+        }
+      ],
+      "max_line_width_px": 0,
+      "max_line_width_ratio": 0,
+      "target_width_ratio": 0.77,
+      "hard_ceiling_ratio": 0.8,
+      "width_band": "WITHIN_TARGET",
+      "overflow": false,
+      "split_required": false,
+      "warnings": [],
+      "content_preserved": true
+    }
+  ]
+}

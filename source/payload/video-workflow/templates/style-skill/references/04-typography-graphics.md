@@ -38,7 +38,9 @@
 
 ## Capability Intent
 
-<!-- Logical capability IDs only -no Runtime names. -->
+<!-- Logical capability IDs only - no Runtime names. -->
+<!-- Inline / span emphasis changes actual measured width; Blueprint subtitle_typography_intent (semantic) + L1 preflight. -->
+<!-- Preflight PASS != final renderer parity. -->
 
 ## Blueprint Mapping
 

@@ -41,7 +41,8 @@ This Style sets pixel-width targets, expressiveness ceiling, and caption-type ro
 ## Prefer When
 
 - Standard primary caption tracks main narration with semantic cue breaks
-- Keyword emphasis highlights proper noun, number, or contrast term already in Frozen Script / content authority
+- Keyword emphasis highlights proper noun, number, or contrast term already in Frozen Script / content authority — emphasis changes layout and must stay within the same width discipline (76–80% band)
+- Emphasis remains **sparse** — emphasized number or proper noun must stay semantically intact (no splitting `40%` across lines)
 - Cue split follows narration breath or semantic unit — one idea per cue where possible
 - Caption-free moments during intentional **BREATH** or **ORIGINAL_SOUND** beats (3–6s soft guidance)
 - Lower-third simple title at hook or section pivot only

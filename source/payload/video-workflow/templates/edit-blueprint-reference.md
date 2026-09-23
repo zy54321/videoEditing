@@ -51,11 +51,28 @@ Ordinary beats: **do not** force full shot lists.
 | `preferred_shot_functions` | recommended | Ordered hints, not rigid shots |
 | `pacing` | recommended | slow / medium / medium-fast / fast |
 | `sound_music_intent` | optional | e.g. narration dominant, duck music |
-| `subtitle_graphics_intent` | optional | standard caption, keyword emphasis, title |
+| `subtitle_graphics_intent` | optional | standard caption, keyword emphasis, title (backward compatible string) |
+| `subtitle_typography_intent` | optional | Structured semantic typography — see below |
 | `color_effect_intent` | optional | natural, slightly warm, etc. |
 | `asset_selection_guidance` | optional | Semantic search hints |
 | `capability_requirements` | optional | Semantic L1 logical IDs — required / preferred / optional / fallback |
 | `shot_plan` | optional | Detailed shots when needed |
+
+### `subtitle_typography_intent` (optional)
+
+Expresses **semantic** caption / emphasis intent only. **Must not** contain Runtime implementation (`font_size_px`, `Fusion`, `Text+`, Resolve API, MCP methods, hex colors, etc.).
+
+```yaml
+subtitle_typography_intent:
+  caption_mode: standard_caption # standard_caption | caption_free | title_or_section
+  emphasis_targets:
+    - text: "40%"
+      semantic_role: key_number
+      intensity: strong # subtle | medium | strong
+  notes: ""
+```
+
+L3 materializes styled runs for L1 layout preflight. Concrete font metrics belong to L1 `subtitle-layout-request.json`.
 
 ### `capability_requirements`
 
@@ -139,6 +156,12 @@ Blueprint summary is **NON_BLOCKING** unless:
   pacing: medium-fast
   sound_music_intent: narration dominant
   subtitle_graphics_intent: standard caption
+  subtitle_typography_intent:
+    caption_mode: standard_caption
+    emphasis_targets:
+      - text: "40%"
+        semantic_role: key_number
+        intensity: strong
   color_effect_intent: natural
   asset_selection_guidance: prefer real European street; avoid ad-like slow motion
   shot_plan: null

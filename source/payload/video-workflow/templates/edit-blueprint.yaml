@@ -31,6 +31,13 @@ beats: []
 #   pacing: medium-fast # slow | medium | medium-fast | fast
 #   sound_music_intent: narration dominant
 #   subtitle_graphics_intent: standard caption
+#   subtitle_typography_intent: # optional — semantic only, no Runtime params
+#     caption_mode: standard_caption # standard_caption | caption_free | title_or_section
+#     emphasis_targets:
+#       - text: "40%"
+#         semantic_role: key_number
+#         intensity: strong
+#     notes: ""
 #   color_effect_intent: natural
 #   asset_selection_guidance: ""
 #   shot_plan: null # optional list — expand only when beat requires detail

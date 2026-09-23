@@ -89,7 +89,7 @@ vocabulary:
   subtitle.layout.pixel_width:
     status: AVAILABLE_UNVERIFIED
     l1_aliases: [subtitle.safe_text_width, subtitle.line_break_control]
-    notes: Target width layout — partial evidence; not production-VERIFIED as pixel guarantee
+    notes: Deterministic preflight foundation exists (subtitle-layout-preflight.ps1); Resolve renderer parity not Runtime-validated (08E-A)
 
   subtitle.render.basic:
     status: VERIFIED
@@ -104,7 +104,7 @@ vocabulary:
   subtitle.style.keyword_emphasis:
     status: UNKNOWN
     l1_aliases: [subtitle.keyword_emphasis]
-    notes: CAPABILITY_VALIDATION_REQUIRED
+    notes: Styled-run semantic/layout contract exists; actual styled rendering route not validated (08E-A)
 
   audio.voice.place:
     status: VERIFIED

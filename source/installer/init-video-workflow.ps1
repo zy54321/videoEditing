@@ -86,7 +86,12 @@ $ProductFiles = @(
     'video-workflow\templates\edit-blueprint-reference.md',
     'video-workflow\templates\capability-resolution-result.yaml',
     'video-workflow\templates\capability-resolution-reference.md',
-    'video-workflow\tools\final-artifact-qa.ps1'
+    'video-workflow\templates\subtitle-layout-reference.md',
+    'video-workflow\templates\subtitle-layout-request.json',
+    'video-workflow\templates\subtitle-layout-result.json',
+    'video-workflow\tools\final-artifact-qa.ps1',
+    'video-workflow\tools\subtitle-layout-preflight.ps1',
+    'video-workflow\tools\lib\subtitle-layout-engine.ps1'
 )
 
 $CreatedPaths = [System.Collections.Generic.List[string]]::new()
