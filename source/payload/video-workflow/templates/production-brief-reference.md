@@ -187,7 +187,16 @@ When `frozen: true`: subtitle / transcription alignment uses Frozen Script as se
 
 ### `assets.music`
 
-Optional music path. If empty and `features.background_music: true`, music must be sourced by a later legal step — do not claim music already exists.
+Optional music source. Two resolution modes (prefer library id for reusable tracks):
+
+| Field | Meaning |
+|-------|---------|
+| `asset_id` | Shared Asset Library music id — resolved at runtime via `shared-asset-resolve` (machine-local root in `shared-asset-library-config.yaml`) |
+| `path` | Direct file path (legacy / one-off Owner file, often under `media.input`) |
+
+If both empty and `features.background_music: true`, L3 may query the Shared Asset Library catalog.  
+If no READY asset matches → `MUSIC_ASSET_NOT_AVAILABLE` (asset supply gap).  
+Do not download unknown-copyright music from the internet.
 
 ### `features`
 

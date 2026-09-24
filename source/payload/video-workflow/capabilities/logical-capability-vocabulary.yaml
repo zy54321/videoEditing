@@ -146,6 +146,21 @@ vocabulary:
     l1_aliases: [audio.fade]
     notes: Music fade in/out
 
+  music.library.search:
+    status: CONTRACT_ONLY
+    l1_aliases: [music.library.search]
+    notes: Step 3A Shared Asset catalog filter — no real assets registered yet
+
+  music.library.select:
+    status: CONTRACT_ONLY
+    l1_aliases: [music.library.select]
+    notes: Deterministic mood/energy/duration filter; missing → MUSIC_ASSET_NOT_AVAILABLE
+
+  music.library.resolve:
+    status: CONTRACT_ONLY
+    l1_aliases: [music.library.resolve]
+    notes: asset_id → path under shared_asset_root; traversal guarded
+
   audio.sfx.place:
     status: AVAILABLE_UNVERIFIED
     l1_aliases: [audio.place]

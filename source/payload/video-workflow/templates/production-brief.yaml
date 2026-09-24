@@ -39,7 +39,8 @@ assets:
     path: "" # Frozen script source (md, txt, srt, etc.)
     frozen: false # true = semantic authority for subtitles / alignment
   music:
-    path: "" # Optional music file; may be empty if features.background_music is true
+    path: "" # Optional direct music file (Owner one-off); resolved path when not using library
+    asset_id: "" # Optional Shared Asset Library music id (preferred over hardcoded paths)
     frozen: false
 
 features:

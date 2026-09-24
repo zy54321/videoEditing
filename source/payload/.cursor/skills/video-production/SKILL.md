@@ -716,7 +716,9 @@ Production Brief features
 #### Music Pass
 
 - background music
-- placement
+- **Shared Asset Library** (Step 3A): `discover → filter → resolve path` only — config `video-workflow/runtime/shared-asset-library-config.yaml`; catalog `<shared_asset_root>/catalog/music.yaml`; Production references `assets.music.asset_id`, not hardcoded absolute paths
+- if BGM required and no READY catalog match → `MUSIC_ASSET_NOT_AVAILABLE` (asset supply gap — **not** `audio.music.place` failure)
+- placement / level / fade still via **VERIFIED** `audio.music.place`, `audio.music.level_under_voice`, existing fade routes — do not reimplement placement
 - looping / trimming
 - section changes
 

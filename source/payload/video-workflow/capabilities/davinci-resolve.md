@@ -407,9 +407,10 @@ V0.1 N02 does not require heavy graphics automation.
 | `audio.track_management` | Add/manage audio tracks | **VERIFIED** | Required | Track count/names |
 | `audio.mix_readback` | Read levels / mapping | **AVAILABLE_UNVERIFIED** | Required | `probe_audio_item`, listen test |
 | `audio.ducking` | Auto-duck music under voice | **UNKNOWN** | Desired | No reliable auto-duck API confirmed |
-| `music.library.search` | Search licensed/internal music library | **UNAVAILABLE** | No | No automated library in V0.1 Runtime |
+| `music.library.search` | Search licensed/internal music library | **CONTRACT_ONLY** | No | Step 3A: file catalog filter (`shared-asset-music-select.py`); no real assets registered yet |
 | `music.library.preview` | Preview library track | **UNAVAILABLE** | No | — |
-| `music.library.select` | Select library track for production | **UNAVAILABLE** | No | — |
+| `music.library.select` | Select library track for production | **CONTRACT_ONLY** | No | Step 3A: deterministic filter + rank; missing → `MUSIC_ASSET_NOT_AVAILABLE` |
+| `music.library.resolve` | Resolve `asset_id` → absolute path under Shared Asset root | **CONTRACT_ONLY** | No | Step 3A: `shared-asset-resolve.py`; path traversal guarded |
 | `voice.eq` | EQ on voice track/item | **AVAILABLE_UNVERIFIED** | Optional | Fairlight/audio MCP surfaces exist; not spike-validated 08A |
 | `voice.compression` | Dynamics on voice | **AVAILABLE_UNVERIFIED** | Optional | — |
 | `voice.pitch` | Pitch/timbre adjustment | **UNKNOWN** | Optional | — |
@@ -571,9 +572,10 @@ Counts are **derived from Master Matrix rows** — do not maintain separate manu
 | subtitle.timing | Cue timing verify | AVAILABLE_UNVERIFIED | PRODUCTION_QA | get_transcript; QA check, not gate blocker |
 | mixed_fps.cadence_analyze | Mixed fps cadence risk | VERIFIED | **MUST** (V2) | FFprobe + Safe Cadence Policy (08A.1) |
 | mixed_fps.interpolation | Optical flow retime | UNKNOWN | Optional | not V2 blocker |
-| music.library.search | Music library search | UNAVAILABLE | No | No V0.1 library automation |
+| music.library.search | Music library search | CONTRACT_ONLY | No | Step 3A file catalog filter |
 | music.library.preview | Music library preview | UNAVAILABLE | No | — |
-| music.library.select | Music library select | UNAVAILABLE | No | — |
+| music.library.select | Music library select | CONTRACT_ONLY | No | Step 3A; missing → MUSIC_ASSET_NOT_AVAILABLE |
+| music.library.resolve | asset_id → path | CONTRACT_ONLY | No | Step 3A shared-asset-resolve |
 | voice.eq | Voice EQ | AVAILABLE_UNVERIFIED | Optional | schema exposed |
 | voice.compression | Voice compression | AVAILABLE_UNVERIFIED | Optional | — |
 | voice.pitch | Voice pitch | UNKNOWN | Optional | — |

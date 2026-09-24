@@ -1,0 +1,83 @@
+schema_version: 1
+catalog_id: test-music-v1
+assets:
+  - asset_id: music-calm-ready-01
+    type: music
+    path: music/calm-ready.mp3
+    title: Calm Ready Track
+    duration: 180
+    mood: calm
+    energy: low
+    bpm: null
+    loopable: true
+    license:
+      type: royalty_free
+      source: Owner test fixture
+      commercial_use: true
+      attribution_required: false
+    source_url: ""
+    status: READY
+  - asset_id: music-warm-unverified-01
+    type: music
+    path: music/warm-unverified.mp3
+    title: Warm Unverified
+    duration: 120
+    mood: warm
+    energy: medium
+    bpm: 90
+    loopable: false
+    license:
+      type: licensed
+      source: Pending review
+      commercial_use: true
+      attribution_required: true
+    source_url: ""
+    status: UNVERIFIED
+  - asset_id: music-no-license-01
+    type: music
+    path: music/no-license.mp3
+    title: Missing License Fields
+    duration: 60
+    mood: neutral
+    energy: low
+    bpm: null
+    loopable: true
+    license:
+      type: unknown
+      source: ""
+      commercial_use: true
+      attribution_required: false
+    source_url: ""
+    status: UNVERIFIED
+  - asset_id: music-missing-file-01
+    type: music
+    path: music/not-present.mp3
+    title: Missing File
+    duration: 90
+    mood: curious
+    energy: medium
+    bpm: null
+    loopable: true
+    license:
+      type: royalty_free
+      source: Fixture
+      commercial_use: true
+      attribution_required: false
+    source_url: ""
+    status: READY
+  - asset_id: music-tense-high-01
+    type: music
+    path: music/tense-high.mp3
+    title: Tense High
+    duration: 200
+    mood: tense
+    energy: high
+    bpm: 128
+    loopable: true
+    license:
+      type: original
+      source: Owner original
+      commercial_use: true
+      attribution_required: false
+    source_url: ""
+    status: READY

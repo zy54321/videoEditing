@@ -1,0 +1,54 @@
+# Shared Asset Catalog — field contract (V1 music)
+schema_version: 1
+
+catalog_top_level:
+  - schema_version
+  - catalog_id
+  - assets
+
+music_asset_required:
+  - asset_id
+  - type
+  - path
+  - title
+  - duration
+  - mood
+  - energy
+  - loopable
+  - license
+  - status
+
+license_required:
+  - type
+  - source
+  - commercial_use
+  - attribution_required
+
+mood_allowed:
+  - calm
+  - curious
+  - tense
+  - warm
+  - neutral
+
+energy_allowed:
+  - low
+  - medium
+  - high
+
+status_allowed:
+  - READY
+  - UNVERIFIED
+  - REJECTED
+  - MISSING
+
+ready_requires:
+  - complete_license_fields
+  - commercial_use_explicit
+  - attribution_required_explicit
+  - relative_path_no_traversal
+  - file_exists_on_validate
+
+production_selection:
+  selectable_status: [READY]
+  missing_code: MUSIC_ASSET_NOT_AVAILABLE

@@ -93,9 +93,9 @@ Issues below are **retrospective gaps** — not capability blockers for minimum 
 |-------|-------|
 | ID | P2 |
 | Category | Asset supply |
-| Status | **REGISTERED** — not implemented |
-| Note | Not missing `audio.music.place`; missing shared music asset source |
-| Future location | `E:\03_Media\02_Video\Davinci\Astra` (structure TBD) |
+| Status | **FOUNDATION** — Step 3A catalog + tools; no real music registered yet |
+| Note | Not missing `audio.music.place`; Shared Asset Library V1 at `E:\03_Media\02_Video\Davinci\Astra\assets` |
+| Future location | `assets\music\` + `assets\catalog\music.yaml` |
 
 ### P3 — Subtitle Readability
 
