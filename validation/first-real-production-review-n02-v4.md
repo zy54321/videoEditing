@@ -103,9 +103,9 @@ Issues below are **retrospective gaps** — not capability blockers for minimum 
 |-------|-------|
 | ID | P3 |
 | Category | Subtitle presentation |
-| Status | **REGISTERED** — not implemented |
+| Status | **INVESTIGATED** — profile contract added; stroke automation **BLOCKED** (Repair Step 2) |
 | Direction | Native DRT subtitle styling (e.g. white text + dark stroke) |
-| Note | Does not reopen Stage 08E Text+ overlay path |
+| Note | Does not reopen Stage 08E Text+ overlay path. Profile: `native-drt-subtitle-readability-profile.yaml`. UI outer stroke = `AVAILABLE_MANUAL`. |
 
 ### P4 — Audio Loudness
 

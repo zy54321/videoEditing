@@ -701,6 +701,7 @@ Production Brief features
 - Blueprint `subtitle_typography_intent` → styled runs (semantic emphasis targets only)
 - L1 **subtitle layout preflight** (`video-workflow/tools/subtitle-layout-preflight.ps1`) when pixel-width discipline applies
 - keyword emphasis (logical `subtitle.style.keyword_emphasis` **AVAILABLE_UNVERIFIED** for production): isolated StyledTextCLS SIZE route verified; production overlay not final — **first Production degradation** = native DRT subtitles + semantic segmentation (no keyword emphasis, no pixel-width parity guarantee)
+- **readability profile** (`video-workflow/runtime/native-drt-subtitle-readability-profile.yaml`): production-safe default = white text + dark outer stroke on native DRT track; logical `subtitle.render.readability_stroke` is **BLOCKED** for automation — do **not** claim VERIFIED without rendered light-background visual evidence; Resolve Inspector outer stroke = `AVAILABLE_MANUAL` only
 - do **not** use `fusion_comp.set_input(CharacterLevelStyling)` — **KNOWN_NON_WORKING_ROUTE**
 
 **Layer split:** L2 / Blueprint decide *which words* deserve emphasis. L1 resolves font metrics, size multipliers, and layout. Runtime backend serializes materialized runs — not L2 Style details. Preflight PASS ≠ pixel-width renderer parity (`subtitle.layout.pixel_width` still AVAILABLE_UNVERIFIED).

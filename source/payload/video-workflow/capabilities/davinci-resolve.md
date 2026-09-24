@@ -331,7 +331,8 @@ Filename alone is **not** semantic evidence.
 | `subtitle.line_break_control` | Explicit cue splits + `\n` line breaks in authored text | **VERIFIED** | **MUST** (N02 V2) | Stage 08A.1: `drt.assemble` `spec.subtitles[]` → 4-cue transcript with 2-line cue → burn-in render visual |
 | `subtitle.safe_text_width` | Avoid horizontal overflow via semantic split + line heuristic | **AVAILABLE_UNVERIFIED** | **MUST** (N02 V2) | L1 deterministic preflight (`subtitle-layout-preflight.ps1`) exists (08E-A); Resolve burn-in parity not validated |
 | `subtitle.position` | Per-cue position / safe-area API control | **UNKNOWN** | Optional | Not required for functional layout |
-| `subtitle.visual_style` | Font, outline, background, animation | **UNKNOWN** | Optional | **Not** N02 V2 blocker; `subtitle.create` VERIFIED ≠ visual style VERIFIED |
+| `subtitle.render.readability_stroke` | Production-safe white text + dark outer stroke on native DRT track | **BLOCKED** | **MUST** (readability) | Repair Step 2: Resolve UI outer stroke = `AVAILABLE_MANUAL`; no verified automation route (DRT assemble unstyled; scripting API none; MCP `set_subtitle_style` no outline fields) |
+| `subtitle.visual_style` | Font, outline, background, animation | **UNKNOWN** | Optional | **Not** N02 V2 blocker; `subtitle.create` VERIFIED ≠ visual style VERIFIED; prefer `subtitle.render.readability_stroke` for production-safe stroke scope |
 | `subtitle.keyword_emphasis` | Per-cue keyword styling | **AVAILABLE_UNVERIFIED** | Optional | Isolated StyledTextCLS SIZE route verified (B-R1); production nested-timeline overlay partial only (08E-FINAL); native DRT fallback VERIFIED |
 | `subtitle.style` | Legacy alias — prefer `subtitle.visual_style` | **UNKNOWN** | Optional | Style read-back not confirmed |
 | `subtitle.timing` | Verify cue timing vs narration | **AVAILABLE_UNVERIFIED** | **PRODUCTION_QA** | `get_transcript` cues vs plan; checked in final QA, not a Capability Gate blocker |
@@ -357,7 +358,9 @@ Filename alone is **not** semantic evidence.
 |-------|--------|-----------------|
 | `live_api_srt_append` | **UNSAFE** | Resolve Studio 21.1.0.14 runtime crash on `media_pool.append_to_timeline` with `media_type: 3` (SRT). See `validation/capability-spike/CRASH-20260921.md`. **DO NOT RETRY IN AUTOMATED PRODUCTION.** |
 | `native_auto_caption` | **AVAILABLE_UNVERIFIED** | `timeline_ai` `create_subtitles` / transcription path. Not suitable as default for Frozen Script precise captions. |
-| `native_drt_subtitles` | **VERIFIED** | `drt.assemble` with `spec.subtitles[]` (`startFrame`, `durationFrames`, `text` with `\n`) → import → transcript + burn-in render (08A.1). `subtitlesSrt` alone may not author cues — prefer `subtitles[]`. |
+| `native_drt_subtitles` | **VERIFIED** | `drt.assemble` with `spec.subtitles[]` (`startFrame`, `durationFrames`, `text` with `\n`) → import → transcript + burn-in render (08A.1). `subtitlesSrt` alone may not author cues — prefer `subtitles[]`. Track style = unstyled stub unless separately seeded. |
+| `native_drt_subtitle_readability_profile` | **CONTRACT_ONLY** | `runtime/native-drt-subtitle-readability-profile.yaml` — white + black outer stroke semantics; stroke automation **BLOCKED** until visual route verified |
+| `project_db_set_subtitle_style` | **PARTIAL** | Advanced MCP: font family/size/weight/italic + normalized position only; **no outline/stroke**; requires styled track blob + closed project + host `better-sqlite3` |
 | `subtitle_functional_fallback` | **VERIFIED** | Content → semantic segmentation → explicit `\n` → max 2 lines → split cue → render → `final-artifact-qa.ps1` visual check |
 
 **Implementation Detail — Not Portable Contract:**

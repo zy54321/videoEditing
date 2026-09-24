@@ -1,0 +1,60 @@
+# Native DRT Subtitle Readability Profile — Production-safe default (Repair Step 2)
+# Applies to the frozen first Production subtitle route: native_drt_subtitles + semantic segmentation.
+# Creative Style may override accent colors later; this profile is the readability safety baseline.
+
+schema_version: 1
+profile_id: native-drt-subtitle-readability-v1
+route: native_drt_subtitles
+
+# Semantic target — Resolve Inspector equivalent: white fill + dark outer stroke.
+typography:
+  foreground:
+    mode: solid
+    color: white
+  outline:
+    enabled: true
+    color: black
+    position: outside
+    width_policy: production_safe
+    width_notes: "Resolve UI outer stroke max 16; width is readability-first, not decorative."
+
+# Explicit non-goals for v1 (do not enable via this profile)
+forbidden_defaults:
+  - background_box
+  - orange_stroke
+  - keyword_emphasis
+  - adaptive_brightness
+  - textplus_overlay
+
+automation:
+  placement_route: drt.assemble
+  placement_fields:
+    - spec.subtitles[].startFrame
+    - spec.subtitles[].durationFrames
+    - spec.subtitles[].text
+  style_routes:
+    samuel_mcp_subtitle_style: UNAVAILABLE
+    resolve_scripting_api: UNAVAILABLE
+    project_db_set_subtitle_style:
+      status: PARTIAL
+      writable: [font.family, font.pointSize, font.weight, font.italic, position.normalized]
+      not_writable: [outline, stroke, shadow, background, text_color_direct]
+      prerequisites:
+        - styled EffectFiltersBA blob must already exist on subtitle track
+        - project closed before Project.db patch
+        - Resolve quit + relaunch after patch
+        - optional better-sqlite3 on advanced MCP host
+    drt_assemble_track_style: NOT_SUPPORTED
+  stroke_automation: BLOCKED
+
+manual_fallback:
+  resolve_ui_outer_stroke: AVAILABLE_MANUAL
+  note: "Resolve 18.6+ Inspector → subtitle track → outer stroke. Manual only until stroke params are automatable."
+
+verification:
+  required_evidence:
+    - automation_or_manual_to_timeline
+    - rendered_frame_or_burn_in_deliver
+  insufficient_evidence:
+    - api_success_without_visual
+    - property_readback_without_render

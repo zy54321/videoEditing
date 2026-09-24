@@ -96,6 +96,11 @@ vocabulary:
     l1_aliases: [subtitle.create]
     notes: Burn-in / timeline subtitle placement
 
+  subtitle.render.readability_stroke:
+    status: BLOCKED
+    l1_aliases: [subtitle.visual_style]
+    notes: "Production-safe white + dark outer stroke on native DRT track. Resolve UI AVAILABLE_MANUAL; automation BLOCKED (Repair Step 2). Profile: native-drt-subtitle-readability-profile.yaml"
+
   subtitle.style.basic:
     status: UNKNOWN
     l1_aliases: [subtitle.visual_style]
