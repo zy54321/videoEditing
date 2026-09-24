@@ -592,9 +592,11 @@ When **READY**, the Agent **MUST**:
 2. Create and save Brief
 3. Automatically enter L3 Stage 0 Preflight
 
-**MUST NOT** ask “是否继续？” / “要不要开始？” / “是否进入下一步？”
+**MUST NOT** ask “是否继续？” / “要不要开始？” / “是否进入下一步？” / “请发送继续”
 
-Only **BLOCKED** stops for user action.
+Only **BLOCKED**, **OWNER_DECISION_REQUIRED**, or **AUTHORIZATION_REQUIRED** stops for user action.
+
+After `PREPARATION_GATE = READY`, L3 **MUST** enter Stage 0 and continue through authorized Production stages without turn-ending progress messages. See `video-workflow-core.mdc` §12 and `video-production` Skill **Continuous Execution Contract**.
 
 ---
 

@@ -975,9 +975,31 @@ Use only:
 
 ---
 
-## Execution Continuity
+## Continuous Execution Contract — MUST
 
-Once Owner starts via `【制作视频】` (or explicit `/video-production` under the same governed Brief), this authorizes completion within that Brief scope through:
+**Truth label:** `PRODUCTION_CONTINUOUS_EXECUTION` — contract defined here; runtime Agent behavior is verified by Production evidence, not by this document alone.
+
+Governance authority also in `video-workflow-core.mdc` §12.
+
+### Authorization model
+
+Once Owner completes governed Intake and `PREPARATION_GATE = READY` (or on `CONTINUE_EXISTING` with valid Brief), **Production Authority inherits** to all steps in the authorized Production Plan for **this** Production / Brief scope.
+
+**Inherited without re-asking `继续`:**
+
+| Domain | Examples |
+|--------|----------|
+| Workspace / files | production workspace reads/writes under bound paths |
+| Inspection | media audit, runtime inspect, read-back |
+| Planning | blueprint, capability resolution, execution plan |
+| Editorial | source-range decisions, assemble, trim-by-range, cuts |
+| Runtime | Resolve project/timeline, clips, subtitles, audio, visual treatment |
+| Delivery | render, verify, final-artifact QA, closeout |
+| Repair | ordinary defect repair per Repair Policy |
+
+Intake-only Owner gates (type, paths, frozen assets, music choice when required) **do not** repeat after Brief exists.
+
+### Authorized pipeline (single continuous run)
 
 ```
 Preflight
@@ -994,14 +1016,75 @@ Preflight
   → QA
   → Repair
   → Render
+  → Post-Render Final Artifact QA
   → Closeout
 ```
 
 **Analyze must not bypass Edit Blueprint or Capability Resolution** to reach Plan or Edit.
 
-Do **not** pause between normal stages to ask "should I continue?"
+### Execution mode — default
 
-Stop only for blockers, scope changes, or Owner decisions defined by existing Rules.
+```
+CONTINUE_AUTONOMOUSLY
+```
+
+While authorized work remains and no pause condition applies, L3 **MUST**:
+
+1. Execute the next legal step
+2. Verify when the step requires write → verify
+3. Proceed to the following step **in the same Agent turn when platform allows**
+
+**MUST NOT** end the turn with:
+
+```
+WAIT_FOR_OWNER_CONTINUE
+```
+
+### Forbidden turn endings
+
+If a legal next step exists, **do not** use a final user-facing message as a substitute for executing it.
+
+**Forbidden as turn terminators:**
+
+- “下一步我会继续……” / “I will continue next…”
+- “我会继续做完” / “No need to send 继续”
+- “接下来进行字幕 / 导出 / Render…”
+- “还剩 X 项” / progress-only checklist with no tool call
+- “当前进度如下……” as the closing action
+
+Progress may be logged inline or in production state notes. **Progress ≠ pause.**
+
+### Only allowed pause outcomes
+
+| Outcome | When | Required payload |
+|---------|------|------------------|
+| `BLOCKED` | Required file missing; Runtime crash/unavailable; failed call with no legal fallback; corrupt artifact; permission genuinely blocks execution | blocker id, attempted actions, why auto-continue impossible, minimal Owner input |
+| `OWNER_DECISION_REQUIRED` | Frozen Voice change; topic/立意 change; new third-party asset needing authorization; materially different creative fork | decision needed, options, default if Owner defers |
+| `AUTHORIZATION_REQUIRED` | Action outside current Brief / Production scope | what is out of scope, what authorization is needed |
+
+**Completion** (`READY_FOR_OWNER_REVIEW` / closeout) is allowed only when the pipeline above is actually finished or explicitly skipped with recorded reason.
+
+### Blueprint summary — non-blocking
+
+Default: emit concise Blueprint summary, then **immediately** continue to Capability Resolution → Plan → Edit.
+
+Pause only if `production_options.review_before_edit: true` or true ambiguity/blocker per Stage 2 rules.
+
+### Platform limit risk (registered)
+
+If Agent platform turn/tool/duration limits still terminate execution despite this contract, escalate to **checkpointed production runner** (future) — auto checkpoint, auto resume, no Owner `继续`. **Not implemented in V0.1.1.**
+
+### Regression contract (mechanical)
+
+See `source/tests/production-continuous-execution.ps1`:
+
+| Case | Expected |
+|------|----------|
+| A — normal multi-step Production | `CONTINUE_AUTONOMOUSLY` |
+| B — missing required media | `BLOCKED` |
+| C — Frozen Voice change | `OWNER_DECISION_REQUIRED` |
+| D — out-of-scope action | `AUTHORIZATION_REQUIRED` |
+| E — step complete, more work remains | progress allowed; execution **continues** |
 
 ---
 

@@ -222,3 +222,51 @@ Agent **必须**遵循：
 然后调用 `video-production` Skill 执行。
 
 生产入口、Intake、Single-Production、Path Binding、Preparation Gate 的治理权威在该 Rule 中定义；本 Rule 不重复其全文。
+
+---
+
+## 12. Continuous Production Execution — MUST
+
+当 Owner 通过 `【制作视频】` 完成 Intake 授权，且 `PREPARATION_GATE = READY` 后：
+
+**已授权 Production Plan 内的后续动作自动继承授权**，不得在每个子阶段重新等待 Owner 发送 `继续`。
+
+### 自动继承授权的动作（非穷尽）
+
+- filesystem / production workspace 操作
+- media inspection
+- blueprint generation
+- source-range decisions
+- Resolve project / timeline 操作
+- clip assembly
+- subtitle / audio / visual treatment
+- render
+- QA / final artifact inspection
+- production closeout
+
+### 唯一允许暂停的条件
+
+| 条件 | 必须返回 |
+|------|----------|
+| 真实 BLOCKER（缺文件、Runtime 不可用、无 fallback、artifact 损坏等） | `BLOCKED` |
+| 需要新的业务/创作 Owner 决定（改 Frozen Voice、换立意、新授权素材等） | `OWNER_DECISION_REQUIRED` |
+| 即将越出当前 Production 授权范围 | `AUTHORIZATION_REQUIRED` |
+
+### 禁止的 turn 结束方式
+
+若仍有合法、已授权、可执行的下一动作，**禁止**以阶段性 final response 结束当前 turn，包括但不限于：
+
+- “下一步我会继续……”
+- “我会继续做完”
+- “接下来进行字幕 / 导出”
+- “还剩 X 项”
+- “当前进度如下……”
+- “不需要你再发继续”
+
+**有下一动作 → 必须继续调用工具/步骤，不得等待 Owner 输入 `继续`。**
+
+Progress 可写入日志或中间状态，**不能**代替继续执行。
+
+### 与 Repair Policy 的关系
+
+§7 Repair Policy 已禁止因普通缺陷等待 `继续`。本 §12 将同一原则扩展到 **整个 Production 编排链**。

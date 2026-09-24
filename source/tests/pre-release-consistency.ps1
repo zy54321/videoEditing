@@ -103,6 +103,10 @@ Assert-True ($installer -match "video-workflow\\knowledge\\editing-craft") 'C10b
 Assert-True ($installer -match 'WorkspaceName') 'C10c installer exposes WorkspaceName parameter'
 Assert-True ($installer -match 'Join-Path \$parentPath \$WorkspaceName') 'C10d installer resolves workspace under parent'
 Assert-True ($installer -match 'WORKSPACE_DIRECTORY_EXISTS') 'C10e installer fails closed when workspace child exists'
+$l3Skill = Get-Content (Join-Path $Payload '.cursor\skills\video-production\SKILL.md') -Raw -Encoding UTF8
+$coreRule = Get-Content (Join-Path $Payload '.cursor\rules\video-workflow-core.mdc') -Raw -Encoding UTF8
+Assert-True ($l3Skill -match 'Continuous Execution Contract') 'C10f L3 continuous execution contract present'
+Assert-True ($coreRule -match 'Continuous Production Execution') 'C10g core continuous production execution rule present'
 
 # 11. build dirty tree fail closed
 $buildScript = Join-Path $Root 'build\build-release.ps1'

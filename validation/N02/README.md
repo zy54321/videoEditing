@@ -11,6 +11,7 @@
 | 类型 | 观察式信息短视频 |
 | V1 状态 | **VALIDATION EVIDENCE + PARTIAL STYLE ACCEPTANCE** |
 | V2 状态 | **READY_TO_RUN** (Stage 08B) |
+| V4 状态 | **FIRST REAL PRODUCTION E2E PASS** — see `validation/first-real-production-review-n02-v4.md` |
 
 ## 资产边界
 
