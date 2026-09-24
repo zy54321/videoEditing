@@ -219,6 +219,16 @@ $evidence = @"
 | N02 capability gate | PASS |
 | Remote status | $remoteStatus |
 
+## Release Position
+
+**First Real Production Baseline** — capability-complete for first Production; not feature-complete.
+
+| Gate | Status |
+|------|--------|
+| `PRODUCTION_MINIMUM_BUNDLE` | READY |
+| `REMAINING_PRODUCTION_BLOCKERS` | [] |
+| Subtitle baseline | Native DRT + semantic segmentation |
+
 ## Known Limitations
 
 1. 当前只有 `observational-info-short` 一种 L2 剪辑策略。
@@ -227,6 +237,9 @@ $evidence = @"
 4. live transition route FAILED；当前使用 native_drt_transition route。
 5. DaVinci-native item audio volume FAILED；当前允许 FFmpeg pre-attenuation fallback。
 6. ducking 未实现，非阻塞项。
+7. `subtitle.layout.pixel_width` / `subtitle.style.keyword_emphasis` = AVAILABLE_UNVERIFIED（accepted degradation）。
+8. Text+ production overlay = PARTIAL；不得升级为 production VERIFIED。
+9. motion / LUT / OFX / Fusion effects = enhancement backlog，非 P0 blocker。
 "@
 Write-Utf8NoBom -Path $evidencePath -Content $evidence
 

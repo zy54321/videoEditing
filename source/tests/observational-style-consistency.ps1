@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  Validates observational-info-short Style contract for v0.1.1-dev (Stage 08D canonical).
+  Validates observational-info-short Style contract for v0.1.1 (Stage 08D canonical).
 #>
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -94,7 +94,7 @@ Assert-True ($qa08 -match 'not technical') 'O18 08-qa separated from technical Q
 Assert-True ($l1 -match 'subtitle\.line_break_control') 'O19 subtitle.line_break_control capability'
 Assert-True ($l1 -match 'N02_V2_READINESS_GATE') 'O19 V2 readiness gate documented'
 
-Assert-True ($version -eq '0.1.1-dev') 'O20 VERSION is 0.1.1-dev'
+Assert-True ($version -eq '0.1.1') 'O20 VERSION is 0.1.1'
 
 $styleCompat = [System.IO.File]::ReadAllText((Join-Path $refRoot 'style.md'), $utf8)
 Assert-True ($styleCompat -match 'DEPRECATED') 'O21 style.md deprecated pointer only'

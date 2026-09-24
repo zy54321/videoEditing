@@ -100,7 +100,7 @@ if (-not (Test-Path -LiteralPath (Join-Path $ReleasePath 'payload') -PathType Co
 Assert-True $r01 'TEST-R01 required release files exist'
 
 $version = (Get-Content -LiteralPath (Join-Path $ReleasePath 'VERSION') -Raw).Trim()
-Assert-True ($version -eq '0.1.0') 'TEST-R02 VERSION = 0.1.0'
+Assert-True ($version -notmatch '-dev$') "TEST-R02 VERSION is release form ($version)"
 
 $manifest = $null
 $manifestOk = $false
@@ -132,11 +132,28 @@ if ($manifestOk) {
         if (-not (Test-Path -LiteralPath $p)) { $componentOk = $false }
     }
     foreach ($cap in $manifest.components.capabilities) {
-        $p = Join-Path $ReleasePath "payload/video-workflow/capabilities/$cap.md"
+        if ($cap -eq 'logical-capability-vocabulary') {
+            $p = Join-Path $ReleasePath 'payload/video-workflow/capabilities/logical-capability-vocabulary.yaml'
+        } else {
+            $p = Join-Path $ReleasePath "payload/video-workflow/capabilities/$cap.md"
+        }
         if (-not (Test-Path -LiteralPath $p)) { $componentOk = $false }
     }
     foreach ($tpl in $manifest.components.templates) {
-        $p = Join-Path $ReleasePath "payload/video-workflow/templates/$tpl.yaml"
+        switch ($tpl) {
+            'style-skill' {
+                $p = Join-Path $ReleasePath 'payload/video-workflow/templates/style-skill/SKILL.md'
+            }
+            'subtitle-layout' {
+                $p = Join-Path $ReleasePath 'payload/video-workflow/templates/subtitle-layout-request.json'
+            }
+            'capability-resolution' {
+                $p = Join-Path $ReleasePath 'payload/video-workflow/templates/capability-resolution-result.yaml'
+            }
+            default {
+                $p = Join-Path $ReleasePath "payload/video-workflow/templates/$tpl.yaml"
+            }
+        }
         if (-not (Test-Path -LiteralPath $p)) { $componentOk = $false }
     }
 }

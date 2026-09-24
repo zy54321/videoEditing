@@ -98,21 +98,18 @@ V0.1 是 **Workflow Installer**，不是 **Full Environment Installer**。
 
 ## 当前阶段
 
-### V0.1.1-dev（进行中）
+### V0.1.1（已发布 — First Real Production Baseline）
 
-正在打磨 **`observational-info-short`** 为完整 Style-first 剪辑策略，修复 N02 V1 暴露的缺口：
+从此版本起，系统允许进入**真实 Production**，并以真实成片反馈驱动后续能力演进。
 
-- Motion normalization（MUST）与 mixed-FPS cadence 分析
-- Subtitle layout / 语义与呈现解耦 / Final Artifact 字幕 QA
-- Music / Voice / Sound Design / Color / Effects 策略补齐
-- Timeline QA 与 Final Artifact QA 分离
-- Capability truth 显式登记（未验证能力不宣称 VERIFIED）
+- `PRODUCTION_MINIMUM_BUNDLE = READY`
+- `REMAINING_PRODUCTION_BLOCKERS = []`
+- 字幕基线：**Native DRT subtitles + semantic segmentation**（08E accepted degradation）
+- Text+ overlay / keyword emphasis / pixel width 等为 enhancement backlog，**不阻塞**首条 Production
 
-详见 [Style-first 模型](docs/06-style-first-editing.md)、[Stage 08A spike](validation/capability-spike/STAGE-08A-observational-style.md)。
+详见 [V0.1 范围](docs/03-v0.1-scope.md)、[Stage 08F closeout](validation/stage-08f-closeout.md)。
 
-**未验证**的高级能力（音乐库自动化、高级 Fusion 花字、自动 ducking 等）**不**写入为已支持。
-
-### V0.1（已发布）
+### V0.1.0（已发布 — immutable）
 
 以 **N02** 真实生产作为第一条 validation case。
 

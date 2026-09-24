@@ -1,0 +1,679 @@
+---
+description: Governs the standard user entry, production intake, path validation, asset audit, brief creation, preparation gate, and single-production-instance behavior for the Video Editing Workflow.
+alwaysApply: true
+---
+
+# Production Entry & Intake
+
+This rule applies only to **Video Editing Workflow production interactions**.
+It must not interfere with unrelated software-development work.
+
+**Authority:** This Rule is the **normative governance contract** for production entry and intake.
+The `video-production` L3 Skill executes under this Rule and must not override it.
+
+---
+
+## 1. Standard Entry — MUST
+
+The **only** standard user production entry is:
+
+```
+【制作视频】
+```
+
+When the user expresses this entry **exactly**, the Agent **MUST**:
+
+1. Treat it as Owner explicitly starting video production
+2. Read this Rule
+3. Read `.cursor/skills/video-production/SKILL.md`
+4. Resolve instance state: **FIRST_RUN** or **CONTINUE_EXISTING**
+
+The Agent **MUST NOT** require the user to:
+
+- Type `/video-production`
+- Type a Skill name
+- Type a Brief path
+- Write a complex prompt
+- Edit YAML manually
+- Specify MCP actions
+- Specify implementation routes
+
+`【制作视频】` **is** the standard product entry.
+
+---
+
+## 2. Single-Production Instance — MUST
+
+One initialized Cursor Workspace **MUST** bind to **exactly one** Production.
+
+| Scope | Policy |
+|-------|--------|
+| Release package | May initialize many workspaces |
+| Initialized workspace | Serves **one** Production only |
+
+Bound marker:
+
+```
+video-workflow/production/brief.yaml
+```
+
+When this file exists and is valid, the workspace is **BOUND**.
+
+The Agent **MUST NOT**:
+
+- Create a second Production in the same workspace
+- Overwrite the existing Brief to switch videos
+- Silently rebind `media.input` / `media.output`
+- Interpret `【制作视频】` as “start a new unrelated video”
+
+If the user explicitly requests another video:
+
+Return:
+
+```
+SINGLE_PRODUCTION_INSTANCE_BOUND
+```
+
+Explain: initialize a **new workspace** from the Release package.
+
+---
+
+## 3. Entry State Resolution — MUST
+
+On `【制作视频】`, check `video-workflow/production/brief.yaml`:
+
+| Case | Condition | Action |
+|------|-----------|--------|
+| **A** | Brief does not exist | **FIRST_RUN** → Preparation / Intake |
+| **B** | Brief exists and is valid | **CONTINUE_EXISTING** |
+| **C** | Brief exists but invalid / conflicting | **BLOCK** → `PRODUCTION_BRIEF_INVALID` |
+
+**CONTINUE_EXISTING** MUST:
+
+- Load current Brief
+- Not re-select video type
+- Not re-request input/output
+- Verify bound paths still valid
+- Determine current production stage and continue automatically
+
+**Case C** MUST NOT create a second Brief to evade the problem.
+
+---
+
+## 4. Preparation Flow — MUST ORDER
+
+**FIRST_RUN** MUST follow this order without skipping steps:
+
+```
+ENTRY
+→ TYPE_SELECTION
+→ PATH_COLLECTION
+→ PATH_VALIDATION
+→ ASSET_AUDIT
+→ REQUIREMENT_CLASSIFICATION
+→ NECESSARY_OWNER_CONFIRMATION
+→ BRIEF_BUILD
+→ PREPARATION_GATE
+```
+
+Only when:
+
+```
+PREPARATION_GATE = READY
+```
+
+may the Agent enter **L3 Stage 0 — Preflight**.
+
+---
+
+## 5. Type Selection — MUST
+
+On first production, the Agent **MUST** ask:
+
+> 请选择本次剪辑类型。
+
+Options **MUST** come from installed L2 Style Skills only:
+
+```
+.cursor/skills/video-editing/*/SKILL.md
+```
+
+For each installed Style Skill, read its **canonical display name** from the Skill file (`display_name` in frontmatter or defined Style Identity section). **MUST NOT** invent or rename Styles.
+
+Present:
+
+- Numbered list
+- Canonical display name
+- `skill-id`
+
+Example (V0.1.1):
+
+```
+请选择本次剪辑类型：
+
+1. 生活观察 / 轻知识短视频
+   observational-info-short
+
+可选：如果你还有特别要求，也可以一起告诉我。
+例如：“字幕活泼一点，整体暖一些。”
+```
+
+Even with **one** Style Skill, the Agent **MUST** require explicit Owner selection.
+**MUST NOT** silently choose for the user.
+
+Owner may respond by number, display name, or `skill-id`.
+
+**MUST NOT** treat video topic / subject as Style selection.
+
+---
+
+## 5.1 Creative Direction — OPTIONAL
+
+After Style is selected, if Owner provides additional stylistic preferences in natural language, map to:
+
+```
+editing.creative_direction
+```
+
+Creative Direction refines the selected Style. It is **not** a new Style.
+
+If Owner provides none: `creative_direction = []` — **MUST NOT** force Owner to fill this field.
+
+---
+
+## 6. Path Collection — MUST
+
+After type is selected, the Agent **MUST** actively request:
+
+- Input path
+- Output path
+
+Natural language is allowed. Map to:
+
+- `media.input`
+- `media.output`
+
+The Agent **MUST NOT**:
+
+- Auto-generate paths from current date
+- Guess media directories from workspace location
+- Reuse paths from historical productions
+- Silently alter user-provided paths
+
+---
+
+## 7. Path Validation — MUST
+
+### Input
+
+**MUST:**
+
+- Valid path syntax
+- Path exists
+- Is a directory
+- Is readable
+
+If missing: **BLOCK** → `INPUT_PATH_NOT_FOUND`
+
+**MUST NOT** auto-create input.
+
+### Output
+
+**MUST** check:
+
+- Path syntax
+- Parent directory
+- Accessibility
+
+If user-provided output does not exist: may create an **empty** directory (non-destructive).
+
+**MUST NOT:**
+
+- Clear output
+- Delete existing files
+- Overwrite deliverables
+- Change user paths without authorization
+
+Failure: `OUTPUT_PATH_UNAVAILABLE`
+
+---
+
+## 8. Asset Audit — MUST
+
+After path validation passes, perform a **read-only** Asset Audit on input.
+
+At minimum classify:
+
+- video
+- image
+- audio
+- subtitle
+- script / text
+- other
+
+When applicable, record basic metadata:
+
+| Type | Metadata |
+|------|----------|
+| Video | count, duration, resolution, fps, orientation |
+| Audio | count, duration, channels, sample rate |
+| Text | filename, type |
+
+Asset Audit **MUST** complete before formal editing.
+
+**Forbidden:**
+
+- Modify, delete, move, or in-place transcode source assets
+- Jump straight to editing after receiving paths only
+
+---
+
+## 9. Requirement Classification — MUST
+
+Classify missing resources using:
+
+- Selected L2 Skill
+- Production `features`
+- Actual audited assets
+
+Categories:
+
+| Class | Meaning |
+|-------|---------|
+| `REQUIRED_NOW` | Blocks Preparation READY if missing |
+| `OPTIONAL` | May proceed |
+| `RESOLVABLE_DURING_PRODUCTION` | May proceed; resolve later in workflow |
+
+Only `REQUIRED_NOW` gaps block READY.
+
+**MUST NOT** use fixed quantity rules (e.g. “must have 10 videos + 1 audio”).
+
+---
+
+## 10. Subtitle Intake Rule
+
+If `features.subtitles = true` and input has no SRT:
+
+**MUST NOT** block solely for missing SRT.
+
+If Frozen Script, script, voice, narration, or legal transcription path exists:
+
+Subtitles → `RESOLVABLE_DURING_PRODUCTION`.
+
+---
+
+## 11. Background Music Intake Rule
+
+If `features.background_music = true` and input has no music:
+
+**MUST NOT** pretend music exists.
+
+If no legal automatic music source in V0.1, offer minimal choice:
+
+1. Owner adds music to input
+2. Disable background music for this production
+
+**MUST NOT** fetch unknown-copyright music from the internet.
+**MUST NOT** fabricate music because L2 defaults music on.
+
+---
+
+## 12. Content Authority Rule
+
+Establish `content.authority` before formal production.
+
+### Single Frozen Voice candidate
+
+Example prompt:
+
+> 检测到旁白音频：`<filename>`
+>
+> 请选择内容依据：
+> A — 完全以这份旁白内容为准
+> B — 以旁白为主，我还有补充要求
+
+### Single Script / Text
+
+Ask whether that file is the primary content authority.
+
+### Multiple Script / Subtitle candidates
+
+List filenames; Owner selects authority. **MUST NOT** guess.
+
+### No Voice, Script, Subtitle, or Owner content description
+
+Only then ask:
+
+> 这条视频主要想表达什么？
+
+**MUST NOT** ask “请描述视频主题” when a clear Frozen Voice / Script already exists.
+
+**MUST NOT** invent the topic.
+
+Record resolved authority in Brief:
+
+```
+content.authority.type
+content.authority.path
+```
+
+---
+
+## 13. Frozen Asset Confirmation
+
+When audit finds voice / script candidates, **MUST** obtain minimal Owner confirmation before setting `frozen: true`.
+
+Example:
+
+> 检测到 1 个旁白音频：xxx.wav — 是否将其作为 Frozen Voice Master？
+
+**MUST NOT** auto-upgrade ordinary assets to Frozen.
+
+---
+
+## 14. Low-Prompt Rule — MUST
+
+After `【制作视频】`, the Agent **MUST** perform as much inspection as possible proactively.
+
+**MUST NOT** walk the user through Production Brief YAML fields one by one.
+
+Do not re-ask information obtainable from:
+
+- Production template defaults
+- Selected L2 Skill
+- Input inspection
+- Runtime inspection
+- Safe defaults
+
+Ask only **Owner Authority** items that cannot be reliably determined.
+
+---
+
+## 15. Format / Feature Defaults
+
+Defaults come from:
+
+- `production-brief` template
+- Selected L2 Skill
+
+Current template defaults include vertical 1080×1920 @ 24 fps and feature flags.
+
+**MUST NOT** re-ask resolution, fps, subtitles, transitions, framing, color, or effects when defaults apply, unless:
+
+1. Owner requests different values
+2. Input/platform conflict
+3. Default is not executable
+4. Owner must decide again
+
+---
+
+## 16. Production ID Resolution — MUST
+
+On **FIRST_RUN**, before Brief creation, resolve `production.id`.
+
+### Default candidate
+
+Use the **leaf directory name** of the current Cursor Workspace:
+
+- Trim leading/trailing whitespace
+- Preserve readable characters as-is
+- **MUST NOT** append date, random GUID, or derive from `media.input` / `media.output`
+
+Example:
+
+```
+Workspace: D:\Productions\N03-austria-shopping
+→ production.id candidate: N03-austria-shopping
+```
+
+### Owner Authority
+
+`production.id` remains **Owner Authority**.
+
+The workspace leaf name is a **candidate only**, not an immutable final authority.
+
+If the workspace name is unsuitable as a Production ID, **MUST** ask Owner:
+
+> 请给这条视频一个简短编号或名称。
+
+Unsuitable examples (non-exhaustive):
+
+- `video`, `project`, `workspace`, `new-folder`, `test`, `temp`
+- empty or illegal identifier
+
+**MUST NOT** invent a business ID.
+
+### After Brief creation
+
+Once `brief.yaml` is written, `production.id` is **fixed**.
+
+On **CONTINUE_EXISTING**, **MUST NOT** regenerate `production.id`.
+
+---
+
+## 17. Output Filename Resolution — MUST
+
+`output.filename` is Required in the Production Brief.
+
+If Owner does **not** explicitly provide an output filename:
+
+### Default
+
+Derive from `production.id`:
+
+```
+<production.id>_V1.mp4
+```
+
+Example: `N03-austria-shopping_V1.mp4`
+
+Set `output.overwrite_existing = false`.
+
+### Collision handling
+
+If `media.output` already contains the candidate filename:
+
+- **MUST NOT** overwrite
+- Try `_V2`, `_V3`, `_V4`, … in order
+- Use the first unused name
+
+Resolve **before** Brief Build. Write the final value to `output.filename`.
+
+**MUST NOT** ask “文件名叫什么？” unless:
+
+1. `production.id` cannot be determined
+2. Owner explicitly requests a custom filename
+3. Auto-generation cannot be resolved safely
+
+Render stage **must** re-verify the target file does not exist before writing.
+
+---
+
+## 18. Brief Creation Timing — MUST
+
+**Installer MUST NOT** create a formal Production Brief.
+
+Formal Brief path:
+
+```
+video-workflow/production/brief.yaml
+```
+
+May be created **only after**:
+
+- Intake information complete
+- Path validation complete
+- Asset audit complete
+- Necessary Owner confirmations complete
+
+**Forbidden:** create a half-empty Brief for later agents to guess.
+
+---
+
+## 19. Path Binding — MUST
+
+On Brief creation, write **resolved absolute paths** to:
+
+- `media.input`
+- `media.output`
+
+These become stable bindings for the Production.
+
+Subsequent `【制作视频】` **MUST** use Brief paths.
+
+**MUST NOT** recompute paths from date, time, workspace name, or history.
+
+If Owner explicitly changes input/output:
+
+Re-run:
+
+```
+PATH_VALIDATION → ASSET_AUDIT → PREPARATION_GATE
+```
+
+---
+
+## 20. Date Ownership — MUST
+
+The workflow **does not** manage date-based media directories.
+
+A path like `D:\Video\2026-09-21\input` is part of Owner-provided paths only.
+
+**MUST NOT:**
+
+- Auto-create today’s dated media folders
+- Switch paths on calendar day change
+- Update Brief from current date
+- Infer production date
+
+Production may continue across days.
+
+---
+
+## 21. Preparation Gate — MUST
+
+Preparation state:
+
+| State | Meaning |
+|-------|---------|
+| `COLLECTING` | Intake in progress |
+| `READY` | May enter L3 Preflight |
+| `BLOCKED` | Stop; explain gaps |
+
+**READY** requires all of the following Brief Required fields have **legal values** (not placeholders):
+
+| Field | Requirement |
+|-------|-------------|
+| `production.id` | Resolved per §16; Owner-confirmed if needed |
+| `editing.skill` | Selected L2 Skill ID |
+| `media.input` | Validated absolute path |
+| `media.output` | Validated absolute path |
+| `format.width` | Positive integer |
+| `format.height` | Positive integer |
+| `format.fps` | Positive number |
+| `output.filename` | Resolved per §17; collision-safe |
+
+Also requires:
+
+- Type selected
+- Input PASS
+- Output PASS
+- Asset audit complete
+- No `REQUIRED_NOW` gaps
+- Owner confirmations complete
+
+If any Required field is missing: remain `COLLECTING` or `BLOCKED`.
+
+**MUST NOT** create a formal Brief with missing Required fields.
+
+When **READY**, the Agent **MUST**:
+
+1. Output Preparation Summary
+2. Create and save Brief
+3. Automatically enter L3 Stage 0 Preflight
+
+**MUST NOT** ask “是否继续？” / “要不要开始？” / “是否进入下一步？”
+
+Only **BLOCKED** stops for user action.
+
+---
+
+## 22. Preparation Summary
+
+Before READY, output a concise summary:
+
+```
+Production Preparation
+
+Type:
+<selected type>
+
+Input:
+<path>
+PASS
+
+Output:
+<path>
+PASS
+
+Assets:
+Video: <n>
+Image: <n>
+Audio: <n>
+Script/Text: <n>
+
+Voice:
+<status>
+
+Script:
+<status>
+
+Subtitles:
+<status>
+
+Music:
+<status>
+
+Format:
+<width>x<height>
+<fps> fps
+
+PREPARATION_GATE: READY
+```
+
+Summary is visible status confirmation — not a new authorization gate.
+After READY, continue automatically.
+
+---
+
+## 23. Repeat Entry — MUST
+
+When a valid Brief exists and user sends `【制作视频】`:
+
+**MUST:**
+
+- Load existing Brief
+- Show brief current Production identity
+- Verify bound paths
+- Determine stage: CONTINUE / REPAIR / QA / RENDER / CLOSEOUT
+
+**MUST NOT** re-select type, re-ask input/output, or create a new Brief.
+
+If state is `READY_FOR_OWNER_REVIEW`: inform Owner production is complete and awaiting review.
+
+---
+
+## 24. Workspace Layout
+
+```
+<workspace>/
+├─ .cursor/
+└─ video-workflow/
+   ├─ capabilities/
+   ├─ templates/
+   └─ production/
+      └─ brief.yaml
+```
+
+`production/` may be created by Installer.
+`brief.yaml` is created **only** after governed Intake completes.

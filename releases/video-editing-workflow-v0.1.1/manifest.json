@@ -1,0 +1,65 @@
+{
+    "name":  "video-editing-workflow",
+    "version":  "0.1.1",
+    "instance_model":  "single-production",
+    "entry":  "【制作视频】",
+    "runtime":  {
+                    "model":  "external-runtime",
+                    "cursor":  true,
+                    "davinci_resolve":  "external",
+                    "davinci_mcp":  "external",
+                    "required":  [
+                                     "cursor",
+                                     "davinci-resolve",
+                                     "compatible-davinci-mcp"
+                                 ],
+                    "validated":  {
+                                      "davinci_resolve":  "21.1.0.14",
+                                      "davinci_mcp":  {
+                                                          "implementation":  "samuelgursky/davinci-resolve-mcp",
+                                                          "version":  "4.8.13"
+                                                      }
+                                  },
+                    "auxiliary":  [
+                                      "ffmpeg",
+                                      "ffprobe",
+                                      "kokoro-tts"
+                                  ]
+                },
+    "components":  {
+                       "rules":  [
+                                     "video-workflow-core",
+                                     "davinci-production",
+                                     "production-entry-intake"
+                                 ],
+                       "skills":  [
+                                      "video-production",
+                                      "observational-info-short"
+                                  ],
+                       "templates":  [
+                                         "production-brief",
+                                         "edit-blueprint",
+                                         "capability-resolution",
+                                         "style-skill",
+                                         "subtitle-layout"
+                                     ],
+                       "knowledge":  [
+                                         "editing-craft"
+                                     ],
+                       "capabilities":  [
+                                            "davinci-resolve",
+                                            "logical-capability-vocabulary"
+                                        ],
+                       "tools":  [
+                                     "final-artifact-qa",
+                                     "subtitle-layout-preflight",
+                                     "textplus-layout-materializer",
+                                     "generate-textplus-cls-setting"
+                                 ],
+                       "runtime_profiles":  [
+                                                "textplus-font-profiles",
+                                                "textplus-production-profile",
+                                                "textplus-cls-canonical"
+                                            ]
+                   }
+}

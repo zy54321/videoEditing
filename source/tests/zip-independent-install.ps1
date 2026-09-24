@@ -7,7 +7,9 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
-$ZipPath = Join-Path $ProjectRoot 'releases\video-editing-workflow-v0.1.0.zip'
+$SourceRoot = Join-Path $ProjectRoot 'source'
+$releaseVersion = (Get-Content (Join-Path $SourceRoot 'VERSION') -Raw).Trim()
+$ZipPath = Join-Path $ProjectRoot "releases\video-editing-workflow-v$releaseVersion.zip"
 $TmpRoot = Join-Path $PSScriptRoot '.tmp-zip-only'
 
 if (Test-Path $TmpRoot) { Remove-Item -LiteralPath $TmpRoot -Recurse -Force }
@@ -16,7 +18,7 @@ New-Item -ItemType Directory -Path $TmpRoot -Force | Out-Null
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 [System.IO.Compression.ZipFile]::ExtractToDirectory($ZipPath, $TmpRoot)
 
-$releaseRoot = Join-Path $TmpRoot 'video-editing-workflow-v0.1.0'
+$releaseRoot = Join-Path $TmpRoot "video-editing-workflow-v$releaseVersion"
 $installer = Join-Path $releaseRoot 'init-video-workflow.ps1'
 $ws = Join-Path $TmpRoot 'workspace'
 New-Item -ItemType Directory -Path $ws -Force | Out-Null

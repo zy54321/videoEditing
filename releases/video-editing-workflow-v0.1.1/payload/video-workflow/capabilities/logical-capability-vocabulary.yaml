@@ -1,0 +1,192 @@
+# Logical Capability Vocabulary — L1 canonical IDs (Stage 08D.1)
+# Canonical status values ONLY:
+#   VERIFIED | AVAILABLE_UNVERIFIED | UNKNOWN | FAILED | UNSAFE | DEFERRED
+# L2 capability-policy.yaml MUST reference IDs defined here only.
+
+schema_version: 1
+
+canonical_states:
+  - VERIFIED
+  - AVAILABLE_UNVERIFIED
+  - UNKNOWN
+  - FAILED
+  - UNSAFE
+  - DEFERRED
+
+# Resolution state matrix (see capability-resolution-reference.md):
+# VERIFIED → SELECTED
+# AVAILABLE_UNVERIFIED → CAPABILITY_VALIDATION_REQUIRED (not direct SELECTED in Production)
+# UNKNOWN / FAILED / DEFERRED → unavailable
+# UNSAFE → prohibited / never select
+
+vocabulary:
+
+  visual.select_asset:
+    status: VERIFIED
+    l1_aliases: [media.inspect, media.import]
+    notes: Asset selection from pool / input scan
+
+  visual.trim:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [clip.trim, clip.source_range]
+    notes: Timeline or source extent trim — limited read-back evidence
+
+  visual.reframe.static:
+    status: VERIFIED
+    l1_aliases: [clip.scale, clip.position]
+    notes: Static fill-frame reposition (not animated camera move)
+
+  visual.reframe.dynamic:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [clip.scale, clip.position]
+    notes: Animated reframing — CAPABILITY_VALIDATION_REQUIRED
+
+  visual.motion.push_in:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [clip.scale]
+    notes: Motivated push-in; no dedicated animated push API verified
+
+  visual.motion.pan:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [clip.position]
+    notes: Animated pan not verified; clip.position evidence is static reframe only
+
+  visual.motion.speed_change:
+    status: VERIFIED
+    l1_aliases: [clip.speed]
+    notes: Speed normalization / retime
+
+  visual.motion.aggressive_zoom:
+    status: FAILED
+    l1_aliases: []
+    notes: Editorial anti-pattern — Style forbidden list only; never select
+
+  edit.cut:
+    status: VERIFIED
+    l1_aliases: [clip.assemble]
+    notes: Hard cut assembly
+
+  edit.transition.basic:
+    status: VERIFIED
+    l1_aliases: [clip.assemble]
+    notes: Hard / action cut (no effect)
+
+  edit.transition.cross_dissolve:
+    status: VERIFIED
+    l1_aliases: [transition.apply]
+    notes: Dissolve via native_drt_transition route
+
+  subtitle.generate:
+    status: VERIFIED
+    l1_aliases: [transcription.generate, transcription.read]
+    notes: Transcript / cue generation
+
+  subtitle.segment.semantic:
+    status: VERIFIED
+    l1_aliases: [subtitle.create, subtitle.import]
+    notes: Semantic cue placement — does NOT guarantee pixel-width layout
+
+  subtitle.layout.pixel_width:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [subtitle.safe_text_width, subtitle.line_break_control]
+    notes: Deterministic preflight foundation exists (subtitle-layout-preflight.ps1); Resolve renderer parity not Runtime-validated (08E-A)
+
+  subtitle.render.basic:
+    status: VERIFIED
+    l1_aliases: [subtitle.create]
+    notes: Burn-in / timeline subtitle placement
+
+  subtitle.style.basic:
+    status: UNKNOWN
+    l1_aliases: [subtitle.visual_style]
+    notes: Font/outline API not validated
+
+  subtitle.style.keyword_emphasis:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [subtitle.keyword_emphasis]
+    notes: "Isolated StyledTextCLS SIZE route verified (08E-B B-R1). Production overlay subtitle route not final-validated (08E-FINAL). Logical production capability requires production-shaped integrated probe. NOT VERIFIED color weight tracking variation arbitrary sizes animation kinetic typography."
+
+  audio.voice.place:
+    status: VERIFIED
+    l1_aliases: [clip.assemble, audio.place]
+    notes: Narration / voice on timeline
+
+  audio.original_sound.preserve:
+    status: VERIFIED
+    l1_aliases: [clip.assemble]
+    notes: Editorial preserve of source audio segments
+
+  audio.ambience.place:
+    status: VERIFIED
+    l1_aliases: [audio.place, audio.import]
+    notes: Ambient bed placement
+
+  audio.music.place:
+    status: VERIFIED
+    l1_aliases: [audio.import, audio.place]
+    notes: Music clip placement — not equivalent to ducking
+
+  audio.music.level_under_voice:
+    status: VERIFIED
+    l1_aliases: [background_music_level_control]
+    notes: Music level reduced under voice via verified pre-attenuation route
+
+  audio.music.duck:
+    status: UNKNOWN
+    l1_aliases: [audio.ducking]
+    notes: Auto ducking not implemented
+
+  audio.music.crossfade:
+    status: VERIFIED
+    l1_aliases: [audio.fade]
+    notes: Music fade in/out
+
+  audio.sfx.place:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [audio.place]
+    notes: SFX placement — limited validation
+
+  color.primary_balance:
+    status: VERIFIED
+    l1_aliases: [color.basic]
+    notes: Exposure / WB / primary correction
+
+  color.shot_match:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [color.basic]
+    notes: Inter-shot match — partial via CDL only
+
+  color.look.apply:
+    status: VERIFIED
+    l1_aliases: [color.basic]
+    notes: Creative look via CDL / grade
+
+  graphics.title.basic:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [effects.fusion]
+    notes: Title cards — Fusion path unverified end-to-end
+
+  graphics.text.motion:
+    status: UNKNOWN
+    l1_aliases: [effects.fusion]
+    notes: CAPABILITY_VALIDATION_REQUIRED
+
+  qa.visual.frame:
+    status: VERIFIED
+    l1_aliases: [final_render.frame_sampling, final_render.black_bar_check]
+    notes: Frame-level visual QA
+
+  qa.subtitle.layout:
+    status: VERIFIED
+    l1_aliases: [final_render.subtitle_visual_qa]
+    notes: Subtitle in deliverable
+
+  qa.audio:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [render.verify]
+    notes: Stream presence; balance QA heuristic
+
+  qa.final_artifact:
+    status: VERIFIED
+    l1_aliases: [render.verify, final_render.frame_sampling]
+    notes: Post-render deliverable QA

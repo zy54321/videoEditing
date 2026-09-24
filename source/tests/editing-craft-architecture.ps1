@@ -133,7 +133,7 @@ Assert-True (($bpRef -notmatch 'timeline_item') -and ($bpTpl -notmatch 'MCP')) '
 Assert-True (($buildPolicy -match 'BUILD_STAGE_NO_PRODUCTION') -and ($archDoc -match 'Build vs Production')) 'E18 build-stage no-production policy exists'
 
 # 19 version
-Assert-True ($version -eq '0.1.1-dev') 'E19 VERSION is 0.1.1-dev'
+Assert-True ($version -eq '0.1.1') 'E19 VERSION is 0.1.1'
 
 # deprecated style.md pointer
 Assert-True ($styleMd -match 'DEPRECATED') 'E20 style.md deprecated compatibility pointer'
