@@ -6,6 +6,7 @@
 [CmdletBinding()]
 param(
     [string]$TargetPath,
+    [string]$WorkspaceName,
     [string]$PayloadRoot,
     [switch]$DryRun,
     [switch]$NoPause,
@@ -21,6 +22,8 @@ $EXIT_SUCCESS = 0
 $EXIT_CANCELLED = 2
 $EXIT_TARGET_NOT_FOUND = 10
 $EXIT_TARGET_NOT_WRITABLE = 11
+$EXIT_WORKSPACE_EXISTS = 12
+$EXIT_WORKSPACE_NAME_INVALID = 13
 $EXIT_PAYLOAD_NOT_FOUND = 20
 $EXIT_PAYLOAD_INVALID = 21
 $EXIT_FILE_CONFLICT = 30
@@ -103,6 +106,9 @@ $ProductFiles = @(
 $CreatedPaths = [System.Collections.Generic.List[string]]::new()
 $PreExistingPaths = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
 $CopyStarted = $false
+$WorkspaceRootCreated = $false
+$parentPath = $null
+$workspace = $null
 
 function Write-ErrorAndExit {
     param(
@@ -139,6 +145,8 @@ function Write-SuccessAndExit {
     Write-Host ''
     Write-Host '实例模式：'
     Write-Host 'Single Production'
+    Write-Host ''
+    Write-Host '请使用 Cursor 打开以上 Workspace。'
     Write-Host ''
     Write-Host '下一步：'
     Write-Host ''
@@ -192,6 +200,16 @@ function Get-ProductVersion {
         }
     }
     throw 'VERSION file not found'
+}
+
+function Test-WorkspaceNameValid {
+    param([string]$Name)
+    if ([string]::IsNullOrWhiteSpace($Name)) { return $false }
+    if ($Name -eq '.' -or $Name -eq '..') { return $false }
+    if ($Name -match '[\\/:*?"<>|]') { return $false }
+    if ($Name.Trim() -ne $Name) { return $false }
+    if ($Name.Contains('..')) { return $false }
+    return $true
 }
 
 function Test-TargetWritable {
@@ -287,8 +305,24 @@ function Remove-EmptyProductDirs {
     }
 }
 
+function Remove-WorkspaceRootIfCreated {
+    param(
+        [string]$Workspace,
+        [bool]$WasCreated
+    )
+    if (-not $WasCreated) { return }
+    if ([string]::IsNullOrWhiteSpace($Workspace)) { return }
+    if (-not (Test-Path -LiteralPath $Workspace)) { return }
+    try {
+        Remove-Item -LiteralPath $Workspace -Recurse -Force
+    } catch { }
+}
+
 function Rollback-Created {
-    param([string]$Workspace)
+    param(
+        [string]$Workspace,
+        [bool]$RemoveWorkspaceRoot = $false
+    )
     foreach ($p in ($CreatedPaths | Where-Object { -not (Test-Path -LiteralPath $_ -PathType Container) } | Sort-Object { $_.Length } -Descending)) {
         if (Test-Path -LiteralPath $p) {
             try { Remove-Item -LiteralPath $p -Force } catch { }
@@ -305,6 +339,7 @@ function Rollback-Created {
         } catch { }
     }
     if ($Workspace) { Remove-EmptyProductDirs -Workspace $Workspace }
+    Remove-WorkspaceRootIfCreated -Workspace $Workspace -WasCreated:$RemoveWorkspaceRoot
 }
 
 function Copy-ProductFile {
@@ -375,8 +410,8 @@ try {
     if (-not $TargetPath) {
         Add-Type -AssemblyName System.Windows.Forms | Out-Null
         $dialog = New-Object System.Windows.Forms.FolderBrowserDialog
-        $dialog.Description = '请选择本次视频 Production 的 Cursor Workspace。一个 Workspace 只服务一个 Production。'
-        $dialog.ShowNewFolderButton = $false
+        $dialog.Description = '请选择存放本次 Production Workspace 的父目录，然后输入 Workspace 名称。'
+        $dialog.ShowNewFolderButton = $true
         $result = $dialog.ShowDialog()
         if ($result -ne [System.Windows.Forms.DialogResult]::OK) {
             Write-Host 'INSTALL_CANCELLED'
@@ -387,24 +422,67 @@ try {
     }
 
     if ([string]::IsNullOrWhiteSpace($TargetPath)) {
-        Write-ErrorAndExit -Code 'TARGET_WORKSPACE_NOT_FOUND' -Message 'Target path is empty.' -ExitCode $EXIT_TARGET_NOT_FOUND
+        Write-ErrorAndExit -Code 'TARGET_PARENT_NOT_FOUND' -Message 'Workspace parent path is empty.' -ExitCode $EXIT_TARGET_NOT_FOUND
     }
 
-    $workspace = [System.IO.Path]::GetFullPath($TargetPath.Trim())
+    $parentPath = [System.IO.Path]::GetFullPath($TargetPath.Trim())
+
+    if (-not $WorkspaceName) {
+        if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey('TargetPath')) {
+            Write-ErrorAndExit -Code 'WORKSPACE_NAME_REQUIRED' -Message 'WorkspaceName is required when TargetPath is supplied on the command line.' -ExitCode $EXIT_WORKSPACE_NAME_INVALID
+        }
+        Write-Host ''
+        Write-Host '请输入 Workspace 名称（将创建于所选父目录下）：'
+        $WorkspaceName = Read-Host 'Workspace Name'
+    }
+
+    if (-not (Test-WorkspaceNameValid -Name $WorkspaceName)) {
+        Write-ErrorAndExit -Code 'WORKSPACE_NAME_INVALID' -Message 'Workspace name must be a single non-empty directory name without path separators or illegal characters.' -ExitCode $EXIT_WORKSPACE_NAME_INVALID
+    }
+
+    $workspace = [System.IO.Path]::GetFullPath((Join-Path $parentPath $WorkspaceName))
+    $parentNormalized = [System.IO.Path]::GetFullPath($parentPath)
+    if (-not $workspace.StartsWith($parentNormalized.TrimEnd('\') + '\', [StringComparison]::OrdinalIgnoreCase)) {
+        Write-ErrorAndExit -Code 'WORKSPACE_NAME_INVALID' -Message 'Workspace name resolves outside the selected parent directory.' -ExitCode $EXIT_WORKSPACE_NAME_INVALID
+    }
 
     Write-Host ''
-    Write-Host 'Target Workspace:'
+    Write-Host 'Parent:'
+    Write-Host $parentPath
+    Write-Host ''
+    Write-Host 'Workspace:'
     Write-Host $workspace
     Write-Host ''
     Write-Host 'Media input/output 将在以后输入【制作视频】时由 Agent 主动询问。'
     Write-Host ''
 
-    if (-not (Test-Path -LiteralPath $workspace -PathType Container)) {
-        Write-ErrorAndExit -Code 'TARGET_WORKSPACE_NOT_FOUND' -Message "Directory does not exist: $workspace" -ExitCode $EXIT_TARGET_NOT_FOUND
+    if (-not (Test-Path -LiteralPath $parentPath -PathType Container)) {
+        Write-ErrorAndExit -Code 'TARGET_PARENT_NOT_FOUND' -Message "Parent directory does not exist: $parentPath" -ExitCode $EXIT_TARGET_NOT_FOUND
     }
 
-    if (-not (Test-TargetWritable -Path $workspace)) {
-        Write-ErrorAndExit -Code 'TARGET_WORKSPACE_NOT_WRITABLE' -Message "Cannot write to: $workspace" -ExitCode $EXIT_TARGET_NOT_WRITABLE
+    if (-not (Test-TargetWritable -Path $parentPath)) {
+        Write-ErrorAndExit -Code 'TARGET_PARENT_NOT_WRITABLE' -Message "Cannot write to parent directory: $parentPath" -ExitCode $EXIT_TARGET_NOT_WRITABLE
+    }
+
+    if (Test-Path -LiteralPath $workspace) {
+        $installState = Get-InstallationState -Workspace $workspace
+        if ($installState.Exists) {
+            if (-not $installState.Valid) {
+                Write-ErrorAndExit -Code 'INSTALLATION_STATE_INVALID' -Message "Invalid installation.json at $($installState.Path)" -ExitCode $EXIT_STATE_INVALID
+            }
+            $obj = $installState.Object
+            Write-Host 'ERROR:'
+            Write-Host 'WORKSPACE_ALREADY_INITIALIZED'
+            Write-Host ''
+            Write-Host "Installed version: $($obj.version)"
+            Write-Host "Install time: $($obj.installed_at)"
+            Write-Host "Workspace: $($obj.workspace)"
+            Write-Host ''
+            Write-Host '此 Workspace 已经是 Single-Production Instance。制作新视频请初始化另一个 Workspace。'
+            if (-not $NoPause) { Read-Host '按 Enter 键关闭' }
+            exit $EXIT_ALREADY_INITIALIZED
+        }
+        Write-ErrorAndExit -Code 'WORKSPACE_DIRECTORY_EXISTS' -Message "Workspace directory already exists: $workspace" -ExitCode $EXIT_WORKSPACE_EXISTS
     }
 
     $briefPath = Join-Path $workspace 'video-workflow\production\brief.yaml'
@@ -412,51 +490,35 @@ try {
         Write-ErrorAndExit -Code 'PRODUCTION_ALREADY_BOUND' -Message 'brief.yaml already exists. This workspace is bound to a production.' -ExitCode $EXIT_PRODUCTION_BOUND
     }
 
-    $installState = Get-InstallationState -Workspace $workspace
-    if ($installState.Exists) {
-        if (-not $installState.Valid) {
-            Write-ErrorAndExit -Code 'INSTALLATION_STATE_INVALID' -Message "Invalid installation.json at $($installState.Path)" -ExitCode $EXIT_STATE_INVALID
-        }
-        $obj = $installState.Object
-        Write-Host 'ERROR:'
-        Write-Host 'WORKSPACE_ALREADY_INITIALIZED'
-        Write-Host ''
-        Write-Host "Installed version: $($obj.version)"
-        Write-Host "Install time: $($obj.installed_at)"
-        Write-Host "Workspace: $($obj.workspace)"
-        Write-Host ''
-        Write-Host '此 Workspace 已经是 Single-Production Instance。制作新视频请初始化另一个 Workspace。'
-        if (-not $NoPause) { Read-Host '按 Enter 键关闭' }
-        exit $EXIT_ALREADY_INITIALIZED
-    }
-
-    $conflicts = @()
-    foreach ($rel in $ProductFiles) {
-        $dst = Join-Path $workspace $rel
-        if (Test-Path -LiteralPath $dst) { $conflicts += $rel }
-    }
-    $installJsonDst = Join-Path $workspace 'video-workflow\installation.json'
-    if (Test-Path -LiteralPath $installJsonDst) { $conflicts += 'video-workflow\installation.json' }
-
-    if ($conflicts.Count -gt 0) {
-        Write-ErrorAndExit -Code 'INSTALL_FILE_CONFLICT' -Message ("Conflicting files:{0}{1}" -f [Environment]::NewLine, ($conflicts -join [Environment]::NewLine)) -ExitCode $EXIT_FILE_CONFLICT
-    }
-
-    Register-PreExistingPaths -Workspace $workspace
-
     if ($DryRun) {
         Write-Host 'DRY RUN — no files will be written.'
         Write-Host ''
+        Write-Host 'Parent:'
+        Write-Host $parentPath
+        Write-Host ''
+        Write-Host 'Workspace:'
+        Write-Host $workspace
+        Write-Host ''
         Write-Host 'Would create:'
         foreach ($rel in $ProductFiles) {
-            Write-Host "  $rel"
+            Write-Host "  $WorkspaceName\$rel"
         }
-        Write-Host '  video-workflow\production\  (empty)'
-        Write-Host '  video-workflow\installation.json'
+        Write-Host "  $WorkspaceName\video-workflow\production\  (empty)"
+        Write-Host "  $WorkspaceName\video-workflow\installation.json"
         Write-Host ''
         Write-Host 'STATUS: DRY_RUN_PASS'
         exit $EXIT_SUCCESS
     }
+
+    try {
+        New-Item -ItemType Directory -Path $workspace -Force | Out-Null
+        $WorkspaceRootCreated = $true
+        $CreatedPaths.Add($workspace) | Out-Null
+    } catch {
+        Write-ErrorAndExit -Code 'WORKSPACE_CREATE_FAILED' -Message $_.Exception.Message -ExitCode $EXIT_TARGET_NOT_WRITABLE
+    }
+
+    Register-PreExistingPaths -Workspace $workspace
 
     $CopyStarted = $true
     $copyIndex = 0
@@ -468,7 +530,7 @@ try {
                 throw 'TestSimulateFailure: simulated copy failure'
             }
         } catch {
-            Rollback-Created -Workspace $workspace
+            Rollback-Created -Workspace $workspace -RemoveWorkspaceRoot:$WorkspaceRootCreated
             Write-ErrorAndExit -Code 'INSTALL_COPY_FAILED' -Message $_.Exception.Message -ExitCode $EXIT_COPY_FAILED
         }
     }
@@ -494,20 +556,25 @@ try {
         [System.IO.File]::WriteAllText($installJsonPath, $installDoc + [Environment]::NewLine, $utf8NoBom)
         $CreatedPaths.Add($installJsonPath) | Out-Null
     } catch {
-        Rollback-Created -Workspace $workspace
+        Rollback-Created -Workspace $workspace -RemoveWorkspaceRoot:$WorkspaceRootCreated
         Write-ErrorAndExit -Code 'INSTALL_COPY_FAILED' -Message $_.Exception.Message -ExitCode $EXIT_COPY_FAILED
     }
 
     try {
         Verify-Installation -Workspace $workspace -Version $version
     } catch {
-        Rollback-Created -Workspace $workspace
+        Rollback-Created -Workspace $workspace -RemoveWorkspaceRoot:$WorkspaceRootCreated
         if (Test-Path -LiteralPath $installJsonPath) { Remove-Item -LiteralPath $installJsonPath -Force }
         Write-ErrorAndExit -Code 'INSTALL_VERIFY_FAILED' -Message $_.Exception.Message -ExitCode $EXIT_VERIFY_FAILED
     }
 
+    $WorkspaceRootCreated = $false
     Write-SuccessAndExit -Version $version -Workspace $workspace
 } catch {
-    if ($workspace) { Rollback-Created -Workspace $workspace } else { Rollback-Created }
+    if ($workspace) {
+        Rollback-Created -Workspace $workspace -RemoveWorkspaceRoot:$WorkspaceRootCreated
+    } else {
+        Rollback-Created
+    }
     Write-ErrorAndExit -Code 'INSTALL_COPY_FAILED' -Message $_.Exception.Message -ExitCode $EXIT_COPY_FAILED
 }

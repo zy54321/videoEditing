@@ -9,6 +9,7 @@ $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $PSScriptRoot
 $Installer = Join-Path $Root 'installer\init-video-workflow.ps1'
 $TmpRoot = Join-Path $PSScriptRoot '.tmp-installer'
+$DefaultWorkspaceName = 'test-production'
 
 $Pass = 0
 $Fail = 0
@@ -29,15 +30,29 @@ function Assert-ExitCode {
     Assert-True ($Actual -eq $Expected) "$Name (expected exit $Expected, got $Actual)"
 }
 
+function Get-WorkspacePath {
+    param(
+        [string]$Parent,
+        [string]$WorkspaceName = $DefaultWorkspaceName
+    )
+    return Join-Path $Parent $WorkspaceName
+}
+
 function Invoke-Installer {
     param(
-        [string]$Target,
+        [string]$Parent,
+        [string]$WorkspaceName = $DefaultWorkspaceName,
         [string]$PayloadRoot,
         [switch]$DryRun,
         [switch]$TestSimulateFailure,
         [int]$TestSimulateFailureAfter = 1
     )
-    $args = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $Installer, '-TargetPath', $Target, '-NoPause')
+    $args = @(
+        '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $Installer,
+        '-TargetPath', $Parent,
+        '-WorkspaceName', $WorkspaceName,
+        '-NoPause'
+    )
     if ($DryRun) { $args += '-DryRun' }
     if ($PayloadRoot) { $args += @('-PayloadRoot', $PayloadRoot) }
     if ($TestSimulateFailure) {
@@ -48,7 +63,7 @@ function Invoke-Installer {
     return [int]$LASTEXITCODE
 }
 
-function New-EmptyWorkspace {
+function New-ParentDir {
     param([string]$Name)
     $p = Join-Path $TmpRoot $Name
     if (Test-Path $p) { Remove-Item -LiteralPath $p -Recurse -Force }
@@ -73,10 +88,17 @@ New-Item -ItemType Directory -Path $TmpRoot -Force | Out-Null
 Write-Host '=== Installer Smoke Tests ===' -ForegroundColor Cyan
 Write-Host ''
 
-# TEST-01: fresh workspace install
-$ws1 = New-EmptyWorkspace 'test01-fresh'
-$code = Invoke-Installer -Target $ws1
+# TEST-01: fresh workspace install (Case A)
+$parent1 = New-ParentDir 'test01-parent'
+$code = Invoke-Installer -Parent $parent1
 Assert-ExitCode -Actual $code -Expected 0 -Name 'TEST-01 fresh workspace install'
+$ws1 = Get-WorkspacePath -Parent $parent1
+Assert-True (Test-Path (Join-Path $ws1 '.cursor\rules\video-workflow-core.mdc')) 'TEST-01A workspace child contains .cursor'
+Assert-True (Test-Path (Join-Path $ws1 'video-workflow\production')) 'TEST-01A workspace child contains video-workflow'
+
+# TEST-01B: parent must not be polluted (Case B)
+Assert-True (-not (Test-Path (Join-Path $parent1 '.cursor'))) 'TEST-01B parent has no .cursor'
+Assert-True (-not (Test-Path (Join-Path $parent1 'video-workflow'))) 'TEST-01B parent has no video-workflow'
 
 # TEST-02: 3 rules
 $rules = @(
@@ -126,113 +148,111 @@ $prodDir = Join-Path $ws1 'video-workflow\production'
 $test05 = (Test-Path $prodDir -PathType Container) -and (-not (Test-Path (Join-Path $prodDir 'brief.yaml')))
 Assert-True $test05 'TEST-05 production dir exists, brief.yaml absent'
 
-# TEST-06: installation.json parse
+# TEST-06: installation.json parse and workspace path
 $jsonPath = Join-Path $ws1 'video-workflow\installation.json'
 $jsonOk = $false
 try {
     $j = Get-Content $jsonPath -Raw | ConvertFrom-Json
-    $jsonOk = ($j.product -eq 'video-editing-workflow') -and ($j.brief_created -eq $false)
+    $expectedWs = [System.IO.Path]::GetFullPath($ws1)
+    $actualWs = [System.IO.Path]::GetFullPath($j.workspace)
+    $jsonOk = ($j.product -eq 'video-editing-workflow') -and ($j.brief_created -eq $false) -and ($actualWs -eq $expectedWs)
 } catch { $jsonOk = $false }
-Assert-True $jsonOk 'TEST-06 installation.json parse'
+Assert-True $jsonOk 'TEST-06 installation.json parse and workspace path'
 
 # TEST-07: re-install same workspace
-$code7 = Invoke-Installer -Target $ws1
+$code7 = Invoke-Installer -Parent $parent1
 Assert-ExitCode -Actual $code7 -Expected 31 -Name 'TEST-07 re-install blocked WORKSPACE_ALREADY_INITIALIZED'
 
-# TEST-08: conflict without installation.json
-$ws8 = New-EmptyWorkspace 'test08-conflict'
-New-Item -ItemType Directory -Path (Join-Path $ws8 '.cursor\rules') -Force | Out-Null
-Copy-Item (Join-Path $ws1 '.cursor\rules\video-workflow-core.mdc') (Join-Path $ws8 '.cursor\rules\video-workflow-core.mdc')
-$code8 = Invoke-Installer -Target $ws8
-Assert-ExitCode -Actual $code8 -Expected 30 -Name 'TEST-08 pre-existing file INSTALL_FILE_CONFLICT'
+# TEST-08: existing workspace directory blocked (Case C)
+$parent8 = New-ParentDir 'test08-parent'
+$existingWs8 = Get-WorkspacePath -Parent $parent8
+New-Item -ItemType Directory -Path (Join-Path $existingWs8 '.cursor\rules') -Force | Out-Null
+Copy-Item (Join-Path $ws1 '.cursor\rules\video-workflow-core.mdc') (Join-Path $existingWs8 '.cursor\rules\video-workflow-core.mdc')
+$code8 = Invoke-Installer -Parent $parent8
+Assert-ExitCode -Actual $code8 -Expected 12 -Name 'TEST-08 existing workspace WORKSPACE_DIRECTORY_EXISTS'
 
-# TEST-09: brief.yaml blocks install (priority)
-$ws9 = New-EmptyWorkspace 'test09-bound'
-New-Item -ItemType Directory -Path (Join-Path $ws9 'video-workflow\production') -Force | Out-Null
-Set-Content -Path (Join-Path $ws9 'video-workflow\production\brief.yaml') -Value 'version: 1'
-$code9 = Invoke-Installer -Target $ws9
-Assert-ExitCode -Actual $code9 -Expected 33 -Name 'TEST-09 existing brief.yaml PRODUCTION_ALREADY_BOUND'
+# TEST-09: existing workspace with brief blocked (Case C)
+$parent9 = New-ParentDir 'test09-parent'
+$existingWs9 = Get-WorkspacePath -Parent $parent9 -WorkspaceName 'bound-production'
+New-Item -ItemType Directory -Path (Join-Path $existingWs9 'video-workflow\production') -Force | Out-Null
+Set-Content -Path (Join-Path $existingWs9 'video-workflow\production\brief.yaml') -Value 'version: 1'
+$code9 = Invoke-Installer -Parent $parent9 -WorkspaceName 'bound-production'
+Assert-ExitCode -Actual $code9 -Expected 12 -Name 'TEST-09 existing workspace with brief WORKSPACE_DIRECTORY_EXISTS'
 
 # TEST-10: dry run no changes
-$ws10 = New-EmptyWorkspace 'test10-dryrun'
-$marker = Join-Path $ws10 'user-marker.txt'
+$parent10 = New-ParentDir 'test10-parent'
+$marker = Join-Path $parent10 'user-marker.txt'
 Set-Content -Path $marker -Value 'keep'
-$before = (Get-ChildItem -LiteralPath $ws10 -Recurse -Force | Measure-Object).Count
-$code10 = Invoke-Installer -Target $ws10 -DryRun
-$after = (Get-ChildItem -LiteralPath $ws10 -Recurse -Force | Measure-Object).Count
+$before = (Get-ChildItem -LiteralPath $parent10 -Recurse -Force | Measure-Object).Count
+$code10 = Invoke-Installer -Parent $parent10 -DryRun
+$after = (Get-ChildItem -LiteralPath $parent10 -Recurse -Force | Measure-Object).Count
 Assert-ExitCode -Actual $code10 -Expected 0 -Name 'TEST-10 dry run exit 0'
 Assert-True (($before -eq $after) -and (Test-Path $marker)) 'TEST-10 dry run no file changes'
+Assert-True (-not (Test-Path (Get-WorkspacePath -Parent $parent10))) 'TEST-10 dry run does not create workspace child'
 
-# TEST-11: does not touch pre-existing user file
-$ws11 = New-EmptyWorkspace 'test11-userfile'
-$userFile = Join-Path $ws11 'my-notes.txt'
+# TEST-11: does not touch pre-existing parent file
+$parent11 = New-ParentDir 'test11-parent'
+$userFile = Join-Path $parent11 'my-notes.txt'
 Set-Content -Path $userFile -Value 'owner data'
-Invoke-Installer -Target $ws11 | Out-Null
-Assert-True (Test-Path -LiteralPath $userFile) 'TEST-11 user file still exists'
-Assert-True ((Get-Content -LiteralPath $userFile -Raw).Trim() -eq 'owner data') 'TEST-11 preserves pre-existing user files'
+Invoke-Installer -Parent $parent11 | Out-Null
+Assert-True (Test-Path -LiteralPath $userFile) 'TEST-11 parent user file still exists'
+Assert-True ((Get-Content -LiteralPath $userFile -Raw).Trim() -eq 'owner data') 'TEST-11 preserves pre-existing parent files'
 
 # TEST-12: no workspace-config.yaml
-$ws12 = $ws1
-Assert-True (-not (Test-Path (Join-Path $ws12 'workspace-config.yaml'))) 'TEST-12 no workspace-config.yaml created'
+Assert-True (-not (Test-Path (Join-Path $ws1 'workspace-config.yaml'))) 'TEST-12 no workspace-config.yaml created'
 
-# TEST-13: missing payload file blocks install, target unchanged
-$ws13 = New-EmptyWorkspace 'test13-payload-invalid'
+# TEST-13: missing payload file blocks install, parent unchanged
+$parent13 = New-ParentDir 'test13-parent'
 $payloadCopy = Join-Path $TmpRoot 'payload-copy'
 if (Test-Path $payloadCopy) { Remove-Item -LiteralPath $payloadCopy -Recurse -Force }
 Copy-Item -LiteralPath (Join-Path $Root 'payload') -Destination $payloadCopy -Recurse -Force
 Remove-Item -LiteralPath (Join-Path $payloadCopy '.cursor\rules\video-workflow-core.mdc') -Force
-$before13 = (Get-ChildItem -LiteralPath $ws13 -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object).Count
-$code13 = Invoke-Installer -Target $ws13 -PayloadRoot $payloadCopy
-$after13 = (Get-ChildItem -LiteralPath $ws13 -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object).Count
+$before13 = (Get-ChildItem -LiteralPath $parent13 -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object).Count
+$code13 = Invoke-Installer -Parent $parent13 -PayloadRoot $payloadCopy
+$after13 = (Get-ChildItem -LiteralPath $parent13 -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object).Count
 Assert-ExitCode -Actual $code13 -Expected 21 -Name 'TEST-13 missing payload file PAYLOAD_INVALID'
-Assert-True ($before13 -eq $after13) 'TEST-13 target unchanged after PAYLOAD_INVALID'
+Assert-True ($before13 -eq $after13) 'TEST-13 parent unchanged after PAYLOAD_INVALID'
 
-# TEST-14: copy failure rollback cleans empty created dirs
-$ws14 = New-EmptyWorkspace 'test14-rollback'
-$userFile14 = Join-Path $ws14 'owner.txt'
+# TEST-14: copy failure rollback cleans workspace child (Case D)
+$parent14 = New-ParentDir 'test14-parent'
+$userFile14 = Join-Path $parent14 'owner.txt'
 Set-Content -Path $userFile14 -Value 'keep'
-$code14 = Invoke-Installer -Target $ws14 -TestSimulateFailure
+$code14 = Invoke-Installer -Parent $parent14 -TestSimulateFailure
 Assert-ExitCode -Actual $code14 -Expected 40 -Name 'TEST-14 simulated copy failure'
-Assert-True (-not (Test-Path (Join-Path $ws14 '.cursor'))) 'TEST-14 rollback removes created .cursor'
-Assert-True ((Get-Content -LiteralPath $userFile14 -Raw).Trim() -eq 'keep') 'TEST-14 preserves pre-existing user file'
+Assert-True (-not (Test-Path (Get-WorkspacePath -Parent $parent14))) 'TEST-14 rollback removes created workspace child'
+Assert-True (-not (Test-Path (Join-Path $parent14 '.cursor'))) 'TEST-14 parent has no .cursor after rollback'
+Assert-True ((Get-Content -LiteralPath $userFile14 -Raw).Trim() -eq 'keep') 'TEST-14 preserves pre-existing parent file'
 
-$ws14b = New-EmptyWorkspace 'test14b-rollback-existing'
-New-Item -ItemType Directory -Path (Join-Path $ws14b '.cursor\rules') -Force | Out-Null
-Set-Content -Path (Join-Path $ws14b '.cursor\rules\custom.mdc') -Value 'owner rule' -Encoding UTF8
-Invoke-Installer -Target $ws14b -TestSimulateFailure | Out-Null
-Assert-True (Test-Path (Join-Path $ws14b '.cursor\rules\custom.mdc')) 'TEST-14 preserves pre-existing .cursor'
+# TEST-14b: parent-level .cursor is never touched
+$parent14b = New-ParentDir 'test14b-parent'
+New-Item -ItemType Directory -Path (Join-Path $parent14b '.cursor\rules') -Force | Out-Null
+Set-Content -Path (Join-Path $parent14b '.cursor\rules\custom.mdc') -Value 'owner rule' -Encoding UTF8
+Invoke-Installer -Parent $parent14b -TestSimulateFailure | Out-Null
+Assert-True (Test-Path (Join-Path $parent14b '.cursor\rules\custom.mdc')) 'TEST-14b preserves parent-level .cursor'
+Assert-True (-not (Test-Path (Get-WorkspacePath -Parent $parent14b))) 'TEST-14b does not leave workspace child after rollback'
 
-# TEST-15A: no pre-existing knowledge/editing-craft — rollback cleans installer-created tree
-$ws15a = New-EmptyWorkspace 'test15a-knowledge-rollback-clean'
-$userFile15a = Join-Path $ws15a 'owner-notes.txt'
+# TEST-15A: rollback removes entire workspace child after late failure
+$parent15a = New-ParentDir 'test15a-parent'
+$userFile15a = Join-Path $parent15a 'owner-notes.txt'
 Set-Content -Path $userFile15a -Value 'keep'
-$code15a = Invoke-Installer -Target $ws15a -TestSimulateFailure -TestSimulateFailureAfter 16
+$code15a = Invoke-Installer -Parent $parent15a -TestSimulateFailure -TestSimulateFailureAfter 16
 Assert-ExitCode -Actual $code15a -Expected 40 -Name 'TEST-15A knowledge rollback simulated failure'
-Assert-True (-not (Test-Path (Join-Path $ws15a 'video-workflow\knowledge\editing-craft'))) 'TEST-15A rollback removes created editing-craft'
-Assert-True (-not (Test-Path (Join-Path $ws15a 'video-workflow\knowledge'))) 'TEST-15A rollback removes created knowledge'
-Assert-True ((Get-Content -LiteralPath $userFile15a -Raw).Trim() -eq 'keep') 'TEST-15A preserves pre-existing user file'
+Assert-True (-not (Test-Path (Get-WorkspacePath -Parent $parent15a))) 'TEST-15A rollback removes workspace child'
+Assert-True ((Get-Content -LiteralPath $userFile15a -Raw).Trim() -eq 'keep') 'TEST-15A preserves pre-existing parent file'
 
-# TEST-15B: Owner pre-existing empty editing-craft — rollback must not delete it
-$ws15b = New-EmptyWorkspace 'test15b-owner-editing-craft-empty'
-$ownerCraftDir = Join-Path $ws15b 'video-workflow\knowledge\editing-craft'
-New-Item -ItemType Directory -Path $ownerCraftDir -Force | Out-Null
-$code15b = Invoke-Installer -Target $ws15b -TestSimulateFailure -TestSimulateFailureAfter 16
-Assert-ExitCode -Actual $code15b -Expected 40 -Name 'TEST-15B owner empty editing-craft rollback failure'
-Assert-True (Test-Path -LiteralPath $ownerCraftDir -PathType Container) 'TEST-15B preserves Owner empty editing-craft dir'
-Assert-True ((Get-ChildItem -LiteralPath $ownerCraftDir -Force | Measure-Object).Count -eq 0) 'TEST-15B Owner editing-craft remains empty after rollback'
-Assert-True (-not (Test-Path (Join-Path $ownerCraftDir 'README.md'))) 'TEST-15B installer craft files rolled back'
+# TEST-15B: parent sibling directory untouched
+$parent15b = New-ParentDir 'test15b-parent'
+$siblingDir = Join-Path $parent15b 'owner-sibling'
+New-Item -ItemType Directory -Path $siblingDir -Force | Out-Null
+Set-Content -Path (Join-Path $siblingDir 'marker.txt') -Value 'stay'
+Invoke-Installer -Parent $parent15b -TestSimulateFailure -TestSimulateFailureAfter 16 | Out-Null
+Assert-True (Test-Path (Join-Path $siblingDir 'marker.txt')) 'TEST-15B preserves parent sibling directory'
+Assert-True (-not (Test-Path (Get-WorkspacePath -Parent $parent15b))) 'TEST-15B workspace child removed after rollback'
 
-# TEST-15C: Owner pre-existing editing-craft with file — content must survive rollback
-$ws15c = New-EmptyWorkspace 'test15c-owner-editing-craft-file'
-$ownerCraftDirC = Join-Path $ws15c 'video-workflow\knowledge\editing-craft'
-New-Item -ItemType Directory -Path $ownerCraftDirC -Force | Out-Null
-$ownerMarker = Join-Path $ownerCraftDirC 'owner-placeholder.txt'
-Set-Content -Path $ownerMarker -Value 'owner craft marker'
-$code15c = Invoke-Installer -Target $ws15c -TestSimulateFailure -TestSimulateFailureAfter 16
-Assert-ExitCode -Actual $code15c -Expected 40 -Name 'TEST-15C owner editing-craft file rollback failure'
-Assert-True (Test-Path -LiteralPath $ownerMarker) 'TEST-15C Owner marker file still exists'
-Assert-True ((Get-Content -LiteralPath $ownerMarker -Raw).Trim() -eq 'owner craft marker') 'TEST-15C Owner marker content unchanged'
-Assert-True (-not (Test-Path (Join-Path $ownerCraftDirC 'README.md'))) 'TEST-15C installer craft files rolled back'
+# TEST-16: invalid workspace name blocked
+$parent16 = New-ParentDir 'test16-parent'
+$code16 = Invoke-Installer -Parent $parent16 -WorkspaceName '..'
+Assert-ExitCode -Actual $code16 -Expected 13 -Name 'TEST-16 invalid workspace name blocked'
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })

@@ -100,6 +100,9 @@ foreach ($rel in $productFiles) {
 Assert-True ($installer -match 'foreach \(\$rel in \$ProductFiles\)' -and -not ($installer -match '\$RequiredPayloadFiles')) 'C10 installer uses single ProductFiles preflight'
 Assert-True $c10 'C10 all ProductFiles exist in payload'
 Assert-True ($installer -match "video-workflow\\knowledge\\editing-craft") 'C10b installer pre-registers Owner editing-craft path'
+Assert-True ($installer -match 'WorkspaceName') 'C10c installer exposes WorkspaceName parameter'
+Assert-True ($installer -match 'Join-Path \$parentPath \$WorkspaceName') 'C10d installer resolves workspace under parent'
+Assert-True ($installer -match 'WORKSPACE_DIRECTORY_EXISTS') 'C10e installer fails closed when workspace child exists'
 
 # 11. build dirty tree fail closed
 $buildScript = Join-Path $Root 'build\build-release.ps1'

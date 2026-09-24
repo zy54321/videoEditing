@@ -42,19 +42,35 @@ function Assert-ExitCode {
 }
 
 function Invoke-ReleaseInstaller {
-    param([string]$Target)
+    param(
+        [string]$Parent,
+        [string]$WorkspaceName = 'release-test-production'
+    )
     $installer = Join-Path $ReleasePath 'init-video-workflow.ps1'
-    $args = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $installer, '-TargetPath', $Target, '-NoPause')
+    $args = @(
+        '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $installer,
+        '-TargetPath', $Parent,
+        '-WorkspaceName', $WorkspaceName,
+        '-NoPause'
+    )
     & powershell.exe @args | Out-Null
     return [int]$LASTEXITCODE
 }
 
-function New-EmptyWorkspace {
+function New-ParentDir {
     param([string]$Name)
     $p = Join-Path $TmpRoot $Name
     if (Test-Path -LiteralPath $p) { Remove-Item -LiteralPath $p -Recurse -Force }
     New-Item -ItemType Directory -Path $p -Force | Out-Null
     return $p
+}
+
+function Get-WorkspacePath {
+    param(
+        [string]$Parent,
+        [string]$WorkspaceName = 'release-test-production'
+    )
+    return Join-Path $Parent $WorkspaceName
 }
 
 function Cleanup-Tmp {
@@ -176,9 +192,11 @@ Assert-True $shaOk 'TEST-R06 SHA256 checksums verify'
 $releasePayload = Join-Path $ReleasePath 'payload'
 Assert-True (Test-Path -LiteralPath $releasePayload -PathType Container) 'TEST-R07 release payload at ./payload'
 
-$ws = New-EmptyWorkspace 'install-target'
-$code = Invoke-ReleaseInstaller -Target $ws
-Assert-ExitCode -Actual $code -Expected 0 -Name 'TEST-R08 release installer installs to empty workspace'
+$parent = New-ParentDir 'install-parent'
+$code = Invoke-ReleaseInstaller -Parent $parent
+$ws = Get-WorkspacePath -Parent $parent
+Assert-ExitCode -Actual $code -Expected 0 -Name 'TEST-R08 release installer installs to workspace child'
+Assert-True (-not (Test-Path (Join-Path $parent '.cursor'))) 'TEST-R08b parent not polluted with .cursor'
 
 $rulesOk = @(
     'video-workflow-core.mdc',
@@ -205,7 +223,7 @@ try {
 } catch { $instOk = $false }
 Assert-True $instOk 'TEST-R15 installation.json version matches release VERSION'
 
-$code16 = Invoke-ReleaseInstaller -Target $ws
+$code16 = Invoke-ReleaseInstaller -Parent $parent
 Assert-ExitCode -Actual $code16 -Expected 31 -Name 'TEST-R16 re-install blocked'
 
 $forbiddenNames = @('docs', 'research', 'validation', 'source', 'tests', '.git')

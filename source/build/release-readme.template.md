@@ -6,8 +6,8 @@
 
 1. 解压 Release
 2. 双击 `init-video-workflow.bat`
-3. 选择本次视频的 Cursor Workspace
-4. 用 Cursor 打开该 Workspace
+3. 选择存放本次 Production Workspace 的**父目录**，然后输入 **Workspace 名称**
+4. 用 Cursor 打开安装器创建的 Workspace 子目录（例如 `E:\Productions\N02-Production-01`）
 
 ## Start
 
@@ -32,7 +32,7 @@ Release 可以反复使用。
 
 但是：一个初始化 Workspace 只服务一个 Production。
 
-新视频：重新运行 Installer，选择新的 Workspace。
+新视频：重新运行 Installer，在父目录下创建新的 Workspace 名称。
 
 ## Runtime Requirement
 
