@@ -4,6 +4,12 @@
 *.mov
 *.wav
 
+# Disposable test fixture outputs
+source/tests/fixtures/**/.qa/
+source/tests/fixtures/pacing-reframe/*.png
+source/tests/fixtures/pacing-reframe/*.mp4
+source/tests/fixtures/audio-loudness/
+
 # Logs & caches
 *.log
 __pycache__/
