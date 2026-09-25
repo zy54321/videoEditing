@@ -69,4 +69,4 @@ Max **1** loudnorm repair + re-QA. Still failing → `FINAL_AUDIO_REPAIR_FAILED`
 
 ## Ending HEAD
 
-`9e5e3887672bb03afc10499f9f521dbcf291c81a`
+`d86e513b8e9ddb647025f58534e81ddb9a8bcd05`
