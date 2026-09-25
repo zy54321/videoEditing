@@ -147,19 +147,19 @@ vocabulary:
     notes: Music fade in/out
 
   music.library.search:
-    status: CONTRACT_ONLY
+    status: VERIFIED
     l1_aliases: [music.library.search]
-    notes: Step 3A Shared Asset catalog filter — no real assets registered yet
+    notes: Step 3B-2 — 4 Adobe Firefly WAV in Astra catalog; filter/rank via shared-asset-music-select.py
 
   music.library.select:
-    status: CONTRACT_ONLY
+    status: VERIFIED
     l1_aliases: [music.library.select]
-    notes: Deterministic mood/energy/duration filter; missing → MUSIC_ASSET_NOT_AVAILABLE
+    notes: N02-like requirement ranking validated; missing → MUSIC_ASSET_NOT_AVAILABLE
 
   music.library.resolve:
-    status: CONTRACT_ONLY
+    status: VERIFIED
     l1_aliases: [music.library.resolve]
-    notes: asset_id → path under shared_asset_root; traversal guarded
+    notes: asset_id → absolute path under shared_asset_root; 4 Firefly tracks resolved in 3B-2
 
   audio.sfx.place:
     status: AVAILABLE_UNVERIFIED

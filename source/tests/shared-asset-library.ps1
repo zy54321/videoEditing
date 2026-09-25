@@ -138,7 +138,7 @@ Assert-True ($installer -notmatch '03_Media\\02_Video\\Davinci\\Astra\\assets') 
 Assert-True ($l3 -match 'MUSIC_ASSET_NOT_AVAILABLE') 'G02 L3 missing music code'
 Assert-True ($l3 -match 'audio\.music\.place') 'G03 L3 defers placement to existing capability'
 Assert-True ($briefRef -match 'asset_id') 'G04 brief supports asset_id'
-Assert-True ($l1 -match 'music\.library\.select[\s\S]{0,120}CONTRACT_ONLY') 'G05 L1 library select CONTRACT_ONLY'
+Assert-True ($l1 -match 'music\.library\.select[\s\S]{0,120}VERIFIED') 'G05 L1 library select VERIFIED'
 Assert-True (Test-Path $closeout) 'G06 closeout doc exists'
 
 # Regression — subtitle step 2 unchanged

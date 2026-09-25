@@ -716,8 +716,30 @@ Production Brief features
 #### Music Pass
 
 - background music
-- **Shared Asset Library** (Step 3A): `discover → filter → resolve path` only — config `video-workflow/runtime/shared-asset-library-config.yaml`; catalog `<shared_asset_root>/catalog/music.yaml`; Production references `assets.music.asset_id`, not hardcoded absolute paths
+- **Shared Asset Library** (Step 3A foundation + Step 3B-2 real assets): logical layer holds **`asset_id` only** — never absolute paths in Style, Brief, or Blueprint
+- config: `video-workflow/runtime/shared-asset-library-config.yaml`
+- catalog authority: `<shared_asset_root>/catalog/music.yaml` (machine-local; not bundled in release)
+- **Execution chain (library boundary → runtime handoff):**
+
+```
+Production Brief / Style
+        ↓
+Music Requirement (mood / style / usage / energy / duration)
+        ↓
+music.library.search   → shared-asset-music-select.py
+        ↓
+music.library.select   → ranked READY candidates; top `asset_id` written to Brief `assets.music.asset_id`
+        ↓
+music.library.resolve  → shared-asset-resolve.py → absolute path (runtime only)
+        ↓
+audio.music.place      → VERIFIED (Resolve placement)
+        ↓
+audio.music.level_under_voice
+```
+
+- CLI: `shared-asset-music-select.py` (`--moods`, `--styles`, `--usage`, `--energy`) or `--requirement-json`
 - if BGM required and no READY catalog match → `MUSIC_ASSET_NOT_AVAILABLE` (asset supply gap — **not** `audio.music.place` failure)
+- **Forbidden:** random internet download; use REJECTED / UNVERIFIED assets; silent mismatch; silent BGM drop
 - placement / level / fade still via **VERIFIED** `audio.music.place`, `audio.music.level_under_voice`, existing fade routes — do not reimplement placement
 - looping / trimming
 - section changes

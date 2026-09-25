@@ -43,8 +43,21 @@ Schema: `video-workflow/templates/shared-asset-catalog.schema.yaml`
 | `license.source` | Provenance description |
 | `license.commercial_use` | Boolean — required explicit value |
 | `license.attribution_required` | Boolean — required explicit value |
-| `source_url` | String or empty |
+| `license.evidence_url` | Official license / provenance URL — **required for READY** |
+| `license.royalty_free` | Optional boolean — record when provider documents royalty-free terms |
+| `source_url` | String or empty (legacy) |
 | `status` | `READY` \| `UNVERIFIED` \| `REJECTED` \| `MISSING` |
+
+### Optional enrichment (Step 3B+)
+
+| Field | Purpose |
+|-------|---------|
+| `moods` | Tag list for multi-mood matching |
+| `styles` | Style tags (`technology`, `documentary`, …) |
+| `usage_tags` | Intended usage (`narration background`, …) |
+| `priority` | `PRIMARY` \| `SECONDARY` — ranking bias |
+| `provider` / `source_type` | Generation provenance (e.g. Adobe Firefly) |
+| `technical` | ffprobe-derived codec / sample_rate / channels / file_size_bytes |
 
 ---
 
@@ -75,26 +88,26 @@ File existence alone does **not** imply `READY`.
 
 ---
 
-## Selection contract (V1)
+## Selection contract (V1.1 — Step 3B-2)
 
 Filter parameters:
 
 ```
-mood            optional exact match
-energy          optional exact match
+mood / moods     tag match against mood + moods + vibe_tags
+styles           tag match against styles + purpose_tags
+usage            tag match against usage_tags + purpose_tags
+energy           exact match (hard filter)
 required_duration  optional minimum seconds coverage
-commercial_use  default true for Production
-loopable        optional require true
-status          default READY only
+commercial_use   default true for Production
+loopable         optional require true
+status           default READY only
 ```
 
-Ranking (deterministic):
+Hard filters: `status`, `commercial_use`, `energy`, `duration`, `loopable`.
 
-1. Status `READY` (filter gate)
-2. Mood match (exact > none)
-3. Energy match (exact > none)
-4. Duration suitable (`duration >= required_duration` when set)
-5. Loopable when required
+Soft scoring (when mood/style/usage specified): intersection count + `PRIMARY` priority bonus; `SECONDARY` penalty.
+
+CLI: `shared-asset-music-select.py --moods calm,thoughtful --styles technology,documentary --usage "narration background" --energy low`
 
 No AI recommendation. No embedding search.
 

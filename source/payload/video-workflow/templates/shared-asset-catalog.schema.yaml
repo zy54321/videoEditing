@@ -24,6 +24,23 @@ license_required:
   - commercial_use
   - attribution_required
 
+license_ready_recommended:
+  - evidence_url
+  - royalty_free
+
+optional_music_fields:
+  - moods
+  - styles
+  - usage_tags
+  - vibe_tags
+  - purpose_tags
+  - priority
+  - provider
+  - source_type
+  - technical
+  - generation_controls
+  - notes
+
 mood_allowed:
   - calm
   - curious
@@ -46,8 +63,13 @@ ready_requires:
   - complete_license_fields
   - commercial_use_explicit
   - attribution_required_explicit
+  - license_evidence_url
   - relative_path_no_traversal
   - file_exists_on_validate
+
+priority_allowed:
+  - PRIMARY
+  - SECONDARY
 
 production_selection:
   selectable_status: [READY]
