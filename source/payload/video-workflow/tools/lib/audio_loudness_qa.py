@@ -25,19 +25,31 @@ class LoudnessProfile:
     accept_min_lufs: float = -17.0
     accept_max_lufs: float = -15.0
     ceiling_dbtp: float = -1.0
+    lra: float = 7.0
+    max_repair_attempts: int = 1
 
 
 def load_loudness_profile(path: Path) -> LoudnessProfile:
     data = load_catalog_file(path)
     integrated = data.get("integrated_loudness") or {}
     peak = data.get("true_peak") or {}
+    auto_repair = data.get("auto_repair") or {}
     return LoudnessProfile(
         target_lufs=float(integrated.get("target_lufs", -16)),
         tolerance_lu=float(integrated.get("tolerance_lu", 1)),
         accept_min_lufs=float(integrated.get("accept_min_lufs", -17)),
         accept_max_lufs=float(integrated.get("accept_max_lufs", -15)),
         ceiling_dbtp=float(peak.get("ceiling_dbtp", -1.0)),
+        lra=float(integrated.get("lra", 7)),
+        max_repair_attempts=int(auto_repair.get("max_retries", 1)),
     )
+
+
+REPAIRABLE_VERDICTS = frozenset({VERDICT_TOO_LOW, VERDICT_TOO_HIGH, VERDICT_TRUE_PEAK})
+
+
+def is_repairable_verdict(verdict: str) -> bool:
+    return verdict in REPAIRABLE_VERDICTS
 
 
 def probe_audio_stream(path: Path) -> Dict[str, Any]:

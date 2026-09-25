@@ -763,7 +763,8 @@ audio.music.level_under_voice
 - `audio.music.level_under_voice` via `ffmpeg_pre_attenuation` — measure voice/music LUFS when possible; fallback factor `0.15` (verified spike)
 - `audio.music.duck` remains **UNKNOWN** — do not claim VERIFIED
 - post-render loudness QA: `audio-loudness-qa.py` / `final-artifact-qa.ps1` audio section
-- `FINAL_AUDIO_AUTO_REPAIR` = **BLOCKED** — fail closed on `LOUDNESS_TOO_LOW` / `LOUDNESS_TOO_HIGH` / `TRUE_PEAK_EXCEEDED`
+- post-render loudness repair: `final-audio-loudness-repair.py` + `final-artifact-audio-qa-repair.ps1` (measure/repair separate)
+- `FINAL_AUDIO_AUTO_REPAIR` = **VERIFIED** — ffmpeg loudnorm two-pass; max **1** attempt; `NO_REPAIR_REQUIRED` when already PASS; `FINAL_AUDIO_REPAIR_FAILED` fail-closed
 
 #### Color Pass
 
@@ -941,7 +942,7 @@ Verdicts: `PASS`, `LOUDNESS_TOO_LOW`, `LOUDNESS_TOO_HIGH`, `TRUE_PEAK_EXCEEDED`,
 
 Target: **-16 LUFS** (±1 LU), true peak **≤ -1 dBTP**. N02 V4 reference ≈ -24.8 LUFS (too low) — do not silently pass.
 
-`FINAL_AUDIO_AUTO_REPAIR` = **BLOCKED** — no verified auto normalize route; escalate repair manually.
+`FINAL_AUDIO_AUTO_REPAIR` = **VERIFIED** — use `final-artifact-audio-qa-repair.ps1` after render when loudness QA fails; do not mutate artifact inside QA-only tools.
 
 `render.verify_output` PASS alone **does not** equal Production PASS.
 

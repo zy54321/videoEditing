@@ -10,6 +10,8 @@ integrated_loudness:
   tolerance_lu: 1
   accept_min_lufs: -17
   accept_max_lufs: -15
+  # V1 engineering parameter — not claimed as universal platform LRA standard
+  lra: 7
 
 true_peak:
   ceiling_dbtp: -1.0
@@ -66,13 +68,24 @@ qa:
     no_audio: NO_AUDIO
 
 auto_repair:
-  final_audio_auto_repair: BLOCKED
-  max_retries: 0
-  reason: "No VERIFIED post-render gain/normalize route in Resolve; audio.volume FAILED."
+  final_audio_auto_repair: VERIFIED
+  max_retries: 1
+  route: ffmpeg_loudnorm_two_pass
+  tool: final-audio-loudness-repair.py
+  orchestrator: final-artifact-audio-qa-repair.ps1
+  policy:
+    repairable_verdicts:
+      - LOUDNESS_TOO_LOW
+      - LOUDNESS_TOO_HIGH
+      - TRUE_PEAK_EXCEEDED
+    non_repairable_verdicts:
+      - NO_AUDIO
+    no_op_verdict: NO_REPAIR_REQUIRED
+    fail_closed_verdict: FINAL_AUDIO_REPAIR_FAILED
   candidate_routes:
     ffmpeg_loudnorm_two_pass:
-      status: AVAILABLE_UNVERIFIED
-      note: "Offline candidate only — not validated on Resolve deliverable chain."
+      status: VERIFIED
+      note: "Post-render loudnorm two-pass on rendered artifact; video stream copy for MP4."
     resolve_fairlight_loudness_normalization:
       status: AVAILABLE_UNVERIFIED
       note: "Resolve/Fairlight may support loudness tools manually; Samuel MCP automation not evidenced."

@@ -9,6 +9,7 @@ source/tests/fixtures/**/.qa/
 source/tests/fixtures/pacing-reframe/*.png
 source/tests/fixtures/pacing-reframe/*.mp4
 source/tests/fixtures/audio-loudness/
+source/tests/fixtures/audio-loudness-repair/
 
 # Logs & caches
 *.log

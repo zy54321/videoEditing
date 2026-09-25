@@ -61,7 +61,8 @@ Assert-True ($profile -match 'profile_id:\s*narration_short_v1') 'A02 profile_id
 Assert-True ($profile -match 'target_lufs:\s*-16') 'A03 -16 LUFS target'
 Assert-True ($profile -match 'tolerance_lu:\s*1') 'A04 tolerance'
 Assert-True ($profile -match 'ceiling_dbtp:\s*-1') 'A05 true peak ceiling'
-Assert-True ($profile -match 'final_audio_auto_repair:\s*BLOCKED') 'A06 auto repair BLOCKED'
+Assert-True ($profile -match 'final_audio_auto_repair:\s*VERIFIED') 'A06 auto repair VERIFIED'
+Assert-True ($profile -match 'lra:\s*7') 'A06b LRA engineering parameter'
 Assert-True ($profile -match 'not_dynamic_ducking:\s*true') 'A07 not ducking'
 Assert-True ($profile -match 'verified_baseline_factor:\s*0\.15') 'A08 verified music fallback'
 
@@ -74,14 +75,14 @@ Assert-True ($ref -match 'audio\.volume.*FAILED|FAILED.*audio\.volume') 'A11 aud
 # 3 — Capability truth
 Assert-True ($vocab -match 'audio\.final\.measure_loudness:[\s\S]{0,80}VERIFIED') 'A12 measure_loudness VERIFIED'
 Assert-True ($vocab -match 'audio\.final\.true_peak_qa:[\s\S]{0,80}VERIFIED') 'A13 true_peak_qa VERIFIED'
-Assert-True ($vocab -match 'audio\.final\.normalize_or_adjust:[\s\S]{0,80}BLOCKED') 'A14 normalize BLOCKED'
+Assert-True ($vocab -match 'audio\.final\.normalize_or_adjust:[\s\S]{0,80}VERIFIED') 'A14 normalize VERIFIED'
 Assert-True ($vocab -match 'audio\.music\.duck:[\s\S]{0,80}UNKNOWN') 'A15 ducking unchanged UNKNOWN'
 Assert-True ($vocab -match 'audio\.music\.level_under_voice:[\s\S]{0,120}VERIFIED') 'A16 level_under_voice still VERIFIED'
 Assert-True ($l1 -match 'final_render\.audio_loudness_check[\s\S]{0,120}VERIFIED') 'A17 L1 loudness check VERIFIED'
 
 # 4 — L3 wiring
 Assert-True ($l3 -match 'narration-short-v1-audio-mix-profile\.yaml') 'A18 L3 profile reference'
-Assert-True ($l3 -match 'FINAL_AUDIO_AUTO_REPAIR[\s\S]{0,80}BLOCKED') 'A19 L3 auto repair BLOCKED'
+Assert-True ($l3 -match 'FINAL_AUDIO_AUTO_REPAIR[\s\S]{0,80}VERIFIED') 'A19 L3 auto repair VERIFIED'
 Assert-True ($l3 -match 'LOUDNESS_TOO_LOW') 'A20 L3 verdict codes'
 
 # 5 — Generate fixtures

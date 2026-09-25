@@ -429,7 +429,7 @@ V0.1 N02 does not require heavy graphics automation.
 
 **Auxiliary note:** `ffmpeg_pre_attenuation` is an **Auxiliary Runtime Fallback** — original music file remains immutable; derived asset imported to Resolve.
 
-**Step 4A — `narration_short_v1` profile:** target **-16 LUFS** (±1 LU), true peak **≤ -1 dBTP**. Music uses measure-then-attenuate (fallback `0.15`). BGM continuous across narration pauses — **not** ducking. `audio.final.measure_loudness` / `audio.final.true_peak_qa` **VERIFIED**; `audio.final.normalize_or_adjust` **BLOCKED**; `FINAL_AUDIO_AUTO_REPAIR` **BLOCKED**.
+**Step 4A — `narration_short_v1` profile:** target **-16 LUFS** (±1 LU), true peak **≤ -1 dBTP**, LRA **7** (V1 engineering). Music uses measure-then-attenuate (fallback `0.15`). BGM continuous across narration pauses — **not** ducking. `audio.final.measure_loudness` / `audio.final.true_peak_qa` **VERIFIED**; `audio.final.normalize_or_adjust` / `FINAL_AUDIO_AUTO_REPAIR` **VERIFIED** (Step 4A-Repair — ffmpeg loudnorm two-pass post-render; max 1 attempt).
 
 **Implementation Detail — Not Portable Contract:**
 
@@ -520,7 +520,7 @@ V0.1 does not maintain a plugin registry. **Do not auto-install OFX.**
 
 **N02 V4 loudness reference (offline, artifact unchanged):** Integrated ≈ **-24.8 LUFS**, True Peak ≈ **-5.84 dBTP** — below `narration_short_v1` target (-16 ±1 LU).
 
-**`FINAL_AUDIO_AUTO_REPAIR`:** **BLOCKED** — no VERIFIED post-render normalize/gain route (`audio.volume` **FAILED**); QA fail-closed.
+**`FINAL_AUDIO_AUTO_REPAIR`:** **VERIFIED** (Step 4A-Repair) — `final-artifact-audio-qa-repair.ps1` orchestrates `audio-loudness-qa.py` → `final-audio-loudness-repair.py` (loudnorm two-pass, video copy for MP4) → re-QA; **max 1** repair attempt; original artifact preserved until promote. Resolve clip gain (`audio.volume`) remains **FAILED** — repair is offline post-render only.
 
 **Visual QA not replaceable by Inspector numbers alone:**
 

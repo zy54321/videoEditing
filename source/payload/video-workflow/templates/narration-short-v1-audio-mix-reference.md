@@ -28,9 +28,9 @@
 | `audio.music.duck` | **UNKNOWN** | No reliable API — **do not upgrade** |
 | `audio.final.measure_loudness` | **VERIFIED** (Step 4A) | `audio-loudness-qa.py` + ebur128 on fixtures |
 | `audio.final.true_peak_qa` | **VERIFIED** (Step 4A) | same tool |
-| `audio.final.normalize_or_adjust` | **BLOCKED** | No verified auto-adjust route |
+| `audio.final.normalize_or_adjust` | **VERIFIED** (Step 4A-Repair) | `final-audio-loudness-repair.py` — ffmpeg loudnorm two-pass |
 | `audio.voice_music_mix` | **VERIFIED** | Pre-attenuated continuous BGM under voice |
-| `FINAL_AUDIO_AUTO_REPAIR` | **BLOCKED** | QA fail-closed; no auto re-render loop |
+| `FINAL_AUDIO_AUTO_REPAIR` | **VERIFIED** (Step 4A-Repair) | `final-artifact-audio-qa-repair.ps1` — measure/repair separate; max 1 retry |
 
 ### N02 V4 reference (offline — artifact not modified)
 
@@ -59,4 +59,23 @@ Qualitative: voice intelligible; music present; overall deliverable too quiet fo
 | `TRUE_PEAK_EXCEEDED` | Peak > -1 dBTP |
 | `NO_AUDIO` | No audio stream |
 
-Repair: **fail closed** — `FINAL_AUDIO_AUTO_REPAIR = BLOCKED`.
+## Post-render loudness repair (Step 4A-Repair)
+
+| Parameter | Value |
+|-----------|-------|
+| Route | `ffmpeg_loudnorm_two_pass` |
+| Target I | **-16 LUFS** (±1 LU) |
+| True peak ceiling | **-1 dBTP** |
+| LRA (V1 engineering) | **7** — not claimed as universal platform standard |
+| Max repair attempts | **1** |
+
+**Pass 1:** `loudnorm` with `print_format=json` — capture `input_i`, `input_tp`, `input_lra`, `input_thresh`, `target_offset`.
+
+**Pass 2:** explicit measured values + `linear=true` — not two independent one-pass runs.
+
+**MP4:** `-c:v copy`; audio loudnorm + AAC. Original artifact preserved until QA PASS promotes repaired copy.
+
+**Repairable:** `LOUDNESS_TOO_LOW`, `LOUDNESS_TOO_HIGH`, `TRUE_PEAK_EXCEEDED`.  
+**No-op:** input already `PASS` → `NO_REPAIR_REQUIRED`.  
+**Blocked:** `NO_AUDIO`, corrupt/unreadable streams.  
+**Fail closed:** post-repair QA still fails → `FINAL_AUDIO_REPAIR_FAILED`.

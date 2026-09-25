@@ -152,9 +152,14 @@ vocabulary:
     notes: Step 4A — true peak ceiling check vs narration_short_v1 profile
 
   audio.final.normalize_or_adjust:
-    status: BLOCKED
+    status: VERIFIED
     l1_aliases: []
-    notes: No VERIFIED auto gain/normalize route; audio.volume FAILED; FINAL_AUDIO_AUTO_REPAIR BLOCKED
+    notes: Step 4A-Repair — ffmpeg loudnorm two-pass via final-audio-loudness-repair.py; post-render only; max 1 attempt
+
+  final_audio.auto_repair:
+    status: VERIFIED
+    l1_aliases: [FINAL_AUDIO_AUTO_REPAIR]
+    notes: Step 4A-Repair — QA → repair → re-QA loop via final-artifact-audio-qa-repair.ps1; fail-closed after one attempt
 
   audio.music.duck:
     status: UNKNOWN
