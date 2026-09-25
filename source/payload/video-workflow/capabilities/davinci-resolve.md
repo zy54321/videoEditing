@@ -429,6 +429,8 @@ V0.1 N02 does not require heavy graphics automation.
 
 **Auxiliary note:** `ffmpeg_pre_attenuation` is an **Auxiliary Runtime Fallback** — original music file remains immutable; derived asset imported to Resolve.
 
+**Step 4A — `narration_short_v1` profile:** target **-16 LUFS** (±1 LU), true peak **≤ -1 dBTP**. Music uses measure-then-attenuate (fallback `0.15`). BGM continuous across narration pauses — **not** ducking. `audio.final.measure_loudness` / `audio.final.true_peak_qa` **VERIFIED**; `audio.final.normalize_or_adjust` **BLOCKED**; `FINAL_AUDIO_AUTO_REPAIR` **BLOCKED**.
+
 **Implementation Detail — Not Portable Contract:**
 
 - `project_settings` `insert_audio`
@@ -514,6 +516,11 @@ V0.1 does not maintain a plugin registry. **Do not auto-install OFX.**
 | `final_render.frame_sampling` | Extract representative frames from MP4 (FFmpeg) | **VERIFIED** | **MUST** | Auxiliary: `ffmpeg -ss` frame extract; workflow temp only |
 | `final_render.black_bar_check` | Detect letterbox/pillarbox in rendered frames | **VERIFIED** | **MUST** (N02 V2) | `video-workflow/tools/final-artifact-qa.ps1` edge heuristic + `AUTOMATED_SCREEN + VISUAL_CONFIRM` (08A.1) |
 | `final_render.subtitle_visual_qa` | Verify subtitle visibility/overflow in MP4 | **VERIFIED** | **MUST** (N02 V2) | Frame extract at cue midpoints + Agent vision; pipeline in `final-artifact-qa.ps1` (08A.1) |
+| `final_render.audio_loudness_check` | Integrated LUFS + true peak on rendered artifact | **VERIFIED** | **MUST** (Step 4A) | `audio-loudness-qa.py` + `narration-short-v1-audio-mix-profile.yaml`; merged into `final-artifact-qa.ps1` JSON |
+
+**N02 V4 loudness reference (offline, artifact unchanged):** Integrated ≈ **-24.8 LUFS**, True Peak ≈ **-5.84 dBTP** — below `narration_short_v1` target (-16 ±1 LU).
+
+**`FINAL_AUDIO_AUTO_REPAIR`:** **BLOCKED** — no VERIFIED post-render normalize/gain route (`audio.volume` **FAILED**); QA fail-closed.
 
 **Visual QA not replaceable by Inspector numbers alone:**
 

@@ -134,12 +134,32 @@ vocabulary:
   audio.music.level_under_voice:
     status: VERIFIED
     l1_aliases: [background_music_level_control]
-    notes: Music level reduced under voice via verified pre-attenuation route
+    notes: Music level reduced under voice via verified pre-attenuation route — unchanged Step 4A
+
+  audio.voice_music_mix:
+    status: VERIFIED
+    l1_aliases: [background_music_level_control, audio.music.level_under_voice]
+    notes: Continuous pre-attenuated BGM under voice; not dynamic ducking
+
+  audio.final.measure_loudness:
+    status: VERIFIED
+    l1_aliases: [final_render.audio_loudness_check]
+    notes: Step 4A — audio-loudness-qa.py ebur128 integrated LUFS on rendered artifact
+
+  audio.final.true_peak_qa:
+    status: VERIFIED
+    l1_aliases: [final_render.audio_loudness_check]
+    notes: Step 4A — true peak ceiling check vs narration_short_v1 profile
+
+  audio.final.normalize_or_adjust:
+    status: BLOCKED
+    l1_aliases: []
+    notes: No VERIFIED auto gain/normalize route; audio.volume FAILED; FINAL_AUDIO_AUTO_REPAIR BLOCKED
 
   audio.music.duck:
     status: UNKNOWN
     l1_aliases: [audio.ducking]
-    notes: Auto ducking not implemented
+    notes: Auto ducking not implemented — unchanged Step 4A
 
   audio.music.crossfade:
     status: VERIFIED
@@ -202,9 +222,9 @@ vocabulary:
     notes: Subtitle in deliverable
 
   qa.audio:
-    status: AVAILABLE_UNVERIFIED
-    l1_aliases: [render.verify]
-    notes: Stream presence; balance QA heuristic
+    status: VERIFIED
+    l1_aliases: [final_render.audio_loudness_check, render.verify]
+    notes: Step 4A — integrated LUFS + true peak verdicts via audio-loudness-qa.py
 
   qa.final_artifact:
     status: VERIFIED

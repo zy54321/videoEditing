@@ -746,10 +746,13 @@ audio.music.level_under_voice
 
 #### Audio Mix Pass
 
-- narration priority
-- ducking
-- level balance
-- clipping check
+- profile: `video-workflow/runtime/narration-short-v1-audio-mix-profile.yaml` (`narration_short_v1`)
+- narration priority — voice primary, music supporting
+- music: continuous BGM across narration pauses (low bed) — **not** dynamic ducking
+- `audio.music.level_under_voice` via `ffmpeg_pre_attenuation` — measure voice/music LUFS when possible; fallback factor `0.15` (verified spike)
+- `audio.music.duck` remains **UNKNOWN** — do not claim VERIFIED
+- post-render loudness QA: `audio-loudness-qa.py` / `final-artifact-qa.ps1` audio section
+- `FINAL_AUDIO_AUTO_REPAIR` = **BLOCKED** — fail closed on `LOUDNESS_TOO_LOW` / `LOUDNESS_TOO_HIGH` / `TRUE_PEAK_EXCEEDED`
 
 #### Color Pass
 
@@ -921,7 +924,13 @@ Use `video-workflow/tools/final-artifact-qa.ps1` when FFmpeg/ffprobe available. 
 
 **Motion:** abnormal slow motion, judder — `MOTION_VISUAL_REVIEW_REQUIRED` when needed.
 
-**Audio:** voice, clipping, silence, voice/music balance.
+**Audio:** `final-artifact-qa.ps1` now includes `audio_loudness_qa` via `audio-loudness-qa.py` against `narration_short_v1` profile.
+
+Verdicts: `PASS`, `LOUDNESS_TOO_LOW`, `LOUDNESS_TOO_HIGH`, `TRUE_PEAK_EXCEEDED`, `NO_AUDIO`.
+
+Target: **-16 LUFS** (±1 LU), true peak **≤ -1 dBTP**. N02 V4 reference ≈ -24.8 LUFS (too low) — do not silently pass.
+
+`FINAL_AUDIO_AUTO_REPAIR` = **BLOCKED** — no verified auto normalize route; escalate repair manually.
 
 `render.verify_output` PASS alone **does not** equal Production PASS.
 

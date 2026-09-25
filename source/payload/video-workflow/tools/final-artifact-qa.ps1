@@ -20,7 +20,9 @@ param(
     [string]$VideoPath,
     [string]$QaRoot = '',
     [string[]]$Timestamps = @(),
-    [string]$RunId = ''
+    [string]$RunId = '',
+    [string]$AudioProfilePath = '',
+    [switch]$SkipAudioLoudness
 )
 
 Set-StrictMode -Version Latest
@@ -130,6 +132,31 @@ foreach ($ts in $Timestamps) {
 $suspectCount = @($frameManifest | Where-Object { $_.black_bar_suspect }).Count
 $blackBarVerdict = if ($suspectCount -ge 2) { 'SUSPECT_BLACK_BARS' } elseif ($suspectCount -eq 1) { 'AUTOMATED_SCREEN + VISUAL_CONFIRM' } else { 'NO_EDGE_BLACK_PATTERN' }
 
+$audioLoudness = $null
+if (-not $SkipAudioLoudness) {
+    $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $audioQaCli = Join-Path $scriptDir 'audio-loudness-qa.py'
+    if (-not (Test-Path -LiteralPath $audioQaCli)) {
+        throw "AUDIO_QA_TOOL_MISSING: $audioQaCli"
+    }
+    if ([string]::IsNullOrWhiteSpace($AudioProfilePath)) {
+        $wfRoot = Split-Path -Parent $scriptDir
+        $AudioProfilePath = Join-Path $wfRoot 'runtime\narration-short-v1-audio-mix-profile.yaml'
+    }
+    $pyArgs = @($audioQaCli, $videoPath, '--profile', $AudioProfilePath)
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    $audioLines = & python @pyArgs 2>&1 | ForEach-Object { if ($_ -is [System.Management.Automation.ErrorRecord]) { $_.ToString() } else { "$_" } }
+    $ErrorActionPreference = $prevEap
+    $audioOut = ($audioLines | Out-String).Trim()
+    $start = $audioOut.IndexOf('{')
+    $end = $audioOut.LastIndexOf('}')
+    if ($start -lt 0 -or $end -le $start) {
+        throw "AUDIO_LOUDNESS_QA_FAILED: $audioOut"
+    }
+    $audioLoudness = $audioOut.Substring($start, $end - $start + 1) | ConvertFrom-Json
+}
+
 $report = [ordered]@{
     run_id = $RunId
     video = $videoPath
@@ -150,6 +177,20 @@ $report = [ordered]@{
         note = 'Extract frames at subtitle cue midpoints; Agent vision or Owner review required for text visibility.'
         pipeline = 'VERIFIED_EXECUTABLE'
     }
+    audio_loudness_qa = if ($audioLoudness) {
+        @{
+            pipeline = 'audio-loudness-qa.py'
+            profile = $AudioProfilePath
+            verdict = $audioLoudness.verdict
+            ok = [bool]$audioLoudness.ok
+            integrated_lufs = $audioLoudness.loudness.integrated_lufs
+            true_peak_dbtp = $audioLoudness.loudness.true_peak_dbtp
+            channels = $audioLoudness.audio_stream.channels
+            detail = $audioLoudness
+        }
+    } else {
+        @{ skipped = $true }
+    }
 }
 
 $reportPath = Join-Path $runDir 'final-artifact-qa.json'
@@ -157,3 +198,6 @@ $report | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $reportPath -Encodi
 
 Write-Output $reportPath
 Write-Output $blackBarVerdict
+if ($audioLoudness) {
+    Write-Output $audioLoudness.verdict
+}
