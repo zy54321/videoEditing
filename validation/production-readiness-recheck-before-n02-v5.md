@@ -202,4 +202,4 @@ Priority order (frozen):
 
 | Label | SHA |
 |-------|-----|
-| **CLOSEOUT_RECORD_HEAD** | `a58042a51d8e8302d6f0565adff8791e8b4a112d` |
+| **CLOSEOUT_RECORD_HEAD** | `5f0d6183c49e662942a4d7956e30439847680904` |
