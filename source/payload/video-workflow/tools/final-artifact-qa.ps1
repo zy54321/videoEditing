@@ -129,8 +129,35 @@ foreach ($ts in $Timestamps) {
     }
 }
 
-$suspectCount = @($frameManifest | Where-Object { $_.black_bar_suspect }).Count
-$blackBarVerdict = if ($suspectCount -ge 2) { 'SUSPECT_BLACK_BARS' } elseif ($suspectCount -eq 1) { 'AUTOMATED_SCREEN + VISUAL_CONFIRM' } else { 'NO_EDGE_BLACK_PATTERN' }
+$blackBarDetail = $null
+$blackBarVerdict = 'NO_EDGE_BLACK_PATTERN'
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$blackBarCli = Join-Path $scriptDir 'black-bar-qa.py'
+if (Test-Path -LiteralPath $blackBarCli) {
+    $bbProfile = Join-Path (Split-Path -Parent $scriptDir) 'runtime\black-bar-reframe-qa-profile.yaml'
+    $frameArgs = @($blackBarCli, $frameManifest[0].path)
+    for ($fi = 1; $fi -lt $frameManifest.Count; $fi++) {
+        $frameArgs += '--frames'
+        $frameArgs += $frameManifest[$fi].path
+    }
+    $frameArgs += '--profile'
+    $frameArgs += $bbProfile
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    $bbLines = & python @frameArgs 2>&1 | ForEach-Object { if ($_ -is [System.Management.Automation.ErrorRecord]) { $_.ToString() } else { "$_" } }
+    $ErrorActionPreference = $prevEap
+    $bbOut = ($bbLines | Out-String).Trim()
+    $bbStart = $bbOut.IndexOf('{')
+    $bbEnd = $bbOut.LastIndexOf('}')
+    if ($bbStart -ge 0 -and $bbEnd -gt $bbStart) {
+        $blackBarDetail = $bbOut.Substring($bbStart, $bbEnd - $bbStart + 1) | ConvertFrom-Json
+        $blackBarVerdict = [string]$blackBarDetail.verdict
+    }
+}
+if (-not $blackBarDetail) {
+    $suspectCount = @($frameManifest | Where-Object { $_.black_bar_suspect }).Count
+    $blackBarVerdict = if ($suspectCount -ge 2) { 'SUSPECT_BLACK_BARS' } elseif ($suspectCount -eq 1) { 'AUTOMATED_SCREEN + VISUAL_CONFIRM' } else { 'NO_EDGE_BLACK_PATTERN' }
+}
 
 $audioLoudness = $null
 if (-not $SkipAudioLoudness) {
@@ -169,9 +196,12 @@ $report = [ordered]@{
     frames = $frameManifest
     black_bar_check = @{
         verdict = $blackBarVerdict
-        suspect_frames = $suspectCount
+        suspect_frames = if ($blackBarDetail) { [int]$blackBarDetail.suspect_frame_count } else { @($frameManifest | Where-Object { $_.black_bar_suspect }).Count }
         total_frames = $frameManifest.Count
-        method = 'edge_band_luminance_heuristic'
+        method = if ($blackBarDetail) { 'black_bar_qa_multiframe' } else { 'edge_band_luminance_heuristic' }
+        dominant_bar_type = if ($blackBarDetail) { $blackBarDetail.dominant_bar_type } else { $null }
+        repair_suggestion = if ($blackBarDetail) { $blackBarDetail.repair_suggestion } else { $null }
+        detail = $blackBarDetail
     }
     subtitle_visual_qa = @{
         note = 'Extract frames at subtitle cue midpoints; Agent vision or Owner review required for text visibility.'

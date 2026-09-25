@@ -1,0 +1,150 @@
+﻿{
+    "run_id":  "step4b-bb",
+    "video":  "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\source\\tests\\fixtures\\pacing-reframe\\case-b.mp4",
+    "probed_at":  "2026-09-25T20:28:54.2673887+08:00",
+    "duration_seconds":  2,
+    "width":  1080,
+    "height":  1920,
+    "fps":  "25/1",
+    "codec":  "h264",
+    "frames":  [
+                   {
+                       "index":  1,
+                       "timestamp_seconds":  "0.5",
+                       "path":  "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\source\\tests\\fixtures\\pacing-reframe\\.qa\\step4b-bb\\frames\\frame_01_0.5s.png",
+                       "edge_black_ratio":  0.5174,
+                       "black_bar_suspect":  false
+                   },
+                   {
+                       "index":  2,
+                       "timestamp_seconds":  "1",
+                       "path":  "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\source\\tests\\fixtures\\pacing-reframe\\.qa\\step4b-bb\\frames\\frame_02_1s.png",
+                       "edge_black_ratio":  0.5174,
+                       "black_bar_suspect":  false
+                   },
+                   {
+                       "index":  3,
+                       "timestamp_seconds":  "1.8",
+                       "path":  "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\source\\tests\\fixtures\\pacing-reframe\\.qa\\step4b-bb\\frames\\frame_03_1.8s.png",
+                       "edge_black_ratio":  0.5174,
+                       "black_bar_suspect":  false
+                   }
+               ],
+    "black_bar_check":  {
+                            "repair_suggestion":  {
+                                                      "needed":  true,
+                                                      "route":  "visual.reframe.static",
+                                                      "scale":  1.0127,
+                                                      "position":  {
+                                                                       "x":  -0.0063,
+                                                                       "y":  -0.0063
+                                                                   },
+                                                      "bar_type":  "letterbox"
+                                                  },
+                            "total_frames":  3,
+                            "verdict":  "REPAIR_REQUIRED",
+                            "dominant_bar_type":  "letterbox",
+                            "suspect_frames":  2,
+                            "method":  "black_bar_qa_multiframe",
+                            "detail":  {
+                                           "ok":  false,
+                                           "verdict":  "REPAIR_REQUIRED",
+                                           "dominant_bar_type":  "letterbox",
+                                           "suspect_frame_count":  2,
+                                           "total_frames":  2,
+                                           "frames":  [
+                                                          {
+                                                              "path":  "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\source\\tests\\fixtures\\pacing-reframe\\.qa\\step4b-bb\\frames\\frame_01_0.5s.png",
+                                                              "frame_w":  1080,
+                                                              "frame_h":  1920,
+                                                              "method":  "edge_band_signalstats",
+                                                              "bar_type":  "letterbox",
+                                                              "bars":  {
+                                                                           "top":  1,
+                                                                           "bottom":  1,
+                                                                           "left":  0,
+                                                                           "right":  0
+                                                                       },
+                                                              "crop":  {
+                                                                           "w":  1080,
+                                                                           "h":  1896,
+                                                                           "x":  0,
+                                                                           "y":  12
+                                                                       },
+                                                              "band_luma":  {
+                                                                                "top":  0.0,
+                                                                                "bottom":  0.0,
+                                                                                "left":  null,
+                                                                                "right":  null,
+                                                                                "center":  49.0
+                                                                            },
+                                                              "suspect":  true,
+                                                              "repair_suggestion":  {
+                                                                                        "needed":  true,
+                                                                                        "route":  "visual.reframe.static",
+                                                                                        "scale":  1.0127,
+                                                                                        "position":  {
+                                                                                                         "x":  -0.0063,
+                                                                                                         "y":  -0.0063
+                                                                                                     },
+                                                                                        "bar_type":  "letterbox"
+                                                                                    }
+                                                          },
+                                                          {
+                                                              "path":  "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\source\\tests\\fixtures\\pacing-reframe\\.qa\\step4b-bb\\frames\\frame_03_1.8s.png",
+                                                              "frame_w":  1080,
+                                                              "frame_h":  1920,
+                                                              "method":  "edge_band_signalstats",
+                                                              "bar_type":  "letterbox",
+                                                              "bars":  {
+                                                                           "top":  1,
+                                                                           "bottom":  1,
+                                                                           "left":  0,
+                                                                           "right":  0
+                                                                       },
+                                                              "crop":  {
+                                                                           "w":  1080,
+                                                                           "h":  1896,
+                                                                           "x":  0,
+                                                                           "y":  12
+                                                                       },
+                                                              "band_luma":  {
+                                                                                "top":  0.0,
+                                                                                "bottom":  0.0,
+                                                                                "left":  null,
+                                                                                "right":  null,
+                                                                                "center":  49.0
+                                                                            },
+                                                              "suspect":  true,
+                                                              "repair_suggestion":  {
+                                                                                        "needed":  true,
+                                                                                        "route":  "visual.reframe.static",
+                                                                                        "scale":  1.0127,
+                                                                                        "position":  {
+                                                                                                         "x":  -0.0063,
+                                                                                                         "y":  -0.0063
+                                                                                                     },
+                                                                                        "bar_type":  "letterbox"
+                                                                                    }
+                                                          }
+                                                      ],
+                                           "repair_suggestion":  {
+                                                                     "needed":  true,
+                                                                     "route":  "visual.reframe.static",
+                                                                     "scale":  1.0127,
+                                                                     "position":  {
+                                                                                      "x":  -0.0063,
+                                                                                      "y":  -0.0063
+                                                                                  },
+                                                                     "bar_type":  "letterbox"
+                                                                 }
+                                       }
+                        },
+    "subtitle_visual_qa":  {
+                               "pipeline":  "VERIFIED_EXECUTABLE",
+                               "note":  "Extract frames at subtitle cue midpoints; Agent vision or Owner review required for text visibility."
+                           },
+    "audio_loudness_qa":  {
+                              "skipped":  true
+                          }
+}

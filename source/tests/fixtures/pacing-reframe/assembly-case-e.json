@@ -1,0 +1,13 @@
+{
+  "shots": [
+    {
+      "shot_id": "B03-S01",
+      "beat_id": "B03",
+      "semantic_beat": "EVIDENCE",
+      "source_asset": "street.mp4",
+      "source_range": { "in_sec": 0, "out_sec": 8 },
+      "timeline_duration_sec": 8,
+      "editorial_reason": "single continuous evidence take"
+    }
+  ]
+}

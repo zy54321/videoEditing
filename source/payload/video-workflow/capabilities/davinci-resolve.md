@@ -514,7 +514,7 @@ V0.1 does not maintain a plugin registry. **Do not auto-install OFX.**
 | `qa.gap_detection` | Detect gaps/overlaps | **VERIFIED** | Required | `detect_gaps_overlaps` |
 | `qa.visual_frame` | Capture rendered frame | **AVAILABLE_UNVERIFIED** | Required | `timeline_frame` capture |
 | `final_render.frame_sampling` | Extract representative frames from MP4 (FFmpeg) | **VERIFIED** | **MUST** | Auxiliary: `ffmpeg -ss` frame extract; workflow temp only |
-| `final_render.black_bar_check` | Detect letterbox/pillarbox in rendered frames | **VERIFIED** | **MUST** (N02 V2) | `video-workflow/tools/final-artifact-qa.ps1` edge heuristic + `AUTOMATED_SCREEN + VISUAL_CONFIRM` (08A.1) |
+| `final_render.black_bar_check` | Detect letterbox/pillarbox in rendered frames | **VERIFIED** (detector) | **MUST** (N02 V2) | Step 4B: `black-bar-qa.py` cropdetect multiframe via `final-artifact-qa.ps1`; **production closure** requires repair loop — N02 V4 gap was gate/loop not detector absence |
 | `final_render.subtitle_visual_qa` | Verify subtitle visibility/overflow in MP4 | **VERIFIED** | **MUST** (N02 V2) | Frame extract at cue midpoints + Agent vision; pipeline in `final-artifact-qa.ps1` (08A.1) |
 | `final_render.audio_loudness_check` | Integrated LUFS + true peak on rendered artifact | **VERIFIED** | **MUST** (Step 4A) | `audio-loudness-qa.py` + `narration-short-v1-audio-mix-profile.yaml`; merged into `final-artifact-qa.ps1` JSON |
 
@@ -639,7 +639,9 @@ Must pass **before** real N02 V2 production. Documentation alone is insufficient
 | F | Interpolation | `mixed_fps.interpolation` | **UNKNOWN** | Safe degradation policy; **not** V2 blocker |
 | G | Frame sampling | `final_render.frame_sampling` | **VERIFIED** | FFmpeg + `final-artifact-qa.ps1` |
 | H | Subtitle visual QA pipeline | `final_render.subtitle_visual_qa` | **VERIFIED** | 08A.1 disposable render + vision |
-| I | Black-bar QA pipeline | `final_render.black_bar_check` | **VERIFIED** | 08A.1 heuristic pipeline |
+| I | Black-bar detect | `final_render.black_bar_check` | **VERIFIED** (detector) | 4B `black-bar-qa.py` |
+| I2 | Black-bar repair loop | `qa.visual.reframe_repair_loop` | **VERIFIED** (fixture) | 4B detect→reframe→re-QA disposable validation |
+| I3 | Pacing heuristic QA | `qa.pacing.heuristic` | **VERIFIED** | 4B `pacing-qa.py` |
 | J | Baseline color | `color.basic` | **VERIFIED** | `timeline_item_color.set_cdl` (08A.1) |
 | K | Motion normalize | `clip.speed_change` | **VERIFIED** | Stage 04A |
 

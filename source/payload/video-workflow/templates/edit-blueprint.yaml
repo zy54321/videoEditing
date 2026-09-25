@@ -55,4 +55,20 @@ beats: []
 capability_requirements: {}
 # Global defaults when not set per-beat. Same shape as beat-level block above.
 
+assembly_plan:
+  shots: []
+# Traceable execution handoff for pacing + reframe QA (Step 4B):
+# - shot_id: B07-S12
+#   beat_id: B07
+#   source_asset: market.mp4
+#   source_range: { in_sec: 0.0, out_sec: 4.5 }
+#   timeline_duration_sec: 4.5
+#   reframe:
+#     required: true
+#     applied: false
+#     scale: null
+#     position: { x: 0, y: 0 }
+#   pacing_exempt: false
+#   editorial_reason: null
+
 notes: ""

@@ -177,3 +177,24 @@ Blueprint summary is **NON_BLOCKING** unless:
 | L3 Editing Plan | Execution planning | WHAT to assemble (still no MCP names) |
 
 Blueprint precedes detailed segment timing in Plan.
+
+---
+
+## Assembly Plan (Step 4B — pacing / reframe QA traceability)
+
+Optional `assembly_plan.shots[]` links beats to concrete timeline items for QA and repair.
+
+| Field | Required | Notes |
+|-------|----------|-------|
+| `shot_id` | yes | e.g. `B07-S12` |
+| `beat_id` | yes | Back-reference to beat |
+| `source_asset` | yes | Filename or pool id |
+| `source_range` | recommended | `{ in_sec, out_sec }` |
+| `timeline_duration_sec` | yes | Timeline span |
+| `reframe.required` | recommended | 9:16 fill needed |
+| `reframe.applied` | recommended | After static reframe |
+| `reframe.scale` / `position` | optional | Applied transform |
+| `editorial_reason` | optional | Exempts pacing heuristic when set |
+| `pacing_exempt` | optional | Boolean exempt flag |
+
+QA tools (`pacing-qa.py`, `black-bar-qa.py`) must cite **beat_id / shot_id / source_asset** in findings.

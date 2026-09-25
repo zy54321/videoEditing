@@ -1,0 +1,20 @@
+{
+  "shots": [
+    {
+      "shot_id": "B07-S12",
+      "beat_id": "B07",
+      "semantic_beat": "CONTRAST",
+      "source_asset": "market.mp4",
+      "source_range": { "in_sec": 0, "out_sec": 12 },
+      "timeline_duration_sec": 6
+    },
+    {
+      "shot_id": "B08-S01",
+      "beat_id": "B08",
+      "semantic_beat": "REVEAL",
+      "source_asset": "market.mp4",
+      "source_range": { "in_sec": 0, "out_sec": 12 },
+      "timeline_duration_sec": 6
+    }
+  ]
+}

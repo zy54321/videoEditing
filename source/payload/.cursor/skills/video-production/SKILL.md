@@ -744,6 +744,17 @@ audio.music.level_under_voice
 - looping / trimming
 - section changes
 
+#### Visual / Pacing QA Pass (Step 4B)
+
+- pacing profile: `runtime/informational-short-pacing-v1-profile.yaml`
+- black-bar profile: `runtime/black-bar-reframe-qa-profile.yaml`
+- Blueprint `assembly_plan.shots[]` must carry `beat_id`, `shot_id`, `source_asset`, `source_range`, `timeline_duration_sec`, `reframe`
+- pacing: `pacing-qa.py` — `>6s` warning, `>10s` unchanged cross-beat span → `PACING_REPAIR_CANDIDATE`
+- repair priority: `clip.source_range` + `clip.assemble` — **not** push-in / pan / ResolveFX first
+- black-bar loop: assemble → `visual.reframe.static` → `black-bar-qa.py` → `REPAIR_REQUIRED` → adjust scale/position → **re-QA** (max 3 attempts)
+- post-render: `final-artifact-qa.ps1` embeds `black-bar-qa.py` — `REPAIR_REQUIRED` / `REFRAME_OWNER_REVIEW_REQUIRED` = fail-closed
+- do **not** treat detector VERIFIED as Production closure without repair loop
+
 #### Audio Mix Pass
 
 - profile: `video-workflow/runtime/narration-short-v1-audio-mix-profile.yaml` (`narration_short_v1`)
@@ -920,7 +931,7 @@ Use `video-workflow/tools/final-artifact-qa.ps1` when FFmpeg/ffprobe available. 
 
 **Technical:** exists, duration, width/height, fps, codec, audio stream.
 
-**Visual:** black bars (`final_render.black_bar_check`), framing, subtitle visibility/overflow (`final_render.subtitle_visual_qa`), gross crop, unintended blank frames.
+**Visual:** black bars (`black-bar-qa.py` / `qa.visual.black_bar_detect` — verdicts `PASS` | `REPAIR_REQUIRED` | `REFRAME_OWNER_REVIEW_REQUIRED`), framing, subtitle visibility/overflow (`final_render.subtitle_visual_qa`), gross crop, unintended blank frames. Findings must cite `beat_id` / `shot_id` / `source_asset`.
 
 **Motion:** abnormal slow motion, judder — `MOTION_VISUAL_REVIEW_REQUIRED` when needed.
 

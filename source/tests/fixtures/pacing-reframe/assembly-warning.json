@@ -1,0 +1,11 @@
+﻿{
+  "shots": [
+    {
+      "shot_id": "B02-S01",
+      "beat_id": "B02",
+      "source_asset": "a.mp4",
+      "source_range": { "in_sec": 0, "out_sec": 7 },
+      "timeline_duration_sec": 7
+    }
+  ]
+}

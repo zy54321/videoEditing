@@ -211,10 +211,35 @@ vocabulary:
     l1_aliases: [effects.fusion]
     notes: CAPABILITY_VALIDATION_REQUIRED
 
+  qa.pacing.heuristic:
+    status: VERIFIED
+    l1_aliases: []
+    notes: Step 4B — pacing-qa.py beat-first shot duration / unchanged-span heuristics
+
+  qa.pacing.repair_candidate:
+    status: VERIFIED
+    l1_aliases: []
+    notes: Step 4B — flags PACING_REPAIR_CANDIDATE with beat/shot/asset traceability
+
+  qa.visual.black_bar_detect:
+    status: VERIFIED
+    l1_aliases: [final_render.black_bar_check]
+    notes: Step 4B — black-bar-qa.py ffmpeg cropdetect multiframe per-edge
+
+  qa.visual.reframe_static_repair:
+    status: VERIFIED
+    l1_aliases: [visual.reframe.static]
+    notes: Step 4B — scale/position suggestion route; fixture-validated
+
+  qa.visual.reframe_repair_loop:
+    status: VERIFIED
+    l1_aliases: []
+    notes: Step 4B — detect → static reframe → re-QA validated on disposable fixtures
+
   qa.visual.frame:
     status: VERIFIED
-    l1_aliases: [final_render.frame_sampling, final_render.black_bar_check]
-    notes: Frame-level visual QA
+    l1_aliases: [final_render.frame_sampling]
+    notes: Frame extract — black-bar gate now qa.visual.black_bar_detect
 
   qa.subtitle.layout:
     status: VERIFIED
