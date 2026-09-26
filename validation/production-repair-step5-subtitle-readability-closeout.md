@@ -105,5 +105,5 @@ Then continue: inject → import timeline → light-background render → delive
 
 | Label | SHA |
 |-------|-----|
-| **IMPLEMENTATION_HEAD** | _(commit below)_ |
-| **CLOSEOUT_RECORD_HEAD** | _(if docs-only follow-up)_ |
+| **IMPLEMENTATION_HEAD** | `77772f14562e388c88c4e140f73ae923d5d7549d` |
+| **CLOSEOUT_RECORD_HEAD** | `77772f14562e388c88c4e140f73ae923d5d7549d` |
