@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "route": "native_drt_effect_filters_ba_template",
+  "status": "PENDING_GOLD_STANDARD",
+  "capture": {
+    "baseline": null,
+    "styled": null,
+    "diff": null,
+    "validation_errors": ["NO_UI_STYLED_EXPORT"]
+  },
+  "artifact": {
+    "effect_filters_ba_b64": null,
+    "sha256": null
+  },
+  "safety": {
+    "contains_cue_text": false,
+    "contains_timing": false,
+    "style_only": true
+  },
+  "notes": "Populate via native-drt-subtitle-stroke-capture.py after Owner manual outer-stroke gold standard in Resolve."
+}

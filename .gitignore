@@ -10,6 +10,8 @@ source/tests/fixtures/pacing-reframe/*.png
 source/tests/fixtures/pacing-reframe/*.mp4
 source/tests/fixtures/audio-loudness/
 source/tests/fixtures/audio-loudness-repair/
+source/tests/fixtures/subtitle-stroke-unblock/
+validation/native-subtitle-readability-unblock/
 
 # Logs & caches
 *.log

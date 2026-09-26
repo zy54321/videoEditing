@@ -45,6 +45,12 @@ automation:
         - Resolve quit + relaunch after patch
         - optional better-sqlite3 on advanced MCP host
     drt_assemble_track_style: NOT_SUPPORTED
+    native_drt_effect_filters_ba_template:
+      status: PENDING_GOLD_STANDARD
+      tool_capture: native-drt-subtitle-stroke-capture.py
+      tool_inject: native-drt-subtitle-stroke-inject.py
+      template_dir: runtime/native-drt-subtitle-stroke-template
+      note: "Step 5 Route A — inject harvested EffectFiltersBA after UI gold standard; visual verify required before VERIFIED"
   stroke_automation: BLOCKED
 
 manual_fallback:

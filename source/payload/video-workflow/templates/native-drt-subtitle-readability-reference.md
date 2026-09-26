@@ -48,6 +48,19 @@ If stroke automation is required and all above fail: register `NATIVE_SUBTITLE_S
 
 ---
 
+## Step 5 — Route A template (checkpoint)
+
+| Step | Tool |
+|------|------|
+| Owner UI gold standard | white + black outer stroke on native subtitle track |
+| Capture diff | `native-drt-subtitle-stroke-capture.py` |
+| Inject into production DRT | `native-drt-subtitle-stroke-inject.py` |
+| Disposable orchestrator | `native-drt-subtitle-readability-probe.ps1` |
+
+`subtitle.render.readability_stroke` remains **BLOCKED** until light-background render + deliver evidence exists.
+
+---
+
 ## Verification rule
 
 `subtitle.render.readability_stroke` may reach **VERIFIED** only with:
