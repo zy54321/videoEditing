@@ -49,8 +49,8 @@ Assert-True (Test-Path $captureCli) 'S02 capture cli exists'
 Assert-True (Test-Path $injectCli) 'S03 inject cli exists'
 
 $profile = [System.IO.File]::ReadAllText($profilePath, $utf8)
-Assert-True ($profile -match 'native_drt_effect_filters_ba_template') 'S04 profile documents Route A template'
-Assert-True ($profile -match 'stroke_automation:\s*BLOCKED') 'S05 stroke_automation still BLOCKED'
+Assert-True ($profile -match 'native_drt_subtitle_track_fields_blob_template') 'S04 profile documents Route A template'
+Assert-True ($profile -match 'stroke_automation:\s*VERIFIED') 'S05 stroke_automation VERIFIED'
 
 $fixtureTpl = Join-Path $PSScriptRoot 'fixtures\subtitle-stroke-unblock\.capture-out'
 New-Item -ItemType Directory -Force -Path $fixtureTpl | Out-Null
@@ -59,19 +59,18 @@ New-Item -ItemType Directory -Force -Path $fixtureTpl | Out-Null
 $cap = Invoke-Py -PyArgs @($captureCli, $baselineDrt, $styledDrt, '--template-dir', $fixtureTpl) -AllowExitCodes @(2)
 $capJson = $cap[1] | ConvertFrom-Json
 Assert-True ($capJson.template_valid -eq $false) 'S06 capture rejects unstyled probe pair'
-Assert-True ($capJson.diff.changed -eq $false) 'S07 probe pair EffectFiltersBA unchanged (both empty)'
+Assert-True ($capJson.diff.changed -eq $false) 'S07 probe pair subtitle FieldsBlob unchanged'
 
 # Injection contract with disposable fake template (not production truth)
 $tmpTpl = Join-Path $PSScriptRoot 'fixtures\subtitle-stroke-unblock\.template'
 New-Item -ItemType Directory -Force -Path $tmpTpl | Out-Null
-$fakeBlob = 'FAKE_STYLE_BLOB_FOR_UNIT_TEST_ONLY'
-$b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($fakeBlob))
-$b64 | Set-Content -LiteralPath (Join-Path $tmpTpl 'effect-filters-ba.b64') -Encoding ASCII -NoNewline
+$fakeBlob = '000000010000000200000012004e0075006d004c006100790065007200730000000200000000000000001e00450066006600650063007400460069006c0074006500720073004200410000000c0000000036000000020000002e800a2b08384a1308171a0f0a0d320b01ffff00000000000000004a1008181a040a02080422040a02080248004a00'
+$fakeBlob | Set-Content -LiteralPath (Join-Path $tmpTpl 'subtitle-track-fields-blob.hex') -Encoding ASCII -NoNewline
 @{
     schema_version = 1
-    route = 'native_drt_effect_filters_ba_template'
+    route = 'native_drt_subtitle_track_fields_blob_template'
     status = 'READY'
-    artifact = @{ effect_filters_ba_b64 = 'effect-filters-ba.b64' }
+    artifact = @{ subtitle_track_fields_blob_hex = 'subtitle-track-fields-blob.hex' }
 } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $tmpTpl 'template-manifest.json') -Encoding UTF8
 
 $outDrt = Join-Path $PSScriptRoot 'fixtures\subtitle-stroke-unblock\injected.drt'
@@ -86,7 +85,7 @@ $orch = & powershell -NoProfile -File $probePs1 2>&1 | ForEach-Object { "$_" }
 Assert-True (($orch | Select-Object -Last 1) -eq 'OWNER_MANUAL_GOLD_STANDARD_REQUIRED') 'S10 probe requests gold standard'
 
 # Truth unchanged
-Assert-True ($vocab -match 'subtitle\.render\.readability_stroke:[\s\S]{0,120}status:\s*BLOCKED') 'S11 vocab readability_stroke BLOCKED'
+Assert-True ($vocab -match 'subtitle\.render\.readability_stroke:[\s\S]{0,120}status:\s*VERIFIED') 'S11 vocab readability_stroke VERIFIED'
 
 # Regressions
 & powershell -NoProfile -File (Join-Path $PSScriptRoot 'production-subtitle-readability.ps1') | Out-Null

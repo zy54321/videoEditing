@@ -1,21 +1,29 @@
 {
   "schema_version": 1,
-  "route": "native_drt_effect_filters_ba_template",
-  "status": "PENDING_GOLD_STANDARD",
+  "route": "native_drt_subtitle_track_fields_blob_template",
+  "status": "READY",
   "capture": {
-    "baseline": null,
-    "styled": null,
-    "diff": null,
-    "validation_errors": ["NO_UI_STYLED_EXPORT"]
+    "baseline": "validation/native-subtitle-readability-unblock/baseline.drt",
+    "styled": "validation/native-subtitle-readability-unblock/styled.drt",
+    "diff": {
+      "baseline_empty": false,
+      "styled_empty": false,
+      "baseline_sha256": "7b66d384fd0564d5dc023bd1cb4e7ab59ec3b2abec206e93015ead470882e085",
+      "styled_sha256": "013ad8e373bcb936c74c67a2f11e16768bfd9c8cf91be9e9ab9946dee1e256c3",
+      "changed": true,
+      "baseline_len": 78,
+      "styled_len": 272,
+      "route": "subtitle_track_fields_blob"
+    },
+    "validation_errors": []
   },
   "artifact": {
-    "effect_filters_ba_b64": null,
-    "sha256": null
+    "subtitle_track_fields_blob_hex": "subtitle-track-fields-blob.hex",
+    "sha256": "013ad8e373bcb936c74c67a2f11e16768bfd9c8cf91be9e9ab9946dee1e256c3"
   },
   "safety": {
     "contains_cue_text": false,
     "contains_timing": false,
     "style_only": true
-  },
-  "notes": "Populate via native-drt-subtitle-stroke-capture.py after Owner manual outer-stroke gold standard in Resolve."
+  }
 }

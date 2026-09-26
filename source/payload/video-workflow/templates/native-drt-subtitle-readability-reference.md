@@ -57,7 +57,7 @@ If stroke automation is required and all above fail: register `NATIVE_SUBTITLE_S
 | Inject into production DRT | `native-drt-subtitle-stroke-inject.py` |
 | Disposable orchestrator | `native-drt-subtitle-readability-probe.ps1` |
 
-`subtitle.render.readability_stroke` remains **BLOCKED** until light-background render + deliver evidence exists.
+`subtitle.render.readability_stroke` is **VERIFIED** after Step 5 Route A FieldsBlob inject + burn-in deliver (see `validation/native-subtitle-readability-unblock/step5-visual-qa.json`).
 
 ---
 

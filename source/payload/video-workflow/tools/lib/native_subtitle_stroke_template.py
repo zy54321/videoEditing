@@ -9,21 +9,22 @@ import zipfile
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-EFFECT_FILTERS_RE = re.compile(
-    r"(<EffectFiltersBA\s*/>)|(<EffectFiltersBA>)([\s\S]*?)(</EffectFiltersBA>)",
+SUBTITLE_TRACK_FIELDS_RE = re.compile(
+    r"(<SubtitleTrackVec>[\s\S]*?<Sm2TiTrack DbId=\"[^\"]+\">\s*<FieldsBlob>)([0-9a-fA-F]*)(</FieldsBlob>)",
     re.MULTILINE,
 )
 
 FORBIDDEN_IN_TEMPLATE = (
-    "Sm2Subtitle",
-    "<Text>",
-    "startFrame",
-    "durationFrames",
+    "Native字幕",
+    "Sm2TiGenerator",
+    "<Start>",
+    "<Duration>",
     "MediaPoolItem",
     "FilePath",
 )
 
 SUBTITLE_TRACK_MARKER = "<SubtitleTrackVec>"
+STYLED_MARKER_HEX = "450066006600650063007400460069006c00740065007200730042004100"  # EffectFiltersBA UTF-16LE
 
 
 def _read_drt_seq_xml(drt_path: Path) -> Tuple[str, str]:
@@ -35,33 +36,31 @@ def _read_drt_seq_xml(drt_path: Path) -> Tuple[str, str]:
         return seq_name, zf.read(seq_name).decode("utf-8", "replace")
 
 
-def extract_subtitle_effect_filters_ba(seq_xml: str) -> Optional[str]:
+def extract_subtitle_track_fields_blob(seq_xml: str) -> str:
     if SUBTITLE_TRACK_MARKER not in seq_xml:
         raise RuntimeError("SubtitleTrackVec not found")
-    sub_idx = seq_xml.index(SUBTITLE_TRACK_MARKER)
-    tail = seq_xml[sub_idx:]
-    m = EFFECT_FILTERS_RE.search(tail)
+    m = SUBTITLE_TRACK_FIELDS_RE.search(seq_xml)
     if not m:
-        raise RuntimeError("EffectFiltersBA not found under subtitle track")
-    if m.group(1):
-        return ""
-    return (m.group(3) or "").strip()
+        raise RuntimeError("Subtitle track FieldsBlob not found")
+    return (m.group(2) or "").strip()
 
 
-def validate_template_blob(blob_inner: str) -> List[str]:
+def validate_template_blob(blob_hex: str) -> List[str]:
     errors: List[str] = []
-    if not blob_inner:
+    if not blob_hex:
         errors.append("EMPTY_BLOB")
         return errors
+    if STYLED_MARKER_HEX.lower() not in blob_hex.lower():
+        errors.append("MISSING_EFFECTFILTERSBA_MARKER")
     for token in FORBIDDEN_IN_TEMPLATE:
-        if token in blob_inner:
+        if token in blob_hex:
             errors.append(f"FORBIDDEN_TOKEN:{token}")
     return errors
 
 
-def diff_effect_filters_ba(baseline_xml: str, styled_xml: str) -> Dict[str, Any]:
-    base = extract_subtitle_effect_filters_ba(baseline_xml)
-    styled = extract_subtitle_effect_filters_ba(styled_xml)
+def diff_subtitle_track_fields_blob(baseline_xml: str, styled_xml: str) -> Dict[str, Any]:
+    base = extract_subtitle_track_fields_blob(baseline_xml)
+    styled = extract_subtitle_track_fields_blob(styled_xml)
     return {
         "baseline_empty": base == "",
         "styled_empty": styled == "",
@@ -70,20 +69,21 @@ def diff_effect_filters_ba(baseline_xml: str, styled_xml: str) -> Dict[str, Any]
         "changed": base != styled,
         "baseline_len": len(base or ""),
         "styled_len": len(styled or ""),
+        "route": "subtitle_track_fields_blob",
     }
 
 
 def capture_from_pair(baseline_drt: Path, styled_drt: Path) -> Dict[str, Any]:
     _, base_xml = _read_drt_seq_xml(baseline_drt)
     _, styled_xml = _read_drt_seq_xml(styled_drt)
-    diff = diff_effect_filters_ba(base_xml, styled_xml)
-    blob = extract_subtitle_effect_filters_ba(styled_xml)
+    diff = diff_subtitle_track_fields_blob(base_xml, styled_xml)
+    blob = extract_subtitle_track_fields_blob(styled_xml)
     errors = validate_template_blob(blob)
     return {
         "baseline": str(baseline_drt.resolve()),
         "styled": str(styled_drt.resolve()),
         "diff": diff,
-        "template_blob_inner": blob,
+        "template_blob_hex": blob,
         "template_valid": len(errors) == 0 and diff.get("changed") and not diff.get("styled_empty"),
         "validation_errors": errors,
     }
@@ -91,14 +91,14 @@ def capture_from_pair(baseline_drt: Path, styled_drt: Path) -> Dict[str, Any]:
 
 def save_template_manifest(out_dir: Path, capture: Dict[str, Any]) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
-    blob = capture.get("template_blob_inner") or ""
-    b64_path = out_dir / "effect-filters-ba.b64"
+    blob = capture.get("template_blob_hex") or ""
+    hex_path = out_dir / "subtitle-track-fields-blob.hex"
     manifest_path = out_dir / "template-manifest.json"
     if blob:
-        b64_path.write_text(base64.b64encode(blob.encode("utf-8")).decode("ascii"), encoding="utf-8")
+        hex_path.write_text(blob, encoding="utf-8")
     payload = {
         "schema_version": 1,
-        "route": "native_drt_effect_filters_ba_template",
+        "route": "native_drt_subtitle_track_fields_blob_template",
         "status": "READY" if capture.get("template_valid") else "PENDING_GOLD_STANDARD",
         "capture": {
             "baseline": capture.get("baseline"),
@@ -107,7 +107,7 @@ def save_template_manifest(out_dir: Path, capture: Dict[str, Any]) -> Path:
             "validation_errors": capture.get("validation_errors"),
         },
         "artifact": {
-            "effect_filters_ba_b64": str(b64_path.name) if blob else None,
+            "subtitle_track_fields_blob_hex": str(hex_path.name) if blob else None,
             "sha256": hashlib.sha256(blob.encode()).hexdigest() if blob else None,
         },
         "safety": {
@@ -123,28 +123,21 @@ def save_template_manifest(out_dir: Path, capture: Dict[str, Any]) -> Path:
 def inject_template_into_drt(
     input_drt: Path,
     output_drt: Path,
-    template_blob_inner: str,
+    template_blob_hex: str,
 ) -> Dict[str, Any]:
-    errors = validate_template_blob(template_blob_inner)
+    errors = validate_template_blob(template_blob_hex)
     if errors:
         raise RuntimeError(f"template invalid: {errors}")
 
     with zipfile.ZipFile(input_drt, "r") as zin:
         seq_name, seq_xml = _read_drt_seq_xml(input_drt)
-        sub_idx = seq_xml.index(SUBTITLE_TRACK_MARKER)
-        head, tail = seq_xml[:sub_idx], seq_xml[sub_idx:]
-        m = EFFECT_FILTERS_RE.search(tail)
+        m = SUBTITLE_TRACK_FIELDS_RE.search(seq_xml)
         if not m:
-            raise RuntimeError("EffectFiltersBA not found for injection")
-        replacement = f"<EffectFiltersBA>{template_blob_inner}</EffectFiltersBA>"
-        if m.group(1):
-            new_tail = tail[: m.start()] + replacement + tail[m.end() :]
-        else:
-            new_tail = tail[: m.start()] + replacement + tail[m.end() :]
-        new_seq = head + new_tail
+            raise RuntimeError("Subtitle track FieldsBlob not found for injection")
+        new_seq = seq_xml[: m.start(2)] + template_blob_hex + seq_xml[m.end(2) :]
 
         output_drt.parent.mkdir(parents=True, exist_ok=True)
-        temp_out = output_drt.with_suffix(output_drt.suffix + ".part")
+        temp_out = output_drt.with_name(f"{output_drt.stem}.part{output_drt.suffix}")
         with zipfile.ZipFile(temp_out, "w", zipfile.ZIP_DEFLATED) as zout:
             for item in zin.infolist():
                 data = zin.read(item.filename)
@@ -155,12 +148,13 @@ def inject_template_into_drt(
             output_drt.unlink()
         temp_out.replace(output_drt)
 
-    verify_blob = extract_subtitle_effect_filters_ba(new_seq)
+    verify_blob = extract_subtitle_track_fields_blob(new_seq)
     return {
         "input": str(input_drt.resolve()),
         "output": str(output_drt.resolve()),
         "injected_sha256": hashlib.sha256(verify_blob.encode()).hexdigest(),
         "injected_len": len(verify_blob),
+        "route": "subtitle_track_fields_blob",
     }
 
 
@@ -171,9 +165,12 @@ def load_template_blob_from_manifest(template_dir: Path) -> str:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8-sig"))
     if manifest.get("status") != "READY":
         raise RuntimeError(f"template status {manifest.get('status')}")
-    b64_name = (manifest.get("artifact") or {}).get("effect_filters_ba_b64")
-    if not b64_name:
-        raise RuntimeError("no effect_filters_ba artifact")
-    b64_path = template_dir / b64_name
-    raw = base64.b64decode(b64_path.read_text(encoding="utf-8").strip())
-    return raw.decode("utf-8")
+    artifact = manifest.get("artifact") or {}
+    hex_name = artifact.get("subtitle_track_fields_blob_hex") or artifact.get("effect_filters_ba_b64")
+    if not hex_name:
+        raise RuntimeError("no subtitle track fields blob artifact")
+    hex_path = template_dir / hex_name
+    if hex_path.suffix == ".b64":
+        raw = base64.b64decode(hex_path.read_text(encoding="utf-8").strip())
+        return raw.decode("utf-8")
+    return hex_path.read_text(encoding="utf-8").strip()

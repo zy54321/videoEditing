@@ -38,7 +38,7 @@ Assert-True ($profile -match 'route:\s*native_drt_subtitles') 'R03 route frozen'
 Assert-True ($profile -match 'color:\s*white') 'R04 foreground white'
 Assert-True ($profile -match 'outline:[\s\S]{0,120}enabled:\s*true') 'R05 outline enabled default'
 Assert-True ($profile -match 'color:\s*black') 'R06 outline black'
-Assert-True ($profile -match 'stroke_automation:\s*BLOCKED') 'R07 stroke automation BLOCKED truth'
+Assert-True ($profile -match 'stroke_automation:\s*VERIFIED') 'R07 stroke automation VERIFIED truth'
 Assert-True ($profile -match 'textplus_overlay') 'R08 profile forbids Text+ overlay default'
 
 # 2 — Reference doc
@@ -49,7 +49,7 @@ Assert-True ($ref -match 'BLOCKED') 'R11 automation BLOCKED documented'
 
 # 3 — L1 capability truth
 Assert-True ($l1 -match 'subtitle\.render\.readability_stroke') 'R12 L1 readability_stroke capability present'
-Assert-True ($l1 -match 'subtitle\.render\.readability_stroke[\s\S]{0,160}BLOCKED') 'R13 readability_stroke BLOCKED'
+Assert-True ($l1 -match 'subtitle\.render\.readability_stroke[\s\S]{0,160}VERIFIED') 'R13 readability_stroke VERIFIED'
 Assert-True ($l1 -match 'native_drt_subtitles[\s\S]{0,120}VERIFIED') 'R14 native_drt_subtitles still VERIFIED'
 Assert-True ($l1 -match 'subtitle\.line_break_control[\s\S]{0,120}VERIFIED') 'R15 semantic/line-break regression'
 Assert-True ($l1 -match 'subtitle\.safe_text_width[\s\S]{0,120}AVAILABLE_UNVERIFIED') 'R16 safe_text_width / pixel_width unchanged'
@@ -57,7 +57,7 @@ Assert-True ($l1 -match 'subtitle\.keyword_emphasis[\s\S]{0,160}AVAILABLE_UNVERI
 
 # 4 — Vocabulary
 Assert-True ($vocab -match 'subtitle\.render\.readability_stroke:') 'R18 vocab readability_stroke entry'
-Assert-True ($vocab -match 'subtitle\.render\.readability_stroke:[\s\S]{0,120}status:\s*BLOCKED') 'R19 vocab status BLOCKED'
+Assert-True ($vocab -match 'subtitle\.render\.readability_stroke:[\s\S]{0,120}status:\s*VERIFIED') 'R19 vocab status VERIFIED'
 Assert-True ($vocab -match 'subtitle\.style\.keyword_emphasis:[\s\S]{0,160}status:\s*AVAILABLE_UNVERIFIED') 'R20 vocab keyword emphasis unchanged'
 Assert-True ($vocab -match 'subtitle\.layout\.pixel_width:[\s\S]{0,160}status:\s*AVAILABLE_UNVERIFIED') 'R21 vocab pixel_width unchanged'
 Assert-True ($vocab -match 'subtitle\.segment\.semantic:[\s\S]{0,120}status:\s*VERIFIED') 'R22 semantic segmentation regression'
@@ -69,7 +69,7 @@ Assert-True ($l1 -match 'textplus_styledtextcls_import_comp[\s\S]{0,80}VERIFIED 
 # 6 — L3 wiring
 Assert-True ($l3 -match 'native-drt-subtitle-readability-profile\.yaml') 'R25 L3 references readability profile'
 Assert-True ($l3 -match 'subtitle\.render\.readability_stroke') 'R26 L3 documents readability capability'
-Assert-True ($l3 -match 'subtitle\.render\.readability_stroke[\s\S]{0,100}\*\*BLOCKED\*\*') 'R27 L3 stroke capability BLOCKED not VERIFIED'
+Assert-True ($l3 -match 'subtitle\.render\.readability_stroke[\s\S]{0,100}VERIFIED') 'R27 L3 stroke capability VERIFIED'
 
 # 7 — Closeout artifact
 Assert-True (Test-Path $closeout) 'R28 closeout doc exists'

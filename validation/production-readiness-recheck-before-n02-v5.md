@@ -21,9 +21,13 @@ Do not use a single `Ending HEAD` to mean both implementation and closeout recor
 
 **以当前真实证据，是否已经可以启动 N02 V5？**
 
-**Answer: NO — `NOT_READY_FOR_N02_V5`**
+**Answer (2026-09-25 review): NO — `NOT_READY_FOR_N02_V5`**
 
-N02 V4 proved E2E chain works but deliverable quality is below publish-review standard. Since Repair Steps 3A–4B, all registered gaps except **native subtitle readability on light backgrounds** have fixture-level or catalog-level closure. The remaining gap is a **real Production–proven P0** with **no VERIFIED automation fallback**.
+N02 V4 proved E2E chain works but deliverable quality is below publish-review standard. Since Repair Steps 3A–4B, all registered gaps except **native subtitle readability on light backgrounds** have fixture-level or catalog-level closure. The remaining gap was a **real Production–proven P0** with **no VERIFIED automation fallback**.
+
+**Supersession (2026-09-26 — Production Repair Step 5 closeout): YES — `READY_FOR_N02_V5`**
+
+Step 5 Route A closed `P0_SUBTITLE_READABILITY_STROKE` via Subtitle Track `FieldsBlob` capture/inject + burn-in deliver (light + busy visual QA). See `validation/production-repair-step5-subtitle-readability-closeout.md`. Evidence artifacts live under gitignored `validation/native-subtitle-readability-unblock/` (no render blobs in git).
 
 ---
 
@@ -41,7 +45,7 @@ N02 V4 proved E2E chain works but deliverable quality is below publish-review st
 | **H. Black-Bar Detection** | `qa.visual.black_bar_detect` / `final_render.black_bar_check` **VERIFIED** (cropdetect multiframe) | Disposable frames (Step 4B) | **NO** | **YES** — detector on N02 V5 render |
 | **I. Reframe Repair Loop** | `qa.visual.reframe_static_repair` / `qa.visual.reframe_repair_loop` **VERIFIED** on fixtures; max 3 attempts; Owner-review path defined | Fixture loop only — **not** real Production loop | **NO** | **YES** — N02 V4 gap was gate/loop enforcement, not missing static reframe |
 | **J. Subtitle Basic Rendering** | `native_drt_subtitles` / `subtitle.render.basic` / `subtitle.segment.semantic` **VERIFIED** | 08A.1 + R1 burn-in | **NO** | **NO** — placement works; issue is style not placement |
-| **K. Subtitle Readability** | `subtitle.render.readability_stroke` **BLOCKED**; profile contract exists; UI outer stroke `AVAILABLE_MANUAL` only | **Real N02 V4 deliverable** + Step 2 disposable probe (white text, **no stroke** on burn-in) | **YES — P0** | **N/A** — blocker is missing capability, not pending validation |
+| **K. Subtitle Readability** | `subtitle.render.readability_stroke` **VERIFIED**; `stroke_automation` **VERIFIED** (Step 5 Route A FieldsBlob) | Step 5 gold standard + inject + burn-in MP4 QA (light/busy) | **NO** | **NO** — automation route proven; N02 V5 confirms full chain |
 | **L. Render** | `render.configure` / `render.start` / `render.status` / `render.verify` **VERIFIED** | 04A-R2 integrated render | **NO** | **NO** |
 | **M. Final Artifact QA** | `qa.final_artifact` **VERIFIED**; `final-artifact-qa.ps1` embeds audio + black-bar sections | Fixture + integration tests | **NO** | **YES** — full gate stack on N02 V5 artifact |
 
@@ -103,18 +107,18 @@ N02 V4 proved E2E chain works but deliverable quality is below publish-review st
 | Route | Status |
 |-------|--------|
 | `native_drt_subtitles` placement | **VERIFIED** |
-| `subtitle.render.readability_stroke` | **BLOCKED** |
+| `subtitle.render.readability_stroke` | **VERIFIED** (Step 5 Route A) |
 | DRT `subtitleStyle` / `subtitleTrackStyle` | ignored |
 | Scripting API subtitle style R/W | none |
 | Advanced MCP style | font + position only; stroke fields absent; host route incomplete |
 | Resolve UI outer stroke | `AVAILABLE_MANUAL` |
 | Text+ overlay | **not** upgraded — explicitly out of scope |
 
-**Classification:** `P0_BLOCKER` for goal *自动产生达到发布审查条件的成片*.
+**Classification (pre–Step 5):** `P0_BLOCKER` for goal *自动产生达到发布审查条件的成片*.
 
-There is **no VERIFIED fallback**. Manual UI stroke does not satisfy automated Production. Must not silently treat as optional enhancement.
+**Post–Step 5:** Route A automation **VERIFIED** — gold standard harvests `SubtitleTrackVec` → `Sm2TiTrack` → `FieldsBlob` (not cue-level `<EffectFiltersBA/>`). Inject + disposable import + burn-in deliver passed light/busy visual QA.
 
-**Owner decision exists:** accept known subtitle degradation **or** authorize Step 5 repair before V5.
+**Route B:** **NOT ENTERED**.
 
 ---
 
@@ -131,21 +135,10 @@ Not V5 blockers per Owner directive:
 ## `REMAINING_PRODUCTION_BLOCKERS`
 
 ```yaml
-REMAINING_PRODUCTION_BLOCKERS:
-  - id: P0_SUBTITLE_READABILITY_STROKE
-    capability: subtitle.render.readability_stroke
-    truth: BLOCKED
-    evidence:
-      - N02 V4 real deliverable — readability risk on light backgrounds with white unstyled native DRT
-      - Step 2 disposable probe — burn-in survives but no outer stroke
-      - No scripting/MCP/DRT automation route VERIFIED
-    impact: Publish-review quality — subtitles may be unreadable on light/busy frames
-    owner_decision_required: true
-    accepted_degradation_alternative: Owner may explicitly accept V5 without stroke automation
-    recommended_repair: Production Repair Step 5 — Minimal Native Subtitle Readability Unblock
+REMAINING_PRODUCTION_BLOCKERS: []
 ```
 
-**Count: 1 true blocker.**
+**Count: 0** (Step 5 closed `P0_SUBTITLE_READABILITY_STROKE`).
 
 All other gates marked `PRODUCTION_INTEGRATION_VALIDATION_PENDING` are **intentionally deferred to N02 V5** — not listed as blockers.
 
@@ -153,11 +146,13 @@ All other gates marked `PRODUCTION_INTEGRATION_VALIDATION_PENDING` are **intenti
 
 ## Final Readiness Verdict
 
-### `NOT_READY_FOR_N02_V5`
+### `READY_FOR_N02_V5` (current, post–Step 5)
 
-**Reason:** One real-Production-proven, publish-quality blocker remains — automated native subtitle outer stroke for light-background readability.
+**Reason:** `subtitle.render.readability_stroke` and `stroke_automation` are **VERIFIED** via Route A FieldsBlob template + burn-in visual QA. Remaining gates are **production integration validation** in N02 V5 (music placement, loudness on real artifact, pacing/reframe loop, continuous execution), not pre-V5 capability blockers.
 
-**Not** `READY_FOR_N02_V5_WITH_OWNER_ACCEPTED_DEGRADATION` unless Owner **first** explicitly accepts: *V5 may proceed knowing light-background subtitles can fail publish review with no automated fix.*
+### Historical: `NOT_READY_FOR_N02_V5` (2026-09-25)
+
+Superseded by Step 5 closeout above.
 
 ---
 
@@ -172,17 +167,11 @@ Agent must **not** substitute Owner acceptance.
 
 ---
 
-## Next唯一合法动作
+## Next合法动作 (post–Step 5)
 
-**Production Repair Step 5 — Minimal Native Subtitle Readability Unblock**
+**N02 V5** — real Production integration validation (continuous execution, catalog music placement, loudness/repair on deliverable, pacing/reframe/black-bar gates on artifact).
 
-Priority order (frozen):
-
-1. Resolve UI: create standard outer-stroke style → export/harvest native `EffectFiltersBA` blob → map to existing track-style route
-2. If (1) infeasible: minimal Advanced MCP style extension (stroke fields only)
-3. If (1)(2) infeasible: return to Owner for degradation decision
-
-**Do not:** jump to Text+ refactor, implement checkpointed runner, or add new Audio/Pacing/QA systems.
+Step 5 **complete** — do not re-open Route B unless Route A fails in Production.
 
 ---
 
@@ -190,9 +179,9 @@ Priority order (frozen):
 
 | Item | Value |
 |------|-------|
-| Runtime executed | **NO** |
+| Runtime executed | **YES** (Step 5 Resolve validation) |
 | Production executed | **NO** |
-| Implementation modified | **NO** |
+| Implementation modified | **YES** (Step 5 FieldsBlob template) |
 | N02 V5 executed | **NO** |
 | N02 touched | **NO** |
 

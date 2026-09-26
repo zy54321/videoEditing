@@ -97,9 +97,9 @@ vocabulary:
     notes: Burn-in / timeline subtitle placement
 
   subtitle.render.readability_stroke:
-    status: BLOCKED
+    status: VERIFIED
     l1_aliases: [subtitle.visual_style]
-    notes: "Production-safe white + dark outer stroke on native DRT track. Resolve UI AVAILABLE_MANUAL; automation BLOCKED (Repair Step 2). Profile: native-drt-subtitle-readability-profile.yaml"
+    notes: "Route A: gold standard Subtitle Track 1 FieldsBlob capture/inject + burn-in deliver visual QA (Repair Step 5). Profile: native-drt-subtitle-readability-profile.yaml"
 
   subtitle.style.basic:
     status: UNKNOWN

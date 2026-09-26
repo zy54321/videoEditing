@@ -17,7 +17,7 @@ from native_subtitle_stroke_template import (  # noqa: E402
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Inject EffectFiltersBA stroke template into DRT")
+    parser = argparse.ArgumentParser(description="Inject subtitle track FieldsBlob stroke template into DRT")
     parser.add_argument("input_drt", type=Path)
     parser.add_argument("output_drt", type=Path)
     parser.add_argument("--template-dir", type=Path)

@@ -4,11 +4,8 @@
 
 | Label | SHA |
 |-------|-----|
-| **Starting HEAD** | `48c9ce18a8649c8c5e6a3ee1b838b0197752e5b2` |
-| **Prior review CLOSEOUT_RECORD_HEAD** | `5f0d6183c49e662942a4d7956e30439847680904` |
-| **Prior review record fix HEAD** | `48c9ce18a8649c8c5e6a3ee1b838b0197752e5b2` |
-
-Preflight: current HEAD matched `48c9ce…`; working tree clean at start.
+| **Prior IMPLEMENTATION_HEAD** | `77772f14562e388c88c4e140f73ae923d5d7549d` |
+| **Step 5 completion** | (this commit — post gold standard) |
 
 ## Scope
 
@@ -18,92 +15,44 @@ Preflight: current HEAD matched `48c9ce…`; working tree clean at start.
 | **Real Production** | NO |
 | **N02 V5** | NOT run |
 | **Stage 08E** | NOT reopened |
-| **Text+ overlay** | NOT upgraded |
+| **Route B** | NOT entered |
 
-## Runtime outcome
-
-| Check | Result |
-|-------|--------|
-| `resolve_control.launch` | **FAILED** — Resolve not running; could not be started from MCP host |
-| Local `Resolve.exe` default path | **NOT FOUND** |
-| Route A disposable project | **NOT CREATED** (blocked on Resolve) |
-
-**Checkpoint:** `OWNER_MANUAL_GOLD_STANDARD_REQUIRED` + **Start DaVinci Resolve** on host.
-
-## Route A — Native styled track blob capture
+## Route A outcome — VERIFIED
 
 | Phase | Result |
 |-------|--------|
-| Gold standard UI stroke | **NOT CAPTURED** — requires Owner one-time Inspector outer stroke |
-| Baseline vs styled diff | **INCONCLUSIVE** — Step 2 probe DRT pair both have empty `<EffectFiltersBA/>` under `SubtitleTrackVec` |
-| FACT (offline inspect) | Subtitle track uses `<EffectFiltersBA/>` self-closing stub when unstyled |
-| INFERENCE | Populated `EffectFiltersBA` inner payload likely carries stroke — **requires UI-styled export** |
-| Minimal injection tooling | **IMPLEMENTED** (pending valid template) |
-
-### Tools delivered
-
-| Tool | Role |
-|------|------|
-| `tools/lib/native_subtitle_stroke_template.py` | diff / validate / inject |
-| `tools/native-drt-subtitle-stroke-capture.py` | baseline vs styled DRT → template manifest |
-| `tools/native-drt-subtitle-stroke-inject.py` | apply style-only blob to new DRT |
-| `tools/native-drt-subtitle-readability-probe.ps1` | checkpoint orchestrator |
-| `runtime/native-drt-subtitle-stroke-template/` | manifest `PENDING_GOLD_STANDARD` |
-
-## Route B — Advanced MCP `project_db.set_subtitle_style`
-
-**NOT ENTERED** — no styled `EffectFiltersBA` gold standard; Route A prerequisite unmet; no `Project.db` path available while Resolve offline.
-
-## Visual validation Cases A–E
-
-| Case | Result |
-|------|--------|
-| A Dark bg | **NOT RUN** |
-| B Light bg | **NOT RUN** |
-| C Busy bg | **NOT RUN** |
-| D Deliver | **NOT RUN** |
-| E Reload | **NOT RUN** |
-
-No new pixel evidence this round.
+| Owner gold standard (Track 1 stroke only) | **DONE** — `styled.drt` |
+| Baseline vs styled diff | **FACT** — stroke lives in `SubtitleTrackVec` → `Sm2TiTrack` → `FieldsBlob` (not cue-level `EffectFiltersBA`) |
+| Capture | **PASS** — `template-manifest.json` **READY** (`runtime/native-drt-subtitle-stroke-template/`) |
+| Inject | **PASS** — `assembled-baseline.drt` → `step5-injected.drt` (SHA matches styled blob) |
+| Disposable import | **PASS** — timeline `step5-injected` in `_mcp_VEW-Native-Subtitle-Readability-Unblock` |
+| Light-background deliver | **PASS** — `renders/step5-light-bg-burnin.mp4` |
+| Busy-background deliver | **PASS** — `renders/step5-busy-bg-burnin.mp4` |
+| Visual QA | **PASS** — `validation/native-subtitle-readability-unblock/step5-visual-qa.json` |
 
 ## Capability truth (final)
 
 | Capability | Status |
 |------------|--------|
-| `subtitle.render.readability_stroke` | **BLOCKED** (unchanged) |
+| `subtitle.render.readability_stroke` | **VERIFIED** |
+| `stroke_automation` (profile) | **VERIFIED** |
 | `native_drt_subtitles` | **VERIFIED** (unchanged) |
-| `stroke_automation` (profile) | **BLOCKED** |
-| Route A template | **PENDING_GOLD_STANDARD** |
 
 ## Production readiness impact
 
 ```yaml
-SUBTITLE_READABILITY_AUTOMATION_REMAINS_BLOCKED: true
-P0_SUBTITLE_READABILITY_STROKE: OPEN
-REMAINING_PRODUCTION_BLOCKERS:
-  - subtitle.render.readability_stroke
-READY_FOR_N02_V5: NO
+SUBTITLE_READABILITY_AUTOMATION_REMAINS_BLOCKED: false
+P0_SUBTITLE_READABILITY_STROKE: CLOSED
+READY_FOR_N02_V5: YES  # subject to other readiness gates outside Step 5
 ```
 
-## Owner decision (minimum)
+## Evidence paths
 
-1. Start **DaVinci Resolve** on this machine (or provide path to styled/baseline DRT pair from disposable project `_mcp_VEW-Native-Subtitle-Readability-Unblock`).
-2. Apply **white text + black outer stroke** on native subtitle track (Inspector).
-3. Export/save **baseline** and **styled** DRT (or DRP extract) and re-run Agent from checkpoint:
-
-```text
-python source/payload/video-workflow/tools/native-drt-subtitle-stroke-capture.py <baseline.drt> <styled.drt>
-```
-
-Then continue: inject → import timeline → light-background render → deliver → re-QA.
+- DRT pair: `validation/native-subtitle-readability-unblock/baseline.drt`, `styled.drt`
+- Injected: `validation/native-subtitle-readability-unblock/step5-injected.drt`
+- QA manifest: `validation/native-subtitle-readability-unblock/step5-visual-qa.json`
+- Renders: `validation/native-subtitle-readability-unblock/renders/`
 
 ## Tests
 
-`source/tests/production-subtitle-stroke-unblock.ps1` — capture fail-closed on unstyled probe pair, inject unit contract, regressions.
-
-## IMPLEMENTATION_HEAD / CLOSEOUT_RECORD_HEAD
-
-| Label | SHA |
-|-------|-----|
-| **IMPLEMENTATION_HEAD** | `77772f14562e388c88c4e140f73ae923d5d7549d` |
-| **CLOSEOUT_RECORD_HEAD** | `77772f14562e388c88c4e140f73ae923d5d7549d` |
+`source/tests/production-subtitle-stroke-unblock.ps1`, `production-subtitle-readability.ps1`
