@@ -33,9 +33,21 @@ $releasePaths = @()
 
 function Write-ReleaseAbort {
     param([string]$Reason)
+    if ($Reason -eq 'RELEASE_RECOVERY_REQUIRED') {
+        if (-not $NoPause) { Read-Host '按 Enter 键关闭' }
+        exit 1
+    }
     Write-Host "RELEASE_ABORTED: $Reason" -ForegroundColor Red
     if ($txn) {
-        Abort-ReleaseTransaction -Transaction $txn -ReleasePathsToRemove $releasePaths
+        try {
+            Abort-ReleaseTransaction -Transaction $txn -ReleasePathsToRemove $releasePaths
+        } catch {
+            if ($_.Exception.Message -eq 'RELEASE_RECOVERY_REQUIRED') {
+                if (-not $NoPause) { Read-Host '按 Enter 键关闭' }
+                exit 1
+            }
+            throw
+        }
     }
     if (-not $NoPause) { Read-Host '按 Enter 键关闭' }
     exit 1
@@ -46,7 +58,9 @@ function Get-ChangeSummary {
     if (-not $lines) { return '(no changes)' }
     $shown = @($lines | Select-Object -First 40)
     if ($lines.Count -gt 40) { $shown += "... (+$($lines.Count - 40) more)" }
-    return ($shown -join [Environment]::NewLine)
+    $stat = git -C $ProjectRoot diff --stat HEAD 2>$null
+    $header = "Full repo freeze: git add -A (non-ignored only) will stage all pending changes below."
+    return ($header + [Environment]::NewLine + ($shown -join [Environment]::NewLine) + [Environment]::NewLine + [Environment]::NewLine + $stat)
 }
 
 # Preflight: root runtime residue
@@ -170,9 +184,8 @@ try {
         throw 'OWNER_CANCEL'
     }
 
-    git -C $ProjectRoot add source release.bat 2>$null | Out-Null
-    git -C $ProjectRoot add "releases/video-editing-workflow-v$Version" "releases/video-editing-workflow-v$Version.zip" "releases/RELEASE-v$Version.md" 2>$null | Out-Null
-    git -C $ProjectRoot add -u source 2>$null | Out-Null
+    git -C $ProjectRoot add -A
+    if ($LASTEXITCODE -ne 0) { throw 'GIT_STAGE_FAIL' }
 
     git -C $ProjectRoot commit -m "release: v$Version"
     if ($LASTEXITCODE -ne 0) { throw 'GIT_COMMIT_FAIL' }
@@ -186,6 +199,11 @@ try {
     }
 
     Complete-ReleaseTransaction -Transaction $txn
+
+    $postStatus = git -C $ProjectRoot status --porcelain=v1 2>$null
+    if ($postStatus) {
+        throw 'GIT_POST_COMMIT_DIRTY: working tree must be clean after release commit'
+    }
 
     Write-Host ''
     Write-Host '========================================' -ForegroundColor Green

@@ -49,40 +49,41 @@ $inv = Get-ProductFileInventory
 Assert-True ($inv -contains 'video-workflow\tools\native-drt-subtitle-stroke-inject.py') 'V11 stroke inject in product'
 Assert-True (-not ($inv | Where-Object { $_ -match '__pycache__|\.pyc$' })) 'V12 no pycache in product'
 
-# disposable git transaction cases
+# disposable git transaction (legacy smoke — full matrix in release-v2-transaction-fixtures.ps1)
 function Test-TxnRollback {
     param([string]$Name, [scriptblock]$Mutate)
     $tmp = Join-Path $PSScriptRoot "fixtures\release-v2-txn-$([guid]::NewGuid().ToString('n'))"
     New-Item -ItemType Directory -Path $tmp -Force | Out-Null
-    Set-Location $tmp
-    git init -q
-    git config user.email 'test@test.local'
-    git config user.name 'Test'
-    'base' | Out-File 'tracked.txt' -Encoding utf8
-    'untracked' | Out-File 'local-only.txt' -Encoding utf8
-    git add tracked.txt
-    git commit -m 'init' -q
-    'edit' | Out-File 'tracked.txt' -Encoding utf8 -NoNewline
-    git add tracked.txt
+    git -C $tmp init -q
+    git -C $tmp config user.email 'test@test.local'
+    git -C $tmp config user.name 'Test'
+    'base' | Out-File (Join-Path $tmp 'tracked.txt') -Encoding utf8
+    'untracked' | Out-File (Join-Path $tmp 'local-only.txt') -Encoding utf8
+    git -C $tmp add tracked.txt
+    git -C $tmp commit -m 'init' -q
+    'edit' | Out-File (Join-Path $tmp 'tracked.txt') -Encoding utf8 -NoNewline
+    git -C $tmp add tracked.txt
     & $Mutate
-    $beforeHead = (git rev-parse HEAD).Trim()
-    $beforeStatus = git status --porcelain=v1
-    $beforeTracked = Get-Content 'tracked.txt' -Raw
-    $beforeUntracked = if (Test-Path 'local-only.txt') { Get-Content 'local-only.txt' -Raw } else { $null }
+    $beforeHead = (git -C $tmp rev-parse HEAD).Trim()
+    $beforePorcelain = Get-GitPorcelainLines -ProjectRoot $tmp
+    $beforeTracked = Get-Content (Join-Path $tmp 'tracked.txt') -Raw
+    $beforeUntracked = if (Test-Path (Join-Path $tmp 'local-only.txt')) { Get-Content (Join-Path $tmp 'local-only.txt') -Raw } else { $null }
     $txn = New-ReleaseTransaction -ProjectRoot $tmp
-    'VERSION-BUMP' | Out-File 'tracked.txt' -Encoding utf8 -NoNewline
+    'VERSION-BUMP' | Out-File (Join-Path $tmp 'tracked.txt') -Encoding utf8 -NoNewline
     Abort-ReleaseTransaction -Transaction $txn
-    $afterHead = (git rev-parse HEAD).Trim()
-    $afterStatus = git status --porcelain=v1
-    $afterTracked = Get-Content 'tracked.txt' -Raw
-    $afterUntracked = if (Test-Path 'local-only.txt') { Get-Content 'local-only.txt' -Raw } else { $null }
-    $ok = ($beforeHead -eq $afterHead) -and ($beforeTracked -eq $afterTracked) -and ($beforeUntracked -eq $afterUntracked) -and (Test-Path -LiteralPath 'local-only.txt')
-    Set-Location $ProjectRoot
+    $afterHead = (git -C $tmp rev-parse HEAD).Trim()
+    $afterPorcelain = Get-GitPorcelainLines -ProjectRoot $tmp
+    $afterTracked = Get-Content (Join-Path $tmp 'tracked.txt') -Raw
+    $afterUntracked = if (Test-Path (Join-Path $tmp 'local-only.txt')) { Get-Content (Join-Path $tmp 'local-only.txt') -Raw } else { $null }
+    $ok = ($beforeHead -eq $afterHead) -and (Test-GitPorcelainEqual -Expected $beforePorcelain -Actual $afterPorcelain) -and ($beforeTracked -eq $afterTracked) -and ($beforeUntracked -eq $afterUntracked) -and (Test-Path -LiteralPath (Join-Path $tmp 'local-only.txt'))
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
     Assert-True $ok $Name
 }
 
 Test-TxnRollback -Name 'V13 rollback preserves tracked+staged+untracked' -Mutate { }
+
+& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'release-v2-transaction-fixtures.ps1')
+Assert-True ($LASTEXITCODE -eq 0) 'V13b transaction fixture suite'
 
 # immutable tag on real repo (read-only)
 $tag01 = git -C $ProjectRoot rev-parse -q --verify refs/tags/v0.1.1 2>$null
