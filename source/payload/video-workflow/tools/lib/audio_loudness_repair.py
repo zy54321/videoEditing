@@ -73,11 +73,13 @@ def _parse_loudnorm_json(text: str) -> Dict[str, str]:
     return {k: str(payload[k]) for k in required}
 
 
+def _loudnorm_tp_target(profile: LoudnessProfile) -> float:
+    return float(profile.repair_target_dbtp)
+
+
 def loudnorm_pass1_measure(path: Path, profile: LoudnessProfile) -> Dict[str, str]:
-    af = (
-        f"loudnorm=I={profile.target_lufs}:TP={profile.ceiling_dbtp}:LRA={profile.lra}"
-        ":print_format=json"
-    )
+    tp = _loudnorm_tp_target(profile)
+    af = f"loudnorm=I={profile.target_lufs}:TP={tp}:LRA={profile.lra}:print_format=json"
     cmd = ["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-af", af, "-f", "null", "-"]
     proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
     if proc.returncode != 0:
@@ -87,8 +89,9 @@ def loudnorm_pass1_measure(path: Path, profile: LoudnessProfile) -> Dict[str, st
 
 
 def _build_pass2_filter(profile: LoudnessProfile, measured: Dict[str, str]) -> str:
+    tp = _loudnorm_tp_target(profile)
     return (
-        f"loudnorm=I={profile.target_lufs}:TP={profile.ceiling_dbtp}:LRA={profile.lra}"
+        f"loudnorm=I={profile.target_lufs}:TP={tp}:LRA={profile.lra}"
         f":measured_I={measured['input_i']}:measured_TP={measured['input_tp']}"
         f":measured_LRA={measured['input_lra']}:measured_thresh={measured['input_thresh']}"
         f":offset={measured['target_offset']}:linear=true:print_format=summary"
@@ -128,6 +131,10 @@ def loudnorm_pass2_apply(
             "aac",
             "-b:a",
             "192k",
+            "-ar",
+            str(profile.output_sample_rate_hz),
+            "-ac",
+            str(profile.output_channels),
             str(temp_out),
         ]
     else:
@@ -141,6 +148,10 @@ def loudnorm_pass2_apply(
             af,
             "-c:a",
             "pcm_s16le",
+            "-ar",
+            str(profile.output_sample_rate_hz),
+            "-ac",
+            str(profile.output_channels),
             str(temp_out),
         ]
 

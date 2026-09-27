@@ -47,6 +47,10 @@ def _same_visual(a: Dict[str, Any], b: Dict[str, Any]) -> bool:
     return ar == br
 
 
+def _same_source_asset(a: Dict[str, Any], b: Dict[str, Any]) -> bool:
+    return bool(a.get("source_asset")) and a.get("source_asset") == b.get("source_asset")
+
+
 def analyze_assembly_plan(
     assembly_plan: Dict[str, Any],
     profile: PacingProfile,
@@ -120,6 +124,28 @@ def analyze_assembly_plan(
                 "span_shot_ids": [s.get("shot_id") for s in span_shots],
                 "repair_route": ["clip.source_range", "clip.assemble", "visual.reframe.static"],
             })
+        i = j
+
+    # Same source_asset across consecutive shots (continuous trim counts as one visual)
+    i = 0
+    while i < len(shots):
+        j = i + 1
+        while j < len(shots) and _same_source_asset(shots[i], shots[j]):
+            j += 1
+        span_shots = shots[i:j]
+        span_duration = sum(_shot_duration(s) for s in span_shots)
+        if len(span_shots) >= 2 and span_duration >= profile.repair_review_duration_sec:
+            if not any(s.get("editorial_reason") or s.get("pacing_exempt") for s in span_shots):
+                findings.append({
+                    "shot_id": span_shots[0].get("shot_id"),
+                    "beat_id": ",".join(str(s.get("beat_id") or "") for s in span_shots),
+                    "duration_sec": span_duration,
+                    "verdict": VERDICT_REPAIR,
+                    "reason": "same_source_asset_span",
+                    "span_shot_ids": [s.get("shot_id") for s in span_shots],
+                    "source_asset": span_shots[0].get("source_asset"),
+                    "repair_route": ["clip.source_range", "clip.alternate_source", "clip.assemble"],
+                })
         i = j
 
     overall = VERDICT_PASS

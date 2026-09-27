@@ -25,6 +25,10 @@ class LoudnessProfile:
     accept_min_lufs: float = -17.0
     accept_max_lufs: float = -15.0
     ceiling_dbtp: float = -1.0
+    repair_target_dbtp: float = -1.5
+    encoder_safety_margin_dbtp: float = 0.5
+    output_sample_rate_hz: int = 48000
+    output_channels: int = 2
     lra: float = 7.0
     max_repair_attempts: int = 1
 
@@ -34,18 +38,34 @@ def load_loudness_profile(path: Path) -> LoudnessProfile:
     integrated = data.get("integrated_loudness") or {}
     peak = data.get("true_peak") or {}
     auto_repair = data.get("auto_repair") or {}
+    out_audio = data.get("output_audio") or {}
+    ceiling = float(peak.get("ceiling_dbtp", -1.0))
+    margin = float(peak.get("encoder_safety_margin_dbtp", 0.5))
+    repair_tp = peak.get("repair_target_dbtp")
+    if repair_tp is None:
+        repair_tp = ceiling - margin
     return LoudnessProfile(
         target_lufs=float(integrated.get("target_lufs", -16)),
         tolerance_lu=float(integrated.get("tolerance_lu", 1)),
         accept_min_lufs=float(integrated.get("accept_min_lufs", -17)),
         accept_max_lufs=float(integrated.get("accept_max_lufs", -15)),
-        ceiling_dbtp=float(peak.get("ceiling_dbtp", -1.0)),
+        ceiling_dbtp=ceiling,
+        repair_target_dbtp=float(repair_tp),
+        encoder_safety_margin_dbtp=margin,
+        output_sample_rate_hz=int(out_audio.get("sample_rate_hz", 48000)),
+        output_channels=int(out_audio.get("channels", 2)),
         lra=float(integrated.get("lra", 7)),
         max_repair_attempts=int(auto_repair.get("max_retries", 1)),
     )
 
 
-REPAIRABLE_VERDICTS = frozenset({VERDICT_TOO_LOW, VERDICT_TOO_HIGH, VERDICT_TRUE_PEAK})
+REPAIRABLE_VERDICTS = frozenset({
+    VERDICT_TOO_LOW,
+    VERDICT_TOO_HIGH,
+    VERDICT_TRUE_PEAK,
+    "OUTPUT_SAMPLE_RATE_MISMATCH",
+    "OUTPUT_CHANNEL_MISMATCH",
+})
 
 
 def is_repairable_verdict(verdict: str) -> bool:
@@ -119,17 +139,37 @@ def measure_loudness(path: Path) -> Dict[str, Any]:
     }
 
 
+def judge_output_stream(stream: Dict[str, Any], profile: LoudnessProfile) -> Optional[str]:
+    if not stream.get("has_audio"):
+        return VERDICT_NO_AUDIO
+    codec = str(stream.get("codec") or "").lower()
+    if codec not in ("aac", "mp4a"):
+        return None
+    sr = int(stream.get("sample_rate") or 0)
+    ch = int(stream.get("channels") or 0)
+    if sr != profile.output_sample_rate_hz:
+        return "OUTPUT_SAMPLE_RATE_MISMATCH"
+    if ch != profile.output_channels:
+        return "OUTPUT_CHANNEL_MISMATCH"
+    return None
+
+
 def judge_loudness(
     integrated_lufs: Optional[float],
     true_peak_dbtp: Optional[float],
     profile: LoudnessProfile,
     *,
     has_audio: bool,
+    stream: Optional[Dict[str, Any]] = None,
 ) -> str:
     if not has_audio:
         return VERDICT_NO_AUDIO
     if integrated_lufs is None:
         return VERDICT_NO_AUDIO
+    if stream:
+        stream_issue = judge_output_stream(stream, profile)
+        if stream_issue:
+            return stream_issue
     if true_peak_dbtp is not None and true_peak_dbtp > profile.ceiling_dbtp:
         return VERDICT_TRUE_PEAK
     if integrated_lufs < profile.accept_min_lufs:
@@ -151,6 +191,7 @@ def analyze_media(path: Path, profile: LoudnessProfile) -> Dict[str, Any]:
         loudness.get("true_peak_dbtp"),
         profile,
         has_audio=bool(stream.get("has_audio")),
+        stream=stream,
     )
     return {
         "path": str(path.resolve()),

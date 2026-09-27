@@ -137,7 +137,7 @@ Assert-True ($noAJson.verdict -eq 'NO_AUDIO') 'D04 no audio failure'
 # 9 — final-artifact-qa integration (audio section)
 $qaTmp = Join-Path $fixtureRoot '.qa'
 $vidPass = Join-Path $fixtureRoot 'voice_music_pass.mp4'
-Invoke-Ffmpeg @('-i',$voiceMusicPass,'-f','lavfi','-i','color=c=black:s=320x240','-shortest','-c:v','libx264','-c:a','aac',$vidPass)
+Invoke-Ffmpeg @('-i',$voiceMusicPass,'-f','lavfi','-i','color=c=black:s=320x240','-shortest','-c:v','libx264','-c:a','aac','-ar','48000','-ac','2',$vidPass)
 $qaOut = & powershell -NoProfile -File $finalQaCli -VideoPath $vidPass -QaRoot $qaTmp -RunId 'step4a-test' 2>&1
 $qaReportPath = ($qaOut | Select-Object -First 1)
 Assert-True (Test-Path -LiteralPath $qaReportPath) 'E01 final-artifact-qa report written'

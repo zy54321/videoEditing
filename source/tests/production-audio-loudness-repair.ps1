@@ -69,6 +69,9 @@ $workDir = Join-Path $fixtureRoot '.work'
 $profile = [System.IO.File]::ReadAllText($profilePath, $utf8)
 Assert-True ($profile -match 'final_audio_auto_repair:\s*VERIFIED') 'A01 profile auto repair VERIFIED'
 Assert-True ($profile -match 'max_retries:\s*1') 'A02 max_retries 1'
+Assert-True ($profile -match 'repair_target_dbtp:\s*-1\.5') 'A02b repair_target_dbtp -1.5'
+Assert-True ($profile -match 'encoder_safety_margin_dbtp:\s*0\.5') 'A02c encoder_safety_margin 0.5'
+Assert-True ($profile -match 'sample_rate_hz:\s*48000') 'A02d output 48kHz'
 Assert-True ($profile -match 'lra:\s*7') 'A03 LRA 7'
 Assert-True ($vocab -match 'audio\.final\.normalize_or_adjust:[\s\S]{0,80}VERIFIED') 'A04 vocab normalize VERIFIED'
 Assert-True ($vocab -match 'final_audio\.auto_repair:[\s\S]{0,80}VERIFIED') 'A05 vocab FINAL_AUDIO_AUTO_REPAIR VERIFIED'
@@ -129,6 +132,8 @@ Assert-True ($bv.codec_name -eq $av.codec_name) 'F02 Case E video codec unchange
 Assert-True ($bv.width -eq $av.width -and $bv.height -eq $av.height) 'F03 Case E resolution unchanged'
 Assert-True ($bv.r_frame_rate -eq $av.r_frame_rate) 'F04 Case E fps unchanged'
 Assert-True ($eJson.after_qa.verdict -eq 'PASS') 'F05 Case E post-repair audio PASS'
+Assert-True ($eJson.after_qa.audio_stream.sample_rate -eq 48000) 'F05b Case E post-repair 48kHz'
+Assert-True ($eJson.repair.pass2_filter -match 'TP=-1\.5') 'F05c Case E pass2 uses repair TP margin'
 
 # Case F — no audio
 $caseF = Invoke-Py -PyArgs @($repairCli, $noAudioMp4, '--profile', $profilePath, '--work-dir', $workDir) -AllowExitCodes @(2)

@@ -1,0 +1,352 @@
+{
+  "before_qa": {
+    "pacing": {
+      "ok": true,
+      "verdict": "PASS",
+      "findings": [
+        {
+          "shot_id": "S0",
+          "beat_id": "",
+          "duration_sec": 4.0,
+          "verdict": "PASS"
+        },
+        {
+          "shot_id": "S1",
+          "beat_id": "",
+          "duration_sec": 4.0,
+          "verdict": "PASS"
+        },
+        {
+          "shot_id": "S2",
+          "beat_id": "",
+          "duration_sec": 4.0,
+          "verdict": "PASS"
+        },
+        {
+          "shot_id": "SP",
+          "beat_id": "",
+          "duration_sec": 4.0,
+          "verdict": "PASS"
+        }
+      ],
+      "shot_count": 4
+    },
+    "reuse": {
+      "ok": false,
+      "verdict": "STRONG_REPAIR_CANDIDATE",
+      "findings": [
+        {
+          "verdict": "STRONG_REPAIR_CANDIDATE",
+          "reason": "same_source_cooldown_violation",
+          "source_asset": "A",
+          "gap_sec": 4.0,
+          "shot_id": "S2",
+          "timeline_start_sec": 8.0
+        },
+        {
+          "verdict": "STRONG_REPAIR_CANDIDATE",
+          "reason": "ping_pong_pattern",
+          "pattern": "A-B-A",
+          "shots": [
+            {
+              "shot_id": "S0",
+              "source_asset": "A",
+              "timeline_start_sec": 0.0
+            },
+            {
+              "shot_id": "S1",
+              "source_asset": "B",
+              "timeline_start_sec": 4.0
+            },
+            {
+              "shot_id": "S2",
+              "source_asset": "A",
+              "timeline_start_sec": 8.0
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "ping_pong_aba_count": 1,
+        "ping_pong_abab_count": 0,
+        "ping_pong_ababa_count": 0
+      },
+      "shot_count": 4
+    }
+  },
+  "repair_applied": true,
+  "repair": {
+    "ok": false,
+    "actions": [
+      {
+        "shot_id": "S2",
+        "repair": {
+          "action": "clip.alternate_source",
+          "reason": "ping_pong_break",
+          "from_source": "A",
+          "to_source": "C"
+        },
+        "trigger": "ping_pong_aba"
+      }
+    ],
+    "action_count": 1,
+    "before": {
+      "pacing": {
+        "ok": true,
+        "verdict": "PASS",
+        "findings": [
+          {
+            "shot_id": "S0",
+            "beat_id": "",
+            "duration_sec": 4.0,
+            "verdict": "PASS"
+          },
+          {
+            "shot_id": "S1",
+            "beat_id": "",
+            "duration_sec": 4.0,
+            "verdict": "PASS"
+          },
+          {
+            "shot_id": "S2",
+            "beat_id": "",
+            "duration_sec": 4.0,
+            "verdict": "PASS"
+          },
+          {
+            "shot_id": "SP",
+            "beat_id": "",
+            "duration_sec": 4.0,
+            "verdict": "PASS"
+          }
+        ],
+        "shot_count": 4
+      },
+      "reuse": {
+        "ok": false,
+        "verdict": "STRONG_REPAIR_CANDIDATE",
+        "findings": [
+          {
+            "verdict": "STRONG_REPAIR_CANDIDATE",
+            "reason": "same_source_cooldown_violation",
+            "source_asset": "A",
+            "gap_sec": 4.0,
+            "shot_id": "S2",
+            "timeline_start_sec": 8.0
+          },
+          {
+            "verdict": "STRONG_REPAIR_CANDIDATE",
+            "reason": "ping_pong_pattern",
+            "pattern": "A-B-A",
+            "shots": [
+              {
+                "shot_id": "S0",
+                "source_asset": "A",
+                "timeline_start_sec": 0.0
+              },
+              {
+                "shot_id": "S1",
+                "source_asset": "B",
+                "timeline_start_sec": 4.0
+              },
+              {
+                "shot_id": "S2",
+                "source_asset": "A",
+                "timeline_start_sec": 8.0
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "ping_pong_aba_count": 1,
+          "ping_pong_abab_count": 0,
+          "ping_pong_ababa_count": 0
+        },
+        "shot_count": 4
+      }
+    },
+    "after": {
+      "pacing": {
+        "ok": true,
+        "verdict": "PASS",
+        "findings": [
+          {
+            "shot_id": "S0",
+            "beat_id": "",
+            "duration_sec": 4.0,
+            "verdict": "PASS"
+          },
+          {
+            "shot_id": "S1",
+            "beat_id": "",
+            "duration_sec": 4.0,
+            "verdict": "PASS"
+          },
+          {
+            "shot_id": "S2",
+            "beat_id": "",
+            "duration_sec": 4.0,
+            "verdict": "PASS"
+          },
+          {
+            "shot_id": "SP",
+            "beat_id": "",
+            "duration_sec": 4.0,
+            "verdict": "PASS"
+          }
+        ],
+        "shot_count": 4
+      },
+      "reuse": {
+        "ok": false,
+        "verdict": "STRONG_REPAIR_CANDIDATE",
+        "findings": [
+          {
+            "verdict": "STRONG_REPAIR_CANDIDATE",
+            "reason": "same_source_cooldown_violation",
+            "source_asset": "C",
+            "gap_sec": 8.0,
+            "shot_id": "SP",
+            "timeline_start_sec": 20.0
+          }
+        ],
+        "metrics": {
+          "ping_pong_aba_count": 0,
+          "ping_pong_abab_count": 0,
+          "ping_pong_ababa_count": 0
+        },
+        "shot_count": 4
+      }
+    },
+    "assembly_plan": {
+      "shots": [
+        {
+          "shot_id": "S0",
+          "source_asset": "A",
+          "timeline_duration_sec": 4,
+          "timeline_start_sec": 0
+        },
+        {
+          "shot_id": "S1",
+          "source_asset": "B",
+          "timeline_duration_sec": 4,
+          "timeline_start_sec": 4
+        },
+        {
+          "shot_id": "S2",
+          "source_asset": "C",
+          "timeline_duration_sec": 4,
+          "timeline_start_sec": 8,
+          "source_range": {
+            "in_sec": 0.0,
+            "out_sec": 4.0
+          },
+          "repair": {
+            "action": "clip.alternate_source",
+            "reason": "ping_pong_break",
+            "from_source": "A",
+            "to_source": "C"
+          }
+        },
+        {
+          "shot_id": "SP",
+          "source_asset": "C",
+          "timeline_duration_sec": 4,
+          "timeline_start_sec": 20
+        }
+      ]
+    }
+  },
+  "after_qa": {
+    "pacing": {
+      "ok": true,
+      "verdict": "PASS",
+      "findings": [
+        {
+          "shot_id": "S0",
+          "beat_id": "",
+          "duration_sec": 4.0,
+          "verdict": "PASS"
+        },
+        {
+          "shot_id": "S1",
+          "beat_id": "",
+          "duration_sec": 4.0,
+          "verdict": "PASS"
+        },
+        {
+          "shot_id": "S2",
+          "beat_id": "",
+          "duration_sec": 4.0,
+          "verdict": "PASS"
+        },
+        {
+          "shot_id": "SP",
+          "beat_id": "",
+          "duration_sec": 4.0,
+          "verdict": "PASS"
+        }
+      ],
+      "shot_count": 4
+    },
+    "reuse": {
+      "ok": false,
+      "verdict": "STRONG_REPAIR_CANDIDATE",
+      "findings": [
+        {
+          "verdict": "STRONG_REPAIR_CANDIDATE",
+          "reason": "same_source_cooldown_violation",
+          "source_asset": "C",
+          "gap_sec": 8.0,
+          "shot_id": "SP",
+          "timeline_start_sec": 20.0
+        }
+      ],
+      "metrics": {
+        "ping_pong_aba_count": 0,
+        "ping_pong_abab_count": 0,
+        "ping_pong_ababa_count": 0
+      },
+      "shot_count": 4
+    }
+  },
+  "assembly_plan": {
+    "shots": [
+      {
+        "shot_id": "S0",
+        "source_asset": "A",
+        "timeline_duration_sec": 4,
+        "timeline_start_sec": 0
+      },
+      {
+        "shot_id": "S1",
+        "source_asset": "B",
+        "timeline_duration_sec": 4,
+        "timeline_start_sec": 4
+      },
+      {
+        "shot_id": "S2",
+        "source_asset": "C",
+        "timeline_duration_sec": 4,
+        "timeline_start_sec": 8,
+        "source_range": {
+          "in_sec": 0.0,
+          "out_sec": 4.0
+        },
+        "repair": {
+          "action": "clip.alternate_source",
+          "reason": "ping_pong_break",
+          "from_source": "A",
+          "to_source": "C"
+        }
+      },
+      {
+        "shot_id": "SP",
+        "source_asset": "C",
+        "timeline_duration_sec": 4,
+        "timeline_start_sec": 20
+      }
+    ]
+  },
+  "ok": false
+}

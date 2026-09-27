@@ -10,8 +10,11 @@
 | **Loop gap** | No mandatory **pre-render** frame QA after `visual.reframe.static` |
 | **Gate gap** | Post-render QA **not enforced** as Production hard-fail in N02 V4 continuous execution |
 | **Repair gap** | No **detect → reframe → re-QA** contract; reframe could run once without recheck |
+| **Pacing gap (N02 V1)** | Per-shot duration &lt; 10s while **same `source_asset` span** ~11.7s; legacy rule required identical `source_range` + semantic beats → no `PACING_REPAIR_CANDIDATE` on timeline export |
 
 **Root cause (primary):** QA **detector VERIFIED ≠ Production closure VERIFIED**. Detection existed but was neither sufficiently sensitive nor wired into a fail-closed repair loop.
+
+**N02 V1 pacing root cause:** `pacing-qa.py` did not treat consecutive **same `source_asset`** trims as one visual span; assembly export used per-clip `beat_id` so cross-beat unchanged-span rule never fired. **Closure (V2 bundle):** `same_source_asset_span` + `assembly-qa-repair-loop.py`.
 
 **Not the root cause:** missing `visual.reframe.static` (that route remains VERIFIED).
 

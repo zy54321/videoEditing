@@ -226,6 +226,16 @@ vocabulary:
     l1_aliases: []
     notes: Step 4B — flags PACING_REPAIR_CANDIDATE with beat/shot/asset traceability
 
+  qa.shot_reuse.heuristic:
+    status: VERIFIED
+    l1_aliases: []
+    notes: N02 V2 bundle — shot-reuse-qa.py cooldown / window / ping-pong on assembly_plan
+
+  qa.assembly.repair_loop:
+    status: VERIFIED
+    l1_aliases: []
+    notes: assembly-qa-repair-loop.py — pacing + reuse QA → assembly_repair → re-QA (fixture + N02 trace)
+
   qa.visual.black_bar_detect:
     status: VERIFIED
     l1_aliases: [final_render.black_bar_check]
