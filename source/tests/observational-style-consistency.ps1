@@ -94,7 +94,7 @@ Assert-True ($qa08 -match 'not technical') 'O18 08-qa separated from technical Q
 Assert-True ($l1 -match 'subtitle\.line_break_control') 'O19 subtitle.line_break_control capability'
 Assert-True ($l1 -match 'N02_V2_READINESS_GATE') 'O19 V2 readiness gate documented'
 
-Assert-True ($version -eq '0.1.1') 'O20 VERSION is 0.1.1'
+Assert-True ($version -match '^\d+\.\d+\.\d+(-dev)?$') 'O20 VERSION from source/VERSION authority'
 
 $styleCompat = [System.IO.File]::ReadAllText((Join-Path $refRoot 'style.md'), $utf8)
 Assert-True ($styleCompat -match 'DEPRECATED') 'O21 style.md deprecated pointer only'

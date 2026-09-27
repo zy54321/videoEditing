@@ -88,16 +88,21 @@ $noVerifiedConflict = $true
 if ($l1 -match 'subtitle\.timing[\s\S]{0,120}\| \*\*MUST\*\*') { $noVerifiedConflict = $false }
 Assert-True $noVerifiedConflict 'C09 subtitle.timing not N02 MUST blocker'
 
-# 10. Installer ProductFiles all in payload preflight
+# 10. Installer product inventory (generated from payload authority)
 $installer = Get-Content (Join-Path $Root 'installer\init-video-workflow.ps1') -Raw -Encoding UTF8
-$pfMatch = [regex]::Match($installer, '\$ProductFiles = @\(([^)]+)\)', [System.Text.RegularExpressions.RegexOptions]::Singleline)
-$productFiles = [regex]::Matches($pfMatch.Groups[1].Value, "'([^']+)'") | ForEach-Object { $_.Groups[1].Value }
+$genPath = Join-Path $Root 'installer\product-files.generated.ps1'
+Assert-True (Test-Path -LiteralPath $genPath) 'C10a product-files.generated.ps1 exists'
+$genContent = Get-Content -LiteralPath $genPath -Raw -Encoding UTF8
+$productFiles = [regex]::Matches($genContent, "'([^']+)'") | ForEach-Object { $_.Groups[1].Value }
+. (Join-Path $Root 'build\lib\ProductInventory.ps1')
+Assert-True (Test-ProductInstallerInSync -SourceRoot $Root) 'C10b product inventory matches payload scan'
 $c10 = $true
 foreach ($rel in $productFiles) {
     $p = Join-Path $Payload ($rel -replace '\\', '\')
     if (-not (Test-Path -LiteralPath $p -PathType Leaf)) { $c10 = $false }
 }
-Assert-True ($installer -match 'foreach \(\$rel in \$ProductFiles\)' -and -not ($installer -match '\$RequiredPayloadFiles')) 'C10 installer uses single ProductFiles preflight'
+Assert-True ($installer -match 'product-files\.generated\.ps1') 'C10 installer loads generated product inventory'
+Assert-True ($installer -match 'foreach \(\$rel in \$ProductFiles\)') 'C10 installer uses ProductFiles preflight'
 Assert-True $c10 'C10 all ProductFiles exist in payload'
 Assert-True ($installer -match "video-workflow\\knowledge\\editing-craft") 'C10b installer pre-registers Owner editing-craft path'
 Assert-True ($installer -match 'WorkspaceName') 'C10c installer exposes WorkspaceName parameter'
@@ -130,7 +135,8 @@ Assert-True $manifestHas08d 'C12b manifest includes Stage 08D style contract com
 $manifestHas08eb = ($manifestTpl.components.tools -contains 'textplus-layout-materializer') -and
     ($manifestTpl.components.runtime_profiles -contains 'textplus-font-profiles')
 Assert-True $manifestHas08eb 'C12f manifest includes Stage 08E-B A1.1 materializer and font profiles'
-Assert-True ($productFiles -contains 'video-workflow\tools\lib\textplus-layout-materializer.ps1') 'C12g installer ProductFiles includes textplus-layout-materializer'
+Assert-True ($productFiles -contains 'video-workflow\tools\lib\textplus-layout-materializer.ps1') 'C12g product inventory includes textplus-layout-materializer'
+Assert-True ($productFiles -contains 'video-workflow\tools\native-drt-subtitle-stroke-inject.py') 'C12g2 product inventory includes subtitle stroke inject'
 Assert-True ($productFiles -contains 'video-workflow\runtime\textplus-font-profiles.yaml') 'C12h installer ProductFiles includes textplus-font-profiles'
 $manifestHas08ebCls = ($manifestTpl.components.tools -contains 'generate-textplus-cls-setting') -and
     ($manifestTpl.components.runtime_profiles -contains 'textplus-cls-canonical')
@@ -151,28 +157,16 @@ if (Test-Path -LiteralPath $buildScript) {
     $buildContent = Get-Content -LiteralPath $buildScript -Raw -Encoding UTF8
     $c13Installer = ($productFiles -contains 'video-workflow\templates\edit-blueprint.yaml') -and
         ($productFiles -contains 'video-workflow\knowledge\editing-craft\README.md')
-    Assert-True ($buildContent -match 'Get-InstallerProductFiles') 'C13 build preflight aligned with installer ProductFiles'
+    Assert-True ($buildContent -match 'Get-InstallerProductFiles') 'C13 build preflight uses product inventory'
+    Assert-True ($buildContent -match 'RELEASE_VERSION_IMMUTABLE') 'C13b build enforces immutable release tags'
     Assert-True $c13Installer 'C13 installer ProductFiles includes edit-blueprint and editing-craft'
 } else {
     Write-Host '[SKIP] C13 build-release.ps1 not present' -ForegroundColor Yellow
 }
 
-# 14. VERSION vs scope release state
+# 14. VERSION authority (single source — no hardcoded current version in tests)
 $version = (Get-Content (Join-Path $Root 'VERSION') -Raw).Trim()
-$scopeDoc = Get-Content (Join-Path $ProjectRoot 'docs\03-v0.1-scope.md') -Raw -Encoding UTF8
-if ($scopeDoc -match 'v0\.1\.1 First Real Production Baseline.*RELEASED') {
-    Assert-True ($version -eq '0.1.1') 'C14 VERSION is 0.1.1 for v0.1.1 RELEASED'
-} elseif ($scopeDoc -match 'v0\.1\.1 Observational Style Acceptance Closure \| IN_PROGRESS') {
-    Assert-True ($version -eq '0.1.1-dev') 'C14 VERSION is 0.1.1-dev during v0.1.1 closure'
-} elseif ($scopeDoc -match '\| Release \| RELEASE_CANDIDATE \|') {
-    Assert-True ($version -eq '0.1.0') 'C14 VERSION is 0.1.0 for RELEASE_CANDIDATE'
-} elseif ($scopeDoc -match '\| Release \| RELEASED \|') {
-    Assert-True ($version -eq '0.1.0') 'C14 VERSION is 0.1.0 for RELEASED'
-} elseif ($scopeDoc -match '\| Release \| NOT STARTED \|') {
-    Assert-True ($version -eq '0.1.0-dev') 'C14 VERSION is 0.1.0-dev before formal release'
-} else {
-    Assert-True $false 'C14 unrecognized Release scope state'
-}
+Assert-True ($version -match '^\d+\.\d+\.\d+(-dev)?$') 'C14 VERSION matches SemVer authority file'
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })

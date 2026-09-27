@@ -55,7 +55,7 @@ Assert-True (Test-Path -LiteralPath $qaTool) 'R11 final-artifact-qa helper exist
 Assert-True ($l3 -match 'Post-Render Final Artifact QA') 'R12 subtitle visual QA pipeline in L3'
 Assert-True ($l1 -match 'final_render\.black_bar_check[\s\S]{0,80}VERIFIED') 'R13 black-bar pipeline VERIFIED'
 Assert-True ($l3 -match 'Pre-Render QA.*Render.*Post-Render') 'R14 post-render ordering explicit'
-Assert-True ($version -eq '0.1.1') 'R15 VERSION 0.1.1'
+Assert-True ($version -match '^\d+\.\d+\.\d+(-dev)?$') 'R15 VERSION read from source/VERSION authority'
 
 Write-Host ''
 Write-Host "Results: $Pass passed, $Fail failed" -ForegroundColor $(if ($Fail -eq 0) { 'Green' } else { 'Red' })

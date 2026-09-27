@@ -33,75 +33,14 @@ $EXIT_PRODUCTION_BOUND = 33
 $EXIT_COPY_FAILED = 40
 $EXIT_VERIFY_FAILED = 41
 
-$ProductFiles = @(
-    '.cursor\rules\video-workflow-core.mdc',
-    '.cursor\rules\davinci-production.mdc',
-    '.cursor\rules\production-entry-intake.mdc',
-    '.cursor\skills\video-production\SKILL.md',
-    '.cursor\skills\video-editing\observational-info-short\SKILL.md',
-    '.cursor\skills\video-editing\observational-info-short\style-profile.yaml',
-    '.cursor\skills\video-editing\observational-info-short\capability-policy.yaml',
-    '.cursor\skills\video-editing\observational-info-short\capability-coverage.yaml',
-    '.cursor\skills\video-editing\observational-info-short\references\01-directing.md',
-    '.cursor\skills\video-editing\observational-info-short\references\02-visual-language.md',
-    '.cursor\skills\video-editing\observational-info-short\references\03-editing-rhythm.md',
-    '.cursor\skills\video-editing\observational-info-short\references\04-typography-graphics.md',
-    '.cursor\skills\video-editing\observational-info-short\references\05-sound-music.md',
-    '.cursor\skills\video-editing\observational-info-short\references\06-color-look-effects.md',
-    '.cursor\skills\video-editing\observational-info-short\references\07-taste.md',
-    '.cursor\skills\video-editing\observational-info-short\references\08-qa.md',
-    '.cursor\skills\video-editing\observational-info-short\references\directing.md',
-    '.cursor\skills\video-editing\observational-info-short\references\visual-language.md',
-    '.cursor\skills\video-editing\observational-info-short\references\editing.md',
-    '.cursor\skills\video-editing\observational-info-short\references\typography-graphics.md',
-    '.cursor\skills\video-editing\observational-info-short\references\sound-music.md',
-    '.cursor\skills\video-editing\observational-info-short\references\color-effects.md',
-    '.cursor\skills\video-editing\observational-info-short\references\qa.md',
-    '.cursor\skills\video-editing\observational-info-short\references\style.md',
-    'video-workflow\capabilities\davinci-resolve.md',
-    'video-workflow\capabilities\logical-capability-vocabulary.yaml',
-    'video-workflow\knowledge\editing-craft\README.md',
-    'video-workflow\knowledge\editing-craft\directing-story.md',
-    'video-workflow\knowledge\editing-craft\visual-language.md',
-    'video-workflow\knowledge\editing-craft\editing-rhythm.md',
-    'video-workflow\knowledge\editing-craft\writing-and-picture.md',
-    'video-workflow\knowledge\editing-craft\typography-graphics.md',
-    'video-workflow\knowledge\editing-craft\sound-music.md',
-    'video-workflow\knowledge\editing-craft\color-look-effects.md',
-    'video-workflow\knowledge\editing-craft\aesthetic-qa.md',
-    'video-workflow\knowledge\editing-craft\reference-cards\README.md',
-    'video-workflow\knowledge\editing-craft\reference-cards\RC-VIS-001.yaml',
-    'video-workflow\templates\style-skill\SKILL.md',
-    'video-workflow\templates\style-skill\style-profile.yaml',
-    'video-workflow\templates\style-skill\capability-policy.yaml',
-    'video-workflow\templates\style-skill\references\01-directing.md',
-    'video-workflow\templates\style-skill\references\02-visual-language.md',
-    'video-workflow\templates\style-skill\references\03-editing-rhythm.md',
-    'video-workflow\templates\style-skill\references\04-typography-graphics.md',
-    'video-workflow\templates\style-skill\references\05-sound-music.md',
-    'video-workflow\templates\style-skill\references\06-color-look-effects.md',
-    'video-workflow\templates\style-skill\references\07-taste.md',
-    'video-workflow\templates\style-skill\references\08-qa.md',
-    'video-workflow\templates\style-profile-schema.yaml',
-    'video-workflow\templates\production-brief.yaml',
-    'video-workflow\templates\production-brief-reference.md',
-    'video-workflow\templates\edit-blueprint.yaml',
-    'video-workflow\templates\edit-blueprint-reference.md',
-    'video-workflow\templates\capability-resolution-result.yaml',
-    'video-workflow\templates\capability-resolution-reference.md',
-    'video-workflow\templates\subtitle-layout-reference.md',
-    'video-workflow\templates\subtitle-layout-request.json',
-    'video-workflow\templates\subtitle-layout-result.json',
-    'video-workflow\tools\final-artifact-qa.ps1',
-    'video-workflow\tools\subtitle-layout-preflight.ps1',
-    'video-workflow\tools\lib\subtitle-layout-engine.ps1',
-    'video-workflow\tools\lib\textplus-layout-materializer.ps1',
-    'video-workflow\tools\generate-textplus-cls-setting.py',
-    'video-workflow\tools\lib\textplus_cls_setting.py',
-    'video-workflow\runtime\textplus-font-profiles.yaml',
-    'video-workflow\runtime\textplus-production-profile.yaml',
-    'video-workflow\runtime\textplus-cls-canonical.setting'
-)
+$generatedList = Join-Path $PSScriptRoot 'product-files.generated.ps1'
+if (-not (Test-Path -LiteralPath $generatedList)) {
+    throw 'INSTALLER_PRODUCT_INVENTORY_MISSING: run source/build/lib/ProductInventory.ps1 sync or Release Gate before install.'
+}
+. $generatedList
+if (-not $ProductFiles -or $ProductFiles.Count -eq 0) {
+    throw 'INSTALLER_PRODUCT_INVENTORY_EMPTY'
+}
 
 $CreatedPaths = [System.Collections.Generic.List[string]]::new()
 $PreExistingPaths = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)

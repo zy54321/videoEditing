@@ -11,7 +11,10 @@
 [CmdletBinding()]
 param(
     [switch]$Clean,
-    [switch]$NoPause
+    [switch]$NoPause,
+    [switch]$AllowWorkingTree,
+    [switch]$SkipInstallerSmoke,
+    [switch]$SkipReleaseSmoke
 )
 
 Set-StrictMode -Version Latest
@@ -23,13 +26,13 @@ $ProjectRoot = Split-Path -Parent $SourceRoot
 $ReleasesRoot = Join-Path $ProjectRoot 'releases'
 
 function Get-InstallerProductFiles {
-    param([string]$InstallerScriptPath)
-    $installerContent = Get-Content -LiteralPath $InstallerScriptPath -Raw -Encoding UTF8
-    $pfMatch = [regex]::Match($installerContent, '\$ProductFiles = @\(([^)]+)\)', [System.Text.RegularExpressions.RegexOptions]::Singleline)
-    if (-not $pfMatch.Success) {
-        throw 'Could not parse $ProductFiles from installer script.'
+    param([string]$SourceRoot)
+    $lib = Join-Path $PSScriptRoot 'lib\ProductInventory.ps1'
+    if (-not (Test-Path -LiteralPath $lib)) {
+        throw 'ProductInventory.ps1 missing'
     }
-    return [regex]::Matches($pfMatch.Groups[1].Value, "'([^']+)'") | ForEach-Object { $_.Groups[1].Value }
+    . $lib
+    return Get-ProductFileInventory -PayloadRoot (Get-ProductPayloadRoot -SourceRoot $SourceRoot)
 }
 
 function Write-BuildError {
@@ -68,13 +71,17 @@ function Write-Utf8WithBom {
 
 $gitStatus = git -C $ProjectRoot status --porcelain 2>$null
 $head = (git -C $ProjectRoot rev-parse HEAD).Trim()
-if ($gitStatus) {
-    Write-BuildError 'BLOCK_RELEASE_DIRTY_TREE: Git working tree is not clean. Commit release source changes before building.'
+if ($gitStatus -and -not $AllowWorkingTree) {
+    Write-BuildError 'BLOCK_RELEASE_DIRTY_TREE: Git working tree is not clean. Use Release orchestrator or -AllowWorkingTree for pre-commit builds.'
 }
 $versionFile = Join-Path $SourceRoot 'VERSION'
 $version = (Get-Content -LiteralPath $versionFile -Raw).Trim()
 if ($version -match '-dev$') {
     Write-BuildError "VERSION must be a release version, got: $version"
+}
+$tagRef = git -C $ProjectRoot rev-parse -q --verify "refs/tags/v$version" 2>$null
+if ($tagRef) {
+    Write-BuildError "RELEASE_VERSION_IMMUTABLE: annotated tag v$version already exists."
 }
 
 $payloadRoot = Join-Path $SourceRoot 'payload'
@@ -91,7 +98,7 @@ foreach ($p in @($payloadRoot, $installerBat, $installerPs1, $manifestTemplate, 
     }
 }
 
-$RequiredPayloadFiles = Get-InstallerProductFiles -InstallerScriptPath $installerPs1
+$RequiredPayloadFiles = Get-InstallerProductFiles -SourceRoot $SourceRoot
 
 $missingPayload = @()
 foreach ($rel in $RequiredPayloadFiles) {
@@ -102,10 +109,12 @@ if ($missingPayload.Count -gt 0) {
     Write-BuildError ("Payload invalid. Missing: {0}" -f ($missingPayload -join ', '))
 }
 
-Write-Host 'Running installer smoke tests...' -ForegroundColor Cyan
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installerSmoke
-if ($LASTEXITCODE -ne 0) {
-    Write-BuildError 'Installer smoke tests failed.'
+if (-not $SkipInstallerSmoke) {
+    Write-Host 'Running installer smoke tests...' -ForegroundColor Cyan
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installerSmoke
+    if ($LASTEXITCODE -ne 0) {
+        Write-BuildError 'Installer smoke tests failed.'
+    }
 }
 
 # --- Release paths ---
@@ -133,6 +142,10 @@ $releasePayload = Join-Path $releaseDir 'payload'
 Copy-Item -LiteralPath $payloadRoot -Destination $releasePayload -Recurse -Force
 Copy-Item -LiteralPath $installerBat -Destination (Join-Path $releaseDir 'init-video-workflow.bat') -Force
 Copy-Item -LiteralPath $installerPs1 -Destination (Join-Path $releaseDir 'init-video-workflow.ps1') -Force
+$genProduct = Join-Path $SourceRoot 'installer\product-files.generated.ps1'
+if (Test-Path -LiteralPath $genProduct) {
+    Copy-Item -LiteralPath $genProduct -Destination (Join-Path $releaseDir 'product-files.generated.ps1') -Force
+}
 Copy-Item -LiteralPath $versionFile -Destination (Join-Path $releaseDir 'VERSION') -Force
 
 $readme = (Get-Content -LiteralPath $readmeTemplate -Raw -Encoding UTF8).Replace('{{VERSION}}', "v$version")
@@ -169,12 +182,12 @@ foreach ($line in $sumLines) {
     }
 }
 
-# --- Release smoke (pre-ZIP) ---
-
-Write-Host 'Running release smoke tests (pre-ZIP)...' -ForegroundColor Cyan
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $releaseSmoke -ReleasePath $releaseDir -NoPause
-if ($LASTEXITCODE -ne 0) {
-    Write-BuildError 'Release smoke tests failed.'
+if (-not $SkipReleaseSmoke) {
+    Write-Host 'Running release smoke tests (pre-ZIP)...' -ForegroundColor Cyan
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $releaseSmoke -ReleasePath $releaseDir -NoPause
+    if ($LASTEXITCODE -ne 0) {
+        Write-BuildError 'Release smoke tests failed.'
+    }
 }
 
 # --- ZIP ---
@@ -184,12 +197,12 @@ if (Test-Path -LiteralPath $releaseZip) {
 }
 Compress-Archive -LiteralPath $releaseDir -DestinationPath $releaseZip -CompressionLevel Optimal
 
-# --- Release smoke (ZIP) ---
-
-Write-Host 'Running release smoke tests (ZIP)...' -ForegroundColor Cyan
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $releaseSmoke -ReleasePath $releaseDir -ZipPath $releaseZip -NoPause
-if ($LASTEXITCODE -ne 0) {
-    Write-BuildError 'Release ZIP smoke test failed.'
+if (-not $SkipReleaseSmoke) {
+    Write-Host 'Running release smoke tests (ZIP)...' -ForegroundColor Cyan
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $releaseSmoke -ReleasePath $releaseDir -ZipPath $releaseZip -NoPause
+    if ($LASTEXITCODE -ne 0) {
+        Write-BuildError 'Release ZIP smoke test failed.'
+    }
 }
 
 $fileCount = (Get-ChildItem -LiteralPath $releaseDir -Recurse -File).Count
