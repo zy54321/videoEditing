@@ -1,0 +1,93 @@
+{
+  "fixture_duration_sec": 12.5,
+  "master_slice": {
+    "source": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V5.mp4",
+    "start_sec": 10.0
+  },
+  "chinese_font_probe": [
+    {
+      "font_family": "Open Sans",
+      "style": "Bold",
+      "error": "cannot open resource"
+    },
+    {
+      "font_family": "Microsoft YaHei UI",
+      "style": "Bold",
+      "file": "C:\\Windows\\Fonts\\msyhbd.ttc",
+      "sample": "进小店、诊所",
+      "rendered_width_px": 288,
+      "ok": true
+    }
+  ],
+  "route_d_external_ass": {
+    "status": "SUPPORTED_ON_FIXTURE",
+    "burnin": {
+      "ok": true,
+      "output": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\fixtures\\subtitle-route\\route_d_external_burnin.mp4",
+      "stderr_tail": ""
+    },
+    "probe": {
+      "programs": [],
+      "stream_groups": [
+        {
+          "streams": [
+            {
+              "codec_name": "h264",
+              "codec_type": "video",
+              "width": 1080,
+              "height": 1920
+            },
+            {
+              "codec_type": "data"
+            }
+          ]
+        }
+      ],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1080,
+          "height": 1920
+        },
+        {
+          "codec_name": "aac",
+          "codec_type": "audio"
+        },
+        {
+          "codec_type": "data"
+        }
+      ],
+      "format": {
+        "duration": "12.506667"
+      }
+    },
+    "geometry_sample": {
+      "authority": "FINAL_ARTIFACT",
+      "artifact": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\fixtures\\subtitle-route\\route_d_external_burnin.mp4",
+      "samples": [
+        {
+          "id": "wide_wrap",
+          "sec": 6.0,
+          "role": "two_line",
+          "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\fixtures\\subtitle-route\\frames_route_d\\wide_wrap_6.00s.png",
+          "frame_w": 1080,
+          "frame_h": 1920,
+          "text_extent_px": 819,
+          "left_margin_px": 134,
+          "right_margin_px": 127,
+          "verdict": "PASS"
+        }
+      ],
+      "SUBTITLE_GEOMETRY_QA": "PASS",
+      "SUBTITLE_READABILITY_QA": "PASS",
+      "failed_geometry_ids": [],
+      "visual_confirm_ids": []
+    }
+  },
+  "notes": {
+    "open_sans_cjk": "Open Sans has no CJK glyphs; Chinese renders via OS fallback unless ASS names a CJK font.",
+    "recommended_family": "Microsoft YaHei UI",
+    "recommended_weight": "Bold"
+  }
+}

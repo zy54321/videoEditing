@@ -1,0 +1,14 @@
+﻿[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: N02Bold,Microsoft YaHei UI,52,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,4,0,2,72,72,280,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:01.00,0:00:04.00,N02Bold,,0,0,0,,星期天就是不开
+Dialogue: 0,0:00:04.50,0:00:08.50,N02Bold,,0,0,0,,进小店、诊所、候诊室
+Dialogue: 0,0:00:09.00,0:00:12.50,N02Bold,,0,0,0,,真到当地你会发现\N有些场景里现金用得特别自然

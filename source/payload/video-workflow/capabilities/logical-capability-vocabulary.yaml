@@ -101,6 +101,11 @@ vocabulary:
     l1_aliases: [subtitle.visual_style]
     notes: "Route A: gold standard Subtitle Track 1 FieldsBlob capture/inject + burn-in deliver visual QA (Repair Step 5). Profile: native-drt-subtitle-readability-profile.yaml"
 
+  subtitle.render.readable_static:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [subtitle.visual_style, subtitle.safe_text_width]
+    notes: "Logical production target — Bold/Semibold CJK, white, black stroke, safe-area. Runtime candidates: native_drt_gold_template (PARTIAL), external_ass_burnin (VERIFIED_ON_FIXTURE 2026-09). See validation/subtitle-rendering-capability-decision.md"
+
   subtitle.style.basic:
     status: UNKNOWN
     l1_aliases: [subtitle.visual_style]
