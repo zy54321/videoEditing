@@ -39,6 +39,16 @@ def _luma(px: Tuple[int, int, int]) -> float:
     return 0.299 * px[0] + 0.587 * px[1] + 0.114 * px[2]
 
 
+def _is_stroked_bright_pixel(im: Image.Image, x: int, y: int, w: int, h: int, bright: float = 200.0, dark: float = 90.0) -> bool:
+    if _luma(im.getpixel((x, y))) < bright:
+        return False
+    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < w and 0 <= ny < h and _luma(im.getpixel((nx, ny))) <= dark:
+            return True
+    return False
+
+
 def measure_subtitle_extent(
     image_path: Path,
     bright_threshold: float = 200.0,
@@ -50,12 +60,26 @@ def measure_subtitle_extent(
     y0 = int(h * SUBTITLE_BAND_TOP_RATIO)
     min_x, max_x = w, 0
     hits = 0
-    for y in range(y0, h):
-        for x in range(w):
-            if _luma(im.getpixel((x, y))) >= bright_threshold:
-                hits += 1
-                min_x = min(min_x, x)
-                max_x = max(max_x, x)
+
+    def _scan(use_stroke: bool) -> int:
+        nonlocal min_x, max_x, hits
+        min_x, max_x, hits = w, 0, 0
+        for y in range(y0, h):
+            for x in range(w):
+                ok_px = (
+                    _is_stroked_bright_pixel(im, x, y, w, h, bright_threshold)
+                    if use_stroke
+                    else _luma(im.getpixel((x, y))) >= bright_threshold
+                )
+                if ok_px:
+                    hits += 1
+                    min_x = min(min_x, x)
+                    max_x = max(max_x, x)
+        return hits
+
+    _scan(True)
+    if hits < 50:
+        _scan(False)
     if hits < 50:
         return {
             "verdict": "VISUAL_CONFIRM_REQUIRED",

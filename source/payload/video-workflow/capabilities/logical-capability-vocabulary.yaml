@@ -102,9 +102,14 @@ vocabulary:
     notes: "Route A: gold standard Subtitle Track 1 FieldsBlob capture/inject + burn-in deliver visual QA (Repair Step 5). Profile: native-drt-subtitle-readability-profile.yaml"
 
   subtitle.render.readable_static:
-    status: AVAILABLE_UNVERIFIED
+    status: VERIFIED
     l1_aliases: [subtitle.visual_style, subtitle.safe_text_width]
-    notes: "Logical production target — Bold/Semibold CJK, white, black stroke, safe-area. Runtime candidates: native_drt_gold_template (PARTIAL), external_ass_burnin (VERIFIED_ON_FIXTURE 2026-09). See validation/subtitle-rendering-capability-decision.md"
+    notes: "N02 V6 production — Microsoft YaHei UI Bold via subtitle.runtime.external_ass + layout engine → ASS → final artifact QA. See validation/n02-v6-production-closeout.md"
+
+  subtitle.runtime.external_ass:
+    status: VERIFIED
+    l1_aliases: [subtitle.render.readable_static]
+    notes: "Resolve clean master (no burn-in) + ffmpeg libass burn-in + loudnorm audio repair. N02_V6.mp4 2026-09-27."
 
   subtitle.style.basic:
     status: UNKNOWN

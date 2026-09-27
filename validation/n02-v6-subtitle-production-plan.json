@@ -1,0 +1,80 @@
+{
+  "runtime_id": "subtitle.runtime.external_ass",
+  "clean_master": {
+    "path": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V6_clean_master.mp4",
+    "codec": "h264",
+    "container": "mp4",
+    "INTERMEDIATE_LIMITATION": true,
+    "reason": "ProRes/DNxHR/FFV1 render pairs rejected on host; H.264 mezzanine + single libx264 burn-in delivery encode",
+    "sha256": "8f95c399c3d1b499200c29fbde62594722cc394bbf1d22145c23399de25c2c17",
+    "frames": {
+      "programs": [],
+      "stream_groups": [
+        {
+          "streams": [
+            {
+              "width": 1080,
+              "height": 1920,
+              "r_frame_rate": "24/1",
+              "nb_read_frames": "1821"
+            }
+          ]
+        }
+      ],
+      "streams": [
+        {
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "24/1",
+          "nb_read_frames": "1821"
+        }
+      ],
+      "format": {
+        "duration": "75.882667"
+      }
+    }
+  },
+  "ass_path": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\_N02_V6_INTERMEDIATE_subtitles.ass",
+  "burnin_intermediate": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\_N02_V6_INTERMEDIATE_subtitle_burnin.mp4",
+  "final_path": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V6.mp4",
+  "font": {
+    "FONT_DEPENDENCY_CHECK": "PASS",
+    "requested_family": "Microsoft YaHei UI",
+    "requested_weight": "Bold",
+    "resolved_file": "C:\\Windows\\Fonts\\msyhbd.ttc",
+    "cjk_sample_width_px": 312
+  },
+  "font_family": "Microsoft YaHei UI",
+  "font_weight": "Bold",
+  "cue_count": 35,
+  "layout_policy": "semantic_wrap_via_subtitle-layout-engine",
+  "encode_graph": "Resolve H.264 clean master → ffmpeg subtitles (libx264 crf18) → loudnorm two-pass (audio only, video copy when possible)",
+  "second_lossy_video_generation": true,
+  "FINAL_ARTIFACT_SHA256": "0a4028a65b546e06cc1bfabb0b84ed3c948da0c42e3d3350a11c6624ccea3462",
+  "final_probe": {
+    "programs": [],
+    "stream_groups": [
+      {
+        "streams": [
+          {
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "24/1",
+            "nb_read_frames": "1821"
+          }
+        ]
+      }
+    ],
+    "streams": [
+      {
+        "width": 1080,
+        "height": 1920,
+        "r_frame_rate": "24/1",
+        "nb_read_frames": "1821"
+      }
+    ],
+    "format": {
+      "duration": "75.900000"
+    }
+  }
+}

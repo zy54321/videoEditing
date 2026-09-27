@@ -6,7 +6,7 @@
 SELECTED_ROUTE: external_ass_burnin
 RUNTIME_ID: subtitle.runtime.external_ass
 CAPABILITY: subtitle.render.readable_static
-STATUS: CAPABILITY_VERIFIED_ON_FIXTURE
+STATUS: VERIFIED_PRODUCTION
 ```
 
 ## WHY
@@ -42,8 +42,8 @@ Resolve: N02 master render (ExportSubtitle: off / no burn-in)
 
 | Field | Value |
 |-------|-------|
-| `SUBTITLE_RENDERING_CAPABILITY` | **VERIFIED_ON_FIXTURE** (not full N02 yet) |
-| `READY_TO_APPLY_N02` | **NO** — awaits Owner review + next apply authorization |
+| `SUBTITLE_RENDERING_CAPABILITY` | **VERIFIED** (`N02_V6.mp4`) |
+| `READY_TO_APPLY_N02` | **DONE** — see `validation/n02-v6-production-closeout.md` |
 | `CAPABILITY_GAP` | **FALSE** at product level; gap was **route selection**, not impossibility |
 
 ## Fixture evidence

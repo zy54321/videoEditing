@@ -1,0 +1,326 @@
+{
+  "FINAL_ARTIFACT_PATH": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V6.mp4",
+  "FINAL_ARTIFACT_SHA256": "0a4028a65b546e06cc1bfabb0b84ed3c948da0c42e3d3350a11c6624ccea3462",
+  "FRAME_PARITY": {
+    "plan_frames": 1821,
+    "clean_master_frames": 1821,
+    "final_artifact_frames": 1821,
+    "delta": 0,
+    "verdict": "PASS"
+  },
+  "PORTRAIT_FILL": "PASS",
+  "BLACK_BAR": "PASS",
+  "LAYOUT_STATE": "PASS",
+  "FINAL_AUDIO": {
+    "integrated_lufs": -16.1,
+    "true_peak_dbtp": -1.4,
+    "raw_summary_present": true,
+    "verdict": "PASS"
+  },
+  "MUSIC_MIX_BALANCE": "PASS",
+  "MUSIC_MIX_ARTIFACT_PROBE": "FAIL_TOO_STRONG",
+  "MUSIC_PRESENT": "PASS",
+  "encode_regression_samples": [
+    {
+      "sec": 2.5,
+      "psnr_log": "[Parsed_psnr_2 @ 00000097347d9700] PSNR r:42.747606 g:43.624369 b:42.267991 average:42.844283 min:42.844283 max:42.844283",
+      "encode_regression": "PASS"
+    },
+    {
+      "sec": 29.0,
+      "psnr_log": "[Parsed_psnr_2 @ 00000080011b6940] PSNR r:42.970042 g:44.083055 b:42.762212 average:43.234234 min:43.234234 max:43.234234",
+      "encode_regression": "PASS"
+    },
+    {
+      "sec": 48.0,
+      "psnr_log": "[Parsed_psnr_2 @ 000000d39f08b700] PSNR r:46.775460 g:48.842169 b:47.396273 average:47.587926 min:47.587926 max:47.587926",
+      "encode_regression": "PASS"
+    }
+  ],
+  "VISUAL_ENCODE_REGRESSION": "PASS",
+  "samples": [
+    {
+      "id": "opening",
+      "sec": 1.0,
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\opening_1.00s.png",
+      "black_bar": {
+        "path": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\opening_1.00s.png",
+        "frame_w": 1080,
+        "frame_h": 1920,
+        "method": "edge_band_signalstats",
+        "bar_type": "none",
+        "bars": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "crop": {
+          "w": 1080,
+          "h": 1920,
+          "x": 0,
+          "y": 0
+        },
+        "band_luma": {
+          "top": 255.0,
+          "bottom": 61.0,
+          "left": null,
+          "right": null,
+          "center": 98.0
+        },
+        "suspect": false,
+        "repair_suggestion": {
+          "needed": false
+        }
+      },
+      "layout": {
+        "layout_state": "PORTRAIT_FILLED",
+        "bar_classification": "NONE",
+        "content_occupancy": 1.0,
+        "bars_px": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "vertical_bar_fraction": 0.0
+      }
+    },
+    {
+      "id": "first_landscape",
+      "sec": 2.5,
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\first_landscape_2.50s.png",
+      "black_bar": {
+        "path": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\first_landscape_2.50s.png",
+        "frame_w": 1080,
+        "frame_h": 1920,
+        "method": "edge_band_signalstats",
+        "bar_type": "none",
+        "bars": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "crop": {
+          "w": 1080,
+          "h": 1920,
+          "x": 0,
+          "y": 0
+        },
+        "band_luma": {
+          "top": 255.0,
+          "bottom": 61.0,
+          "left": null,
+          "right": null,
+          "center": 97.0
+        },
+        "suspect": false,
+        "repair_suggestion": {
+          "needed": false
+        }
+      },
+      "layout": {
+        "layout_state": "PORTRAIT_FILLED",
+        "bar_classification": "NONE",
+        "content_occupancy": 1.0,
+        "bars_px": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "vertical_bar_fraction": 0.0
+      }
+    },
+    {
+      "id": "office",
+      "sec": 29.0,
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\office_29.00s.png",
+      "black_bar": {
+        "path": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\office_29.00s.png",
+        "frame_w": 1080,
+        "frame_h": 1920,
+        "method": "edge_band_signalstats",
+        "bar_type": "none",
+        "bars": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "crop": {
+          "w": 1080,
+          "h": 1920,
+          "x": 0,
+          "y": 0
+        },
+        "band_luma": {
+          "top": 254.0,
+          "bottom": 96.0,
+          "left": null,
+          "right": null,
+          "center": 91.0
+        },
+        "suspect": false,
+        "repair_suggestion": {
+          "needed": false
+        }
+      },
+      "layout": {
+        "layout_state": "PORTRAIT_FILLED",
+        "bar_classification": "NONE",
+        "content_occupancy": 1.0,
+        "bars_px": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "vertical_bar_fraction": 0.0
+      }
+    },
+    {
+      "id": "money",
+      "sec": 48.0,
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\money_48.00s.png",
+      "black_bar": {
+        "path": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\money_48.00s.png",
+        "frame_w": 1080,
+        "frame_h": 1920,
+        "method": "edge_band_signalstats",
+        "bar_type": "none",
+        "bars": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "crop": {
+          "w": 1080,
+          "h": 1920,
+          "x": 0,
+          "y": 0
+        },
+        "band_luma": {
+          "top": 69.0,
+          "bottom": 92.0,
+          "left": null,
+          "right": null,
+          "center": 108.0
+        },
+        "suspect": false,
+        "repair_suggestion": {
+          "needed": false
+        }
+      },
+      "layout": {
+        "layout_state": "PORTRAIT_FILLED",
+        "bar_classification": "NONE",
+        "content_occupancy": 1.0,
+        "bars_px": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "vertical_bar_fraction": 0.0
+      }
+    },
+    {
+      "id": "late",
+      "sec": 65.0,
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\late_65.00s.png",
+      "black_bar": {
+        "path": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\late_65.00s.png",
+        "frame_w": 1080,
+        "frame_h": 1920,
+        "method": "edge_band_signalstats",
+        "bar_type": "none",
+        "bars": {
+          "top": 1,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "crop": {
+          "w": 1080,
+          "h": 1908,
+          "x": 0,
+          "y": 12
+        },
+        "band_luma": {
+          "top": 16.0,
+          "bottom": 51.0,
+          "left": null,
+          "right": null,
+          "center": 38.0
+        },
+        "suspect": false,
+        "repair_suggestion": {
+          "needed": false
+        }
+      },
+      "layout": {
+        "layout_state": "PORTRAIT_FILLED",
+        "bar_classification": "NONE",
+        "content_occupancy": 0.9938,
+        "bars_px": {
+          "top": 12,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "vertical_bar_fraction": 0.0063
+      }
+    },
+    {
+      "id": "ending",
+      "sec": 73.0,
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\ending_73.00s.png",
+      "black_bar": {
+        "path": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-final-artifact-frames\\ending_73.00s.png",
+        "frame_w": 1080,
+        "frame_h": 1920,
+        "method": "edge_band_signalstats",
+        "bar_type": "none",
+        "bars": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "crop": {
+          "w": 1080,
+          "h": 1920,
+          "x": 0,
+          "y": 0
+        },
+        "band_luma": {
+          "top": 126.0,
+          "bottom": 61.0,
+          "left": null,
+          "right": null,
+          "center": 126.0
+        },
+        "suspect": false,
+        "repair_suggestion": {
+          "needed": false
+        }
+      },
+      "layout": {
+        "layout_state": "PORTRAIT_FILLED",
+        "bar_classification": "NONE",
+        "content_occupancy": 1.0,
+        "bars_px": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        },
+        "vertical_bar_fraction": 0.0
+      }
+    }
+  ],
+  "FINAL_ARTIFACT": "PASS"
+}

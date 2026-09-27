@@ -1,47 +1,60 @@
-# N02 V6 Production Closeout
+# N02 V6 Production Closeout — External ASS Final
 
 | Field | Value |
-|-------|-------|
-| Starting HEAD | `921863e8f603581983ef3d7cd2b8ab4ba7a73852` |
-| VERSION | `0.1.3-dev` |
-| Timeline (music repair) | `N02-V6-Audio-Repair` |
-| Music preview artifact | `E:\03_Media\02_Video\Davinci\Astra\2026-09-21\output\N02_V6_audio_repaired_preview.mp4` |
-| SHA256 (preview) | `00466c5d77ac88e2b6cb77e9ed37bc4aba2fc9ea7668edc92e8c02be8c4e42fe` |
-| Full `N02_V6.mp4` | **Not produced** (subtitle weight CAPABILITY_GAP) |
+|-------|--------|
+| **Starting HEAD (route review)** | `5b10557` |
+| **VERSION** | `0.1.3-dev` |
+| **Timeline** | `N02-V6-Audio-Repair` |
+| **Subtitle runtime** | `subtitle.runtime.external_ass` |
+| **Final artifact** | `E:\03_Media\02_Video\Davinci\Astra\2026-09-21\output\N02_V6.mp4` |
+| **FINAL_ARTIFACT_SHA256** | `0a4028a65b546e06cc1bfabb0b84ed3c948da0c42e3d3350a11c6624ccea3462` |
 
-## Music
+## Pipeline
 
-- **V5 false PASS:** WORKFLOW_GAP — wrong metric (`voice−mix`), pre-loudnorm mislabeled; see `validation/n02-v6-gap-classification.md`.
-- **V5 truth:** production stem **−5.4 dB** vs V4 (`music_mix_balance_qa.py` stem regression).
-- **QA fix:** `music_mix_balance_qa.py` + fixtures + stem regression authority.
-- **Repair:** V6 envelope `base_factor=0.15` → stem RMS **−35.9 dB** (matches V4).
-- **Preview:** encode 1821f → loudnorm **−16.1 LUFS**, **−1.4 dBTP**.
+```
+N02-V6-Audio-Repair (Resolve, no subtitle burn-in)
+  → N02_V6_clean_master.mp4 (H.264 mezzanine, INTERMEDIATE_LIMITATION)
+  → layout engine (Microsoft YaHei UI Bold) → ASS
+  → ffmpeg libass burn-in (audio copy)
+  → loudnorm two-pass (video preserved)
+  → N02_V6.mp4
+```
 
-## Subtitle
-
-- **CAPABILITY_GAP:** no verified Bold apply + burn-in route (`validation/n02-v6-subtitle-capability-audit.md`).
-- **Geometry:** final artifact QA **FAIL** on encoded V5 (`validation/n02-v6-subtitle-final-qa.json`) — precheck was not authority.
+**Second lossy video generation:** Yes — Resolve H.264 clean master + one libx264 CRF18 burn-in pass. Mezzanine ProRes/DNxHR/FFV1 rejected by Resolve on this host.
 
 ## Gates
 
-| Gate | Status |
+| Gate | Result |
 |------|--------|
-| MUSIC_MIX_QA_AUTHORITY | **PASS** |
-| MUSIC_MIX_BALANCE (V6 preview stem) | **PASS** |
-| SUBTITLE_RUNTIME_WEIGHT_CAPABILITY | **FAIL** |
-| SUBTITLE_FONT_WEIGHT | **CAPABILITY_GAP** |
-| SUBTITLE_GEOMETRY_QA | **FAIL** (V5 artifact) |
-| READY_FOR_OWNER_REVIEW | **NO** |
-| BLOCKER_CLASS | **CAPABILITY_GAP** |
+| FONT_DEPENDENCY | **PASS** (`msyhbd.ttc`) |
+| FRAME_PARITY | **PASS** (1821 / 1821 / 1821) |
+| PORTRAIT_FILL / BLACK_BAR / LAYOUT | **PASS** |
+| FINAL_AUDIO | **PASS** (−16.1 LUFS, −1.4 dBTP, 48 kHz stereo) |
+| MUSIC_MIX_BALANCE | **PASS** (V6 music stem vs V4 reference) |
+| SUBTITLE_* (35 cues, timing, geometry, burn-in) | **PASS** |
+| FINAL_ARTIFACT | **PASS** |
+| **READY_FOR_OWNER_REVIEW** | **YES** |
 
-## Continuous execution
+## Capability promotion
 
-Fourth uninterrupted repair chain within authorization (audit → QA → music → render → evidence).
+| Capability | Status |
+|------------|--------|
+| `subtitle.runtime.external_ass` | **VERIFIED** |
+| `subtitle.render.readable_static` | **VERIFIED** |
+| Native DRT | Retained for preview / stroke / fallback — not N02 final renderer |
 
 ## Evidence
 
-- `validation/n02-v6-gap-classification.md`
-- `validation/n02-v6-music-mix-qa.json`
-- `validation/n02-v6-subtitle-capability-audit.md`
+- `validation/n02-v6-subtitle-production-plan.json`
+- `validation/n02-v6-subtitle-timing-trace.json`
 - `validation/n02-v6-subtitle-final-qa.json`
-- `validation/n02-v6-regression-matrix.md`
+- `validation/n02-v6-final-artifact-qa.json`
+- `validation/scripts/n02-v6-external-ass-production.py`
+
+## Intermediate artifacts (not in git)
+
+| Path | Purpose |
+|------|---------|
+| `N02_V6_clean_master.mp4` | Clean picture+audio |
+| `_N02_V6_INTERMEDIATE_subtitles.ass` | ASS renderer input |
+| `_N02_V6_INTERMEDIATE_subtitle_burnin.mp4` | Pre-loudnorm burn-in |
