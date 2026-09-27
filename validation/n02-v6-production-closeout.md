@@ -33,7 +33,21 @@ N02-V6-Audio-Repair (Resolve, no subtitle burn-in)
 | MUSIC_MIX_BALANCE | **PASS** (V6 music stem vs V4 reference) |
 | SUBTITLE_* (35 cues, timing, geometry, burn-in) | **PASS** |
 | FINAL_ARTIFACT | **PASS** |
-| **READY_FOR_OWNER_REVIEW** | **YES** |
+
+## Owner sign-off
+
+```
+READY_FOR_OWNER_REVIEW = NO
+OWNER_ACCEPTANCE = CONFIRMED
+N02_V6_PRODUCTION = ACCEPTED
+```
+
+Owner 已对 `N02_V6.mp4` 完成实际审片并认可，作为 v0.1.3 真实 Production 验收依据（2026-09-27）。
+
+## Known limitations (non-blocker for v0.1.3)
+
+1. External ASS 生产链：Resolve **H.264** clean master → **libx264 CRF18** 烧录（额外一次有损视频编码）；`VISUAL_ENCODE_REGRESSION` 已 PASS；后续可评估稳定 mezzanine（ProRes/DNxHR/FFV1）。
+2. Resolve Native DRT **font-weight** 自动化仍为局部 capability gap；N02 正式字幕 runtime 为 **external ASS**（`subtitle.runtime.external_ass`）。
 
 ## Capability promotion
 

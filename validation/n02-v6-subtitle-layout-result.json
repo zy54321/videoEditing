@@ -1,0 +1,1750 @@
+{
+    "font_resolution":  {
+                            "resolved_from":  "primary",
+                            "requested_family":  "Microsoft YaHei UI",
+                            "alias_from":  null,
+                            "resolved_family":  "Microsoft YaHei UI",
+                            "fallback_used":  false
+                        },
+    "graphics_unit":  "Pixel",
+    "schema_version":  1,
+    "measurement_backend":  "System.Drawing",
+    "cue_results":  [
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.6752,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  632,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.6752,
+                                              "width_ratio_frame":  0.5852,
+                                              "width_px":  632,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  632,
+                                                               "break_after":  "prefer",
+                                                               "text":  "你要是第一次去奥地利生活"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C01",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.5852,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.5852,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.6752,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  632,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.6752,
+                                              "width_ratio_frame":  0.5852,
+                                              "width_px":  632,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  632,
+                                                               "break_after":  "prefer",
+                                                               "text":  "有些东西真没人专门提醒你"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C02",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.5852,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.5852,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.7308,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  684,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.7308,
+                                              "width_ratio_frame":  0.6333,
+                                              "width_px":  684,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  684,
+                                                               "break_after":  "prefer",
+                                                               "text":  "比如星期天你想下楼买点东西"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C03",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.6333,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.6333,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.7393,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  692,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.7393,
+                                              "width_ratio_frame":  0.6407,
+                                              "width_px":  692,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  476,
+                                                               "break_after":  "prefer",
+                                                               "text":  "结果一条街上门关着"
+                                                           },
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  216,
+                                                               "break_after":  "forbid",
+                                                               "text":  "不是倒闭"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C04",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.6407,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.6407,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5641,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  528,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5641,
+                                              "width_ratio_frame":  0.4889,
+                                              "width_px":  528,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  528,
+                                                               "break_after":  "prefer",
+                                                               "text":  "奥地利很多普通零售店"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C05",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4889,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4889,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.3974,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  372,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.3974,
+                                              "width_ratio_frame":  0.3444,
+                                              "width_px":  372,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  372,
+                                                               "break_after":  "prefer",
+                                                               "text":  "星期天就是不开"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C06",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.3444,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.3444,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.453,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  424,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.453,
+                                              "width_ratio_frame":  0.3926,
+                                              "width_px":  424,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  424,
+                                                               "break_after":  "prefer",
+                                                               "text":  "当地人可能还觉得"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C07",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.3926,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.3926,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5641,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  528,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5641,
+                                              "width_ratio_frame":  0.4889,
+                                              "width_px":  528,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  528,
+                                                               "break_after":  "prefer",
+                                                               "text":  "那你周六买好不就完了"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C08",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4889,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4889,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.2863,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  268,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.2863,
+                                              "width_ratio_frame":  0.2481,
+                                              "width_px":  268,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  268,
+                                                               "break_after":  "prefer",
+                                                               "text":  "还有个小事"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C09",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.2481,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.2481,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5726,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  536,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5726,
+                                              "width_ratio_frame":  0.4963,
+                                              "width_px":  536,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  372,
+                                                               "break_after":  "prefer",
+                                                               "text":  "进小店、诊所、"
+                                                           },
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  164,
+                                                               "break_after":  "forbid",
+                                                               "text":  "候诊室"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C10",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4963,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4963,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5085,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  476,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5085,
+                                              "width_ratio_frame":  0.4407,
+                                              "width_px":  476,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  476,
+                                                               "break_after":  "prefer",
+                                                               "text":  "别低着头直接往里走"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C11",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4407,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4407,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5641,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  528,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5641,
+                                              "width_ratio_frame":  0.4889,
+                                              "width_px":  528,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  528,
+                                                               "break_after":  "prefer",
+                                                               "text":  "打个招呼哪怕点一下头"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C12",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4889,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4889,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5085,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  476,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5085,
+                                              "width_ratio_frame":  0.4407,
+                                              "width_px":  476,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  476,
+                                                               "break_after":  "prefer",
+                                                               "text":  "有些地方这事挺重要"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C13",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4407,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4407,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5641,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  528,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5641,
+                                              "width_ratio_frame":  0.4889,
+                                              "width_px":  528,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  528,
+                                                               "break_after":  "prefer",
+                                                               "text":  "到了公司中午碰到同事"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C14",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4889,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4889,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5085,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  476,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5085,
+                                              "width_ratio_frame":  0.4407,
+                                              "width_px":  476,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  476,
+                                                               "break_after":  "prefer",
+                                                               "text":  "人家可能甩给你一句"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C15",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4407,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4407,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.2504,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  234.36,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.2504,
+                                              "width_ratio_frame":  0.217,
+                                              "width_px":  234.36,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  234.36,
+                                                               "break_after":  "prefer",
+                                                               "text":  "Mahlzeit"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C16",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.217,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.217,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.3419,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  320,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.3419,
+                                              "width_ratio_frame":  0.2963,
+                                              "width_px":  320,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  320,
+                                                               "break_after":  "prefer",
+                                                               "text":  "第一次听会愣"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C17",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.2963,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.2963,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.2863,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  268,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.2863,
+                                              "width_ratio_frame":  0.2481,
+                                              "width_px":  268,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  268,
+                                                               "break_after":  "prefer",
+                                                               "text":  "啥？吃饭？"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C18",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.2481,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.2481,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.6752,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  632,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.6752,
+                                              "width_ratio_frame":  0.5852,
+                                              "width_px":  632,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  632,
+                                                               "break_after":  "prefer",
+                                                               "text":  "差不多中午它也能当一句嗨"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C19",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.5852,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.5852,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.7308,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  684,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.7308,
+                                              "width_ratio_frame":  0.6333,
+                                              "width_px":  684,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  684,
+                                                               "break_after":  "prefer",
+                                                               "text":  "然后就是现金、手机、银行卡"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C20",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.6333,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.6333,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.2863,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  268,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.2863,
+                                              "width_ratio_frame":  0.2481,
+                                              "width_px":  268,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  268,
+                                                               "break_after":  "prefer",
+                                                               "text":  "都准备好了"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C21",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.2481,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.2481,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.453,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  424,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.453,
+                                              "width_ratio_frame":  0.3926,
+                                              "width_px":  424,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  424,
+                                                               "break_after":  "prefer",
+                                                               "text":  "真到当地你会发现"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C22",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.3926,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.3926,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.7308,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  684,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.7308,
+                                              "width_ratio_frame":  0.6333,
+                                              "width_px":  684,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  684,
+                                                               "break_after":  "prefer",
+                                                               "text":  "有些场景里现金用得特别自然"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C23",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.6333,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.6333,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5641,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  528,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5641,
+                                              "width_ratio_frame":  0.4889,
+                                              "width_px":  528,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  528,
+                                                               "break_after":  "prefer",
+                                                               "text":  "不少人就是挺喜欢现金"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C24",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4889,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4889,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.7863,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  736,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.7863,
+                                              "width_ratio_frame":  0.6815,
+                                              "width_px":  736,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  736,
+                                                               "break_after":  "prefer",
+                                                               "text":  "最后别把奥地利人想成一种性格"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C25",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.6815,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.6815,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.3974,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  372,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.3974,
+                                              "width_ratio_frame":  0.3444,
+                                              "width_px":  372,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  372,
+                                                               "break_after":  "prefer",
+                                                               "text":  "维也纳、蒂罗尔"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C26",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.3444,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.3444,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.6752,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  632,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.6752,
+                                              "width_ratio_frame":  0.5852,
+                                              "width_px":  632,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  632,
+                                                               "break_after":  "prefer",
+                                                               "text":  "不同地方的习惯和社交方式"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C27",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.5852,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.5852,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.2863,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  268,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.2863,
+                                              "width_ratio_frame":  0.2481,
+                                              "width_px":  268,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  268,
+                                                               "break_after":  "prefer",
+                                                               "text":  "都不太一样"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C28",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.2481,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.2481,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.3974,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  372,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.3974,
+                                              "width_ratio_frame":  0.3444,
+                                              "width_px":  372,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  372,
+                                                               "break_after":  "prefer",
+                                                               "text":  "有人觉得他们冷"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C29",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.3444,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.3444,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.8419,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  788,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.8419,
+                                              "width_ratio_frame":  0.7296,
+                                              "width_px":  788,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  788,
+                                                               "break_after":  "prefer",
+                                                               "text":  "也可能只是没那么爱跟陌生人闲聊"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C30",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.7296,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.7296,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5085,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  476,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5085,
+                                              "width_ratio_frame":  0.4407,
+                                              "width_px":  476,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  476,
+                                                               "break_after":  "prefer",
+                                                               "text":  "所以说奇怪也不至于"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C31",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4407,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4407,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5641,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  528,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5641,
+                                              "width_ratio_frame":  0.4889,
+                                              "width_px":  528,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  528,
+                                                               "break_after":  "prefer",
+                                                               "text":  "更像是换了个地方生活"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C32",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4889,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4889,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.6197,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  580,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.6197,
+                                              "width_ratio_frame":  0.537,
+                                              "width_px":  580,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  580,
+                                                               "break_after":  "prefer",
+                                                               "text":  "系统默认设置突然全变了"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C33",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.537,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.537,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5641,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  528,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5641,
+                                              "width_ratio_frame":  0.4889,
+                                              "width_px":  528,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  528,
+                                                               "break_after":  "prefer",
+                                                               "text":  "关键它还不弹窗告诉你"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C34",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4889,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4889,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        },
+                        {
+                            "width_band":  "WITHIN_TARGET",
+                            "warnings":  [
+
+                                         ],
+                            "style_target_width_px":  831.6,
+                            "selected_break_policies":  {
+
+                                                        },
+                            "max_line_width_ratio_safe_area":  0.5641,
+                            "safe_area_width_px":  936,
+                            "max_line_width_px":  528,
+                            "style_hard_ceiling_px":  864,
+                            "lines":  [
+                                          {
+                                              "width_ratio_safe_area":  0.5641,
+                                              "width_ratio_frame":  0.4889,
+                                              "width_px":  528,
+                                              "runs":  [
+                                                           {
+                                                               "semantic_role":  "phrase",
+                                                               "emphasis_level":  "normal",
+                                                               "width_px":  528,
+                                                               "break_after":  "prefer",
+                                                               "text":  "只能自己一点点踩出来"
+                                                           }
+                                                       ],
+                                              "line_index":  1
+                                          }
+                                      ],
+                            "target_width_ratio":  0.77,
+                            "cue_id":  "C35",
+                            "split_required":  false,
+                            "effective_ceiling_px":  864,
+                            "selected_break_indices":  {
+
+                                                       },
+                            "content_preserved":  true,
+                            "max_line_width_ratio_frame":  0.4889,
+                            "frame_width_px":  1080,
+                            "hard_ceiling_ratio":  0.8,
+                            "status":  "PASS",
+                            "line_count":  1,
+                            "max_line_width_ratio":  0.4889,
+                            "split_candidates":  [
+
+                                                 ],
+                            "overflow":  false
+                        }
+                    ],
+    "warnings":  [
+                     "MEASUREMENT_CONSERVATIVE_BOUND: stroke/padding applied per-run may over-estimate composite line bounds; not Resolve renderer parity"
+                 ],
+    "measurement_limitations":  [
+                                    "Per-run stroke/padding may conservatively over-estimate composite bounds",
+                                    "Preflight PASS does not prove Resolve/Fusion/Text+ renderer parity"
+                                ]
+}

@@ -1,0 +1,445 @@
+{
+  "schema_version": 1,
+  "canvas": {
+    "width_px": 1080,
+    "height_px": 1920
+  },
+  "layout": {
+    "target_width_ratio": 0.77,
+    "hard_ceiling_ratio": 0.8,
+    "max_lines": 2,
+    "safe_margins": {
+      "left_px": 72,
+      "right_px": 72
+    }
+  },
+  "typography": {
+    "font_family": "Microsoft YaHei UI",
+    "fallback_font_family": "Microsoft YaHei UI",
+    "base_font_size_px": 52,
+    "tracking_px": 0,
+    "stroke_px": 4,
+    "visual_padding_px": 0,
+    "emphasis_style_mapping": {
+      "normal": {
+        "size_multiplier": 1.0,
+        "font_style": "Bold",
+        "tracking_px": 0
+      },
+      "subtle": {
+        "size_multiplier": 1.0,
+        "font_style": "Bold",
+        "tracking_px": 0
+      },
+      "medium": {
+        "size_multiplier": 1.0,
+        "font_style": "Bold",
+        "tracking_px": 0
+      },
+      "strong": {
+        "size_multiplier": 1.0,
+        "font_style": "Bold",
+        "tracking_px": 0
+      }
+    }
+  },
+  "cues": [
+    {
+      "cue_id": "C01",
+      "runs": [
+        {
+          "text": "你要是第一次去奥地利生活",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C02",
+      "runs": [
+        {
+          "text": "有些东西真没人专门提醒你",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C03",
+      "runs": [
+        {
+          "text": "比如星期天你想下楼买点东西",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C04",
+      "runs": [
+        {
+          "text": "结果一条街上门关着",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        },
+        {
+          "text": "不是倒闭",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "forbid"
+        }
+      ]
+    },
+    {
+      "cue_id": "C05",
+      "runs": [
+        {
+          "text": "奥地利很多普通零售店",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C06",
+      "runs": [
+        {
+          "text": "星期天就是不开",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C07",
+      "runs": [
+        {
+          "text": "当地人可能还觉得",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C08",
+      "runs": [
+        {
+          "text": "那你周六买好不就完了",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C09",
+      "runs": [
+        {
+          "text": "还有个小事",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C10",
+      "runs": [
+        {
+          "text": "进小店、诊所、",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        },
+        {
+          "text": "候诊室",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "forbid"
+        }
+      ]
+    },
+    {
+      "cue_id": "C11",
+      "runs": [
+        {
+          "text": "别低着头直接往里走",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C12",
+      "runs": [
+        {
+          "text": "打个招呼哪怕点一下头",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C13",
+      "runs": [
+        {
+          "text": "有些地方这事挺重要",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C14",
+      "runs": [
+        {
+          "text": "到了公司中午碰到同事",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C15",
+      "runs": [
+        {
+          "text": "人家可能甩给你一句",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C16",
+      "runs": [
+        {
+          "text": "Mahlzeit",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C17",
+      "runs": [
+        {
+          "text": "第一次听会愣",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C18",
+      "runs": [
+        {
+          "text": "啥？吃饭？",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C19",
+      "runs": [
+        {
+          "text": "差不多中午它也能当一句嗨",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C20",
+      "runs": [
+        {
+          "text": "然后就是现金、手机、银行卡",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C21",
+      "runs": [
+        {
+          "text": "都准备好了",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C22",
+      "runs": [
+        {
+          "text": "真到当地你会发现",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C23",
+      "runs": [
+        {
+          "text": "有些场景里现金用得特别自然",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C24",
+      "runs": [
+        {
+          "text": "不少人就是挺喜欢现金",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C25",
+      "runs": [
+        {
+          "text": "最后别把奥地利人想成一种性格",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C26",
+      "runs": [
+        {
+          "text": "维也纳、蒂罗尔",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C27",
+      "runs": [
+        {
+          "text": "不同地方的习惯和社交方式",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C28",
+      "runs": [
+        {
+          "text": "都不太一样",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C29",
+      "runs": [
+        {
+          "text": "有人觉得他们冷",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C30",
+      "runs": [
+        {
+          "text": "也可能只是没那么爱跟陌生人闲聊",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C31",
+      "runs": [
+        {
+          "text": "所以说奇怪也不至于",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C32",
+      "runs": [
+        {
+          "text": "更像是换了个地方生活",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C33",
+      "runs": [
+        {
+          "text": "系统默认设置突然全变了",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C34",
+      "runs": [
+        {
+          "text": "关键它还不弹窗告诉你",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    },
+    {
+      "cue_id": "C35",
+      "runs": [
+        {
+          "text": "只能自己一点点踩出来",
+          "semantic_role": "phrase",
+          "emphasis_level": "normal",
+          "break_after": "prefer"
+        }
+      ]
+    }
+  ]
+}

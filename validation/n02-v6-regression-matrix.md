@@ -16,3 +16,5 @@
 | Encode regression (burn-in) | — | — | — | — | — | **PASS** | PSNR vs clean master | No |
 
 **Deliverable:** `N02_V6.mp4` — full production with external ASS subtitles and V6 music mix.
+
+**Owner:** `OWNER_ACCEPTANCE = CONFIRMED`, `N02_V6_PRODUCTION = ACCEPTED` (2026-09-27).

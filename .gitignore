@@ -14,6 +14,10 @@ source/tests/fixtures/audio-loudness-repair/
 source/tests/fixtures/subtitle-stroke-unblock/
 validation/native-subtitle-readability-unblock/
 
+# Regeneratable N02 V6 QA frame extracts (authority = JSON QA + scripts)
+validation/n02-v6-subtitle-final-frames/
+validation/n02-v6-final-artifact-frames/
+
 # Logs & caches
 *.log
 __pycache__/
