@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
   Production Repair Step 4B — pacing + black-bar / reframe QA tests.

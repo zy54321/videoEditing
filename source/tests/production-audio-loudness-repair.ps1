@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
   Production Repair Step 4A-Repair — loudnorm two-pass final audio repair tests (Cases A–G).

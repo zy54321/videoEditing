@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
   Production Repair Step 2 — Native DRT subtitle readability profile & truth regression.

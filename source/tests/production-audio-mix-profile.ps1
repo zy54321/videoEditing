@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
   Production Repair Step 4A — narration_short_v1 profile, loudness QA, mix regression.

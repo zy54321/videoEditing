@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
   Release System V2 — version, authority, transaction, and regression tests.
@@ -23,6 +23,9 @@ function Assert-True {
 . (Join-Path $BuildLib 'ReleaseTransaction.ps1')
 
 Write-Host '=== Release V2 Tests ===' -ForegroundColor Cyan
+
+& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'release-encoding-gate.ps1') -SkipExecutionSmoke
+Assert-True ($LASTEXITCODE -eq 0) 'V00 release-encoding-gate (PS 5.1 parse)'
 
 # 1-7 version parsing / candidates
 $cur = (Get-Content (Join-Path $SourceRoot 'VERSION') -Raw).Trim()
