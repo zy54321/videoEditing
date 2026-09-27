@@ -1,0 +1,30 @@
+{
+  "CANDIDATE_SAFETY": "PASS",
+  "open_sign": {
+    "finding": "CLOSE visible at 2.5-5.0s; OPEN at ~14s",
+    "action": "source_range moved to OPEN segment for V1-04 and V1-20"
+  },
+  "business_hall": {
+    "finding": "RUTA DE EVACUACIÓN visible at 5.5s",
+    "action": "V1-10 replaced with supermarket early-range B-roll (no Spain signage)",
+    "visible_semantic_conflict": true
+  },
+  "entries": [
+    {
+      "shot_id": "V1-04",
+      "candidate": "open_sign",
+      "result": "range_corrected_to_OPEN_segment"
+    },
+    {
+      "shot_id": "V1-10",
+      "candidate": "business_hall",
+      "result": "REJECTED",
+      "replacement": "market_broll_early_range"
+    },
+    {
+      "shot_id": "V1-20",
+      "candidate": "open_sign",
+      "result": "range_corrected_to_OPEN_segment"
+    }
+  ]
+}

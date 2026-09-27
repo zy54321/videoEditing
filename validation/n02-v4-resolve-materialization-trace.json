@@ -1,0 +1,19 @@
+{
+  "production": "N02",
+  "version": "V4",
+  "strategy": "V2 duplicate (voice/music/subtitles) + delete V1 video + contiguous append_to_timeline clip_infos (floor duration formula)",
+  "delivery_timeline": "N02-V4-Captioned-Final",
+  "assembly_timeline": "N02-V4-Assembly-Parity v03",
+  "planned_total_frames": 1821,
+  "voice_authority_frames": 1821,
+  "materialized_total_frames": 1821,
+  "plan_runtime_delta_frames": 0,
+  "v3_comparison": {
+    "planned": 1814,
+    "materialized": 1839,
+    "delta": 25
+  },
+  "duration_formula": "floor(source_span * timeline_fps / source_fps)",
+  "PLAN_RUNTIME_FRAME_PARITY": "PASS",
+  "RESOLVE_MATERIALIZATION": "PASS"
+}
