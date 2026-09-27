@@ -137,6 +137,31 @@ def cropdetect_frame(path: Path) -> Optional[Tuple[int, int, int, int]]:
     return int(w), int(h), int(x), int(y)
 
 
+def classify_bar_severity(
+    frame_w: int,
+    frame_h: int,
+    bar_top: int,
+    bar_bottom: int,
+    bar_left: int,
+    bar_right: int,
+    crop_w: int,
+    crop_h: int,
+) -> str:
+    v_sum = bar_top + bar_bottom
+    v_frac = v_sum / max(frame_h, 1)
+    max_edge = max(bar_top, bar_bottom, bar_left, bar_right)
+    occupancy = (crop_w * crop_h) / max(frame_w * frame_h, 1)
+    if v_frac >= 0.18 and bar_left < 24 and bar_right < 24:
+        return "LARGE_LETTERBOX"
+    if max_edge <= 24 and v_sum > 0 and occupancy >= 0.9:
+        return "THIN_EDGE_BAR"
+    if occupancy < 0.82:
+        return "PARTIAL_CANVAS_FILL"
+    if v_frac >= 0.08:
+        return "PARTIAL_CANVAS_FILL"
+    return "NONE"
+
+
 def classify_bars(
     frame_w: int,
     frame_h: int,
@@ -155,8 +180,12 @@ def classify_bars(
         bar_type = "pillarbox"
     elif max(bar_top, bar_bottom, bar_left, bar_right) >= min_bar_px:
         bar_type = "mixed_canvas_mismatch"
+    severity = classify_bar_severity(
+        frame_w, frame_h, bar_top, bar_bottom, bar_left, bar_right, crop_w, crop_h
+    )
     return {
         "bar_type": bar_type,
+        "bar_classification": severity,
         "bars": {
             "top": bar_top,
             "bottom": bar_bottom,

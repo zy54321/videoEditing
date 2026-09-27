@@ -1,0 +1,415 @@
+{
+  "production": "N02",
+  "version": "V5",
+  "target_canvas": {
+    "width": 1080,
+    "height": 1920
+  },
+  "fill_mode_policy": "cover_static_center",
+  "PORTRAIT_FILL_QA": "PASS",
+  "LAYOUT_STATE_QA": "PASS",
+  "BLACK_BAR_QA": "PASS",
+  "qa_layer": "FINAL_ARTIFACT",
+  "qa_artifact": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V5.mp4",
+  "shots": [
+    {
+      "shot_id": "V1-00",
+      "source_aspect_ratio": 1.7778,
+      "portrait_fill_required": true,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "static_center_crop_acceptable",
+      "reframe_status": "STATIC_FILL",
+      "target_zoom_cover": 3.1605,
+      "fill_mode": "cover_static",
+      "item_index": 0,
+      "source_asset": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+      "source_asset_name": "busy-vienna-street-with-tram-and-pedestrians [37618078].mp4",
+      "timeline_duration_frames": 130,
+      "resolve_transform": {
+        "ZoomX": 3.1605,
+        "ZoomY": 3.1605,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-02",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 1,
+      "source_asset": "bb019a05-0898-4e7e-9287-e3c61560a795",
+      "source_asset_name": "a-woman-shopping-in-a-supermarket-with-oranges [9474086].mp4",
+      "timeline_duration_frames": 112,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-03",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 2,
+      "source_asset": "b0cedc60-5c8a-4ad8-a57b-c695cadf7616",
+      "source_asset_name": "Couple of girls chatting in a coffee shop [couple-of-girls-chatting-in-a-coffee-shop-41862].mp4",
+      "timeline_duration_frames": 114,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-04",
+      "source_aspect_ratio": 0.5273,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "static_center_crop_acceptable",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0667,
+      "fill_mode": "native_fit",
+      "item_index": 3,
+      "source_asset": "f5820003-e145-4106-a49e-e8276a85e368",
+      "source_asset_name": "open-business-sign [6115073].mp4",
+      "timeline_duration_frames": 94,
+      "resolve_transform": {
+        "ZoomX": 1.0667,
+        "ZoomY": 1.0667,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-05",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 4,
+      "source_asset": "3f196f0c-bf86-478b-b51e-c25ccb8dc419",
+      "source_asset_name": "a-person-entering-the-clinic [6998656].mp4",
+      "timeline_duration_frames": 114,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-06",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 5,
+      "source_asset": "9461ceda-bd3d-4e32-8690-093fb51f6073",
+      "source_asset_name": "customer-talking-to-receptionist [6763337].mp4",
+      "timeline_duration_frames": 125,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-08",
+      "source_aspect_ratio": 1.7778,
+      "portrait_fill_required": true,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "static_center_crop_acceptable",
+      "reframe_status": "STATIC_FILL",
+      "target_zoom_cover": 3.1605,
+      "fill_mode": "cover_static",
+      "item_index": 6,
+      "source_asset": "78389944-6c96-4c0d-8cd1-0ed15cea4ccd",
+      "source_asset_name": "Open office space [open-office-space-914].mp4",
+      "timeline_duration_frames": 96,
+      "resolve_transform": {
+        "ZoomX": 3.1605,
+        "ZoomY": 3.1605,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-09",
+      "source_aspect_ratio": 1.7778,
+      "portrait_fill_required": true,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "static_center_crop_acceptable",
+      "reframe_status": "STATIC_FILL",
+      "target_zoom_cover": 3.1605,
+      "fill_mode": "cover_static",
+      "item_index": 7,
+      "source_asset": "78389944-6c96-4c0d-8cd1-0ed15cea4ccd",
+      "source_asset_name": "Open office space [open-office-space-914].mp4",
+      "timeline_duration_frames": 91,
+      "resolve_transform": {
+        "ZoomX": 3.1605,
+        "ZoomY": 3.1605,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-10",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 8,
+      "source_asset": "bb019a05-0898-4e7e-9287-e3c61560a795",
+      "source_asset_name": "a-woman-shopping-in-a-supermarket-with-oranges [9474086].mp4",
+      "timeline_duration_frames": 91,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-11",
+      "source_aspect_ratio": 1.8963,
+      "portrait_fill_required": true,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "static_center_crop_acceptable",
+      "reframe_status": "STATIC_FILL",
+      "target_zoom_cover": 3.3712,
+      "fill_mode": "cover_static",
+      "item_index": 9,
+      "source_asset": "2391060f-5f49-4809-b7ab-1b1a3adb7771",
+      "source_asset_name": "hands-hand-rich-green [3943965].mp4",
+      "timeline_duration_frames": 57,
+      "resolve_transform": {
+        "ZoomX": 3.3712,
+        "ZoomY": 3.3712,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-13",
+      "source_aspect_ratio": 1.7778,
+      "portrait_fill_required": true,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "static_center_crop_acceptable",
+      "reframe_status": "STATIC_FILL",
+      "target_zoom_cover": 3.1605,
+      "fill_mode": "cover_static",
+      "item_index": 10,
+      "source_asset": "befbaa14-b1c8-4865-8848-bc3f6fb11c6f",
+      "source_asset_name": "person-paying-cashier-with-phone [6683945].mp4",
+      "timeline_duration_frames": 43,
+      "resolve_transform": {
+        "ZoomX": 3.1605,
+        "ZoomY": 3.1605,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-14",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 11,
+      "source_asset": "03725f91-aecd-4f98-9f43-eacb1e99f446",
+      "source_asset_name": "hands-exchanging-euro-banknote-on-red-background [30353173].mp4",
+      "timeline_duration_frames": 98,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-16",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 12,
+      "source_asset": "c82f314f-d489-436e-8ad6-7977e06b8c3a",
+      "source_asset_name": "Cup being filled with coffee in a coffee machine [cup-being-filled-with-coffee-in-a-coffee-machine-41865].mp4",
+      "timeline_duration_frames": 61,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-17",
+      "source_aspect_ratio": 1.7778,
+      "portrait_fill_required": true,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "static_center_crop_acceptable",
+      "reframe_status": "STATIC_FILL",
+      "target_zoom_cover": 3.1605,
+      "fill_mode": "cover_static",
+      "item_index": 13,
+      "source_asset": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+      "source_asset_name": "busy-vienna-street-with-tram-and-pedestrians [37618078].mp4",
+      "timeline_duration_frames": 88,
+      "resolve_transform": {
+        "ZoomX": 3.1605,
+        "ZoomY": 3.1605,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-18",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 14,
+      "source_asset": "d4db87c8-0129-4102-ae53-4cb0726bf2ea",
+      "source_asset_name": "charming-mountain-village-street-in-summer [37532285].mp4",
+      "timeline_duration_frames": 101,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-20",
+      "source_aspect_ratio": 0.5273,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "static_center_crop_acceptable",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0667,
+      "fill_mode": "native_fit",
+      "item_index": 15,
+      "source_asset": "f5820003-e145-4106-a49e-e8276a85e368",
+      "source_asset_name": "open-business-sign [6115073].mp4",
+      "timeline_duration_frames": 114,
+      "resolve_transform": {
+        "ZoomX": 1.0667,
+        "ZoomY": 1.0667,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-21",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 16,
+      "source_asset": "c82f314f-d489-436e-8ad6-7977e06b8c3a",
+      "source_asset_name": "Cup being filled with coffee in a coffee machine [cup-being-filled-with-coffee-in-a-coffee-machine-41865].mp4",
+      "timeline_duration_frames": 95,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-23",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 17,
+      "source_asset": "3f196f0c-bf86-478b-b51e-c25ccb8dc419",
+      "source_asset_name": "a-person-entering-the-clinic [6998656].mp4",
+      "timeline_duration_frames": 96,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    },
+    {
+      "shot_id": "V1-24",
+      "source_aspect_ratio": 0.5625,
+      "portrait_fill_required": false,
+      "portrait_crop_feasible": true,
+      "portrait_crop_reason": "already_portrait_or_near",
+      "reframe_status": "NO_REFRAME",
+      "target_zoom_cover": 1.0,
+      "fill_mode": "native_fit",
+      "item_index": 18,
+      "source_asset": "b0cedc60-5c8a-4ad8-a57b-c695cadf7616",
+      "source_asset_name": "Couple of girls chatting in a coffee shop [couple-of-girls-chatting-in-a-coffee-shop-41862].mp4",
+      "timeline_duration_frames": 94,
+      "resolve_transform": {
+        "ZoomX": 1.0,
+        "ZoomY": 1.0,
+        "Pan": 0.0,
+        "Tilt": 0.0
+      },
+      "visual_reframe_route": "visual.reframe.static"
+    }
+  ]
+}

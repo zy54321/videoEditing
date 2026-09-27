@@ -1,0 +1,31 @@
+{
+  "layer": "PLAN_LAYOUT_PREFLIGHT + FINAL_ARTIFACT",
+  "artifact": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V5.mp4",
+  "cue_count_expected": 35,
+  "cue_count_layout": 0,
+  "font_requested": "Open Sans Bold",
+  "font_resolved": "Microsoft YaHei UI",
+  "font_style": "Bold",
+  "font_resolution_from": "fallback",
+  "max_rendered_width_px": 788,
+  "safe_area": {
+    "left_px": 72,
+    "right_px": 72
+  },
+  "unsafe_cues": [],
+  "SUBTITLE_FONT_WEIGHT": "PARTIAL",
+  "SUBTITLE_GEOMETRY_QA": "PASS",
+  "SUBTITLE_READABILITY_QA": "PASS",
+  "burn_in": {
+    "present_in_artifact": true,
+    "stroke_assumed_from_v4_drt": true
+  },
+  "video_stream": {
+    "codec_name": "h264",
+    "width": 1080,
+    "height": 1920
+  },
+  "note": "Bold preflight validates wrap/safe-area; timeline font patch requires Project.db on host.",
+  "SUBTITLE_QA": "PASS",
+  "VISUAL_CONFIRM_REQUIRED": "Verify burn-in weight on encoded frames at 12s and 35s"
+}
