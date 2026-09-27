@@ -1,0 +1,6 @@
+﻿{"fps":24,"shots":[
+  {"shot_id":"M0","source_asset":"A","timeline_start_sec":0,"timeline_duration_sec":5,
+   "source_range":{"in_sec":0,"out_sec":5},"source_duration_sec":20},
+  {"shot_id":"M1","source_asset":"A","timeline_start_sec":5,"timeline_duration_sec":0.042,
+   "source_range":{"in_sec":5,"out_sec":5.042}}
+]}

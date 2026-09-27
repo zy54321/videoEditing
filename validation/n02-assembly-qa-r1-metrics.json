@@ -1,0 +1,106 @@
+{
+  "assembly": "n02-v1-timeline-assembly.json",
+  "fps": 24.0,
+  "micro_fragment_shot_ids": [
+    "V1-01",
+    "V1-07",
+    "V1-12",
+    "V1-15",
+    "V1-19",
+    "V1-22"
+  ],
+  "micro_fragment_count": 6,
+  "logical_source_span_count": 16,
+  "cooldown_violations": [
+    {
+      "verdict": "STRONG_REPAIR_CANDIDATE",
+      "reason": "same_source_cooldown_violation",
+      "source_asset": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+      "gap_sec": 4.708,
+      "logical_span_shot_ids": [
+        "V1-03"
+      ],
+      "timeline_start_sec": 10.125
+    },
+    {
+      "verdict": "STRONG_REPAIR_CANDIDATE",
+      "reason": "same_source_cooldown_violation",
+      "source_asset": "bb019a05-0898-4e7e-9287-e3c61560a795",
+      "gap_sec": 4.75,
+      "logical_span_shot_ids": [
+        "V1-04"
+      ],
+      "timeline_start_sec": 14.875
+    },
+    {
+      "verdict": "STRONG_REPAIR_CANDIDATE",
+      "reason": "same_source_cooldown_violation",
+      "source_asset": "2391060f-5f49-4809-b7ab-1b1a3adb7771",
+      "gap_sec": 5.916,
+      "logical_span_shot_ids": [
+        "V1-16"
+      ],
+      "timeline_start_sec": 48.708
+    },
+    {
+      "verdict": "STRONG_REPAIR_CANDIDATE",
+      "reason": "same_source_cooldown_violation",
+      "source_asset": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+      "gap_sec": 4.208,
+      "logical_span_shot_ids": [
+        "V1-20"
+      ],
+      "timeline_start_sec": 59.208
+    },
+    {
+      "verdict": "STRONG_REPAIR_CANDIDATE",
+      "reason": "same_source_cooldown_violation",
+      "source_asset": "d4db87c8-0129-4102-ae53-4cb0726bf2ea",
+      "gap_sec": 4.749,
+      "logical_span_shot_ids": [
+        "V1-21",
+        "V1-22"
+      ],
+      "timeline_start_sec": 63.958
+    },
+    {
+      "verdict": "STRONG_REPAIR_CANDIDATE",
+      "reason": "same_source_cooldown_violation",
+      "source_asset": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+      "gap_sec": 3.959,
+      "logical_span_shot_ids": [
+        "V1-23",
+        "V1-24"
+      ],
+      "timeline_start_sec": 67.917
+    }
+  ],
+  "window_violations": [
+    {
+      "verdict": "REPAIR_CANDIDATE",
+      "reason": "same_source_window_exceeded",
+      "source_asset": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+      "count_in_window": 3,
+      "window_sec": 30.0,
+      "logical_span_starts_sec": [
+        51.292,
+        59.208,
+        67.917
+      ]
+    }
+  ],
+  "ping_pong": {
+    "ping_pong_aba_count": 3,
+    "ping_pong_abab_count": 1,
+    "ping_pong_ababa_count": 0,
+    "logical_source_span_count": 16
+  },
+  "pacing_verdict": "PACING_REPAIR_CANDIDATE",
+  "reuse_verdict": "STRONG_REPAIR_CANDIDATE",
+  "repair_status": "ASSEMBLY_REPAIR_NOT_CONVERGED",
+  "repair_converged": false,
+  "safe_repair_action_count": 6,
+  "blocked_repair_count": 5,
+  "after_reuse_verdict": "STRONG_REPAIR_CANDIDATE",
+  "after_pacing_ok": false
+}

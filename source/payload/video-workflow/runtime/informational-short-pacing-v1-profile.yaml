@@ -26,7 +26,10 @@ rules:
 thresholds:
   warning_duration_sec: 6.0
   repair_review_duration_sec: 10.0
-  notes: "V1 heuristic only — editorial_reason may exempt."
+  micro_fragment:
+    max_frames: 2
+    max_sec_fallback: 0.084
+  notes: "V1 heuristic only — editorial_reason / intentional_flash may exempt."
 
 repair_priority:
   - clip.source_range

@@ -39,8 +39,8 @@ def main() -> int:
     }
 
     needs_repair = (
-        pacing_before["verdict"] == "PACING_REPAIR_CANDIDATE"
-        or reuse_before["verdict"] in ("REPAIR_CANDIDATE", "STRONG_REPAIR_CANDIDATE")
+        not pacing_before.get("ok")
+        or not reuse_before.get("ok")
     )
 
     if args.apply_repair and needs_repair:
@@ -54,9 +54,13 @@ def main() -> int:
         result["after_qa"] = repaired["after"]
         result["assembly_plan"] = repaired["assembly_plan"]
         result["ok"] = repaired["ok"]
+        result["converged"] = repaired.get("converged", False)
+        result["status"] = repaired.get("status")
     else:
         result["after_qa"] = result["before_qa"]
         result["ok"] = pacing_before["ok"] and reuse_before["ok"]
+        result["converged"] = result["ok"]
+        result["status"] = "ASSEMBLY_REPAIR_CONVERGED" if result["ok"] else "ASSEMBLY_REPAIR_NOT_CONVERGED"
 
     out = json.dumps(result, indent=2, ensure_ascii=False)
     if args.out:

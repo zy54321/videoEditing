@@ -1,0 +1,5 @@
+﻿{"fps":24,"shots":[
+  {"shot_id":"O0","source_asset":"office","timeline_start_sec":0,"timeline_duration_sec":4},
+  {"shot_id":"O1","source_asset":"office","timeline_start_sec":4,"timeline_duration_sec":4},
+  {"shot_id":"O2","source_asset":"office","timeline_start_sec":8,"timeline_duration_sec":4}
+]}

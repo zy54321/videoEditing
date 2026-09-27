@@ -3,21 +3,20 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
+from assembly_shot_utils import (
+    CONTINUITY_GAP_SEC,
+    build_logical_source_spans,
+    build_timed_shots,
+    is_editorial_exempt,
+)
 from shared_asset_library import load_catalog_file
 
 VERDICT_PASS = "PASS"
 VERDICT_WARNING = "SHOT_REUSE_WARNING"
 VERDICT_REPAIR = "REPAIR_CANDIDATE"
 VERDICT_STRONG = "STRONG_REPAIR_CANDIDATE"
-
-EXEMPT_REASONS = frozenset({
-    "editorial_reason",
-    "intentional_callback",
-    "comparison",
-    "narrative_reason",
-})
 
 
 @dataclass
@@ -37,24 +36,7 @@ def load_shot_reuse_profile(path: Path) -> ShotReuseProfile:
     )
 
 
-def _timeline_start(shot: Dict[str, Any], cursor: float) -> Tuple[float, float]:
-    if "timeline_start_sec" in shot:
-        start = float(shot["timeline_start_sec"])
-        dur = float(shot.get("timeline_duration_sec") or shot.get("timeline_duration") or 0)
-        return start, dur
-    dur = float(shot.get("timeline_duration_sec") or shot.get("timeline_duration") or 0)
-    return cursor, dur
-
-
-def _is_exempt(shot: Dict[str, Any]) -> bool:
-    reason = str(shot.get("editorial_reason") or shot.get("reuse_exempt_reason") or "")
-    if reason in EXEMPT_REASONS:
-        return True
-    return bool(shot.get("reuse_exempt"))
-
-
 def _ping_pong_patterns(sources: List[str]) -> List[Dict[str, Any]]:
-    """Detect A-B-A, A-B-A-B, A-B-A-B-A on source_asset sequence (non-exempt shots only)."""
     findings: List[Dict[str, Any]] = []
     n = len(sources)
     for i in range(n - 2):
@@ -94,52 +76,39 @@ def analyze_shot_reuse(
 ) -> Dict[str, Any]:
     shots: List[Dict[str, Any]] = list(assembly_plan.get("shots") or [])
     findings: List[Dict[str, Any]] = []
-    cursor = 0.0
-    timed: List[Dict[str, Any]] = []
-
-    for shot in shots:
-        start, dur = _timeline_start(shot, cursor)
-        end = start + dur
-        timed.append({**shot, "_start": start, "_end": end, "_dur": dur})
-        cursor = end
+    timed, _ = build_timed_shots(shots)
+    logical_spans = build_logical_source_spans(timed, continuity_gap_sec=CONTINUITY_GAP_SEC)
 
     last_end_by_source: Dict[str, float] = {}
-    for shot in timed:
-        if _is_exempt(shot):
-            continue
-        src = str(shot.get("source_asset") or "")
-        if not src:
-            continue
+    for span in logical_spans:
+        src = span["source_asset"]
         prev_end = last_end_by_source.get(src)
         if prev_end is not None:
-            gap = shot["_start"] - prev_end
-            if gap < profile.same_source_cooldown_sec:
+            gap = float(span["start_sec"]) - prev_end
+            if gap >= CONTINUITY_GAP_SEC and gap < profile.same_source_cooldown_sec:
                 findings.append({
                     "verdict": VERDICT_STRONG,
                     "reason": "same_source_cooldown_violation",
                     "source_asset": src,
                     "gap_sec": round(gap, 3),
-                    "shot_id": shot.get("shot_id"),
-                    "timeline_start_sec": shot["_start"],
+                    "logical_span_shot_ids": span.get("shot_ids"),
+                    "timeline_start_sec": span["start_sec"],
                 })
-        last_end_by_source[src] = shot["_end"]
+        last_end_by_source[src] = float(span["end_sec"])
 
-    for i, shot in enumerate(timed):
-        if _is_exempt(shot):
-            continue
-        src = str(shot.get("source_asset") or "")
-        if not src:
-            continue
-        window_start = shot["_start"]
+    for span in logical_spans:
+        src = span["source_asset"]
+        window_start = float(span["start_sec"])
         window_end = window_start + profile.same_source_window_sec
         count = 0
-        shot_ids: List[Any] = []
-        for other in timed:
-            if str(other.get("source_asset") or "") != src:
+        span_starts: List[float] = []
+        for other in logical_spans:
+            if other["source_asset"] != src:
                 continue
-            if other["_start"] >= window_start and other["_start"] < window_end:
+            ostart = float(other["start_sec"])
+            if ostart >= window_start and ostart < window_end:
                 count += 1
-                shot_ids.append(other.get("shot_id"))
+                span_starts.append(ostart)
         if count > profile.same_source_max_in_window:
             findings.append({
                 "verdict": VERDICT_REPAIR,
@@ -147,20 +116,20 @@ def analyze_shot_reuse(
                 "source_asset": src,
                 "count_in_window": count,
                 "window_sec": profile.same_source_window_sec,
-                "anchor_shot_id": shot.get("shot_id"),
-                "shot_ids": shot_ids,
+                "logical_span_starts_sec": span_starts,
             })
 
-    non_exempt_sources = [
-        str(s.get("source_asset") or "")
-        for s in timed
-        if not _is_exempt(s)
-    ]
+    non_exempt_sources: List[str] = []
+    for s in timed:
+        if is_editorial_exempt(s):
+            continue
+        non_exempt_sources.append(str(s.get("source_asset") or ""))
+
     for ping in _ping_pong_patterns(non_exempt_sources):
         mapped = []
         idx = 0
         for s in timed:
-            if _is_exempt(s):
+            if is_editorial_exempt(s):
                 continue
             if idx in ping["indices"]:
                 mapped.append({
@@ -196,6 +165,8 @@ def analyze_shot_reuse(
             "ping_pong_aba_count": aba,
             "ping_pong_abab_count": abab,
             "ping_pong_ababa_count": ababa,
+            "logical_source_span_count": len(logical_spans),
         },
+        "logical_spans": logical_spans,
         "shot_count": len(shots),
     }
