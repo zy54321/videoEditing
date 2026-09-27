@@ -1,0 +1,16 @@
+schema: informational_short_shot_reuse_v1
+version: 1
+
+thresholds:
+  same_source_cooldown_sec: 12.0
+  same_source_window_sec: 30.0
+  same_source_max_in_window: 2
+
+patterns:
+  ping_pong_aba: STRONG_REPAIR_CANDIDATE
+  ping_pong_abab: STRONG_REPAIR_CANDIDATE
+  ping_pong_ababa: REPAIR_CANDIDATE
+
+notes:
+  - "Governance is source_asset identity only; visual-scene similarity is VISUAL_SCENE_REUSE_GAP unless a simple detector exists."
+  - "Editorial_reason / intentional_callback / comparison / narrative_reason exempt ping-pong penalties."

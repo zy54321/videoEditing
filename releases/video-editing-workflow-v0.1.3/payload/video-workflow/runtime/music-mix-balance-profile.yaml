@@ -1,0 +1,25 @@
+# Music mix balance — engineering profile (not an industry standard).
+schema_version: 1
+profile_id: music_mix_balance_n02_v1
+
+authority: FINAL_ARTIFACT
+
+# Target: music bed perceptible under narration (voice remains primary).
+relative_level_target_db:
+  music_below_voice_min: 12.0
+  music_below_voice_max: 22.0
+
+thresholds:
+  too_weak_music_below_voice_db: 24.0
+  too_strong_music_below_voice_db: 10.0
+  min_sections_fail_ratio: 0.35
+  regression_vs_reference_db: 3.0
+
+measurement:
+  window_method: plan_shot_sections
+  music_estimate: pause_bed_on_final_mix_plus_stem_regression
+  pre_mix_labels:
+    - PRECHECK_ONLY
+  mix_balance_encode_stage: encoded_mp4_before_loudness_repair
+  final_loudness_stage: encoded_mp4_after_loudness_repair
+  stem_regression_authority: production_music_wav_on_timeline

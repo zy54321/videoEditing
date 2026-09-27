@@ -1,0 +1,30 @@
+schema_version: 1
+style_id: <style-id>
+
+identity:
+  name: <display name>
+  core_feeling: <core feeling>
+  audience_relationship: <audience relationship>
+  primary_goal: <primary goal>
+
+taste_profile:
+  naturalism: medium
+  polish: medium
+  visual_energy: medium
+  camera_assertiveness: medium
+  camera_stability: medium
+  psychological_distance: conversational
+  shot_variety: medium
+  cut_density: medium
+  breathing_room: medium
+  graphic_expressiveness: medium
+  subtitle_expressiveness: medium
+  music_assertiveness: medium
+  ambience_value: medium
+  silence_value: medium
+  color_stylization: medium
+  effects_visibility: medium
+  realism_priority: medium
+
+format_adaptation:
+  note: Format from Production Brief — not fixed to Style identity
