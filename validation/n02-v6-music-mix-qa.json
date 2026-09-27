@@ -1,0 +1,680 @@
+{
+  "MUSIC_MIX_QA_AUTHORITY": "PASS",
+  "fixture_triplet": {
+    "fixture_results": [
+      {
+        "case": "inaudible",
+        "expected": "FAIL_REGRESSION_VS_REFERENCE",
+        "got": "FAIL_REGRESSION_VS_REFERENCE",
+        "ok": true
+      },
+      {
+        "case": "balanced",
+        "expected": "PASS",
+        "got": "PASS",
+        "ok": true
+      },
+      {
+        "case": "loud",
+        "expected": "FAIL_TOO_STRONG",
+        "got": "FAIL_TOO_STRONG",
+        "ok": true
+      }
+    ],
+    "all_ok": true
+  },
+  "regression": {
+    "N02_V4": {
+      "authority": "FINAL_ARTIFACT",
+      "artifact": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V4.mp4",
+      "voice_stem": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\input\\N02_VOICE_MASTER_zm100_post1.4.wav",
+      "reference_artifact": null,
+      "profile": {
+        "regression_vs_reference_db": 3.0,
+        "pause_bed_too_weak_db": -50.0,
+        "pause_bed_too_strong_db": -28.0
+      },
+      "sections": [
+        {
+          "shot_id": "V1-00",
+          "start_sec": 0.0,
+          "duration_sec": 5.417,
+          "mix_rms_db": -19.8,
+          "music_bed_pause_db": -26.5,
+          "bed_verdict": "FAIL_TOO_STRONG"
+        },
+        {
+          "shot_id": "V1-02",
+          "start_sec": 5.417,
+          "duration_sec": 4.708,
+          "mix_rms_db": -18.9,
+          "music_bed_pause_db": -35.8,
+          "bed_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-03",
+          "start_sec": 10.125,
+          "duration_sec": 4.75,
+          "mix_rms_db": -19.7,
+          "music_bed_pause_db": -32.4,
+          "bed_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-04",
+          "start_sec": 14.875,
+          "duration_sec": 3.917,
+          "mix_rms_db": -18.7,
+          "music_bed_pause_db": -32.8,
+          "bed_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-05",
+          "start_sec": 18.792,
+          "duration_sec": 4.75,
+          "mix_rms_db": -17.9,
+          "music_bed_pause_db": -23.0,
+          "bed_verdict": "FAIL_TOO_STRONG"
+        },
+        {
+          "shot_id": "V1-06",
+          "start_sec": 23.542,
+          "duration_sec": 5.209,
+          "mix_rms_db": -17.8,
+          "music_bed_pause_db": null
+        },
+        {
+          "shot_id": "V1-08",
+          "start_sec": 28.751,
+          "duration_sec": 4.0,
+          "mix_rms_db": -17.6,
+          "music_bed_pause_db": null
+        },
+        {
+          "shot_id": "V1-09",
+          "start_sec": 32.751000000000005,
+          "duration_sec": 3.833,
+          "mix_rms_db": -18.5,
+          "music_bed_pause_db": -23.0,
+          "bed_verdict": "FAIL_TOO_STRONG"
+        },
+        {
+          "shot_id": "V1-10",
+          "start_sec": 36.584,
+          "duration_sec": 3.833,
+          "mix_rms_db": -20.1,
+          "music_bed_pause_db": -31.7,
+          "bed_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-11",
+          "start_sec": 40.417,
+          "duration_sec": 2.375,
+          "mix_rms_db": -17.4,
+          "music_bed_pause_db": -24.6,
+          "bed_verdict": "FAIL_TOO_STRONG"
+        },
+        {
+          "shot_id": "V1-13",
+          "start_sec": 42.792,
+          "duration_sec": 1.833,
+          "mix_rms_db": -19.1,
+          "music_bed_pause_db": null
+        },
+        {
+          "shot_id": "V1-14",
+          "start_sec": 44.625,
+          "duration_sec": 4.084,
+          "mix_rms_db": -19.0,
+          "music_bed_pause_db": null
+        },
+        {
+          "shot_id": "V1-16",
+          "start_sec": 48.709,
+          "duration_sec": 2.583,
+          "mix_rms_db": -19.1,
+          "music_bed_pause_db": -27.2,
+          "bed_verdict": "FAIL_TOO_STRONG"
+        },
+        {
+          "shot_id": "V1-17",
+          "start_sec": 51.292,
+          "duration_sec": 3.708,
+          "mix_rms_db": -18.5,
+          "music_bed_pause_db": -30.4,
+          "bed_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-18",
+          "start_sec": 55.0,
+          "duration_sec": 4.209,
+          "mix_rms_db": -18.7,
+          "music_bed_pause_db": -35.9,
+          "bed_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-20",
+          "start_sec": 59.209,
+          "duration_sec": 4.75,
+          "mix_rms_db": -19.6,
+          "music_bed_pause_db": -38.1,
+          "bed_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-21",
+          "start_sec": 63.959,
+          "duration_sec": 3.9589999999999996,
+          "mix_rms_db": -18.3,
+          "music_bed_pause_db": -20.6,
+          "bed_verdict": "FAIL_TOO_STRONG"
+        },
+        {
+          "shot_id": "V1-23",
+          "start_sec": 67.918,
+          "duration_sec": 4.0,
+          "mix_rms_db": -18.9,
+          "music_bed_pause_db": -18.7,
+          "bed_verdict": "FAIL_TOO_STRONG"
+        },
+        {
+          "shot_id": "V1-24",
+          "start_sec": 71.918,
+          "duration_sec": 3.958,
+          "mix_rms_db": -20.0,
+          "music_bed_pause_db": -34.4,
+          "bed_verdict": "PASS"
+        }
+      ],
+      "summary": {
+        "mean_mix_delta_vs_reference_db": null,
+        "mean_music_bed_pause_db": -29.01,
+        "sections_regression_fail": 0,
+        "sections_bed_too_weak": 0,
+        "sections_bed_too_strong": 7
+      },
+      "MUSIC_MIX_BALANCE": "FAIL_TOO_STRONG",
+      "MUSIC_MIX_QA_AUTHORITY": "FAIL"
+    },
+    "N02_V5": {
+      "authority": "FINAL_ARTIFACT",
+      "artifact": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V5.mp4",
+      "voice_stem": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\input\\N02_VOICE_MASTER_zm100_post1.4.wav",
+      "reference_artifact": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V4.mp4",
+      "profile": {
+        "regression_vs_reference_db": 3.0,
+        "pause_bed_too_weak_db": -50.0,
+        "pause_bed_too_strong_db": -28.0
+      },
+      "sections": [
+        {
+          "shot_id": "V1-00",
+          "start_sec": 0.0,
+          "duration_sec": 5.417,
+          "mix_rms_db": -19.8,
+          "music_bed_pause_db": -32.0,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -19.8,
+          "mix_delta_vs_reference_db": 0.0,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-02",
+          "start_sec": 5.417,
+          "duration_sec": 4.708,
+          "mix_rms_db": -19.0,
+          "music_bed_pause_db": -37.9,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -18.9,
+          "mix_delta_vs_reference_db": -0.1,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-03",
+          "start_sec": 10.125,
+          "duration_sec": 4.75,
+          "mix_rms_db": -19.9,
+          "music_bed_pause_db": -37.9,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -19.7,
+          "mix_delta_vs_reference_db": -0.2,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-04",
+          "start_sec": 14.875,
+          "duration_sec": 3.917,
+          "mix_rms_db": -18.8,
+          "music_bed_pause_db": -37.3,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -18.7,
+          "mix_delta_vs_reference_db": -0.1,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-05",
+          "start_sec": 18.792,
+          "duration_sec": 4.75,
+          "mix_rms_db": -18.8,
+          "music_bed_pause_db": -27.9,
+          "bed_verdict": "FAIL_TOO_STRONG",
+          "reference_mix_rms_db": -17.9,
+          "mix_delta_vs_reference_db": -0.9,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-06",
+          "start_sec": 23.542,
+          "duration_sec": 5.209,
+          "mix_rms_db": -18.6,
+          "music_bed_pause_db": null,
+          "reference_mix_rms_db": -17.8,
+          "mix_delta_vs_reference_db": -0.8,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-08",
+          "start_sec": 28.751,
+          "duration_sec": 4.0,
+          "mix_rms_db": -18.5,
+          "music_bed_pause_db": null,
+          "reference_mix_rms_db": -17.6,
+          "mix_delta_vs_reference_db": -0.9,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-09",
+          "start_sec": 32.751000000000005,
+          "duration_sec": 3.833,
+          "mix_rms_db": -18.6,
+          "music_bed_pause_db": -28.0,
+          "bed_verdict": "FAIL_TOO_STRONG",
+          "reference_mix_rms_db": -18.5,
+          "mix_delta_vs_reference_db": -0.1,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-10",
+          "start_sec": 36.584,
+          "duration_sec": 3.833,
+          "mix_rms_db": -20.1,
+          "music_bed_pause_db": -36.8,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -20.1,
+          "mix_delta_vs_reference_db": 0.0,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-11",
+          "start_sec": 40.417,
+          "duration_sec": 2.375,
+          "mix_rms_db": -17.9,
+          "music_bed_pause_db": -29.7,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -17.4,
+          "mix_delta_vs_reference_db": -0.5,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-13",
+          "start_sec": 42.792,
+          "duration_sec": 1.833,
+          "mix_rms_db": -19.3,
+          "music_bed_pause_db": null,
+          "reference_mix_rms_db": -19.1,
+          "mix_delta_vs_reference_db": -0.2,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-14",
+          "start_sec": 44.625,
+          "duration_sec": 4.084,
+          "mix_rms_db": -18.9,
+          "music_bed_pause_db": null,
+          "reference_mix_rms_db": -19.0,
+          "mix_delta_vs_reference_db": 0.1,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-16",
+          "start_sec": 48.709,
+          "duration_sec": 2.583,
+          "mix_rms_db": -19.9,
+          "music_bed_pause_db": -32.3,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -19.1,
+          "mix_delta_vs_reference_db": -0.8,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-17",
+          "start_sec": 51.292,
+          "duration_sec": 3.708,
+          "mix_rms_db": -18.8,
+          "music_bed_pause_db": -35.6,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -18.5,
+          "mix_delta_vs_reference_db": -0.3,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-18",
+          "start_sec": 55.0,
+          "duration_sec": 4.209,
+          "mix_rms_db": -18.5,
+          "music_bed_pause_db": -39.8,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -18.7,
+          "mix_delta_vs_reference_db": 0.2,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-20",
+          "start_sec": 59.209,
+          "duration_sec": 4.75,
+          "mix_rms_db": -19.7,
+          "music_bed_pause_db": -41.8,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -19.6,
+          "mix_delta_vs_reference_db": -0.1,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-21",
+          "start_sec": 63.959,
+          "duration_sec": 3.9589999999999996,
+          "mix_rms_db": -18.5,
+          "music_bed_pause_db": -25.8,
+          "bed_verdict": "FAIL_TOO_STRONG",
+          "reference_mix_rms_db": -18.3,
+          "mix_delta_vs_reference_db": -0.2,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-23",
+          "start_sec": 67.918,
+          "duration_sec": 4.0,
+          "mix_rms_db": -19.1,
+          "music_bed_pause_db": -24.0,
+          "bed_verdict": "FAIL_TOO_STRONG",
+          "reference_mix_rms_db": -18.9,
+          "mix_delta_vs_reference_db": -0.2,
+          "section_verdict": "PASS"
+        },
+        {
+          "shot_id": "V1-24",
+          "start_sec": 71.918,
+          "duration_sec": 3.958,
+          "mix_rms_db": -19.9,
+          "music_bed_pause_db": -39.4,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -20.0,
+          "mix_delta_vs_reference_db": 0.1,
+          "section_verdict": "PASS"
+        }
+      ],
+      "summary": {
+        "mean_mix_delta_vs_reference_db": -0.26,
+        "mean_music_bed_pause_db": -33.75,
+        "sections_regression_fail": 0,
+        "sections_bed_too_weak": 0,
+        "sections_bed_too_strong": 4
+      },
+      "MUSIC_MIX_BALANCE": "FAIL_REGRESSION_VS_REFERENCE",
+      "MUSIC_MIX_QA_AUTHORITY": "PASS",
+      "production_stem_regression": {
+        "authority": "PRODUCTION_MUSIC_STEM",
+        "reference_music": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\N02\\video-workflow\\.qa\\audio\\music_glass_horizon_attenuated.wav",
+        "candidate_music": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\N02\\video-workflow\\.qa\\audio\\music_glass_horizon_v5_envelope.wav",
+        "reference_rms_db": -35.9,
+        "candidate_rms_db": -41.3,
+        "delta_db": -5.4,
+        "MUSIC_MIX_BALANCE": "FAIL_REGRESSION_VS_REFERENCE"
+      }
+    }
+  },
+  "v5_false_pass_audit": {
+    "gap_class": "WORKFLOW_GAP",
+    "fact": "V5 used recommended_base_factor 0.08 vs V4 legacy 0.15 (~5.6 dB weaker bed).",
+    "v5_bug": "n02-v5-music-mix-final-measure.py used mix_minus_voice_db=voice_rms-mix_rms on full mix; when music is weak, mix鈮坴oice so gap stays small and never exceeded weak threshold 18 dB.",
+    "wrong_authority": "Pre-loudnorm file labeled as mix truth; semantics measured total mix not music bed."
+  },
+  "corrected_v5_verdict": "FAIL_REGRESSION_VS_REFERENCE",
+  "v6_preview": {
+    "stem_vs_v4": {
+      "authority": "PRODUCTION_MUSIC_STEM",
+      "reference_music": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\N02\\video-workflow\\.qa\\audio\\music_glass_horizon_attenuated.wav",
+      "candidate_music": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\N02\\video-workflow\\.qa\\audio\\music_glass_horizon_v6_envelope.wav",
+      "reference_rms_db": -35.9,
+      "candidate_rms_db": -35.9,
+      "delta_db": 0.0,
+      "MUSIC_MIX_BALANCE": "PASS"
+    },
+    "encode_vs_v4_final": {
+      "authority": "FINAL_ARTIFACT",
+      "artifact": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V6_audio_repaired_preview_encode.mp4",
+      "voice_stem": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\input\\N02_VOICE_MASTER_zm100_post1.4.wav",
+      "reference_artifact": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V4.mp4",
+      "profile": {
+        "regression_vs_reference_db": 3.0,
+        "pause_bed_too_weak_db": -50.0,
+        "pause_bed_too_strong_db": -28.0
+      },
+      "sections": [
+        {
+          "shot_id": "V1-00",
+          "start_sec": 0.0,
+          "duration_sec": 5.417,
+          "mix_rms_db": -27.9,
+          "music_bed_pause_db": -35.9,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -19.8,
+          "mix_delta_vs_reference_db": -8.1,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-02",
+          "start_sec": 5.417,
+          "duration_sec": 4.708,
+          "mix_rms_db": -27.9,
+          "music_bed_pause_db": -45.2,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -18.9,
+          "mix_delta_vs_reference_db": -9.0,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-03",
+          "start_sec": 10.125,
+          "duration_sec": 4.75,
+          "mix_rms_db": -28.4,
+          "music_bed_pause_db": -41.8,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -19.7,
+          "mix_delta_vs_reference_db": -8.7,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-04",
+          "start_sec": 14.875,
+          "duration_sec": 3.917,
+          "mix_rms_db": -27.2,
+          "music_bed_pause_db": -42.1,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -18.7,
+          "mix_delta_vs_reference_db": -8.5,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-05",
+          "start_sec": 18.792,
+          "duration_sec": 4.75,
+          "mix_rms_db": -26.7,
+          "music_bed_pause_db": -32.1,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -17.9,
+          "mix_delta_vs_reference_db": -8.8,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-06",
+          "start_sec": 23.542,
+          "duration_sec": 5.209,
+          "mix_rms_db": -26.5,
+          "music_bed_pause_db": null,
+          "reference_mix_rms_db": -17.8,
+          "mix_delta_vs_reference_db": -8.7,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-08",
+          "start_sec": 28.751,
+          "duration_sec": 4.0,
+          "mix_rms_db": -26.0,
+          "music_bed_pause_db": null,
+          "reference_mix_rms_db": -17.6,
+          "mix_delta_vs_reference_db": -8.4,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-09",
+          "start_sec": 32.751000000000005,
+          "duration_sec": 3.833,
+          "mix_rms_db": -27.0,
+          "music_bed_pause_db": -32.0,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -18.5,
+          "mix_delta_vs_reference_db": -8.5,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-10",
+          "start_sec": 36.584,
+          "duration_sec": 3.833,
+          "mix_rms_db": -28.5,
+          "music_bed_pause_db": -40.6,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -20.1,
+          "mix_delta_vs_reference_db": -8.4,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-11",
+          "start_sec": 40.417,
+          "duration_sec": 2.375,
+          "mix_rms_db": -25.5,
+          "music_bed_pause_db": -33.5,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -17.4,
+          "mix_delta_vs_reference_db": -8.1,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-13",
+          "start_sec": 42.792,
+          "duration_sec": 1.833,
+          "mix_rms_db": -27.5,
+          "music_bed_pause_db": null,
+          "reference_mix_rms_db": -19.1,
+          "mix_delta_vs_reference_db": -8.4,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-14",
+          "start_sec": 44.625,
+          "duration_sec": 4.084,
+          "mix_rms_db": -27.1,
+          "music_bed_pause_db": null,
+          "reference_mix_rms_db": -19.0,
+          "mix_delta_vs_reference_db": -8.1,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-16",
+          "start_sec": 48.709,
+          "duration_sec": 2.583,
+          "mix_rms_db": -27.8,
+          "music_bed_pause_db": -36.0,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -19.1,
+          "mix_delta_vs_reference_db": -8.7,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-17",
+          "start_sec": 51.292,
+          "duration_sec": 3.708,
+          "mix_rms_db": -27.1,
+          "music_bed_pause_db": -39.3,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -18.5,
+          "mix_delta_vs_reference_db": -8.6,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-18",
+          "start_sec": 55.0,
+          "duration_sec": 4.209,
+          "mix_rms_db": -27.0,
+          "music_bed_pause_db": -44.7,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -18.7,
+          "mix_delta_vs_reference_db": -8.3,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-20",
+          "start_sec": 59.209,
+          "duration_sec": 4.75,
+          "mix_rms_db": -28.5,
+          "music_bed_pause_db": -47.0,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -19.6,
+          "mix_delta_vs_reference_db": -8.9,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-21",
+          "start_sec": 63.959,
+          "duration_sec": 3.9589999999999996,
+          "mix_rms_db": -26.2,
+          "music_bed_pause_db": -29.5,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -18.3,
+          "mix_delta_vs_reference_db": -7.9,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-23",
+          "start_sec": 67.918,
+          "duration_sec": 4.0,
+          "mix_rms_db": -27.7,
+          "music_bed_pause_db": -27.7,
+          "bed_verdict": "FAIL_TOO_STRONG",
+          "reference_mix_rms_db": -18.9,
+          "mix_delta_vs_reference_db": -8.8,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        },
+        {
+          "shot_id": "V1-24",
+          "start_sec": 71.918,
+          "duration_sec": 3.958,
+          "mix_rms_db": -28.3,
+          "music_bed_pause_db": -43.0,
+          "bed_verdict": "PASS",
+          "reference_mix_rms_db": -20.0,
+          "mix_delta_vs_reference_db": -8.3,
+          "section_verdict": "FAIL_REGRESSION_VS_REFERENCE"
+        }
+      ],
+      "summary": {
+        "mean_mix_delta_vs_reference_db": -8.48,
+        "mean_music_bed_pause_db": -38.03,
+        "sections_regression_fail": 19,
+        "sections_bed_too_weak": 0,
+        "sections_bed_too_strong": 1
+      },
+      "MUSIC_MIX_BALANCE": "FAIL_REGRESSION_VS_REFERENCE",
+      "MUSIC_MIX_QA_AUTHORITY": "FAIL"
+    },
+    "MUSIC_MIX_BALANCE_STEM": "PASS"
+  }
+}

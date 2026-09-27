@@ -1,0 +1,108 @@
+{
+  "authority": "FINAL_ARTIFACT",
+  "artifact": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\output\\N02_V5.mp4",
+  "samples": [
+    {
+      "id": "short_single",
+      "sec": 8.5,
+      "role": "short_single_line",
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-subtitle-final-frames\\short_single_8.50s.png",
+      "frame_w": 1080,
+      "frame_h": 1920,
+      "text_extent_px": 1060,
+      "left_margin_px": 0,
+      "right_margin_px": 20,
+      "verdict": "FAIL_GEOMETRY"
+    },
+    {
+      "id": "wide_clinic",
+      "sec": 29.0,
+      "role": "wide_single_line",
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-subtitle-final-frames\\wide_clinic_29.00s.png",
+      "frame_w": 1080,
+      "frame_h": 1920,
+      "text_extent_px": 883,
+      "left_margin_px": 0,
+      "right_margin_px": 197,
+      "verdict": "FAIL_GEOMETRY"
+    },
+    {
+      "id": "two_line_money",
+      "sec": 48.0,
+      "role": "two_line",
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-subtitle-final-frames\\two_line_money_48.00s.png",
+      "frame_w": 1080,
+      "frame_h": 1920,
+      "text_extent_px": 827,
+      "left_margin_px": 127,
+      "right_margin_px": 126,
+      "verdict": "PASS"
+    },
+    {
+      "id": "light_bg",
+      "sec": 12.0,
+      "role": "light_background",
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-subtitle-final-frames\\light_bg_12.00s.png",
+      "frame_w": 1080,
+      "frame_h": 1920,
+      "text_extent_px": 794,
+      "left_margin_px": 0,
+      "right_margin_px": 286,
+      "verdict": "FAIL_GEOMETRY"
+    },
+    {
+      "id": "busy_bg",
+      "sec": 35.0,
+      "role": "busy_background",
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-subtitle-final-frames\\busy_bg_35.00s.png",
+      "frame_w": 1080,
+      "frame_h": 1920,
+      "text_extent_px": 903,
+      "left_margin_px": 0,
+      "right_margin_px": 177,
+      "verdict": "FAIL_GEOMETRY"
+    },
+    {
+      "id": "dark_bg",
+      "sec": 65.0,
+      "role": "dark_background",
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-subtitle-final-frames\\dark_bg_65.00s.png",
+      "frame_w": 1080,
+      "frame_h": 1920,
+      "text_extent_px": 1004,
+      "left_margin_px": 0,
+      "right_margin_px": 76,
+      "verdict": "FAIL_GEOMETRY"
+    },
+    {
+      "id": "near_edge",
+      "sec": 29.0,
+      "role": "near_safe_area",
+      "image": "E:\\01_Work\\01_PersonalProjects\\011-video-editing-workflow\\validation\\n02-v6-subtitle-final-frames\\near_edge_29.00s.png",
+      "frame_w": 1080,
+      "frame_h": 1920,
+      "text_extent_px": 883,
+      "left_margin_px": 0,
+      "right_margin_px": 197,
+      "verdict": "FAIL_GEOMETRY"
+    }
+  ],
+  "SUBTITLE_GEOMETRY_QA": "FAIL",
+  "SUBTITLE_READABILITY_QA": "PASS",
+  "failed_geometry_ids": [
+    "short_single",
+    "wide_clinic",
+    "light_bg",
+    "busy_bg",
+    "dark_bg",
+    "near_edge"
+  ],
+  "visual_confirm_ids": [],
+  "SUBTITLE_FONT_WEIGHT": "CAPABILITY_GAP",
+  "SUBTITLE_RUNTIME_WEIGHT_CAPABILITY": "FAIL",
+  "font_requested": "Open Sans Bold",
+  "actual_final_applied_font": "unknown_inherited_v4_drt",
+  "actual_final_applied_weight": "unknown_regular_or_ui_default",
+  "precheck_note": "Layout preflight is PRECHECK_ONLY; not used as PASS authority.",
+  "SUBTITLE_QA": "FAIL"
+}

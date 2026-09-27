@@ -1,0 +1,142 @@
+{
+  "strategy": "section_static_envelope_v6",
+  "base_factor": 0.15,
+  "output_wav": "E:\\03_Media\\02_Video\\Davinci\\Astra\\2026-09-21\\N02\\video-workflow\\.qa\\audio\\music_glass_horizon_v6_envelope.wav",
+  "sections": [
+    {
+      "shot_id": "V1-00",
+      "start_sec": 0.0,
+      "duration_sec": 5.417,
+      "end_sec": 5.417,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-02",
+      "start_sec": 5.417,
+      "duration_sec": 4.708,
+      "end_sec": 10.125,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-03",
+      "start_sec": 10.125,
+      "duration_sec": 4.75,
+      "end_sec": 14.875,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-04",
+      "start_sec": 14.875,
+      "duration_sec": 3.917,
+      "end_sec": 18.792,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-05",
+      "start_sec": 18.792,
+      "duration_sec": 4.75,
+      "end_sec": 23.542,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-06",
+      "start_sec": 23.542,
+      "duration_sec": 5.209,
+      "end_sec": 28.751,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-08",
+      "start_sec": 28.751,
+      "duration_sec": 4.0,
+      "end_sec": 32.751000000000005,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-09",
+      "start_sec": 32.751000000000005,
+      "duration_sec": 3.833,
+      "end_sec": 36.584,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-10",
+      "start_sec": 36.584,
+      "duration_sec": 3.833,
+      "end_sec": 40.417,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-11",
+      "start_sec": 40.417,
+      "duration_sec": 2.375,
+      "end_sec": 42.792,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-13",
+      "start_sec": 42.792,
+      "duration_sec": 1.833,
+      "end_sec": 44.625,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-14",
+      "start_sec": 44.625,
+      "duration_sec": 4.084,
+      "end_sec": 48.709,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-16",
+      "start_sec": 48.709,
+      "duration_sec": 2.583,
+      "end_sec": 51.292,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-17",
+      "start_sec": 51.292,
+      "duration_sec": 3.708,
+      "end_sec": 55.0,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-18",
+      "start_sec": 55.0,
+      "duration_sec": 4.209,
+      "end_sec": 59.209,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-20",
+      "start_sec": 59.209,
+      "duration_sec": 4.75,
+      "end_sec": 63.959,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-21",
+      "start_sec": 63.959,
+      "duration_sec": 3.9589999999999996,
+      "end_sec": 67.918,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-23",
+      "start_sec": 67.918,
+      "duration_sec": 4.0,
+      "end_sec": 71.918,
+      "section_gain": 1.0
+    },
+    {
+      "shot_id": "V1-24",
+      "start_sec": 71.918,
+      "duration_sec": 3.958,
+      "end_sec": 75.876,
+      "section_gain": 1.0
+    }
+  ],
+  "voice_lufs": -27.7,
+  "music_source_lufs": -17.4
+}
