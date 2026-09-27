@@ -1,0 +1,17 @@
+schema_version: 1
+style_id: <style-id>
+
+# Logical Capability IDs only. criticality: REQUIRED | PREFERRED | OPTIONAL
+# Fallback entries MUST include: target, effect_preservation, degradation_level, style_impact, reason
+
+example_dimension:
+  example_decision:
+    preferred: [visual.motion.push_in]
+    fallback:
+      visual.motion.push_in:
+        - target: visual.reframe.static
+          effect_preservation: partial
+          degradation_level: medium
+          style_impact: describe perceptual change
+          reason: why fallback is allowed
+    criticality: PREFERRED
