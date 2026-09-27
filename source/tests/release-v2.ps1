@@ -51,6 +51,7 @@ Assert-True (Test-ProductInstallerInSync -SourceRoot $SourceRoot) 'V10 installer
 $inv = Get-ProductFileInventory
 Assert-True ($inv -contains 'video-workflow\tools\native-drt-subtitle-stroke-inject.py') 'V11 stroke inject in product'
 Assert-True (-not ($inv | Where-Object { $_ -match '__pycache__|\.pyc$' })) 'V12 no pycache in product'
+Assert-True (-not ($inv | Where-Object { $_ -match '(^|\\)video-workflow\\\.qa\\' })) 'V12b no video-workflow/.qa in product'
 
 # disposable git transaction (legacy smoke — full matrix in release-v2-transaction-fixtures.ps1)
 function Test-TxnRollback {

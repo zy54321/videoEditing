@@ -139,7 +139,8 @@ if ((Test-Path -LiteralPath $releaseDir) -or (Test-Path -LiteralPath $releaseZip
 
 New-Item -ItemType Directory -Path $releaseDir -Force | Out-Null
 $releasePayload = Join-Path $releaseDir 'payload'
-Copy-Item -LiteralPath $payloadRoot -Destination $releasePayload -Recurse -Force
+. (Join-Path $PSScriptRoot 'lib\ProductInventory.ps1')
+Copy-ProductPayloadTree -PayloadRoot $payloadRoot -DestinationRoot $releasePayload -Inventory $RequiredPayloadFiles
 Copy-Item -LiteralPath $installerBat -Destination (Join-Path $releaseDir 'init-video-workflow.bat') -Force
 Copy-Item -LiteralPath $installerPs1 -Destination (Join-Path $releaseDir 'init-video-workflow.ps1') -Force
 $genProduct = Join-Path $SourceRoot 'installer\product-files.generated.ps1'

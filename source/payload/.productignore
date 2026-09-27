@@ -3,3 +3,5 @@
 **/.DS_Store
 **/Thumbs.db
 .productignore
+# Local / runtime QA tree (regenerable; not product authority).
+video-workflow/.qa/**

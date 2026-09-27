@@ -18,9 +18,20 @@ function Get-ProductIgnorePatterns {
         $lines = Get-Content -LiteralPath $ignoreFile -Encoding UTF8 |
             ForEach-Object { $_.Trim() } |
             Where-Object { $_ -and -not $_.StartsWith('#') }
-        if ($lines) { $patterns = $lines }
+        if ($lines) { $patterns = $patterns + $lines }
     }
     return $patterns
+}
+
+function Convert-ProductIgnorePatternToRegex {
+    param([string]$Pattern)
+    $p = $Pattern.Trim().ToLowerInvariant()
+    if ($p.EndsWith('/**')) {
+        $prefix = $p.Substring(0, $p.Length - 3)
+        $esc = $prefix.Replace('.', '\.').Replace('**/', '(?:.*/)?').Replace('*', '[^/]*')
+        return '^' + $esc + '(?:/.*)?$'
+    }
+    return '^' + ($p.Replace('.', '\.').Replace('**/', '(?:.*/)?').Replace('*', '[^/]*')) + '$'
 }
 
 function Test-ProductIgnoreMatch {
@@ -31,10 +42,31 @@ function Test-ProductIgnoreMatch {
     foreach ($pat in $Patterns) {
         $p = $pat.Trim().ToLowerInvariant()
         if ($p -eq '**/__pycache__/**' -or $p -eq '**/*.pyc') { continue }
-        $rx = '^' + ($p.Replace('.', '\.').Replace('**/', '(?:.*/)?').Replace('*', '[^/]*')) + '$'
+        $rx = Convert-ProductIgnorePatternToRegex -Pattern $p
         if ($norm -match $rx) { return $true }
     }
     return $false
+}
+
+function Copy-ProductPayloadTree {
+    param(
+        [string]$PayloadRoot,
+        [string]$DestinationRoot,
+        [string[]]$Inventory
+    )
+    if (Test-Path -LiteralPath $DestinationRoot) {
+        Remove-Item -LiteralPath $DestinationRoot -Recurse -Force
+    }
+    New-Item -ItemType Directory -Path $DestinationRoot -Force | Out-Null
+    foreach ($rel in $Inventory) {
+        $src = Join-Path $PayloadRoot ($rel -replace '/', '\')
+        $dst = Join-Path $DestinationRoot ($rel -replace '/', '\')
+        $dstDir = Split-Path -Parent $dst
+        if (-not (Test-Path -LiteralPath $dstDir)) {
+            New-Item -ItemType Directory -Path $dstDir -Force | Out-Null
+        }
+        Copy-Item -LiteralPath $src -Destination $dst -Force
+    }
 }
 
 function Get-ProductFileInventory {

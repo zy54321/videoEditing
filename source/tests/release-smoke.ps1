@@ -14,6 +14,9 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+# Release smoke must not mutate the candidate via Python bytecode (see TEST-R23).
+$env:PYTHONDONTWRITEBYTECODE = '1'
+
 $Pass = 0
 $Fail = 0
 $TmpRoot = Join-Path $PSScriptRoot '.tmp-release'
@@ -250,6 +253,15 @@ Get-ChildItem -LiteralPath $ReleasePath -Recurse -File | ForEach-Object {
     if ($_.Name -match '(?i)^N02.+\.' ) { $r19 = $false }
 }
 Assert-True $r19 'TEST-R19 no N02 production asset leakage'
+
+$r23 = $true
+Get-ChildItem -LiteralPath $ReleasePath -Recurse -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+    if ($_.Name -eq '__pycache__') { $r23 = $false }
+}
+Get-ChildItem -LiteralPath $ReleasePath -Recurse -File -ErrorAction SilentlyContinue | ForEach-Object {
+    if ($_.Extension -eq '.pyc') { $r23 = $false }
+}
+Assert-True $r23 'TEST-R23 release candidate has no Python bytecode artifacts'
 
 $entryRule = Join-Path $ReleasePath 'payload\.cursor\rules\production-entry-intake.mdc'
 $entryContent = Get-Content -LiteralPath $entryRule -Raw -Encoding UTF8
