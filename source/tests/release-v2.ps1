@@ -31,18 +31,39 @@ Assert-True ($LASTEXITCODE -eq 0) 'V00 release-encoding-gate (PS 5.1 parse)'
 $cur = (Get-Content (Join-Path $SourceRoot 'VERSION') -Raw).Trim()
 try { Parse-SemVer $cur | Out-Null; Assert-True $true 'V01 VERSION parses' } catch { Assert-True $false 'V01 VERSION parses' }
 
-$c = Get-ReleaseVersionCandidates -ProjectRoot $ProjectRoot -CurrentVersion '0.1.2-dev'
-Assert-True ($c.Patch -eq '0.1.2') 'V02 dev formalize patch 0.1.2'
-Assert-True ((Compare-SemVer $c.Patch $c.LatestRelease) -gt 0) 'V03 patch > latest tag'
+# Case A: X.Y.Z-dev formalizes to X.Y.Z when tag vX.Y.Z absent and Z-line >= latest release
+$c = Get-ReleaseVersionCandidates -ProjectRoot $ProjectRoot -CurrentVersion '0.1.3-dev'
+Assert-True ($c.Patch -eq '0.1.3') 'V02 Case A: 0.1.3-dev formalizes to patch 0.1.3 (latest v0.1.2)'
+Assert-True ((Compare-SemVer $c.Patch $c.LatestRelease) -gt 0) 'V03 patch candidate > latest tag'
 
+# Non-dev current below latest: patch candidate = next after latest tag (not re-release)
 $c2 = Get-ReleaseVersionCandidates -ProjectRoot $ProjectRoot -CurrentVersion '0.1.1'
-Assert-True ($c2.Patch -eq '0.1.2') 'V04 patch bump from 0.1.1'
+Assert-True ($c2.Patch -eq '0.1.3') 'V04 patch bump from 0.1.1 when latest is v0.1.2'
 Assert-True ($c2.Minor -eq '0.2.0') 'V05 minor candidate'
 Assert-True ($c2.Major -eq '1.0.0') 'V06 major candidate'
 
 try { Assert-ReleaseVersionValid -ProjectRoot $ProjectRoot -Version 'not-a-version'; Assert-True $false 'V07 invalid semver rejected' } catch { Assert-True $true 'V07 invalid semver rejected' }
 
 try { Assert-ReleaseVersionValid -ProjectRoot $ProjectRoot -Version '0.1.1'; Assert-True $false 'V08 duplicate/low version rejected' } catch { Assert-True $true 'V08 duplicate/low version rejected' }
+
+# Case B: existing release tag is immutable (fail closed)
+try { Assert-ReleaseVersionValid -ProjectRoot $ProjectRoot -Version '0.1.2'; Assert-True $false 'V08b Case B: tag v0.1.2 blocks re-release 0.1.2' } catch { Assert-True $true 'V08b Case B: tag v0.1.2 blocks re-release 0.1.2' }
+
+# Case C: next dev line formalizes to its normalized version
+$c4 = Get-ReleaseVersionCandidates -ProjectRoot $ProjectRoot -CurrentVersion '0.1.4-dev'
+Assert-True ($c4.Patch -eq '0.1.4') 'V08c Case C: 0.1.4-dev formalizes to 0.1.4'
+
+# Case D: dev formalize must not skip to next patch line
+Assert-True ($c.Patch -ne '0.1.4') 'V08d Case D: 0.1.3-dev patch candidate is not 0.1.4'
+
+# Dev matching an existing tag cannot re-formalize same version (bump instead)
+$cStaleDev = Get-ReleaseVersionCandidates -ProjectRoot $ProjectRoot -CurrentVersion '0.1.2-dev'
+Assert-True ($cStaleDev.Patch -eq '0.1.3') 'V08e dev 0.1.2-dev does not re-release tagged 0.1.2'
+
+# Repo VERSION authority matches formalize semantics
+$cRepo = Get-ReleaseVersionCandidates -ProjectRoot $ProjectRoot -CurrentVersion $cur
+Assert-True ($cur -eq '0.1.3-dev') 'V08f repo VERSION is 0.1.3-dev'
+Assert-True ($cRepo.Patch -eq '0.1.3') 'V08g repo VERSION formalizes to 0.1.3 for release'
 
 # 9 product authority
 $sync = Sync-ProductInstallerInventory -SourceRoot $SourceRoot
