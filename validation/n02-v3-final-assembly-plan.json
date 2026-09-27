@@ -1,0 +1,536 @@
+{
+  "shots": [
+    {
+      "shot_id": "V1-00",
+      "beat_id": "B-00",
+      "source_asset": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+      "source_asset_name": "busy-vienna-street-with-tram-and-pedestrians [37618078].mp4",
+      "timeline_start_sec": 0.0,
+      "timeline_duration_sec": 5.417,
+      "source_range": {
+        "in_sec": 1.48,
+        "out_sec": 6.96
+      },
+      "timeline_item_id": "cad3221b-495f-4a37-82e6-d284fd01c3c4",
+      "item_index": 0,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 0,
+      "timeline_duration_frames": 130,
+      "timeline_end_frame": 130,
+      "source_in_frame": 37,
+      "source_out_frame": 174
+    },
+    {
+      "shot_id": "V1-02",
+      "beat_id": "B-02",
+      "source_asset": "bb019a05-0898-4e7e-9287-e3c61560a795",
+      "source_asset_name": "a-woman-shopping-in-a-supermarket-with-oranges [9474086].mp4",
+      "timeline_start_sec": 5.417,
+      "timeline_duration_sec": 4.708,
+      "source_range": {
+        "in_sec": 0.417,
+        "out_sec": 5.125
+      },
+      "timeline_item_id": "64ed52b5-42c6-45ec-9f6f-723f0c566117",
+      "item_index": 2,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 130,
+      "timeline_duration_frames": 112,
+      "timeline_end_frame": 242,
+      "source_in_frame": 10,
+      "source_out_frame": 128
+    },
+    {
+      "shot_id": "V1-03",
+      "beat_id": "B-03",
+      "source_asset": "b0cedc60-5c8a-4ad8-a57b-c695cadf7616",
+      "source_asset_name": "Couple of girls chatting in a coffee shop [couple-of-girls-chatting-in-a-coffee-shop-41862].mp4",
+      "timeline_start_sec": 10.125,
+      "timeline_duration_sec": 4.75,
+      "source_range": {
+        "in_sec": 0.5,
+        "out_sec": 5.25
+      },
+      "timeline_item_id": "3418747b-4242-4e74-8efa-90f76063862b",
+      "item_index": 3,
+      "alternate_source_assets": [
+        {
+          "source_asset": "b0cedc60-5c8a-4ad8-a57b-c695cadf7616",
+          "source_duration_sec": 10.96,
+          "source_range": {
+            "in_sec": 0.5,
+            "out_sec": 5.25
+          }
+        }
+      ],
+      "source_duration_sec": 10.96,
+      "upstream_swap": {
+        "from": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+        "to": "b0cedc60-5c8a-4ad8-a57b-c695cadf7616",
+        "semantic_reason": "break plaza return after market"
+      },
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 242,
+      "timeline_duration_frames": 114,
+      "timeline_end_frame": 356,
+      "source_in_frame": 12,
+      "source_out_frame": 131
+    },
+    {
+      "shot_id": "V1-04",
+      "beat_id": "B-04",
+      "source_asset": "f5820003-e145-4106-a49e-e8276a85e368",
+      "source_asset_name": "open-business-sign [6115073].mp4",
+      "timeline_start_sec": 14.875,
+      "timeline_duration_sec": 3.917,
+      "source_range": {
+        "in_sec": 2.0,
+        "out_sec": 6.0
+      },
+      "timeline_item_id": "5a95fea9-283d-4479-b1b1-5980eaeb1853",
+      "item_index": 4,
+      "alternate_source_assets": [
+        {
+          "source_asset": "f5820003-e145-4106-a49e-e8276a85e368",
+          "source_duration_sec": 22.08,
+          "source_range": {
+            "in_sec": 2.0,
+            "out_sec": 6.0
+          }
+        }
+      ],
+      "source_duration_sec": 22.08,
+      "upstream_swap": {
+        "from": "bb019a05-0898-4e7e-9287-e3c61560a795",
+        "to": "f5820003-e145-4106-a49e-e8276a85e368",
+        "semantic_reason": "alternate retail interior"
+      },
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 356,
+      "timeline_duration_frames": 94,
+      "timeline_end_frame": 450,
+      "source_in_frame": 50,
+      "source_out_frame": 150
+    },
+    {
+      "shot_id": "V1-05",
+      "beat_id": "B-05",
+      "source_asset": "3f196f0c-bf86-478b-b51e-c25ccb8dc419",
+      "source_asset_name": "a-person-entering-the-clinic [6998656].mp4",
+      "timeline_start_sec": 18.792,
+      "timeline_duration_sec": 4.75,
+      "source_range": {
+        "in_sec": 0.32,
+        "out_sec": 5.068
+      },
+      "timeline_item_id": "1d0cb2f6-73ec-4c29-80d3-06faca7c1503",
+      "item_index": 5,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 450,
+      "timeline_duration_frames": 114,
+      "timeline_end_frame": 564,
+      "source_in_frame": 8,
+      "source_out_frame": 126
+    },
+    {
+      "shot_id": "V1-06",
+      "beat_id": "B-06",
+      "source_asset": "9461ceda-bd3d-4e32-8690-093fb51f6073",
+      "source_asset_name": "customer-talking-to-receptionist [6763337].mp4",
+      "timeline_start_sec": 23.542,
+      "timeline_duration_sec": 5.209,
+      "source_range": {
+        "in_sec": 2.0,
+        "out_sec": 7.24
+      },
+      "timeline_item_id": "29672250-b84d-4a2d-9ebb-0bf02b87c442",
+      "item_index": 6,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 564,
+      "timeline_duration_frames": 125,
+      "timeline_end_frame": 689,
+      "source_in_frame": 50,
+      "source_out_frame": 181
+    },
+    {
+      "shot_id": "V1-08",
+      "beat_id": "B-08",
+      "source_asset": "78389944-6c96-4c0d-8cd1-0ed15cea4ccd",
+      "source_asset_name": "Open office space [open-office-space-914].mp4",
+      "timeline_start_sec": 28.751,
+      "timeline_duration_sec": 4.0,
+      "source_range": {
+        "in_sec": 2.002,
+        "out_sec": 6.002
+      },
+      "timeline_item_id": "a306a47f-8d4d-4f2f-a58b-2df3860789f9",
+      "item_index": 8,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 689,
+      "timeline_duration_frames": 96,
+      "timeline_end_frame": 785,
+      "source_in_frame": 50,
+      "source_out_frame": 150
+    },
+    {
+      "shot_id": "V1-09",
+      "beat_id": "B-09",
+      "source_asset": "78389944-6c96-4c0d-8cd1-0ed15cea4ccd",
+      "source_asset_name": "Open office space [open-office-space-914].mp4",
+      "timeline_start_sec": 32.751000000000005,
+      "timeline_duration_sec": 3.833,
+      "source_range": {
+        "in_sec": 6.215,
+        "out_sec": 10.048
+      },
+      "timeline_item_id": "a0e0530f-4a50-4adb-b1f1-08977a8a8e21",
+      "item_index": 9,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 785,
+      "timeline_duration_frames": 91,
+      "timeline_end_frame": 876,
+      "source_in_frame": 155,
+      "source_out_frame": 251
+    },
+    {
+      "shot_id": "V1-10",
+      "beat_id": "B-10",
+      "source_asset": "08ebb267-0648-43d5-bf0a-c91ec7e0326d",
+      "source_asset_name": "Two business people walk in an office hall [two-business-people-walk-in-an-office-hall-315].mp4",
+      "timeline_start_sec": 36.584,
+      "timeline_duration_sec": 3.833,
+      "source_range": {
+        "in_sec": 4.0,
+        "out_sec": 8.0
+      },
+      "timeline_item_id": "a0d12fed-e31b-449e-9490-da55cdb3d003",
+      "item_index": 10,
+      "alternate_source_assets": [
+        {
+          "source_asset": "08ebb267-0648-43d5-bf0a-c91ec7e0326d",
+          "source_duration_sec": 34.83,
+          "source_range": {
+            "in_sec": 4.0,
+            "out_sec": 8.0
+          }
+        }
+      ],
+      "source_duration_sec": 34.83,
+      "upstream_swap": {
+        "from": "78389944-6c96-4c0d-8cd1-0ed15cea4ccd",
+        "to": "08ebb267-0648-43d5-bf0a-c91ec7e0326d",
+        "semantic_reason": "office B-roll variant at span tail"
+      },
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 876,
+      "timeline_duration_frames": 91,
+      "timeline_end_frame": 967,
+      "source_in_frame": 100,
+      "source_out_frame": 200
+    },
+    {
+      "shot_id": "V1-11",
+      "beat_id": "B-11",
+      "source_asset": "2391060f-5f49-4809-b7ab-1b1a3adb7771",
+      "source_asset_name": "hands-hand-rich-green [3943965].mp4",
+      "timeline_start_sec": 40.417,
+      "timeline_duration_sec": 2.375,
+      "source_range": {
+        "in_sec": 1.0,
+        "out_sec": 3.4
+      },
+      "timeline_item_id": "e03f4e84-1fc8-442a-820d-471fe7aa9c20",
+      "item_index": 11,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 967,
+      "timeline_duration_frames": 57,
+      "timeline_end_frame": 1024,
+      "source_in_frame": 25,
+      "source_out_frame": 85
+    },
+    {
+      "shot_id": "V1-13",
+      "beat_id": "B-13",
+      "source_asset": "befbaa14-b1c8-4865-8848-bc3f6fb11c6f",
+      "source_asset_name": "person-paying-cashier-with-phone [6683945].mp4",
+      "timeline_start_sec": 42.792,
+      "timeline_duration_sec": 1.833,
+      "source_range": {
+        "in_sec": 2.0,
+        "out_sec": 3.832
+      },
+      "timeline_item_id": "3785fe5b-6787-4a25-b9a9-32d9d64c99f8",
+      "item_index": 13,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 1024,
+      "timeline_duration_frames": 43,
+      "timeline_end_frame": 1067,
+      "source_in_frame": 50,
+      "source_out_frame": 95
+    },
+    {
+      "shot_id": "V1-14",
+      "beat_id": "B-14",
+      "source_asset": "03725f91-aecd-4f98-9f43-eacb1e99f446",
+      "source_asset_name": "hands-exchanging-euro-banknote-on-red-background [30353173].mp4",
+      "timeline_start_sec": 44.625,
+      "timeline_duration_sec": 4.084,
+      "source_range": {
+        "in_sec": 0.801,
+        "out_sec": 4.905
+      },
+      "timeline_item_id": "9e5cd6f6-938c-4707-8c44-6224dbd0c50c",
+      "item_index": 14,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 1067,
+      "timeline_duration_frames": 98,
+      "timeline_end_frame": 1165,
+      "source_in_frame": 20,
+      "source_out_frame": 122
+    },
+    {
+      "shot_id": "V1-16",
+      "beat_id": "B-16",
+      "source_asset": "c82f314f-d489-436e-8ad6-7977e06b8c3a",
+      "source_asset_name": "Cup being filled with coffee in a coffee machine [cup-being-filled-with-coffee-in-a-coffee-machine-41865].mp4",
+      "timeline_start_sec": 48.709,
+      "timeline_duration_sec": 2.583,
+      "source_range": {
+        "in_sec": 1.0,
+        "out_sec": 5.0
+      },
+      "timeline_item_id": "20f12732-cc0a-4a0e-8eda-7c157bc55523",
+      "item_index": 16,
+      "alternate_source_assets": [
+        {
+          "source_asset": "c82f314f-d489-436e-8ad6-7977e06b8c3a",
+          "source_duration_sec": 13.17,
+          "source_range": {
+            "in_sec": 1.0,
+            "out_sec": 5.0
+          }
+        }
+      ],
+      "source_duration_sec": 13.17,
+      "upstream_swap": {
+        "from": "2391060f-5f49-4809-b7ab-1b1a3adb7771",
+        "to": "c82f314f-d489-436e-8ad6-7977e06b8c3a",
+        "semantic_reason": "money beat detail alternate"
+      },
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 1165,
+      "timeline_duration_frames": 61,
+      "timeline_end_frame": 1226,
+      "source_in_frame": 25,
+      "source_out_frame": 125
+    },
+    {
+      "shot_id": "V1-17",
+      "beat_id": "B-17",
+      "source_asset": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+      "source_asset_name": "busy-vienna-street-with-tram-and-pedestrians [37618078].mp4",
+      "timeline_start_sec": 51.292,
+      "timeline_duration_sec": 3.708,
+      "source_range": {
+        "in_sec": 12.8,
+        "out_sec": 16.507
+      },
+      "timeline_item_id": "c28468fe-acc1-4d51-846d-dd6bfc5c7e4d",
+      "item_index": 17,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 1226,
+      "timeline_duration_frames": 88,
+      "timeline_end_frame": 1314,
+      "source_in_frame": 320,
+      "source_out_frame": 412
+    },
+    {
+      "shot_id": "V1-18",
+      "beat_id": "B-18",
+      "source_asset": "d4db87c8-0129-4102-ae53-4cb0726bf2ea",
+      "source_asset_name": "charming-mountain-village-street-in-summer [37532285].mp4",
+      "timeline_start_sec": 55.0,
+      "timeline_duration_sec": 4.209,
+      "source_range": {
+        "in_sec": 0.4,
+        "out_sec": 4.633
+      },
+      "timeline_item_id": "500cbddd-7a4d-44b8-87c7-fe949f77af2f",
+      "item_index": 18,
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 1314,
+      "timeline_duration_frames": 101,
+      "timeline_end_frame": 1415,
+      "source_in_frame": 10,
+      "source_out_frame": 115
+    },
+    {
+      "shot_id": "V1-20",
+      "beat_id": "B-20",
+      "source_asset": "f5820003-e145-4106-a49e-e8276a85e368",
+      "source_asset_name": "open-business-sign [6115073].mp4",
+      "timeline_start_sec": 59.209,
+      "timeline_duration_sec": 4.75,
+      "source_range": {
+        "in_sec": 2.0,
+        "out_sec": 7.25
+      },
+      "timeline_item_id": "a657f19f-0c29-4ade-ba0d-979a0a3b23b3",
+      "item_index": 20,
+      "alternate_source_assets": [
+        {
+          "source_asset": "f5820003-e145-4106-a49e-e8276a85e368",
+          "source_duration_sec": 22.08,
+          "source_range": {
+            "in_sec": 2.0,
+            "out_sec": 7.25
+          }
+        }
+      ],
+      "source_duration_sec": 22.08,
+      "upstream_swap": {
+        "from": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+        "to": "f5820003-e145-4106-a49e-e8276a85e368",
+        "semantic_reason": "retail sign instead of plaza return"
+      },
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 1415,
+      "timeline_duration_frames": 114,
+      "timeline_end_frame": 1529,
+      "source_in_frame": 50,
+      "source_out_frame": 181
+    },
+    {
+      "shot_id": "V1-21",
+      "beat_id": "B-21",
+      "source_asset": "c82f314f-d489-436e-8ad6-7977e06b8c3a",
+      "source_asset_name": "Cup being filled with coffee in a coffee machine [cup-being-filled-with-coffee-in-a-coffee-machine-41865].mp4",
+      "timeline_start_sec": 63.959,
+      "timeline_duration_sec": 3.9589999999999996,
+      "source_range": {
+        "in_sec": 1.0,
+        "out_sec": 5.0
+      },
+      "timeline_item_id": "daeae81e-695f-4e27-8b28-407073c8a1ed",
+      "item_index": 21,
+      "alternate_source_assets": [
+        {
+          "source_asset": "c82f314f-d489-436e-8ad6-7977e06b8c3a",
+          "source_duration_sec": 13.17,
+          "source_range": {
+            "in_sec": 1.0,
+            "out_sec": 5.0
+          }
+        }
+      ],
+      "source_duration_sec": 13.17,
+      "upstream_swap": {
+        "from": "d4db87c8-0129-4102-ae53-4cb0726bf2ea",
+        "to": "c82f314f-d489-436e-8ad6-7977e06b8c3a",
+        "semantic_reason": "coffee detail instead of mountain return"
+      },
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 1529,
+      "timeline_duration_frames": 95,
+      "timeline_end_frame": 1624,
+      "source_in_frame": 25,
+      "source_out_frame": 125
+    },
+    {
+      "shot_id": "V1-23",
+      "beat_id": "B-23",
+      "source_asset": "3f196f0c-bf86-478b-b51e-c25ccb8dc419",
+      "source_asset_name": "a-person-entering-the-clinic [6998656].mp4",
+      "timeline_start_sec": 67.918,
+      "timeline_duration_sec": 4.0,
+      "source_range": {
+        "in_sec": 8.0,
+        "out_sec": 12.0
+      },
+      "timeline_item_id": "7b652e02-a702-4082-93dd-d8f4683f889e",
+      "item_index": 23,
+      "alternate_source_assets": [
+        {
+          "source_asset": "3f196f0c-bf86-478b-b51e-c25ccb8dc419",
+          "source_duration_sec": 33.2,
+          "source_range": {
+            "in_sec": 8.0,
+            "out_sec": 12.0
+          }
+        }
+      ],
+      "source_duration_sec": 33.2,
+      "upstream_swap": {
+        "from": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+        "to": "3f196f0c-bf86-478b-b51e-c25ccb8dc419",
+        "semantic_reason": "clinic beat alternate vs open sign cooldown"
+      },
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 1624,
+      "timeline_duration_frames": 96,
+      "timeline_end_frame": 1720,
+      "source_in_frame": 200,
+      "source_out_frame": 300
+    },
+    {
+      "shot_id": "V1-24",
+      "beat_id": "B-24",
+      "source_asset": "b0cedc60-5c8a-4ad8-a57b-c695cadf7616",
+      "source_asset_name": "Couple of girls chatting in a coffee shop [couple-of-girls-chatting-in-a-coffee-shop-41862].mp4",
+      "timeline_start_sec": 71.918,
+      "timeline_duration_sec": 3.958,
+      "source_range": {
+        "in_sec": 0.5,
+        "out_sec": 5.25
+      },
+      "timeline_item_id": "38372086-b40c-4c62-ac5b-a0ef7e62b272",
+      "item_index": 24,
+      "alternate_source_assets": [
+        {
+          "source_asset": "b0cedc60-5c8a-4ad8-a57b-c695cadf7616",
+          "source_duration_sec": 10.96,
+          "source_range": {
+            "in_sec": 0.5,
+            "out_sec": 5.25
+          }
+        }
+      ],
+      "source_duration_sec": 10.96,
+      "upstream_swap": {
+        "from": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+        "to": "b0cedc60-5c8a-4ad8-a57b-c695cadf7616",
+        "semantic_reason": "closing street beat alternate"
+      },
+      "timeline_fps": 24.0,
+      "source_fps": 25.0,
+      "timeline_start_frame": 1720,
+      "timeline_duration_frames": 94,
+      "timeline_end_frame": 1814,
+      "source_in_frame": 12,
+      "source_out_frame": 131
+    }
+  ],
+  "timeline": "N02-V1-Captioned-wrap2",
+  "fps": 24.0,
+  "timeline_duration_frames": 1814,
+  "assembly_plan_verdict": "PASS",
+  "ASSEMBLY_PLAN_CONVERGED": "YES"
+}

@@ -1,0 +1,207 @@
+{
+  "RESOLVE_MATERIALIZATION": "PASS",
+  "strategy": "create_timeline_from_clips + V2 duplicate audio/subtitle + delete V1 + append_to_timeline clip_infos",
+  "delivery_timeline": "N02-V3-Captioned-Final",
+  "summary": {
+    "timeline": "N02-V3-Captioned-Final",
+    "assembly_timeline": "N02-V3-Assembly-Repaired",
+    "planned_shots": 19,
+    "materialized_shots": 19,
+    "planned_timeline_duration_frames": 1814,
+    "materialized_timeline_duration_frames": 1839,
+    "frame_rounding": "floor(sec*fps) per assembly_plan_frames.py",
+    "tolerance_note": "Resolve may extend tail vs plan by <=25 frames due to source fps conversion",
+    "mismatches": [
+      {
+        "index": 0,
+        "shot_id": "V1-00",
+        "planned_media_pool_item_id": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+        "planned_source_in_frame": 37,
+        "planned_source_out_frame": 174,
+        "planned_record_frame": 0,
+        "planned_duration_frames": 130,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 1,
+        "shot_id": "V1-02",
+        "planned_media_pool_item_id": "bb019a05-0898-4e7e-9287-e3c61560a795",
+        "planned_source_in_frame": 10,
+        "planned_source_out_frame": 128,
+        "planned_record_frame": 130,
+        "planned_duration_frames": 112,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 2,
+        "shot_id": "V1-03",
+        "planned_media_pool_item_id": "b0cedc60-5c8a-4ad8-a57b-c695cadf7616",
+        "planned_source_in_frame": 12,
+        "planned_source_out_frame": 131,
+        "planned_record_frame": 242,
+        "planned_duration_frames": 114,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 3,
+        "shot_id": "V1-04",
+        "planned_media_pool_item_id": "f5820003-e145-4106-a49e-e8276a85e368",
+        "planned_source_in_frame": 50,
+        "planned_source_out_frame": 150,
+        "planned_record_frame": 356,
+        "planned_duration_frames": 94,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 4,
+        "shot_id": "V1-05",
+        "planned_media_pool_item_id": "3f196f0c-bf86-478b-b51e-c25ccb8dc419",
+        "planned_source_in_frame": 8,
+        "planned_source_out_frame": 126,
+        "planned_record_frame": 450,
+        "planned_duration_frames": 114,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 5,
+        "shot_id": "V1-06",
+        "planned_media_pool_item_id": "9461ceda-bd3d-4e32-8690-093fb51f6073",
+        "planned_source_in_frame": 50,
+        "planned_source_out_frame": 181,
+        "planned_record_frame": 564,
+        "planned_duration_frames": 125,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 6,
+        "shot_id": "V1-08",
+        "planned_media_pool_item_id": "78389944-6c96-4c0d-8cd1-0ed15cea4ccd",
+        "planned_source_in_frame": 50,
+        "planned_source_out_frame": 150,
+        "planned_record_frame": 689,
+        "planned_duration_frames": 96,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 7,
+        "shot_id": "V1-09",
+        "planned_media_pool_item_id": "78389944-6c96-4c0d-8cd1-0ed15cea4ccd",
+        "planned_source_in_frame": 155,
+        "planned_source_out_frame": 251,
+        "planned_record_frame": 785,
+        "planned_duration_frames": 91,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 8,
+        "shot_id": "V1-10",
+        "planned_media_pool_item_id": "08ebb267-0648-43d5-bf0a-c91ec7e0326d",
+        "planned_source_in_frame": 100,
+        "planned_source_out_frame": 200,
+        "planned_record_frame": 876,
+        "planned_duration_frames": 91,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 9,
+        "shot_id": "V1-11",
+        "planned_media_pool_item_id": "2391060f-5f49-4809-b7ab-1b1a3adb7771",
+        "planned_source_in_frame": 25,
+        "planned_source_out_frame": 85,
+        "planned_record_frame": 967,
+        "planned_duration_frames": 57,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 10,
+        "shot_id": "V1-13",
+        "planned_media_pool_item_id": "befbaa14-b1c8-4865-8848-bc3f6fb11c6f",
+        "planned_source_in_frame": 50,
+        "planned_source_out_frame": 95,
+        "planned_record_frame": 1024,
+        "planned_duration_frames": 43,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 11,
+        "shot_id": "V1-14",
+        "planned_media_pool_item_id": "03725f91-aecd-4f98-9f43-eacb1e99f446",
+        "planned_source_in_frame": 20,
+        "planned_source_out_frame": 122,
+        "planned_record_frame": 1067,
+        "planned_duration_frames": 98,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 12,
+        "shot_id": "V1-16",
+        "planned_media_pool_item_id": "c82f314f-d489-436e-8ad6-7977e06b8c3a",
+        "planned_source_in_frame": 25,
+        "planned_source_out_frame": 125,
+        "planned_record_frame": 1165,
+        "planned_duration_frames": 61,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 13,
+        "shot_id": "V1-17",
+        "planned_media_pool_item_id": "8caf2f07-e499-4c82-a3c6-3744ac64b37c",
+        "planned_source_in_frame": 320,
+        "planned_source_out_frame": 412,
+        "planned_record_frame": 1226,
+        "planned_duration_frames": 88,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 14,
+        "shot_id": "V1-18",
+        "planned_media_pool_item_id": "d4db87c8-0129-4102-ae53-4cb0726bf2ea",
+        "planned_source_in_frame": 10,
+        "planned_source_out_frame": 115,
+        "planned_record_frame": 1314,
+        "planned_duration_frames": 101,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 15,
+        "shot_id": "V1-20",
+        "planned_media_pool_item_id": "f5820003-e145-4106-a49e-e8276a85e368",
+        "planned_source_in_frame": 50,
+        "planned_source_out_frame": 181,
+        "planned_record_frame": 1415,
+        "planned_duration_frames": 114,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 16,
+        "shot_id": "V1-21",
+        "planned_media_pool_item_id": "c82f314f-d489-436e-8ad6-7977e06b8c3a",
+        "planned_source_in_frame": 25,
+        "planned_source_out_frame": 125,
+        "planned_record_frame": 1529,
+        "planned_duration_frames": 95,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 17,
+        "shot_id": "V1-23",
+        "planned_media_pool_item_id": "3f196f0c-bf86-478b-b51e-c25ccb8dc419",
+        "planned_source_in_frame": 200,
+        "planned_source_out_frame": 300,
+        "planned_record_frame": 1624,
+        "planned_duration_frames": 96,
+        "runtime_status": "materialized_batch_verified"
+      },
+      {
+        "index": 18,
+        "shot_id": "V1-24",
+        "planned_media_pool_item_id": "b0cedc60-5c8a-4ad8-a57b-c695cadf7616",
+        "planned_source_in_frame": 12,
+        "planned_source_out_frame": 131,
+        "planned_record_frame": 1720,
+        "planned_duration_frames": 94,
+        "runtime_status": "materialized_batch_verified"
+      }
+    ]
+  }
+}
