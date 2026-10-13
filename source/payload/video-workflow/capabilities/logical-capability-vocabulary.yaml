@@ -91,6 +91,21 @@ vocabulary:
     l1_aliases: [subtitle.safe_text_width, subtitle.line_break_control]
     notes: Deterministic preflight foundation exists (subtitle-layout-preflight.ps1); Resolve renderer parity not Runtime-validated (08E-A)
 
+  subtitle.authority.frozen_script:
+    status: VERIFIED
+    l1_aliases: [content.authority]
+    notes: "R1 — frozen_script_authority.py + Brief content.authority / assets.script.frozen; layout newlines are not timing boundaries"
+
+  subtitle.align.monotonic:
+    status: VERIFIED
+    l1_aliases: [subtitle.timing]
+    notes: "R1 — script_audio_monotonic_align.py (Needleman–Wunsch global monotonic); ASR text is alignment evidence only; fail-closed on large unaligned runs"
+
+  subtitle.cue.canonical:
+    status: VERIFIED
+    l1_aliases: [subtitle.segment.semantic]
+    notes: "R1 — build-canonical-subtitle-cues.py; Frozen Script + ASR timing → CanonicalSubtitleCue[] via subtitle-layout-engine; renderer-neutral contract (DRT + ASS adapters)"
+
   subtitle.render.basic:
     status: VERIFIED
     l1_aliases: [subtitle.create]

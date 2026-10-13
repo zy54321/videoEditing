@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "cues": [
+    {
+      "cue_id": "asr_1",
+      "start": 0.0,
+      "end": 1.6,
+      "recognized_text": "前面实践"
+    },
+    {
+      "cue_id": "asr_2",
+      "start": 1.6,
+      "end": 3.0,
+      "recognized_text": "全部"
+    }
+  ]
+}

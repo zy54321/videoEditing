@@ -696,8 +696,9 @@ Production Brief features
 
 #### Subtitle Pass
 
-- transcript / script alignment
-- subtitle segmentation (`subtitle.segment.semantic`)
+- **R1 authority chain (renderer-neutral):** Frozen Script = text authority; ASR = timing + alignment evidence only — `video-workflow/tools/build-canonical-subtitle-cues.py` → **Canonical Subtitle Cue list** (`canonical-subtitle-cue-list.schema.json`). Renderers (Native DRT / external ASS) **must consume** this list; they do not own subtitle text.
+- transcript / script alignment (monotonic global align — not line-count or whole-video proportional timing)
+- subtitle segmentation (`subtitle.segment.semantic`) via existing `subtitle-layout-engine.ps1` / `subtitle-layout-preflight.ps1`
 - Blueprint `subtitle_typography_intent` → styled runs (semantic emphasis targets only)
 - L1 **subtitle layout preflight** (`video-workflow/tools/subtitle-layout-preflight.ps1`) when pixel-width discipline applies
 - keyword emphasis (logical `subtitle.style.keyword_emphasis` **AVAILABLE_UNVERIFIED** for production): isolated StyledTextCLS SIZE route verified; production overlay not final — **first Production degradation** = native DRT subtitles + semantic segmentation (no keyword emphasis, no pixel-width parity guarantee)

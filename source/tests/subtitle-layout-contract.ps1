@@ -229,10 +229,10 @@ $leak = $false
 foreach ($f in $forbidden) { if ($typoSection -match $f) { $leak = $true } }
 Assert-True (-not $leak) 'T18 blueprint typography intent no runtime terms'
 
-# T19 installer includes new artifacts
-$installer = Get-Content (Join-Path $Root 'installer\init-video-workflow.ps1') -Raw -Encoding UTF8
-Assert-True ($installer -match 'subtitle-layout-preflight.ps1') 'T19 installer includes preflight tool'
-Assert-True ($installer -match 'subtitle-layout-reference.md') 'T19 installer includes layout reference'
+# T19 product inventory includes layout artifacts (installer copies ProductFiles)
+$productGen = Get-Content (Join-Path $Root 'installer\product-files.generated.ps1') -Raw -Encoding UTF8
+Assert-True ($productGen -match 'subtitle-layout-preflight\.ps1') 'T19 installer includes preflight tool'
+Assert-True ($productGen -match 'subtitle-layout-reference\.md') 'T19 installer includes layout reference'
 Assert-True (Test-Path $preflightPath) 'T19 preflight script exists'
 
 # T20 preflight CLI round-trip

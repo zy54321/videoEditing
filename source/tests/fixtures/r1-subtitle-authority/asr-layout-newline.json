@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "cues": [
+    { "cue_id": "a1", "start": 0.0, "end": 1.2, "recognized_text": "愚昧加上" },
+    { "cue_id": "a2", "start": 1.2, "end": 2.4, "recognized_text": "权力才可怕" }
+  ]
+}

@@ -53,6 +53,7 @@
     "tools": [
       "final-artifact-qa",
       "subtitle-layout-preflight",
+      "build-canonical-subtitle-cues",
       "textplus-layout-materializer",
       "generate-textplus-cls-setting"
     ],

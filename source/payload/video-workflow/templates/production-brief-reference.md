@@ -185,6 +185,8 @@ Frozen script source (markdown, txt, srt source, etc.).
 
 When `frozen: true`: subtitle / transcription alignment uses Frozen Script as semantic authority.
 
+**R1 runtime:** `content.authority.type = script` with `content.authority.path`, or `assets.script.frozen: true` with `assets.script.path`, feeds `build-canonical-subtitle-cues.py`. ASR JSON supplies timing evidence only; final cue text comes from Frozen Script, not ASR recognized text.
+
 ### `assets.music`
 
 Optional music source. Two resolution modes (prefer library id for reusable tracks):

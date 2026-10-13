@@ -42,6 +42,7 @@ function Run-PreBuild {
     Invoke-TestScript (Join-Path $Tests 'production-audio-loudness-repair.ps1') 'production-audio-loudness-repair'
     Invoke-TestScript (Join-Path $Tests 'production-pacing-reframe-qa.ps1') 'production-pacing-reframe-qa'
     Invoke-TestScript (Join-Path $Tests 'production-subtitle-readability.ps1') 'production-subtitle-readability'
+    Invoke-TestScript (Join-Path $Tests 'production-subtitle-authority-alignment.ps1') 'production-subtitle-authority-alignment'
     Invoke-TestScript (Join-Path $Tests 'production-subtitle-stroke-unblock.ps1') 'production-subtitle-stroke-unblock'
     Invoke-TestScript (Join-Path $Tests 'production-continuous-execution.ps1') 'production-continuous-execution'
 }
