@@ -189,6 +189,8 @@ When `frozen: true`: subtitle / transcription alignment uses Frozen Script as se
 
 **R1 Closeout (mandatory L3):** use `invoke-frozen-script-subtitle-route.ps1` → `canonical-subtitle-cues.json` + `SUBTITLE_CANONICAL_AUTHORITY_GATE`; renderers require `assert-subtitle-renderer-canonical-input.ps1` PASS first. See `subtitle-canonical-authority-gate-reference.md`.
 
+**R2 (final deliver):** write `final-render-contract.json`; after render run `run-final-artifact-gate.ps1` → `FINAL_ARTIFACT_GATE` / `FINAL_RENDER_SUBTITLE_BURNIN` on the **burned MP4** only. Closeout requires `assert-production-final-deliver.ps1`. See `final-render-contract-reference.md`.
+
 ### `assets.music`
 
 Optional music source. Two resolution modes (prefer library id for reusable tracks):

@@ -84,6 +84,7 @@ def measure_subtitle_extent(
         return {
             "verdict": "VISUAL_CONFIRM_REQUIRED",
             "reason": "insufficient_bright_pixels_in_subtitle_band",
+            "bright_pixel_hits": hits,
             "frame_w": w,
             "frame_h": h,
         }
@@ -97,8 +98,19 @@ def measure_subtitle_extent(
         "text_extent_px": extent_w,
         "left_margin_px": left_margin,
         "right_margin_px": right_margin,
+        "bright_pixel_hits": hits,
         "verdict": "FAIL_GEOMETRY" if geom_fail else "PASS",
     }
+
+
+def subtitle_pixels_present(measure: Dict[str, Any], min_hits: int = 50) -> bool:
+    """True when burned-in subtitle-like pixels exist (not OCR / stream metadata)."""
+    hits = int(measure.get("bright_pixel_hits") or 0)
+    if hits >= min_hits:
+        return True
+    if measure.get("verdict") in ("PASS", "FAIL_GEOMETRY"):
+        return True
+    return False
 
 
 def analyze_samples(video: Path, samples: List[Dict[str, Any]], work_dir: Path) -> Dict[str, Any]:
@@ -120,12 +132,16 @@ def analyze_samples(video: Path, samples: List[Dict[str, Any]], work_dir: Path) 
     readability = "PASS" if not visual else "VISUAL_CONFIRM_REQUIRED"
     if visual and fails:
         readability = "FAIL_READABILITY"
+    present = sum(1 for r in rows if subtitle_pixels_present(r))
+    burnin = "PASS" if present >= max(1, len(rows) // 2) else "FAIL"
     return {
         "authority": "FINAL_ARTIFACT",
         "artifact": str(video),
         "samples": rows,
         "SUBTITLE_GEOMETRY_QA": geometry,
         "SUBTITLE_READABILITY_QA": readability,
+        "SUBTITLE_BURNIN_SAMPLE_PASS_COUNT": present,
+        "FINAL_RENDER_SUBTITLE_BURNIN": burnin,
         "failed_geometry_ids": fails,
         "visual_confirm_ids": visual,
     }

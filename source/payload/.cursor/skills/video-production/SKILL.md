@@ -951,8 +951,46 @@ If render output is invalid: enter Repair.
 **Order (mandatory):**
 
 ```
-Pre-Render QA → Render → Post-Render Final Artifact QA → Repair (if needed) → Re-render → Post-Render QA
+Pre-Render QA → Final Render (burn-in deliver) → Post-Render Final Artifact QA → FINAL_ARTIFACT_GATE → Repair (if needed) → Re-render → Re-QA
 ```
+
+**Deliver authority (R2):** only the **burned final MP4** (`final-render-contract.json` → `final_artifact_path`) may pass Production. The following **do not** prove Production PASS alone:
+
+- Resolve timeline subtitle track populated
+- Native DRT / ASS source files
+- TTML / SRT sidecar files
+- Render job success without pixel verification
+- `render.verify_output` stream probe only
+
+### Final Render Contract (MUST before gate)
+
+Write `video-workflow/production/final-render-contract.json` per `final-render-contract-reference.md`:
+
+| Route | `subtitle_materialization` | Final deliverable |
+|-------|---------------------------|-------------------|
+| Native DRT | `native_drt_burnin` | MP4 with Resolve **Burn Into Video** (`resolve_subtitle_export_mode` = `burn_into_video`) |
+| external ASS | `external_ass_burnin` | MP4 after **ffmpeg libass** burn-in; `clean_master_path` is **not** the deliverable |
+
+Must reference R1 `canonical-subtitle-cues.json` when subtitles enabled.
+
+**Forbidden PASS:** `resolve_subtitle_export_mode` = `separate_subtitle_file` with sidecar TTML/SRT while final MP4 lacks burned pixels (N03 regression).
+
+### Unified gate orchestration
+
+```powershell
+video-workflow/tools/run-final-artifact-gate.ps1 -WorkspaceRoot <workspace>
+```
+
+Runs `final-artifact-qa.ps1` (ffprobe, frames, black-bar, audio loudness) then `run-final-artifact-gate.py` → `video-workflow/production/final-artifact-gate-result.json`.
+
+**`FINAL_ARTIFACT_GATE`** combines (each `PASS` or explicit `N/A` in contract):
+
+- `VIDEO_STREAM_PASS` / `AUDIO_STREAM_PASS` / `FORMAT_PASS`
+- `BLACK_BAR_QA` (from QA report when present)
+- `AUDIO_LOUDNESS_QA` (when not skipped)
+- **`FINAL_RENDER_SUBTITLE_BURNIN`** — pixel evidence via `subtitle_final_artifact_qa.py` at canonical cue sample times; **not** subtitle stream metadata
+
+Only when `FINAL_ARTIFACT_GATE = PASS` may Closeout claim **`PRODUCTION_FINAL_RENDER_PASS`**. Use `assert-production-final-deliver.ps1` before Stage 10 Complete.
 
 After a valid render file exists, verify the **actual MP4** — not timeline-only state.
 
@@ -960,7 +998,7 @@ Use `video-workflow/tools/final-artifact-qa.ps1` when FFmpeg/ffprobe available. 
 
 **Technical:** exists, duration, width/height, fps, codec, audio stream.
 
-**Visual:** black bars (`black-bar-qa.py` / `qa.visual.black_bar_detect` — verdicts `PASS` | `REPAIR_REQUIRED` | `REFRAME_OWNER_REVIEW_REQUIRED`), framing, subtitle visibility/overflow (`final_render.subtitle_visual_qa`), gross crop, unintended blank frames. Findings must cite `beat_id` / `shot_id` / `source_asset`.
+**Visual:** black bars (`black-bar-qa.py` / `qa.visual.black_bar_detect` — verdicts `PASS` | `REPAIR_REQUIRED` | `REFRAME_OWNER_REVIEW_REQUIRED`), framing, subtitle burn-in (`FINAL_RENDER_SUBTITLE_BURNIN`), gross crop, unintended blank frames. Findings must cite `beat_id` / `shot_id` / `source_asset`.
 
 **Motion:** abnormal slow motion, judder — `MOTION_VISUAL_REVIEW_REQUIRED` when needed.
 
@@ -974,13 +1012,15 @@ Target: **-16 LUFS** (±1 LU), true peak **≤ -1 dBTP**. N02 V4 reference ≈ -
 
 `render.verify_output` PASS alone **does not** equal Production PASS.
 
-If Agent cannot perform visual review: `FINAL_VISUAL_QA_REQUIRES_OWNER_REVIEW` — **no fake PASS**.
+If Agent cannot perform visual review: `FINAL_VISUAL_QA_REQUIRES_OWNER_REVIEW` — **no fake PASS** (subtitle burn-in pixel gate still required when subtitles enabled).
 
 ---
 
 ## Stage 10 — Closeout
 
 Closeout is more than "video generated successfully."
+
+**R2 prerequisite:** `assert-production-final-deliver.ps1` exit `0` (`FINAL_ARTIFACT_GATE` PASS on `final-render-contract.json` deliverable). Do not mark Production Complete on timeline-only or sidecar-only subtitle evidence.
 
 ### Required Structured Output
 

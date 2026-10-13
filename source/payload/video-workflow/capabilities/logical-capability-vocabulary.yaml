@@ -111,6 +111,11 @@ vocabulary:
     l1_aliases: [subtitle.create]
     notes: "R1 Closeout — validate-canonical-subtitle-authority-gate.py + invoke-frozen-script-subtitle-route.ps1 + assert-subtitle-renderer-canonical-input.ps1; SUBTITLE_CANONICAL_AUTHORITY_GATE must PASS before DRT/ASS"
 
+  final_render.artifact_gate:
+    status: VERIFIED
+    l1_aliases: [final_render.subtitle_visual_qa, render.verify_output]
+    notes: "R2 — run-final-artifact-gate.ps1 + final-render-contract.json; FINAL_ARTIFACT_GATE / FINAL_RENDER_SUBTITLE_BURNIN on final MP4 pixels; blocks N03 separate-TTML-only deliver"
+
   subtitle.render.basic:
     status: VERIFIED
     l1_aliases: [subtitle.create]

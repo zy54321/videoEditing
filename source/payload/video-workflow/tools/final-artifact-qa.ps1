@@ -22,6 +22,7 @@ param(
     [string[]]$Timestamps = @(),
     [string]$RunId = '',
     [string]$AudioProfilePath = '',
+    [string]$CanonicalCuesPath = '',
     [switch]$SkipAudioLoudness
 )
 
@@ -204,7 +205,7 @@ $report = [ordered]@{
         detail = $blackBarDetail
     }
     subtitle_visual_qa = @{
-        note = 'Extract frames at subtitle cue midpoints; Agent vision or Owner review required for text visibility.'
+        note = 'R2: use run-final-artifact-gate.ps1 for FINAL_RENDER_SUBTITLE_BURNIN when canonical cues + contract exist.'
         pipeline = 'VERIFIED_EXECUTABLE'
     }
     audio_loudness_qa = if ($audioLoudness) {
