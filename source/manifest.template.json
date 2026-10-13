@@ -54,6 +54,9 @@
       "final-artifact-qa",
       "subtitle-layout-preflight",
       "build-canonical-subtitle-cues",
+      "validate-canonical-subtitle-authority-gate",
+      "invoke-frozen-script-subtitle-route",
+      "assert-subtitle-renderer-canonical-input",
       "textplus-layout-materializer",
       "generate-textplus-cls-setting"
     ],

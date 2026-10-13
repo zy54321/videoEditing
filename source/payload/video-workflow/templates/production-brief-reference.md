@@ -187,6 +187,8 @@ When `frozen: true`: subtitle / transcription alignment uses Frozen Script as se
 
 **R1 runtime:** `content.authority.type = script` with `content.authority.path`, or `assets.script.frozen: true` with `assets.script.path`, feeds `build-canonical-subtitle-cues.py`. ASR JSON supplies timing evidence only; final cue text comes from Frozen Script, not ASR recognized text.
 
+**R1 Closeout (mandatory L3):** use `invoke-frozen-script-subtitle-route.ps1` → `canonical-subtitle-cues.json` + `SUBTITLE_CANONICAL_AUTHORITY_GATE`; renderers require `assert-subtitle-renderer-canonical-input.ps1` PASS first. See `subtitle-canonical-authority-gate-reference.md`.
+
 ### `assets.music`
 
 Optional music source. Two resolution modes (prefer library id for reusable tracks):

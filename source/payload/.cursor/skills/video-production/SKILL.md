@@ -697,6 +697,7 @@ Production Brief features
 #### Subtitle Pass
 
 - **R1 authority chain (renderer-neutral):** Frozen Script = text authority; ASR = timing + alignment evidence only — `video-workflow/tools/build-canonical-subtitle-cues.py` → **Canonical Subtitle Cue list** (`canonical-subtitle-cue-list.schema.json`). Renderers (Native DRT / external ASS) **must consume** this list; they do not own subtitle text.
+- **Mandatory gate (Frozen Script Production):** When `content.authority.type = script` **or** `assets.script.frozen = true` (and `features.subtitles` is enabled), subtitle production **MUST NOT** bypass Canonical Subtitle Cue. See **Frozen Script Subtitle Authority Gate** below.
 - transcript / script alignment (monotonic global align — not line-count or whole-video proportional timing)
 - subtitle segmentation (`subtitle.segment.semantic`) via existing `subtitle-layout-engine.ps1` / `subtitle-layout-preflight.ps1`
 - Blueprint `subtitle_typography_intent` → styled runs (semantic emphasis targets only)
@@ -706,6 +707,32 @@ Production Brief features
 - do **not** use `fusion_comp.set_input(CharacterLevelStyling)` — **KNOWN_NON_WORKING_ROUTE**
 
 **Layer split:** L2 / Blueprint decide *which words* deserve emphasis. L1 resolves font metrics, size multipliers, and layout. Runtime backend serializes materialized runs — not L2 Style details. Preflight PASS ≠ pixel-width renderer parity (`subtitle.layout.pixel_width` still AVAILABLE_UNVERIFIED).
+
+##### Frozen Script Subtitle Authority Gate (R1 — MUST)
+
+**Applies when:** `features.subtitles` is enabled **and** (`content.authority.type = script` **or** `assets.script.frozen = true`).
+
+**Canonical Subtitle Cue is the only legal renderer input.** Fail closed — no fallback to ASR transcript text, Agent-generated subtitle copy, Frozen TXT line-number timing, or renderer-side re-segmentation of authority text.
+
+**Ordered production route (MUST):**
+
+1. Obtain ASR **timing evidence** (Resolve transcription route, MCP, or other authorized capture) and write `video-workflow/production/asr-timing-evidence.json` (ASR timing evidence contract).
+2. Run `video-workflow/tools/invoke-frozen-script-subtitle-route.ps1` with `-WorkspaceRoot <cursor workspace>` **or** execute the same steps explicitly:
+   - `build-canonical-subtitle-cues.py --brief video-workflow/production/brief.yaml --asr video-workflow/production/asr-timing-evidence.json --out video-workflow/production/canonical-subtitle-cues.json`
+   - `validate-canonical-subtitle-authority-gate.py` → `video-workflow/production/subtitle-canonical-gate-result.json`
+3. Require `SUBTITLE_CANONICAL_AUTHORITY_GATE = PASS` (`verdict: PASS` in gate result JSON).
+4. **Before** Native DRT or external ASS materialization: run `assert-subtitle-renderer-canonical-input.ps1` — **BLOCK** on non-zero exit (bypass blocked).
+5. Renderers consume **only** `canonical-subtitle-cues.json` (via `to_drt_subtitles()` / `to_ass_dialogue_lines()` adapters). **MUST NOT** feed ASR `recognized_text` or ad-hoc cue text into renderers.
+
+**BLOCK (subtitle renderer MUST NOT run) when any of:**
+
+- Frozen Script path missing or unreadable
+- `asr-timing-evidence.json` missing
+- `canonical-subtitle-cues.json` missing or stale vs current script/ASR
+- Alignment `blocked` or `meta.status != OK`
+- Gate `verdict != PASS`
+
+Reference: `video-workflow/templates/subtitle-canonical-authority-gate-reference.md`
 
 #### Graphics Pass
 

@@ -106,6 +106,11 @@ vocabulary:
     l1_aliases: [subtitle.segment.semantic]
     notes: "R1 — build-canonical-subtitle-cues.py; Frozen Script + ASR timing → CanonicalSubtitleCue[] via subtitle-layout-engine; renderer-neutral contract (DRT + ASS adapters)"
 
+  subtitle.gate.canonical_authority:
+    status: VERIFIED
+    l1_aliases: [subtitle.create]
+    notes: "R1 Closeout — validate-canonical-subtitle-authority-gate.py + invoke-frozen-script-subtitle-route.ps1 + assert-subtitle-renderer-canonical-input.ps1; SUBTITLE_CANONICAL_AUTHORITY_GATE must PASS before DRT/ASS"
+
   subtitle.render.basic:
     status: VERIFIED
     l1_aliases: [subtitle.create]

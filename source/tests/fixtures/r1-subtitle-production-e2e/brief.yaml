@@ -1,0 +1,20 @@
+production:
+  id: r1-subtitle-production-e2e
+editing:
+  skill: observational-info-short
+features:
+  subtitles: true
+content:
+  authority:
+    type: script
+    path: frozen-script.txt
+format:
+  width: 1080
+  height: 1920
+  fps: 24
+media:
+  input: "E:/fixture/input"
+  output: "E:/fixture/output"
+output:
+  filename: r1-subtitle-production-e2e_V1.mp4
+  overwrite_existing: false
