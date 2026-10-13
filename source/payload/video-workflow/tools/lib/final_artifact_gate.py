@@ -6,7 +6,6 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-from canonical_cue_sample_times import load_canonical_cues, select_active_cue_sample_times
 from final_render_contract import (
     EXPORT_MODE_SEPARATE,
     MATERIALIZATION_EXTERNAL,
@@ -14,7 +13,8 @@ from final_render_contract import (
     MATERIALIZATION_NA,
     load_final_render_contract,
 )
-from subtitle_final_artifact_qa import analyze_samples
+from artifact_fingerprint import build_evidence_bindings
+from subtitle_burnin_evidence import evaluate_subtitle_burnin_gate
 
 GATE_ID = "FINAL_ARTIFACT_GATE"
 MIN_FILE_BYTES = 4096
@@ -52,6 +52,7 @@ def evaluate_final_artifact_gate(
     qa_report_path: Path | None = None,
     work_dir: Path,
 ) -> dict[str, Any]:
+    contract_path = contract_path.resolve()
     contract = load_final_render_contract(contract_path)
     video = Path(contract.final_artifact_path)
     errors: list[str] = []
@@ -111,8 +112,11 @@ def evaluate_final_artifact_gate(
     if qa_report_path and qa_report_path.is_file():
         qa = json.loads(qa_report_path.read_text(encoding="utf-8-sig"))
         bb = (qa.get("black_bar_check") or {}).get("verdict", "")
-        if bb in ("PASS", "NO_EDGE_BLACK_PATTERN", "AUTOMATED_SCREEN + VISUAL_CONFIRM"):
+        if bb in ("PASS", "NO_EDGE_BLACK_PATTERN"):
             checks["BLACK_BAR_QA"] = "PASS"
+        elif bb in ("AUTOMATED_SCREEN + VISUAL_CONFIRM", "SUSPECT_BLACK_BARS", "REPAIR_REQUIRED", "REFRAME_OWNER_REVIEW_REQUIRED"):
+            checks["BLACK_BAR_QA"] = "VISUAL_CONFIRM_REQUIRED"
+            errors.append(f"BLACK_BAR_{bb}")
         elif bb:
             checks["BLACK_BAR_QA"] = "FAIL"
             errors.append(f"BLACK_BAR_{bb}")
@@ -145,13 +149,17 @@ def evaluate_final_artifact_gate(
         if not canonical.is_file():
             burnin_errors.append("CANONICAL_CUES_MISSING_FOR_QA")
         else:
-            cues = load_canonical_cues(canonical)
-            samples = select_active_cue_sample_times(cues, duration=duration or None)
-            if not samples:
-                samples = [{"id": "mid", "sec": max(0.5, duration * 0.5), "role": "fallback"}]
             work_dir.mkdir(parents=True, exist_ok=True)
-            subtitle_detail = analyze_samples(video, samples, work_dir)
+            subtitle_detail = evaluate_subtitle_burnin_gate(
+                contract=contract,
+                final_video=video,
+                canonical_path=canonical,
+                work_dir=work_dir,
+                duration=duration,
+            )
             burn = subtitle_detail.get("FINAL_RENDER_SUBTITLE_BURNIN", "FAIL")
+            if burn == "VISUAL_CONFIRM_REQUIRED":
+                burnin_errors.append("SUBTITLE_BURNIN_VISUAL_CONFIRM_REQUIRED")
             if not separate_export:
                 checks["FINAL_RENDER_SUBTITLE_BURNIN"] = burn
                 checks["SUBTITLE_BURNIN_PASS"] = burn
@@ -173,7 +181,28 @@ def evaluate_final_artifact_gate(
 
     required = [k for k, v in checks.items() if v not in ("N/A", "PASS")]
     verdict = "PASS" if not errors and not required else "FAIL"
-    return _result(checks, errors, contract, probe, subtitle_detail, verdict)
+
+    evidence_bindings = None
+    if verdict == "PASS":
+        canonical_p = Path(contract.canonical_subtitle_cues_path or "") if contract.canonical_subtitle_cues_path else None
+        evidence_bindings = build_evidence_bindings(
+            contract_path=contract_path,
+            final_artifact_path=video,
+            canonical_cues_path=canonical_p if canonical_p and canonical_p.is_file() else None,
+            qa_report_path=qa_report_path,
+        )
+
+    return _result(
+        checks,
+        errors,
+        contract,
+        probe,
+        subtitle_detail,
+        verdict,
+        evidence_bindings=evidence_bindings,
+        contract_path=str(contract_path),
+        qa_report_path=str(qa_report_path) if qa_report_path else None,
+    )
 
 
 def _result(
@@ -183,16 +212,23 @@ def _result(
     probe: dict[str, Any] | None,
     subtitle_detail: dict[str, Any] | None,
     verdict: str | None = None,
+    evidence_bindings: dict[str, Any] | None = None,
+    contract_path: str | None = None,
+    qa_report_path: str | None = None,
 ) -> dict[str, Any]:
     if verdict is None:
         verdict = "PASS" if not errors else "FAIL"
     return {
         "gate": GATE_ID,
         "verdict": verdict,
+        "status": "COMPLETE" if verdict in ("PASS", "FAIL") else "INCOMPLETE",
         "checks": checks,
         "errors": errors,
+        "contract_path": contract_path,
+        "qa_report_path": qa_report_path,
         "final_artifact_path": contract.final_artifact_path,
         "subtitle_materialization": contract.subtitle_materialization,
+        "evidence_bindings": evidence_bindings,
         "probe_summary": {
             "duration": (probe or {}).get("format", {}).get("duration"),
         }

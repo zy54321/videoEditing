@@ -41,27 +41,48 @@ if ([string]::IsNullOrWhiteSpace($RunId)) {
     $RunId = 'final-gate-' + (Get-Date -Format 'yyyyMMdd-HHmmss')
 }
 
-$qaArgs = @{
-    VideoPath = $VideoPath
-    QaRoot    = $qaRoot
-    RunId     = $RunId
-}
-if ($SkipAudioLoudness) { $qaArgs['SkipAudioLoudness'] = $true }
-$qaOutLines = & $qaPs1 @qaArgs
-$qaReportPath = $qaOutLines | Select-Object -First 1
-if (-not (Test-Path -LiteralPath $qaReportPath)) {
-    throw "FINAL_ARTIFACT_QA_REPORT_MISSING: $qaReportPath"
-}
-
-$workDir = Join-Path $qaRoot $RunId 'subtitle-burnin-frames'
 $gateResult = Join-Path $prod 'final-artifact-gate-result.json'
+$invalid = @{
+    gate            = 'FINAL_ARTIFACT_GATE'
+    verdict         = 'INVALIDATED'
+    status          = 'RUNNING'
+    invalidated_at  = (Get-Date).ToString('o')
+    final_artifact_path = $VideoPath
+} | ConvertTo-Json -Depth 4
+Set-Content -LiteralPath $gateResult -Value $invalid -Encoding UTF8
 
-& python $gatePy --contract $ContractPath --qa-report $qaReportPath --work-dir $workDir --out $gateResult
-if ($LASTEXITCODE -ne 0) {
-    Write-Host 'FINAL_ARTIFACT_GATE: FAIL' -ForegroundColor Red
-    exit 2
+try {
+    $qaArgs = @{
+        VideoPath = $VideoPath
+        QaRoot    = $qaRoot
+        RunId     = $RunId
+    }
+    if ($SkipAudioLoudness) { $qaArgs['SkipAudioLoudness'] = $true }
+    $qaOutLines = & $qaPs1 @qaArgs
+    $qaReportPath = $qaOutLines | Select-Object -First 1
+    if (-not (Test-Path -LiteralPath $qaReportPath)) {
+        throw "FINAL_ARTIFACT_QA_REPORT_MISSING: $qaReportPath"
+    }
+
+    $workDir = Join-Path $qaRoot $RunId 'subtitle-burnin-frames'
+    & python $gatePy --contract $ContractPath --qa-report $qaReportPath --work-dir $workDir --out $gateResult
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host 'FINAL_ARTIFACT_GATE: FAIL' -ForegroundColor Red
+        exit 2
+    }
+
+    Write-Host 'FINAL_ARTIFACT_GATE: PASS' -ForegroundColor Green
+    Write-Host "PRODUCTION_FINAL_RENDER_PASS: candidate ($VideoPath)"
+    exit 0
 }
-
-Write-Host 'FINAL_ARTIFACT_GATE: PASS' -ForegroundColor Green
-Write-Host "PRODUCTION_FINAL_RENDER_PASS: candidate ($VideoPath)"
-exit 0
+catch {
+    $fail = @{
+        gate    = 'FINAL_ARTIFACT_GATE'
+        verdict = 'FAIL'
+        status  = 'ERROR'
+        error   = $_.Exception.Message
+        failed_at = (Get-Date).ToString('o')
+    } | ConvertTo-Json -Depth 4
+    Set-Content -LiteralPath $gateResult -Value $fail -Encoding UTF8
+    throw
+}

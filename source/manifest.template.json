@@ -59,6 +59,7 @@
       "assert-subtitle-renderer-canonical-input",
       "run-final-artifact-gate",
       "assert-production-final-deliver",
+      "verify-production-final-deliver",
       "textplus-layout-materializer",
       "generate-textplus-cls-setting"
     ],

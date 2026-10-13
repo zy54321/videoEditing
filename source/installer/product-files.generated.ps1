@@ -91,6 +91,7 @@ $ProductFiles = @(
     'video-workflow\tools\final-audio-loudness-repair.py',
     'video-workflow\tools\generate-textplus-cls-setting.py',
     'video-workflow\tools\invoke-frozen-script-subtitle-route.ps1',
+    'video-workflow\tools\lib\artifact_fingerprint.py',
     'video-workflow\tools\lib\asr_timing_evidence.py',
     'video-workflow\tools\lib\assembly_plan_frames.py',
     'video-workflow\tools\lib\assembly_repair.py',
@@ -113,6 +114,7 @@ $ProductFiles = @(
     'video-workflow\tools\lib\semantic_cue_layout.py',
     'video-workflow\tools\lib\shared_asset_library.py',
     'video-workflow\tools\lib\shot_reuse_qa.py',
+    'video-workflow\tools\lib\subtitle_burnin_evidence.py',
     'video-workflow\tools\lib\subtitle_final_artifact_qa.py',
     'video-workflow\tools\lib\subtitle-layout-engine.ps1',
     'video-workflow\tools\lib\textplus_cls_setting.py',
@@ -130,5 +132,6 @@ $ProductFiles = @(
     'video-workflow\tools\shared-asset-resolve.py',
     'video-workflow\tools\shot-reuse-qa.py',
     'video-workflow\tools\subtitle-layout-preflight.ps1',
-    'video-workflow\tools\validate-canonical-subtitle-authority-gate.py'
+    'video-workflow\tools\validate-canonical-subtitle-authority-gate.py',
+    'video-workflow\tools\verify-production-final-deliver.py'
 )

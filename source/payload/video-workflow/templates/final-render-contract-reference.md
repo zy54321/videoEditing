@@ -39,3 +39,7 @@ video-workflow/tools/run-final-artifact-gate.ps1 -WorkspaceRoot <workspace>
 ```
 
 Writes `video-workflow/production/final-artifact-gate-result.json` with `FINAL_ARTIFACT_GATE` verdict.
+
+On **PASS**, records `evidence_bindings` (SHA256): `contract_sha256`, `final_artifact_sha256`, `canonical_subtitle_cues_sha256`, optional `qa_report_sha256`. Stage 10 `assert-production-final-deliver.ps1` recomputes hashes — any drift → `PRODUCTION_COMPLETE_BLOCKED`.
+
+Subtitle burn-in uses **differential evidence** (`subtitle_burnin_evidence.py`): external ASS compares clean master vs final; Native DRT uses temporal negative control. Bright pixels alone are **not** sufficient for `FINAL_RENDER_SUBTITLE_BURNIN = PASS`.

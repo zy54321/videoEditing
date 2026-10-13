@@ -132,16 +132,13 @@ def analyze_samples(video: Path, samples: List[Dict[str, Any]], work_dir: Path) 
     readability = "PASS" if not visual else "VISUAL_CONFIRM_REQUIRED"
     if visual and fails:
         readability = "FAIL_READABILITY"
-    present = sum(1 for r in rows if subtitle_pixels_present(r))
-    burnin = "PASS" if present >= max(1, len(rows) // 2) else "FAIL"
     return {
         "authority": "FINAL_ARTIFACT",
         "artifact": str(video),
         "samples": rows,
         "SUBTITLE_GEOMETRY_QA": geometry,
         "SUBTITLE_READABILITY_QA": readability,
-        "SUBTITLE_BURNIN_SAMPLE_PASS_COUNT": present,
-        "FINAL_RENDER_SUBTITLE_BURNIN": burnin,
         "failed_geometry_ids": fails,
         "visual_confirm_ids": visual,
+        "note": "Burn-in authority: subtitle_burnin_evidence.py (R2 hardening); bright-pixel hits are not sufficient.",
     }

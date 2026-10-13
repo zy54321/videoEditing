@@ -990,7 +990,9 @@ Runs `final-artifact-qa.ps1` (ffprobe, frames, black-bar, audio loudness) then `
 - `AUDIO_LOUDNESS_QA` (when not skipped)
 - **`FINAL_RENDER_SUBTITLE_BURNIN`** — pixel evidence via `subtitle_final_artifact_qa.py` at canonical cue sample times; **not** subtitle stream metadata
 
-Only when `FINAL_ARTIFACT_GATE = PASS` may Closeout claim **`PRODUCTION_FINAL_RENDER_PASS`**. Use `assert-production-final-deliver.ps1` before Stage 10 Complete.
+Only when `FINAL_ARTIFACT_GATE = PASS` may Closeout claim **`PRODUCTION_FINAL_RENDER_PASS`**. Use `assert-production-final-deliver.ps1` before Stage 10 Complete (re-verifies `evidence_bindings` SHA256 for contract, final MP4, canonical cues).
+
+**`FINAL_RENDER_SUBTITLE_BURNIN`:** pixel **differential** evidence (`subtitle_burnin_evidence.py`) — external ASS uses `clean_master_path` vs `final_artifact_path`; Native DRT uses active cue vs negative-control timestamps. Lower-band bright pixels alone are **not** sufficient PASS.
 
 After a valid render file exists, verify the **actual MP4** — not timeline-only state.
 
