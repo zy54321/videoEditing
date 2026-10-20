@@ -57,6 +57,8 @@
       "validate-canonical-subtitle-authority-gate",
       "invoke-frozen-script-subtitle-route",
       "assert-subtitle-renderer-canonical-input",
+      "canonical-to-external-ass",
+      "external-ass-burnin",
       "run-final-artifact-gate",
       "assert-production-final-deliver",
       "verify-production-final-deliver",

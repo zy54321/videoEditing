@@ -64,7 +64,7 @@ try {
         throw "FINAL_ARTIFACT_QA_REPORT_MISSING: $qaReportPath"
     }
 
-    $workDir = Join-Path $qaRoot $RunId 'subtitle-burnin-frames'
+    $workDir = Join-Path (Join-Path $qaRoot $RunId) 'subtitle-burnin-frames'
     & python $gatePy --contract $ContractPath --qa-report $qaReportPath --work-dir $workDir --out $gateResult
     if ($LASTEXITCODE -ne 0) {
         Write-Host 'FINAL_ARTIFACT_GATE: FAIL' -ForegroundColor Red

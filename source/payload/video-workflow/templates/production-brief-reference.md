@@ -189,7 +189,9 @@ When `frozen: true`: subtitle / transcription alignment uses Frozen Script as se
 
 **R1 Closeout (mandatory L3):** use `invoke-frozen-script-subtitle-route.ps1` → `canonical-subtitle-cues.json` + `SUBTITLE_CANONICAL_AUTHORITY_GATE`; renderers require `assert-subtitle-renderer-canonical-input.ps1` PASS first. See `subtitle-canonical-authority-gate-reference.md`.
 
-**R2 (final deliver):** write `final-render-contract.json`; after render run `run-final-artifact-gate.ps1` → `FINAL_ARTIFACT_GATE` / `FINAL_RENDER_SUBTITLE_BURNIN` on the **burned MP4** only. Closeout requires `assert-production-final-deliver.ps1`. See `final-render-contract-reference.md`.
+**R2 (final deliver):** write `final-render-contract.json`; after clean master render, run `invoke-production-deliver-closeout.ps1` (external ASS when `renderer_route: external_ass`, then `run-final-artifact-gate.ps1`) → `FINAL_ARTIFACT_GATE` / `FINAL_RENDER_SUBTITLE_BURNIN` on the **burned MP4** only. Closeout requires `assert-production-final-deliver.ps1`. See `final-render-contract-reference.md`.
+
+**R3 (static portrait reframe):** after assembly, export `timeline-probe.json` (MCP `probe_timeline_structure`); run `invoke-static-portrait-reframe.ps1` with `-Apply` before clean-master render. Policy `static-portrait-reframe.v1` only — no ad-hoc crop+zoom bulk scripts.
 
 ### `assets.music`
 

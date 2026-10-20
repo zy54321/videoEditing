@@ -1,0 +1,25 @@
+# GENERATED SNAPSHOT — unit: logical_capability_id
+# Verify: source/tests/verify-capability-coverage.ps1
+# Inventory only — NOT an aesthetic score.
+
+style_id: observational-info-short
+generated_stage: 08D.1
+unit: logical_capability_id
+
+required:
+  total: 8
+  verified: 8
+  unresolved: 0
+
+preferred:
+  total: 12
+  verified: 6
+  fallback_capable: 5
+  unresolved: 1
+  notes:
+    unresolved_ids:
+      - visual.trim
+
+optional:
+  total: 4
+  verified: 3

@@ -1,0 +1,252 @@
+---
+description: Safety and verification rules for DaVinci Resolve production work executed through an external Resolve MCP/runtime.
+alwaysApply: true
+---
+
+# DaVinci Production Rules
+
+These constraints apply **only during DaVinci / Resolve video-production tasks**.
+They must not interfere with unrelated software-development tasks in the same Cursor workspace.
+
+---
+
+## 1. Runtime
+
+当前 V0.1 默认 Resolve Runtime：
+
+```
+Cursor → external DaVinci Resolve MCP → DaVinci Resolve
+```
+
+Workflow **不拥有** MCP。
+
+**禁止：**
+
+- 修改 MCP 安装
+- 修改 MCP 配置
+- 自动切换 MCP implementation
+
+---
+
+## 2. Project Identity
+
+任何 Resolve write 前，必须确认：
+
+- Project name
+- Project ID（API 可得时）
+- Project open 状态
+
+如果当前打开 Project 与 Brief 不一致：停止写入。
+
+禁止因为「项目名看起来差不多」继续操作。
+
+---
+
+## 3. Project Isolation
+
+默认：一个真实 Production 使用独立 Resolve Project。
+
+**禁止修改其他 Project。**
+
+已有验证 / Test Project：除非 Brief 明确指定，否则不得作为真实生产目标。
+
+---
+
+## 4. Timeline Identity
+
+Timeline write 前必须确认：
+
+- timeline name
+- timeline ID（可得时）
+- resolution
+- FPS
+
+禁止向错误 Timeline 写入。
+
+结构性大版本修改：优先创建明确的新 Timeline / version。
+
+---
+
+## 5. Frame Accuracy
+
+所有以下操作以 Timeline 实际 FPS 为基准处理：
+
+- Clip start / end
+- Gap
+- Transition
+- Subtitle timing
+- Audio timing
+
+**禁止硬编码所有项目都是 24 fps。**
+
+seconds → frames 时必须按当前 Timeline FPS 转换。
+
+不得留下非设计性的 1～N frame gaps。
+
+---
+
+## 6. Vertical / Aspect Handling
+
+当目标为 **9:16** 时，横屏素材默认要求：
+
+- preserve aspect ratio
+- fill frame
+- adjust position to preserve subject
+
+**禁止：**
+
+- 拉伸
+- 非设计黑边
+- 因 scale 导致主要主体完全丢失
+
+但如果 Production Brief 明确要求 letterbox，则以 Brief 为准。
+
+---
+
+## 7. Motion / Speed
+
+不得把 Stock footage 的原始播放速度默认为「自然速度」。
+
+如果 Editing Skill 要求 motion normalization，应检查明显：
+
+- slow motion
+- overcranked footage
+- unnaturally slow movement
+
+Speed change 后必须重新检查：
+
+- 动作自然度
+- clip duration
+- source range
+- timeline gap
+- audio（如源素材带音频）
+
+---
+
+## 8. Transitions
+
+Transition 只能根据 Editing Skill / Editing Plan 使用。
+
+**禁止：** 为了「显得专业」给所有 cut 自动套转场。
+
+应用 transition 后必须验证：
+
+- 两侧有足够 handles
+- 没有产生 gap
+- 没有黑帧
+- 时长正确
+
+---
+
+## 9. Subtitle
+
+字幕必须来源于：
+
+- Frozen Script
+- 或 transcription 与 Frozen Script 的对齐结果
+
+ASR 结果不是绝对权威。
+
+专有词、人名、地名等：如果存在已冻结文本，应优先对齐冻结文本。
+
+---
+
+## 10. Audio
+
+Voice Master 默认具有最高语音优先级。
+
+背景音乐不得：
+
+- 覆盖 Voice
+- 改变 Frozen Voice
+- 导致明显 clipping
+
+Audio Mix 后必须验证：
+
+- Voice audible
+- Music lower than narration
+- No unintended silence
+- No clipping
+
+---
+
+## 11. Timeline Gap / Black Frame
+
+任何非设计性：
+
+- empty V1 segment
+- black frame
+- timeline gap
+
+均视为 **defect**。
+
+Render 前必须检查。
+
+---
+
+## 12. Render
+
+**Render 前验证：**
+
+- current project
+- current timeline
+- resolution
+- fps
+- timeline duration
+- output path
+- output filename
+- existing output collision
+
+**Render 后验证实际文件：**
+
+- file exists
+- duration
+- resolution
+- fps
+- codec
+- audio stream
+
+必要时还应进行 frame-level QA。
+
+---
+
+## 13. Failure Semantics
+
+如果 MCP / API 不支持所需写操作：
+
+- 不得伪装为已完成
+- 不得自动改成 GUI 手工假设、未验证脚本、或第二套 MCP
+
+应报告明确 **blocker**。
+
+---
+
+## 14. Runtime Crash / Host Instability
+
+如果执行 Runtime write 时出现：
+
+- Resolve process crash
+- SIGABRT
+- assertion failure
+- scripting API loss
+- host restart
+- fatal exception
+
+则该 operation class：
+
+**立即 Fail Closed。**
+
+**禁止自动 retry。**
+
+普通 Repair Retry Policy 不适用于 Runtime Crash。
+
+必须：
+
+1. 停止当前 capability chain
+2. 保存 evidence
+3. 标记 implementation route：**UNSAFE** 或 **FAILED**
+4. 只有新的明确验证方案才能重新测试
+
+已知：
+
+- `live_api_srt_append` = **UNSAFE** = **DO NOT RETRY**

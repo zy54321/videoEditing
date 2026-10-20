@@ -1,0 +1,73 @@
+# Production Brief — copy this file to start a new production.
+# Field semantics: video-workflow/templates/production-brief-reference.md
+
+version: 1
+
+production:
+  id: "" # Stable production ID (Owner-assigned; required)
+  title: "" # Human-readable title (optional)
+  description: "" # What video to make — natural language intent (optional)
+
+editing:
+  skill: "" # L2 skill ID, e.g. observational-info-short (required)
+  creative_direction: [] # Optional Owner refinements to selected Style (not a new Style)
+
+media:
+  input: "" # Input media root — absolute or workspace-relative path (required)
+  output: "" # Deliverable output directory — not the same as input (required)
+
+format:
+  orientation: vertical # vertical | horizontal | square | custom
+  width: 1080 # Target deliverable width in pixels (required)
+  height: 1920 # Target deliverable height in pixels (required)
+  fps: 24 # Target frame rate (required)
+  target_duration_seconds:
+    min: # Optional minimum duration; empty = no lower bound
+    max: # Optional maximum duration; empty = no upper bound
+
+runtime:
+  type: nle # V0.1: nle
+  preferred_backend: davinci-resolve # Backend identity, not MCP implementation
+  project_name: "" # Existing NLE project name, or empty if L3 will propose one
+  timeline_name: "" # Existing or target timeline name, or empty
+
+assets:
+  voice:
+    path: "" # Voice Master / narration audio
+    frozen: false # true = no regeneration, speed change, or replacement
+  script:
+    path: "" # Frozen script source (md, txt, srt, etc.)
+    frozen: false # true = semantic authority for subtitles / alignment
+  music:
+    path: "" # Optional direct music file (Owner one-off); resolved path when not using library
+    asset_id: "" # Optional Shared Asset Library music id (preferred over hardcoded paths)
+    frozen: false
+
+features:
+  subtitles: true # Request subtitle finishing per L2 strategy
+  background_music: true # Request music per L2 strategy
+  transitions: true # Request transitions per L2 strategy (not every cut)
+  motion_normalization: true # Correct abnormal motion speed
+  framing: true # Handle target aspect / fill frame
+  color: true # Basic color consistency
+  graphics: false # Extra titles / lower thirds / charts
+  effects: false # Extra visual effects
+
+content:
+  language: zh-CN # Primary content language (e.g. zh-CN, en-US)
+  factuality_sensitive: true # true = avoid misleading factual presentation
+  authority:
+    type: "" # voice | script | subtitle | owner | empty until resolved
+    path: "" # Primary content authority file when applicable
+  author_intent:
+    global: null # Optional whole-piece intent; null = Style + content default
+    local: [] # Optional: { beat_id, intent } — affects named beats only
+
+production_options:
+  review_before_edit: false # true = pause after Blueprint for Owner review
+
+output:
+  filename: "" # Final deliverable filename (required)
+  overwrite_existing: false # false = do not silently overwrite existing file
+
+notes: "" # Free-form Owner notes (optional)

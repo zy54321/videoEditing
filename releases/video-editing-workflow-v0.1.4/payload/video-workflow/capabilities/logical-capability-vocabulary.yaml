@@ -1,0 +1,307 @@
+# Logical Capability Vocabulary — L1 canonical IDs (Stage 08D.1)
+# Canonical status values ONLY:
+#   VERIFIED | AVAILABLE_UNVERIFIED | UNKNOWN | FAILED | UNSAFE | DEFERRED
+# L2 capability-policy.yaml MUST reference IDs defined here only.
+
+schema_version: 1
+
+canonical_states:
+  - VERIFIED
+  - AVAILABLE_UNVERIFIED
+  - UNKNOWN
+  - FAILED
+  - UNSAFE
+  - DEFERRED
+
+# Resolution state matrix (see capability-resolution-reference.md):
+# VERIFIED → SELECTED
+# AVAILABLE_UNVERIFIED → CAPABILITY_VALIDATION_REQUIRED (not direct SELECTED in Production)
+# UNKNOWN / FAILED / DEFERRED → unavailable
+# UNSAFE → prohibited / never select
+
+vocabulary:
+
+  visual.select_asset:
+    status: VERIFIED
+    l1_aliases: [media.inspect, media.import]
+    notes: Asset selection from pool / input scan
+
+  visual.trim:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [clip.trim, clip.source_range]
+    notes: Timeline or source extent trim — limited read-back evidence
+
+  visual.reframe.static:
+    status: VERIFIED
+    l1_aliases: [clip.scale, clip.position]
+    notes: Static fill-frame reposition (not animated camera move)
+
+  visual.reframe.dynamic:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [clip.scale, clip.position]
+    notes: Animated reframing — CAPABILITY_VALIDATION_REQUIRED
+
+  visual.motion.push_in:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [clip.scale]
+    notes: Motivated push-in; no dedicated animated push API verified
+
+  visual.motion.pan:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [clip.position]
+    notes: Animated pan not verified; clip.position evidence is static reframe only
+
+  visual.motion.speed_change:
+    status: VERIFIED
+    l1_aliases: [clip.speed]
+    notes: Speed normalization / retime
+
+  visual.motion.aggressive_zoom:
+    status: FAILED
+    l1_aliases: []
+    notes: Editorial anti-pattern — Style forbidden list only; never select
+
+  edit.cut:
+    status: VERIFIED
+    l1_aliases: [clip.assemble]
+    notes: Hard cut assembly
+
+  edit.transition.basic:
+    status: VERIFIED
+    l1_aliases: [clip.assemble]
+    notes: Hard / action cut (no effect)
+
+  edit.transition.cross_dissolve:
+    status: VERIFIED
+    l1_aliases: [transition.apply]
+    notes: Dissolve via native_drt_transition route
+
+  subtitle.generate:
+    status: VERIFIED
+    l1_aliases: [transcription.generate, transcription.read]
+    notes: Transcript / cue generation
+
+  subtitle.segment.semantic:
+    status: VERIFIED
+    l1_aliases: [subtitle.create, subtitle.import]
+    notes: Semantic cue placement — does NOT guarantee pixel-width layout
+
+  subtitle.layout.pixel_width:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [subtitle.safe_text_width, subtitle.line_break_control]
+    notes: Deterministic preflight foundation exists (subtitle-layout-preflight.ps1); Resolve renderer parity not Runtime-validated (08E-A)
+
+  subtitle.authority.frozen_script:
+    status: VERIFIED
+    l1_aliases: [content.authority]
+    notes: "R1 — frozen_script_authority.py + Brief content.authority / assets.script.frozen; layout newlines are not timing boundaries"
+
+  subtitle.align.monotonic:
+    status: VERIFIED
+    l1_aliases: [subtitle.timing]
+    notes: "R1 — script_audio_monotonic_align.py (Needleman–Wunsch global monotonic); ASR text is alignment evidence only; fail-closed on large unaligned runs"
+
+  subtitle.cue.canonical:
+    status: VERIFIED
+    l1_aliases: [subtitle.segment.semantic]
+    notes: "R1 — build-canonical-subtitle-cues.py; Frozen Script + ASR timing → CanonicalSubtitleCue[] via subtitle-layout-engine; renderer-neutral contract (DRT + ASS adapters)"
+
+  subtitle.gate.canonical_authority:
+    status: VERIFIED
+    l1_aliases: [subtitle.create]
+    notes: "R1 Closeout — validate-canonical-subtitle-authority-gate.py + invoke-frozen-script-subtitle-route.ps1 + assert-subtitle-renderer-canonical-input.ps1; SUBTITLE_CANONICAL_AUTHORITY_GATE must PASS before DRT/ASS"
+
+  final_render.artifact_gate:
+    status: VERIFIED
+    l1_aliases: [final_render.subtitle_visual_qa, render.verify_output]
+    notes: "R2 — run-final-artifact-gate.ps1 + final-render-contract.json; FINAL_ARTIFACT_GATE / FINAL_RENDER_SUBTITLE_BURNIN on final MP4 pixels; blocks N03 separate-TTML-only deliver"
+
+  subtitle.render.basic:
+    status: VERIFIED
+    l1_aliases: [subtitle.create]
+    notes: Burn-in / timeline subtitle placement
+
+  subtitle.render.readability_stroke:
+    status: VERIFIED
+    l1_aliases: [subtitle.visual_style]
+    notes: "Route A: gold standard Subtitle Track 1 FieldsBlob capture/inject + burn-in deliver visual QA (Repair Step 5). Profile: native-drt-subtitle-readability-profile.yaml"
+
+  subtitle.render.readable_static:
+    status: VERIFIED
+    l1_aliases: [subtitle.visual_style, subtitle.safe_text_width]
+    notes: "N02 V6 production — Microsoft YaHei UI Bold via subtitle.runtime.external_ass + layout engine → ASS → final artifact QA. See validation/n02-v6-production-closeout.md"
+
+  subtitle.runtime.external_ass:
+    status: VERIFIED
+    l1_aliases: [subtitle.render.readable_static]
+    notes: "Opt-in route only (not global default). Style baseline astra-external-ass-n02prod-v1 → canonical-to-external-ass.py + external-ass-burnin.py; R2 FINAL_RENDER_SUBTITLE_BURNIN unchanged. N02_V6 / Owner N03_V9. Native DRT size reverse-engineering ABANDONED_FOR_CURRENT_PRODUCTION."
+
+  subtitle.style.basic:
+    status: UNKNOWN
+    l1_aliases: [subtitle.visual_style]
+    notes: Font/outline API not validated
+
+  subtitle.style.keyword_emphasis:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [subtitle.keyword_emphasis]
+    notes: "Isolated StyledTextCLS SIZE route verified (08E-B B-R1). Production overlay subtitle route not final-validated (08E-FINAL). Logical production capability requires production-shaped integrated probe. NOT VERIFIED color weight tracking variation arbitrary sizes animation kinetic typography."
+
+  audio.voice.place:
+    status: VERIFIED
+    l1_aliases: [clip.assemble, audio.place]
+    notes: Narration / voice on timeline
+
+  audio.original_sound.preserve:
+    status: VERIFIED
+    l1_aliases: [clip.assemble]
+    notes: Editorial preserve of source audio segments
+
+  audio.ambience.place:
+    status: VERIFIED
+    l1_aliases: [audio.place, audio.import]
+    notes: Ambient bed placement
+
+  audio.music.place:
+    status: VERIFIED
+    l1_aliases: [audio.import, audio.place]
+    notes: Music clip placement — not equivalent to ducking
+
+  audio.music.level_under_voice:
+    status: VERIFIED
+    l1_aliases: [background_music_level_control]
+    notes: Music level reduced under voice via verified pre-attenuation route — unchanged Step 4A
+
+  audio.voice_music_mix:
+    status: VERIFIED
+    l1_aliases: [background_music_level_control, audio.music.level_under_voice]
+    notes: Continuous pre-attenuated BGM under voice; not dynamic ducking
+
+  audio.final.measure_loudness:
+    status: VERIFIED
+    l1_aliases: [final_render.audio_loudness_check]
+    notes: Step 4A — audio-loudness-qa.py ebur128 integrated LUFS on rendered artifact
+
+  audio.final.true_peak_qa:
+    status: VERIFIED
+    l1_aliases: [final_render.audio_loudness_check]
+    notes: Step 4A — true peak ceiling check vs narration_short_v1 profile
+
+  audio.final.normalize_or_adjust:
+    status: VERIFIED
+    l1_aliases: []
+    notes: Step 4A-Repair — ffmpeg loudnorm two-pass via final-audio-loudness-repair.py; post-render only; max 1 attempt
+
+  final_audio.auto_repair:
+    status: VERIFIED
+    l1_aliases: [FINAL_AUDIO_AUTO_REPAIR]
+    notes: Step 4A-Repair — QA → repair → re-QA loop via final-artifact-audio-qa-repair.ps1; fail-closed after one attempt
+
+  audio.music.duck:
+    status: UNKNOWN
+    l1_aliases: [audio.ducking]
+    notes: Auto ducking not implemented — unchanged Step 4A
+
+  audio.music.crossfade:
+    status: VERIFIED
+    l1_aliases: [audio.fade]
+    notes: Music fade in/out
+
+  music.library.search:
+    status: VERIFIED
+    l1_aliases: [music.library.search]
+    notes: Step 3B-2 — 4 Adobe Firefly WAV in Astra catalog; filter/rank via shared-asset-music-select.py
+
+  music.library.select:
+    status: VERIFIED
+    l1_aliases: [music.library.select]
+    notes: N02-like requirement ranking validated; missing → MUSIC_ASSET_NOT_AVAILABLE
+
+  music.library.resolve:
+    status: VERIFIED
+    l1_aliases: [music.library.resolve]
+    notes: asset_id → absolute path under shared_asset_root; 4 Firefly tracks resolved in 3B-2
+
+  audio.sfx.place:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [audio.place]
+    notes: SFX placement — limited validation
+
+  color.primary_balance:
+    status: VERIFIED
+    l1_aliases: [color.basic]
+    notes: Exposure / WB / primary correction
+
+  color.shot_match:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [color.basic]
+    notes: Inter-shot match — partial via CDL only
+
+  color.look.apply:
+    status: VERIFIED
+    l1_aliases: [color.basic]
+    notes: Creative look via CDL / grade
+
+  graphics.title.basic:
+    status: AVAILABLE_UNVERIFIED
+    l1_aliases: [effects.fusion]
+    notes: Title cards — Fusion path unverified end-to-end
+
+  graphics.text.motion:
+    status: UNKNOWN
+    l1_aliases: [effects.fusion]
+    notes: CAPABILITY_VALIDATION_REQUIRED
+
+  qa.pacing.heuristic:
+    status: VERIFIED
+    l1_aliases: []
+    notes: Step 4B — pacing-qa.py beat-first shot duration / unchanged-span heuristics
+
+  qa.pacing.repair_candidate:
+    status: VERIFIED
+    l1_aliases: []
+    notes: Step 4B — flags PACING_REPAIR_CANDIDATE with beat/shot/asset traceability
+
+  qa.shot_reuse.heuristic:
+    status: VERIFIED
+    l1_aliases: []
+    notes: N02 V2 bundle — shot-reuse-qa.py cooldown / window / ping-pong on assembly_plan
+
+  qa.assembly.repair_loop:
+    status: VERIFIED
+    l1_aliases: []
+    notes: assembly-qa-repair-loop.py — pacing + reuse QA → assembly_repair → re-QA (fixture + N02 trace)
+
+  qa.visual.black_bar_detect:
+    status: VERIFIED
+    l1_aliases: [final_render.black_bar_check]
+    notes: Step 4B — black-bar-qa.py ffmpeg cropdetect multiframe per-edge
+
+  qa.visual.reframe_static_repair:
+    status: VERIFIED
+    l1_aliases: [visual.reframe.static]
+    notes: Step 4B — scale/position suggestion route; fixture-validated
+
+  qa.visual.reframe_repair_loop:
+    status: VERIFIED
+    l1_aliases: []
+    notes: Step 4B — detect → static reframe → re-QA validated on disposable fixtures
+
+  qa.visual.frame:
+    status: VERIFIED
+    l1_aliases: [final_render.frame_sampling]
+    notes: Frame extract — black-bar gate now qa.visual.black_bar_detect
+
+  qa.subtitle.layout:
+    status: VERIFIED
+    l1_aliases: [final_render.subtitle_visual_qa]
+    notes: Subtitle in deliverable
+
+  qa.audio:
+    status: VERIFIED
+    l1_aliases: [final_render.audio_loudness_check, render.verify]
+    notes: Step 4A — integrated LUFS + true peak verdicts via audio-loudness-qa.py
+
+  qa.final_artifact:
+    status: VERIFIED
+    l1_aliases: [render.verify, final_render.frame_sampling]
+    notes: Post-render deliverable QA

@@ -734,6 +734,16 @@ Production Brief features
 
 Reference: `video-workflow/templates/subtitle-canonical-authority-gate-reference.md`
 
+**External ASS materialization (opt-in — MUST when `final-render-contract.json` uses `renderer_route: external_ass`):**
+
+After **clean master** render (`ExportSubtitle: false`), **MUST NOT** claim deliverable until:
+
+1. `video-workflow/tools/invoke-external-ass-deliver-route.ps1 -WorkspaceRoot <workspace>`  
+   → `canonical-to-external-ass.py` + `external-ass-burnin.py` (style baseline `astra-external-ass-n02prod-v1`)
+2. Or full closeout: `invoke-production-deliver-closeout.ps1` (external ASS + `run-final-artifact-gate.ps1` + `assert-production-final-deliver.ps1`)
+
+**BLOCK** if canonical missing, clean master missing, burn-in fails, or final MP4 not created. Do not reuse a prior production’s gate JSON for a new render.
+
 #### Graphics Pass
 
 - titles
@@ -780,6 +790,7 @@ audio.music.level_under_voice
 - pacing: `pacing-qa.py` — `>6s` warning, `>10s` unchanged cross-beat span → `PACING_REPAIR_CANDIDATE`
 - repair priority: `clip.source_range` + `clip.assemble` — **not** push-in / pan / ResolveFX first
 - black-bar loop: assemble → `visual.reframe.static` → `black-bar-qa.py` → `REPAIR_REQUIRED` → adjust scale/position → **re-QA** (max 3 attempts)
+- **R3 static portrait apply (landscape → 9:16):** MCP `timeline.probe_timeline_structure` → `production/timeline-probe.json` → `invoke-static-portrait-reframe.ps1` (`-Apply` writes zoom-only `static-portrait-reframe.v1` via `apply-static-portrait-reframe-bulk.py` or MCP `bulk_set_item_properties`). **MUST NOT** use ad-hoc `build_reframe_bulk.py` crop+zoom scripts.
 - post-render: `final-artifact-qa.ps1` embeds `black-bar-qa.py` — `REPAIR_REQUIRED` / `REFRAME_OWNER_REVIEW_REQUIRED` = fail-closed
 - do **not** treat detector VERIFIED as Production closure without repair loop
 
@@ -978,10 +989,20 @@ Must reference R1 `canonical-subtitle-cues.json` when subtitles enabled.
 ### Unified gate orchestration
 
 ```powershell
+# Preferred post-render (external ASS productions):
+video-workflow/tools/invoke-production-deliver-closeout.ps1 -WorkspaceRoot <workspace>
+
+# Or gate only (after burn-in already done):
 video-workflow/tools/run-final-artifact-gate.ps1 -WorkspaceRoot <workspace>
 ```
 
-Runs `final-artifact-qa.ps1` (ffprobe, frames, black-bar, audio loudness) then `run-final-artifact-gate.py` → `video-workflow/production/final-artifact-gate-result.json`.
+`invoke-production-deliver-closeout.ps1` runs external ASS when contracted, then `final-artifact-qa.ps1` (ffprobe, frames, black-bar, audio loudness) and `run-final-artifact-gate.py` → `video-workflow/production/final-artifact-gate-result.json`, then `assert-production-final-deliver.ps1`.
+
+### Render queue hygiene (MUST before `render.start`)
+
+- Confirm **current timeline** matches `final-render-contract.json` / Brief `runtime.timeline_name`.
+- Deliver queue should contain **only** the intended job (target filename + timeline). **Do not** use `delete_all_jobs` as a default production strategy; clear stale jobs only with Owner authorization.
+- After render: verify output path, filename, and ffprobe video stream — inherited Deliver presets can produce wrong filenames or audio-only outputs.
 
 **`FINAL_ARTIFACT_GATE`** combines (each `PASS` or explicit `N/A` in contract):
 

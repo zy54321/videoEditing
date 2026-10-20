@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "baseline_id": "astra-external-ass-n02prod-v1",
+  "display_name": "Astra N02Prod external ASS (libass)",
+  "play_res": {
+    "x": 1080,
+    "y": 1920
+  },
+  "provenance": {
+    "source_ass_sha256": "e4ee7871aad1ec60b13bf8ab3e15cc100b83c05aacd25f0907f5f25c63da363b",
+    "source_ass_description": "N02_V6 production intermediate ASS (_N02_V6_INTERMEDIATE_subtitles.ass)",
+    "visual_reference_description": "N02_V6.mp4 Owner visual authority",
+    "owner_accepted_route": "N03_V9 external ASS + libass burn-in (2026-10-13)",
+    "native_drt_size_reverse_engineering": "ABANDONED_FOR_CURRENT_PRODUCTION"
+  },
+  "style": {
+    "Name": "N02Prod",
+    "Fontname": "Microsoft YaHei UI",
+    "Fontsize": "52",
+    "PrimaryColour": "&H00FFFFFF",
+    "SecondaryColour": "&H000000FF",
+    "OutlineColour": "&H00000000",
+    "BackColour": "&H80000000",
+    "Bold": "1",
+    "Italic": "0",
+    "Underline": "0",
+    "StrikeOut": "0",
+    "ScaleX": "100",
+    "ScaleY": "100",
+    "Spacing": "0",
+    "Angle": "0",
+    "BorderStyle": "1",
+    "Outline": "4",
+    "Shadow": "0",
+    "Alignment": "2",
+    "MarginL": "72",
+    "MarginR": "72",
+    "MarginV": "280",
+    "Encoding": "1"
+  }
+}

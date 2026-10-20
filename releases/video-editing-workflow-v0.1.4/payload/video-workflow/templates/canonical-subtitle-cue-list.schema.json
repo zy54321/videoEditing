@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CanonicalSubtitleCueList",
+  "type": "object",
+  "required": ["schema_version", "pipeline_id", "meta", "cues"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "pipeline_id": { "const": "subtitle.authority_alignment_v1" },
+    "frozen_script": {
+      "type": "object",
+      "required": ["authority", "normalized_text"],
+      "properties": {
+        "authority": { "const": "frozen_script" },
+        "source_path": { "type": "string" },
+        "normalized_text": { "type": "string" }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": ["status", "text_authority", "alignment"],
+      "properties": {
+        "status": { "enum": ["OK", "BLOCKED"] },
+        "block_reason": { "type": "string" },
+        "text_authority": { "const": "frozen_script" },
+        "alignment": { "type": "object" }
+      }
+    },
+    "cues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["cue_id", "start", "end", "text", "lines", "confidence", "source_span_ids", "text_authority"],
+        "properties": {
+          "cue_id": { "type": "string" },
+          "start": { "type": "number" },
+          "end": { "type": "number" },
+          "text": { "type": "string" },
+          "lines": { "type": "array", "maxItems": 2, "items": { "type": "string" } },
+          "confidence": { "type": "number" },
+          "source_span_ids": { "type": "array", "items": { "type": "string" } },
+          "text_authority": { "const": "frozen_script" }
+        }
+      }
+    }
+  }
+}

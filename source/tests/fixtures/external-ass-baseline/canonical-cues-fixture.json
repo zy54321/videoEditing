@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "pipeline_id": "subtitle.authority_alignment_v1",
+  "meta": {
+    "status": "OK",
+    "text_authority": "frozen_script",
+    "cue_count": 4,
+    "alignment": {}
+  },
+  "cues": [
+    {
+      "cue_id": "C01",
+      "start": 0.5,
+      "end": 2.0,
+      "text": "单行字幕样本",
+      "lines": ["单行字幕样本"],
+      "confidence": 1.0,
+      "source_span_ids": ["S01"],
+      "text_authority": "frozen_script"
+    },
+    {
+      "cue_id": "C02",
+      "start": 2.5,
+      "end": 5.0,
+      "text": "第一行第二行",
+      "lines": ["第一行", "第二行"],
+      "confidence": 1.0,
+      "source_span_ids": ["S02"],
+      "text_authority": "frozen_script"
+    },
+    {
+      "cue_id": "C03",
+      "start": 5.5,
+      "end": 7.0,
+      "text": "特殊——标点",
+      "lines": ["特殊——标点"],
+      "confidence": 1.0,
+      "source_span_ids": ["S03"],
+      "text_authority": "frozen_script"
+    },
+    {
+      "cue_id": "C04",
+      "start": 7.5,
+      "end": 9.0,
+      "text": "英文ABC混合",
+      "lines": ["英文ABC混合"],
+      "confidence": 1.0,
+      "source_span_ids": ["S04"],
+      "text_authority": "frozen_script"
+    }
+  ]
+}

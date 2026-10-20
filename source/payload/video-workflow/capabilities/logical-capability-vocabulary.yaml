@@ -134,7 +134,7 @@ vocabulary:
   subtitle.runtime.external_ass:
     status: VERIFIED
     l1_aliases: [subtitle.render.readable_static]
-    notes: "Resolve clean master (no burn-in) + ffmpeg libass burn-in + loudnorm audio repair. N02_V6.mp4 2026-09-27."
+    notes: "Opt-in route only (not global default). Style baseline astra-external-ass-n02prod-v1 → canonical-to-external-ass.py + external-ass-burnin.py; R2 FINAL_RENDER_SUBTITLE_BURNIN unchanged. N02_V6 / Owner N03_V9. Native DRT size reverse-engineering ABANDONED_FOR_CURRENT_PRODUCTION."
 
   subtitle.style.basic:
     status: UNKNOWN
