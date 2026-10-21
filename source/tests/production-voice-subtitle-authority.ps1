@@ -154,6 +154,7 @@ $j7 = $out7 | ConvertFrom-Json
 Assert-True ($j7.status -eq 'CONTRACT_READY') 'V7 voice approved CONTRACT_READY'
 
 # V8 canonical route after OWNER_ACCEPTED (ws2)
+& python (Join-Path $PSScriptRoot 'bind-existing-timing-evidence.py') $ws2
 $route = Join-Path $Tools 'invoke-frozen-script-subtitle-route.ps1'
 & $route -WorkspaceRoot $ws2 -NoPause
 Assert-True ($LASTEXITCODE -eq 0) 'V8 voice canonical route exit 0'

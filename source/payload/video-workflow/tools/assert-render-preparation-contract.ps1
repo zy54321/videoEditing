@@ -69,5 +69,14 @@ if ($LASTEXITCODE -ne 0) {
     exit 4
 }
 
+$musicCli = Join-Path $tools 'invoke-music-bed-derivation.ps1'
+if (Test-Path -LiteralPath $musicCli) {
+    & $musicCli -WorkspaceRoot $WorkspaceRoot -BriefPath $briefPath -CheckOnly | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host 'RENDER_PREP_ASSERT_BLOCKED: MUSIC_BED_STALE_OR_FAILED' -ForegroundColor Red
+        exit 4
+    }
+}
+
 Write-Host 'RENDER_PREPARATION_CONTRACT_ASSERT: PASS'
 exit 0

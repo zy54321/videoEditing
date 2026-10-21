@@ -109,6 +109,7 @@ $w2 = Setup-ApprovedVoiceWs 'f02-gate'
 $sha2 = Get-ReviewedTextSha $w2
 Write-OwnerIntent -Workspace $w2 -TextSha256 $sha2
 & python (Join-Path $Tools 'record-voice-subtitle-owner-approval.py') --workspace $w2 | Out-Null
+& python (Join-Path $PSScriptRoot 'bind-existing-timing-evidence.py') $w2
 & (Join-Path $Tools 'invoke-frozen-script-subtitle-route.ps1') -WorkspaceRoot $w2 -NoPause | Out-Null
 $py2 = @"
 import sys

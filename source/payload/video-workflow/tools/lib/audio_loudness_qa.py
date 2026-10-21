@@ -208,30 +208,79 @@ def analyze_media(path: Path, profile: LoudnessProfile) -> Dict[str, Any]:
     }
 
 
+def load_music_gain_policy(profile_path: Path) -> Dict[str, Any]:
+    """Read mix targets from the profile file. Callers must not substitute other targets."""
+    import yaml
+
+    data = yaml.safe_load(profile_path.read_text(encoding="utf-8-sig")) or {}
+    strategy = ((data.get("music_level") or {}).get("strategy") or {})
+    return {
+        "music_below_voice_lu": float(strategy.get("music_below_voice_lu", 14.0)),
+        "tolerance_lu": float(strategy.get("tolerance_lu", 2.0)),
+        "min_factor": float(strategy.get("min_factor", 0.05)),
+        "max_factor": float(strategy.get("max_factor", 4.0)),
+        "fallback_factor": float(strategy.get("fallback_factor", 0.15)),
+        "fallback_is_pass": bool(strategy.get("fallback_is_pass", False)),
+    }
+
+
 def recommend_music_attenuation(
-    voice_integrated_lufs: float,
-    music_integrated_lufs: float,
+    voice_integrated_lufs: float | None,
+    music_integrated_lufs: float | None,
     *,
     music_below_voice_lu: float = 14.0,
-    min_factor: float = 0.08,
-    max_factor: float = 0.35,
+    min_factor: float = 0.05,
+    max_factor: float = 4.0,
+    tolerance_lu: float = 2.0,
     fallback_factor: float = 0.15,
 ) -> Dict[str, Any]:
+    """Compute a linear gain. Missing measurements and out-of-range gains are not PASS."""
     if voice_integrated_lufs is None or music_integrated_lufs is None:
         return {
-            "factor": fallback_factor,
-            "method": "fallback_verified_baseline",
+            "ok": False,
+            "factor": None,
+            "method": "measurement_failed",
+            "verdict": "MEASUREMENT_FAILED",
+            "historical_fallback_factor": fallback_factor,
+            "fallback_is_pass": False,
             "reason": "missing_probe",
         }
     target_music_lufs = voice_integrated_lufs - music_below_voice_lu
     delta_db = target_music_lufs - music_integrated_lufs
     factor = 10 ** (delta_db / 20.0)
-    factor = max(min_factor, min(max_factor, factor))
-    return {
+    payload = {
         "factor": round(factor, 4),
         "method": "measure_then_attenuate",
         "voice_integrated_lufs": voice_integrated_lufs,
         "music_integrated_lufs": music_integrated_lufs,
         "target_music_lufs": round(target_music_lufs, 2),
         "music_below_voice_lu": music_below_voice_lu,
+        "tolerance_lu": tolerance_lu,
+        "gain_db": round(delta_db, 3),
+        "historical_fallback_factor": fallback_factor,
+        "fallback_is_pass": False,
     }
+    if factor < min_factor or factor > max_factor:
+        payload["ok"] = False
+        payload["verdict"] = "GAIN_LIMIT_EXCEEDED"
+        return payload
+    payload["ok"] = True
+    payload["verdict"] = "GAIN_COMPUTED"
+    return payload
+
+
+def judge_music_gap(
+    voice_integrated_lufs: float | None,
+    music_integrated_lufs: float | None,
+    *,
+    music_below_voice_lu: float = 14.0,
+    tolerance_lu: float = 2.0,
+) -> str:
+    if voice_integrated_lufs is None or music_integrated_lufs is None:
+        return "MEASUREMENT_FAILED"
+    gap = voice_integrated_lufs - music_integrated_lufs
+    if gap > music_below_voice_lu + tolerance_lu:
+        return "MUSIC_TOO_WEAK"
+    if gap < music_below_voice_lu - tolerance_lu:
+        return "MUSIC_TOO_STRONG"
+    return "PASS"

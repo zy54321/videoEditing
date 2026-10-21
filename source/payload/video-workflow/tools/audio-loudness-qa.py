@@ -13,6 +13,7 @@ sys.path.insert(0, str(LIB))
 from audio_loudness_qa import (  # noqa: E402
     analyze_media,
     load_loudness_profile,
+    load_music_gain_policy,
     measure_loudness,
     probe_audio_stream,
     recommend_music_attenuation,
@@ -29,7 +30,7 @@ def main() -> int:
     )
     parser.add_argument("--voice", type=Path, help="Optional voice-only probe for attenuation recommendation")
     parser.add_argument("--music", type=Path, help="Optional music-only probe for attenuation recommendation")
-    parser.add_argument("--music-below-voice-lu", type=float, default=14.0)
+    parser.add_argument("--music-below-voice-lu", type=float, default=None)
     args = parser.parse_args()
 
     payload = Path(__file__).resolve().parents[1]
@@ -38,12 +39,18 @@ def main() -> int:
     result = analyze_media(args.media.resolve(), profile)
 
     if args.voice and args.music:
+        policy = load_music_gain_policy(profile_path)
+        below = args.music_below_voice_lu if args.music_below_voice_lu is not None else policy["music_below_voice_lu"]
         voice_probe = measure_loudness(args.voice.resolve())
         music_probe = measure_loudness(args.music.resolve())
         result["music_attenuation_recommendation"] = recommend_music_attenuation(
             voice_probe.get("integrated_lufs"),
             music_probe.get("integrated_lufs"),
-            music_below_voice_lu=args.music_below_voice_lu,
+            music_below_voice_lu=below,
+            min_factor=policy["min_factor"],
+            max_factor=policy["max_factor"],
+            tolerance_lu=policy["tolerance_lu"],
+            fallback_factor=policy["fallback_factor"],
         )
 
     print(json.dumps(result, indent=2, ensure_ascii=False))

@@ -51,11 +51,16 @@ music_level:
     steps:
       - probe voice integrated loudness on narration master
       - probe music integrated loudness on selected READY asset
-      - compute attenuation so music sits ~14 LU below voice integrated level
-      - clamp factor between 0.08 and 0.35
-      - fall back to verified_baseline_factor when probes unavailable
+      - compute gain so music integrated loudness is 14 LU below voice
+      - accept the result only when the measured gap is within tolerance_lu
+      - if the required gain is outside min_factor/max_factor, FAIL; do not clamp and report PASS
+      - measurement failure is FAIL; verified_baseline_factor is historical only and is not a PASS
     music_below_voice_lu: 14
+    tolerance_lu: 2
+    min_factor: 0.05
+    max_factor: 4.0
     fallback_factor: 0.15
+    fallback_is_pass: false
 
 bgm_continuity:
   cover_narration_gaps: true

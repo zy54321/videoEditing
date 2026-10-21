@@ -6,12 +6,16 @@ authority: FINAL_ARTIFACT
 
 # Target: music bed perceptible under narration (voice remains primary).
 relative_level_target_db:
+  music_below_voice_target: 14.0
+  music_below_voice_tolerance: 2.0
   music_below_voice_min: 12.0
-  music_below_voice_max: 22.0
+  music_below_voice_max: 16.0
 
+# Stem integrated gap uses narration_short_v1: music 14 LU below voice, pass 12–16.
+# These two keys match that window. They are not a second, wider 10–24 LU standard.
 thresholds:
-  too_weak_music_below_voice_db: 24.0
-  too_strong_music_below_voice_db: 10.0
+  too_weak_music_below_voice_db: 16.0
+  too_strong_music_below_voice_db: 12.0
   min_sections_fail_ratio: 0.35
   regression_vs_reference_db: 3.0
 

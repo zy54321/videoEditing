@@ -92,5 +92,43 @@ if (-not $NoWrite -and -not (Test-Path -LiteralPath $contractPath)) {
     exit 4
 }
 
+if (-not $NoWrite) {
+    $musicCli = Join-Path $tools 'invoke-music-bed-derivation.ps1'
+    if (-not (Test-Path -LiteralPath $musicCli)) {
+        $musicCli = Join-Path $PSScriptRoot 'invoke-music-bed-derivation.ps1'
+    }
+    if (Test-Path -LiteralPath $musicCli) {
+        $musicRaw = (& $musicCli -WorkspaceRoot $WorkspaceRoot -BriefPath $BriefPath | Out-String).Trim()
+        $musicPass = 'FAIL'
+        if ($musicRaw) {
+            try { $musicPass = [string](($musicRaw | ConvertFrom-Json).music_pass) } catch { $musicPass = 'FAIL' }
+        }
+        $doc.music_pass = $musicPass
+        if ($musicRaw) {
+            try {
+                $musicObj = $musicRaw | ConvertFrom-Json
+                if ($musicObj.render_input_wav) { $doc.render_input_wav = [string]$musicObj.render_input_wav }
+                if ($musicObj.render_input_sha256) { $doc.render_input_sha256 = [string]$musicObj.render_input_sha256 }
+            } catch { }
+        }
+        $doc | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $resultPath -Encoding UTF8
+        if ($musicPass -eq 'PENDING') {
+            $doc.render_preparation_contract = 'PENDING'
+            $doc.verdict = 'PENDING'
+            $doc | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $resultPath -Encoding UTF8
+            Write-Host 'RENDER_PREPARATION_CONTRACT: PENDING (MUSIC_NOT_SELECTED)' -ForegroundColor Yellow
+            exit 2
+        }
+        if ($LASTEXITCODE -ne 0 -or $musicPass -eq 'FAIL') {
+            $doc.render_preparation_contract = 'FAIL'
+            $doc.verdict = 'FAIL'
+            $doc.errors = @($doc.errors) + @('MUSIC_BED_DERIVATION_FAILED')
+            $doc | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $resultPath -Encoding UTF8
+            Write-Host "RENDER_PREPARATION_CONTRACT: FAIL (MUSIC_BED $musicPass)" -ForegroundColor Red
+            exit 1
+        }
+    }
+}
+
 Write-Host 'RENDER_PREPARATION_CONTRACT: PASS (CONTRACT_READY)' -ForegroundColor Green
 exit 0

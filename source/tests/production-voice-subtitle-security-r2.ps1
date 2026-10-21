@@ -157,6 +157,7 @@ Invoke-Review $w8
 $sha8 = (Get-Content (Join-Path $w8 'video-workflow\production\voice-subtitle-review-result.json') -Raw | ConvertFrom-Json).fingerprints.reviewed_text_sha256
 Write-OwnerIntent -Workspace $w8 -TextSha256 $sha8
 & python (Join-Path $Tools 'record-voice-subtitle-owner-approval.py') --workspace $w8 | Out-Null
+& python (Join-Path $PSScriptRoot 'bind-existing-timing-evidence.py') $w8
 & (Join-Path $Tools 'invoke-frozen-script-subtitle-route.ps1') -WorkspaceRoot $w8 -NoPause | Out-Null
 Set-Content (Join-Path $w8 'video-workflow\production\reviewed-subtitle-text.txt') '漂移文字' -Encoding UTF8
 $py8 = @"

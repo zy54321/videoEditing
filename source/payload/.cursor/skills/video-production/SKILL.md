@@ -716,7 +716,7 @@ Production Brief features
 
 **Ordered production route (MUST):**
 
-1. Obtain ASR **timing evidence** (Resolve transcription route, MCP, or other authorized capture) and write `video-workflow/production/asr-timing-evidence.json` (ASR timing evidence contract).
+1. Obtain word-level ASR **timing evidence** by running `video-workflow/tools/invoke-subtitle-timing-evidence.ps1` If no bound word cues exist, that command calls Resolve MediaPoolItem.TranscribeAudio and reads word timings, then the N20261021 monotonic aligner. A single full-span segment is not precise timing. Missing words are BLOCKED. Do not invent character-proportional times and do not ask the Owner to type timecodes. Write `video-workflow/production/asr-timing-evidence.json`.
 2. Run `video-workflow/tools/invoke-frozen-script-subtitle-route.ps1` with `-WorkspaceRoot <cursor workspace>` **or** execute the same steps explicitly:
    - `build-canonical-subtitle-cues.py --brief video-workflow/production/brief.yaml --asr video-workflow/production/asr-timing-evidence.json --out video-workflow/production/canonical-subtitle-cues.json`
    - `validate-canonical-subtitle-authority-gate.py` → `video-workflow/production/subtitle-canonical-gate-result.json`
@@ -799,7 +799,7 @@ audio.music.level_under_voice
 - profile: `video-workflow/runtime/narration-short-v1-audio-mix-profile.yaml` (`narration_short_v1`)
 - narration priority — voice primary, music supporting
 - music: continuous BGM across narration pauses (low bed) — **not** dynamic ducking
-- `audio.music.level_under_voice` via `ffmpeg_pre_attenuation` — measure voice/music LUFS when possible; fallback factor `0.15` (verified spike)
+- `audio.music.level_under_voice` via `ensure-music-bed.py` / `invoke-music-bed-derivation.ps1` before render prep PASS. The profile sets music 14 LU below voice (±2). `0.15` is a historical factor and is not a PASS. Do not type a fader value.
 - `audio.music.duck` remains **UNKNOWN** — do not claim VERIFIED
 - post-render loudness QA: `audio-loudness-qa.py` / `final-artifact-qa.ps1` audio section
 - post-render loudness repair: `final-audio-loudness-repair.py` + `final-artifact-audio-qa-repair.ps1` (measure/repair separate)

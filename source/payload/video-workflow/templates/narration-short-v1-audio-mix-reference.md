@@ -47,7 +47,7 @@ Qualitative: voice intelligible; music present; overall deliverable too quiet fo
 1. Narration is primary — never masked by BGM.
 2. BGM is continuous across narration pauses (~0.6–0.8s gaps in N02 V4) at low level — **not** gated ducking.
 3. Use `ffmpeg_pre_attenuation` on immutable music source → derived WAV → Resolve import.
-4. Attenuation factor is **measured**, not a magic constant — `0.15` remains verified fallback from spike.
+4. Attenuation factor is **measured** from the profile (`music_below_voice_lu: 14`, tolerance ±2 LU). `0.15` is a historical spike only and is not a PASS when measurement fails.
 
 ## QA verdicts
 

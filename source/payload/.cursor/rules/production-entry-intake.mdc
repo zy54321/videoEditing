@@ -591,7 +591,8 @@ When **READY**, the Agent **MUST**:
 1. Output Preparation Summary
 2. Create and save Brief
 3. When `features.subtitles` is enabled and `content.authority.type` is `voice`, run `invoke-voice-subtitle-review-route.ps1` (mechanical). `NEEDS_OWNER_REVIEW` requires `record-voice-subtitle-owner-approval.py` before render-prep contract PASS.
-4. Run `video-workflow/tools/invoke-production-preparation-contract.ps1 -WorkspaceRoot <workspace>` (mechanical — not optional)
+3b. When subtitles are enabled, run `invoke-subtitle-timing-evidence.ps1` before Canonical build (mechanical). A single full-span ASR segment is not precise timing. Missing word-level evidence is BLOCKED; do not ask the Owner to type timecodes. Reuse validated word cues when the script and narration hashes still match.
+4. Run `video-workflow/tools/invoke-production-preparation-contract.ps1 -WorkspaceRoot <workspace>` (mechanical — not optional). When `assets.music.path` is set, this step runs `invoke-music-bed-derivation.ps1` and render-prep stays FAIL unless the derivation report is PASS.
    - `BLOCKED` → **PREPARATION_GATE** must not claim READY (invalid contract inputs)
    - `INCOMPLETE` → Intake may still reach READY for editorial start; `render_preparation_contract` stays **PENDING** (e.g. voice subtitle authority pending U1)
    - `CONTRACT_READY` → writes `final-render-contract.json` + `preparation-contract-result.json` with `render_preparation_contract: PASS`
