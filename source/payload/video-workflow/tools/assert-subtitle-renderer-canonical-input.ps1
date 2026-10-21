@@ -25,9 +25,12 @@ $detectPy = @"
 import sys
 from pathlib import Path
 sys.path.insert(0, r'$($tools -replace "'","''")\\lib')
+from pathlib import Path
 from brief_subtitle_authority import load_brief_dict, brief_requires_canonical_subtitle_route
-b = load_brief_dict(Path(r'$($BriefPath -replace "'","''")'))
-print('REQUIRED' if brief_requires_canonical_subtitle_route(b) else 'SKIP')
+ws = Path(r'$($WorkspaceRoot -replace "'","''")')
+bpath = Path(r'$($BriefPath -replace "'","''")')
+b = load_brief_dict(bpath)
+print('REQUIRED' if brief_requires_canonical_subtitle_route(b, workspace_root=ws, brief_path=bpath) else 'SKIP')
 "@
 
 $need = & python -c $detectPy 2>&1 | Select-Object -Last 1

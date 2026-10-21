@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "cues": [
+    {"cue_id": "b1", "start": 0.0, "end": 2.0, "recognized_text": "你好世界"}
+  ]
+}

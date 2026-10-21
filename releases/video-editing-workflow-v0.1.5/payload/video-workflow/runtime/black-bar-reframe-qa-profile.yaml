@@ -1,0 +1,52 @@
+# Black-bar / Reframe QA V1 — detect → repair → re-QA loop contract (Step 4B)
+
+schema_version: 1
+profile_id: black_bar_reframe_qa_v1
+
+target_canvas:
+  aspect: "9:16"
+  default_width: 1080
+  default_height: 1920
+
+detection:
+  tool: black-bar-qa.py
+  method: ffmpeg_cropdetect_multiframe_per_edge
+  min_bar_pixels: 12
+  frames_required_for_fail: 2
+  distinguish:
+    - letterbox
+    - pillarbox
+    - canvas_mismatch
+  not_bar:
+    - intentional_composition
+    - intrinsic_source_black_region
+    - scene_black_objects
+
+verdicts:
+  pass: PASS
+  suspect: SUSPECT_BLACK_BARS
+  repair_required: REPAIR_REQUIRED
+  owner_review: REFRAME_OWNER_REVIEW_REQUIRED
+
+repair:
+  route: visual.reframe.static
+  allowed_adjustments:
+    - scale
+    - position
+  max_auto_attempts: 3
+  fail_if_subject_would_be_cropped: REFRAME_OWNER_REVIEW_REQUIRED
+
+loop:
+  - source_selection
+  - assemble
+  - static_reframe
+  - frame_qa
+  - black_bar_detection
+  - pass_or_repair_required
+  - repair
+  - re_qa
+
+production_gate:
+  pre_render_qa_required: true
+  post_render_qa_required: true
+  repair_loop_verified: fixture_validated

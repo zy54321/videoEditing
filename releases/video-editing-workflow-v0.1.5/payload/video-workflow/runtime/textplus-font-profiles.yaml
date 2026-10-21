@@ -1,0 +1,33 @@
+# Validated Text+ font profiles for L1 layout materialization (Stage 08E-B A1 / A1.1).
+# Do not auto-calibrate or extend without validation evidence.
+#
+# Production CLS generator requires EXACT match:
+#   typography.font_family + typography.base_font_size_px == profile.l1_base_font_size_px
+# Unvalidated sizes fail closed: TEXTPLUS_FONT_SIZE_PROFILE_NOT_VALIDATED
+#
+# Related golden fixture (structural topology reference — NOT a runtime dependency):
+#   video-workflow/runtime/textplus-cls-canonical.setting
+# Executable graph authority: textplus_cls_setting.generate_setting()
+
+schema_version: 1
+
+profiles:
+  microsoft_yahei_ui:
+    l1_font_family: Microsoft YaHei
+    resolve_font_family: Microsoft YaHei UI
+    l1_base_font_size_px: 48
+    textplus_style: Regular
+    textplus_size: 0.073
+    evidence:
+      - validation/08e-b-exp-a/evidence/a1-size-calibration-yahei.json
+      - validation/08e-b-exp-a/evidence/a1-parity-matrix-yahei-a01-a06.json
+
+  arial:
+    l1_font_family: Arial
+    resolve_font_family: Arial
+    l1_base_font_size_px: 48
+    textplus_style: Regular
+    textplus_size: 0.064
+    evidence:
+      - validation/08e-b-exp-a/evidence/a1-size-calibration.json
+      - validation/08e-b-exp-a/evidence/a00-smoke-result.json

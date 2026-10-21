@@ -1,0 +1,25 @@
+version: 1
+production:
+  id: external-u2
+editing:
+  skill: observational-info-short
+features:
+  subtitles: true
+content:
+  authority:
+    type: script
+    path: frozen-script.txt
+format:
+  width: 1080
+  height: 1920
+  fps: 24
+media:
+  input: input
+  output: output
+output:
+  filename: external-u2_V1.mp4
+delivery:
+  ready: true
+  subtitle_renderer_route: external_ass
+  external_ass_style_baseline_id: astra-external-ass-n02prod-v1
+  subtitle_series_style_ref: ""

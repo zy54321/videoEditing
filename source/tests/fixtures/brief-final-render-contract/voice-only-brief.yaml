@@ -1,0 +1,23 @@
+version: 1
+production:
+  id: voice-u2
+editing:
+  skill: observational-info-short
+features:
+  subtitles: true
+content:
+  authority:
+    type: voice
+    path: narration.wav
+format:
+  width: 1080
+  height: 1920
+  fps: 24
+media:
+  input: input
+  output: output
+output:
+  filename: voice-u2_V1.mp4
+delivery:
+  ready: true
+  subtitle_renderer_route: native_drt

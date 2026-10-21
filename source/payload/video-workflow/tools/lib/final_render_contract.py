@@ -33,9 +33,11 @@ class FinalRenderContract:
     resolve_subtitle_export_mode: str | None = None
     sidecar_subtitle_paths: tuple[str, ...] = ()
     deliver_authority: str = DELIVER_AUTHORITY_FINAL_MP4
+    external_ass_style_baseline_id: str | None = None
+    subtitle_series_style_ref: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        doc = {
             "schema_version": SCHEMA_VERSION,
             "deliver_authority": self.deliver_authority,
             "renderer_route": self.renderer_route,
@@ -51,6 +53,11 @@ class FinalRenderContract:
             "expected_duration_seconds": self.expected_duration_seconds,
             "canonical_subtitle_cues_path": self.canonical_subtitle_cues_path,
         }
+        if self.external_ass_style_baseline_id:
+            doc["external_ass_style_baseline_id"] = self.external_ass_style_baseline_id
+        if self.subtitle_series_style_ref:
+            doc["subtitle_series_style_ref"] = self.subtitle_series_style_ref
+        return doc
 
 
 def load_final_render_contract(path: Path) -> FinalRenderContract:
@@ -73,6 +80,8 @@ def load_final_render_contract(path: Path) -> FinalRenderContract:
         expected_duration_seconds=doc.get("expected_duration_seconds"),
         canonical_subtitle_cues_path=doc.get("canonical_subtitle_cues_path"),
         deliver_authority=str(doc.get("deliver_authority", DELIVER_AUTHORITY_FINAL_MP4)),
+        external_ass_style_baseline_id=doc.get("external_ass_style_baseline_id"),
+        subtitle_series_style_ref=doc.get("subtitle_series_style_ref"),
     )
 
 

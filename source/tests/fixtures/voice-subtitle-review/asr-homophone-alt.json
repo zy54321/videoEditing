@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "cues": [
+    {"cue_id": "h2", "start": 0.0, "end": 2.5, "recognized_text": "心里反复想起"}
+  ]
+}

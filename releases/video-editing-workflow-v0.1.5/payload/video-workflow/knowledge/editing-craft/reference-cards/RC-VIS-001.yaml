@@ -1,0 +1,27 @@
+id: RC-VIS-001
+dimension: visual-language
+
+context:
+  narrative_function: EVIDENCE
+  emotion_before: curiosity
+  emotion_after: recognition
+  attention_target: hands at payment counter
+
+options:
+  - id: A
+    description: medium stable shot, readable action, neutral angle
+  - id: B
+    description: aggressive push-in with shallow depth and dramatic angle
+
+preferred: A
+
+because: >
+  Observational style treats payment as everyday evidence, not spectacle.
+  Push-in reads as promotional emphasis.
+
+tradeoff: A sacrifices cinematic punch for credibility.
+
+avoid_when: local Owner intent requests heightened contrast or reveal
+
+applicable_styles:
+  - observational-info-short

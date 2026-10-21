@@ -1,0 +1,50 @@
+# Style Profile field contract (Stage 08D.1)
+# Instances and canonical template MUST conform.
+
+schema_version: 1
+
+required_top_level:
+  - schema_version
+  - style_id
+  - identity
+  - taste_profile
+  - format_adaptation
+
+identity_required:
+  - name
+  - core_feeling
+  - audience_relationship
+  - primary_goal
+
+intensity_scale: &intensity
+  - very-low
+  - low
+  - medium-low
+  - medium
+  - medium-high
+  - high
+  - very-high
+
+taste_profile_fields:
+  naturalism: { type: intensity, allowed: *intensity }
+  polish: { type: intensity, allowed: *intensity }
+  visual_energy: { type: intensity, allowed: *intensity }
+  camera_assertiveness: { type: intensity, allowed: *intensity }
+  camera_stability: { type: intensity, allowed: *intensity }
+  psychological_distance:
+    type: semantic
+    allowed: [distant, medium-distant, conversational, medium-close, close]
+  shot_variety: { type: intensity, allowed: *intensity }
+  cut_density: { type: intensity, allowed: *intensity }
+  breathing_room: { type: intensity, allowed: *intensity }
+  graphic_expressiveness: { type: intensity, allowed: *intensity }
+  subtitle_expressiveness: { type: intensity, allowed: *intensity }
+  music_assertiveness: { type: intensity, allowed: *intensity }
+  ambience_value: { type: intensity, allowed: *intensity }
+  silence_value: { type: intensity, allowed: *intensity }
+  color_stylization: { type: intensity, allowed: *intensity }
+  effects_visibility: { type: intensity, allowed: *intensity }
+  realism_priority: { type: intensity, allowed: *intensity }
+
+taste_axes_optional: true
+taste_axes_strength_allowed: [weak, moderate, strong]

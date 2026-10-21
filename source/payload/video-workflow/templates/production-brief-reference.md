@@ -189,7 +189,22 @@ When `frozen: true`: subtitle / transcription alignment uses Frozen Script as se
 
 **R1 Closeout (mandatory L3):** use `invoke-frozen-script-subtitle-route.ps1` → `canonical-subtitle-cues.json` + `SUBTITLE_CANONICAL_AUTHORITY_GATE`; renderers require `assert-subtitle-renderer-canonical-input.ps1` PASS first. See `subtitle-canonical-authority-gate-reference.md`.
 
-**R2 (final deliver):** write `final-render-contract.json`; after clean master render, run `invoke-production-deliver-closeout.ps1` (external ASS when `renderer_route: external_ass`, then `run-final-artifact-gate.ps1`) → `FINAL_ARTIFACT_GATE` / `FINAL_RENDER_SUBTITLE_BURNIN` on the **burned MP4** only. Closeout requires `assert-production-final-deliver.ps1`. See `final-render-contract-reference.md`.
+**R2 (final deliver):** generate `final-render-contract.json` with `build-final-render-contract-from-brief.py` from Brief `delivery` + `media.output` + `output.filename`; after clean master render, run `invoke-production-deliver-closeout.ps1` (external ASS when `renderer_route: external_ass`, then `run-final-artifact-gate.ps1`) → `FINAL_ARTIFACT_GATE` / `FINAL_RENDER_SUBTITLE_BURNIN` on the **burned MP4** only. Closeout requires `assert-production-final-deliver.ps1`. See `final-render-contract-reference.md`.
+
+### `delivery` (U2 — task-level render contract inputs)
+
+Machine-readable deliverable policy. **Does not** replace `content.authority` (voice vs script). Natural-language Style refinements (`editing.creative_direction`) are **not** auto-compiled — only fields below are used for contract generation.
+
+| Field | Meaning |
+|-------|---------|
+| `delivery.ready` | `false` → contract build returns `INCOMPLETE` (`DELIVERY_NOT_READY`). Voice-only subtitle authority stays `INCOMPLETE` until U1 review path exists. |
+| `delivery.subtitle_renderer_route` | `native_drt` \| `external_ass` — required when `features.subtitles: true` and `ready: true`. Legacy Briefs **without** a `delivery` section default to `native_drt` when subtitles enabled. |
+| `delivery.external_ass_style_baseline_id` | Required for `external_ass` (e.g. `astra-external-ass-n02prod-v1`). Must match a bundled baseline JSON. |
+| `delivery.subtitle_series_style_ref` | Optional registry key in `subtitle-series-style-registry.v1.json` (e.g. `xinjian-kouwen:ep01_subtitle`). Unresolved keys **BLOCK** — do not guess “沿用上一集”. |
+
+**Final MP4 path authority:** `Path(media.output) / output.filename` (normalized absolute). Contract `final_artifact_path` must match or generation **BLOCK**s (`BRIEF_CONTRACT_FINAL_PATH_MISMATCH`).
+
+**Preparation (mechanical):** after Brief save, run `invoke-production-preparation-contract.ps1` → `preparation-contract-result.json`. `CONTRACT_READY` ≠ `FINAL_ARTIFACT_GATE` PASS. Before Render, `assert-render-preparation-contract.ps1` must exit `0`.
 
 **R3 (static portrait reframe):** after assembly, export `timeline-probe.json` (MCP `probe_timeline_structure`); run `invoke-static-portrait-reframe.ps1` with `-Apply` before clean-master render. Policy `static-portrait-reframe.v1` only — no ad-hoc crop+zoom bulk scripts.
 

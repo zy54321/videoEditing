@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "provenance": {
+    "asr_run_id": "run-secondary-002",
+    "provider_id": "fixture.provider.beta",
+    "source_audio_sha256": "61607e279f58ecf64ac48b25b94c2cec1c45e9344bdd03127fdd0ce0485f2c95",
+    "captured_at": "2026-10-20T10:05:00Z"
+  },
+  "cues": [
+    {"cue_id": "b1", "start": 0.0, "end": 2.0, "recognized_text": "你好世界"}
+  ]
+}

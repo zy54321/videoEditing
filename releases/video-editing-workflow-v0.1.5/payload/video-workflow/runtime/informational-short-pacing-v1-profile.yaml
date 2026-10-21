@@ -1,0 +1,48 @@
+# Informational-short Pacing V1 — beat-first editorial rhythm contract (Step 4B)
+# Heuristic thresholds — not universal editing law.
+
+schema_version: 1
+profile_id: informational_short_pacing_v1
+
+authority:
+  primary: beat
+  shot_expansion: on_demand
+
+rules:
+  - beat_is_primary_rhythm_authority
+  - no_single_visual_across_unrelated_semantic_beats_without_reason
+  - on_beat_change_prefer:
+      - new_source_range
+      - alternate_asset
+      - same_asset_new_range
+      - static_reframe_variation
+  - do_not_auto_escalate_to:
+      - visual.motion.push_in
+      - visual.motion.pan
+      - resolvefx
+      - fusion_motion
+      - decorative_transitions
+
+thresholds:
+  warning_duration_sec: 6.0
+  repair_review_duration_sec: 10.0
+  micro_fragment:
+    max_frames: 2
+    max_sec_fallback: 0.084
+  notes: "V1 heuristic only — editorial_reason / intentional_flash may exempt."
+
+repair_priority:
+  - clip.source_range
+  - clip.assemble
+  - visual.reframe.static
+  forbidden_first:
+    - visual.motion.push_in
+    - visual.motion.pan
+    - resolvefx
+    - fusion_motion
+
+verdicts:
+  pass: PASS
+  warning: PACING_WARNING
+  repair_candidate: PACING_REPAIR_CANDIDATE
+  exempt: PACING_EXEMPT

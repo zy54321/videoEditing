@@ -1,0 +1,27 @@
+# Shared Asset Library — machine-local runtime configuration (Step 3A)
+# NOT bundled with release media. Each host may override this path.
+
+schema_version: 1
+library_id: astra-shared-assets-v1
+
+# Canonical root — parallel to dated Production folders (YYYY-MM-DD/input|output)
+shared_asset_root: "E:/03_Media/02_Video/Davinci/Astra/assets"
+
+catalog:
+  music: catalog/music.yaml
+
+# V1 ACTIVE categories only
+active_categories:
+  - music
+
+# Reserved category boundaries (no automation in V1)
+reserved_categories:
+  - sfx
+  - video
+  - images
+  - overlays
+
+selection:
+  missing_asset_code: MUSIC_ASSET_NOT_AVAILABLE
+  production_selectable_status:
+    - READY

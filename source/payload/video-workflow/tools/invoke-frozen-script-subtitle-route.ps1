@@ -35,9 +35,12 @@ $detectPy = @"
 import json, sys
 from pathlib import Path
 sys.path.insert(0, r'$($tools -replace "'","''")\\lib')
+from pathlib import Path
 from brief_subtitle_authority import load_brief_dict, brief_requires_canonical_subtitle_route
-b = load_brief_dict(Path(r'$($BriefPath -replace "'","''")'))
-print('REQUIRED' if brief_requires_canonical_subtitle_route(b) else 'SKIP')
+ws = Path(r'$($WorkspaceRoot -replace "'","''")')
+bpath = Path(r'$($BriefPath -replace "'","''")')
+b = load_brief_dict(bpath)
+print('REQUIRED' if brief_requires_canonical_subtitle_route(b, workspace_root=ws, brief_path=bpath) else 'SKIP')
 "@
 
 $need = & python -c $detectPy 2>&1 | Select-Object -Last 1
@@ -58,12 +61,37 @@ foreach ($p in @($BriefPath, $AsrEvidencePath, $buildCli, $gateCli)) {
 $canonicalOut = Join-Path $prod 'canonical-subtitle-cues.json'
 $gateOut = Join-Path $prod 'subtitle-canonical-gate-result.json'
 
-& python $buildCli --brief $BriefPath --asr $AsrEvidencePath --out $canonicalOut
+$detectVoicePy = @"
+import sys
+from pathlib import Path
+sys.path.insert(0, r'$($tools -replace "'","''")\\lib')
+from brief_subtitle_authority import load_brief_dict, voice_subtitle_review_pending, voice_canonical_script_path
+b = load_brief_dict(Path(r'$($BriefPath -replace "'","''")'))
+ws = Path(r'$($WorkspaceRoot -replace "'","''")')
+print('VOICE_REVIEWED' if voice_subtitle_review_pending(b) else 'BRIEF_SCRIPT')
+"@
+
+$voiceMode = & python -c $detectVoicePy 2>&1 | Select-Object -Last 1
+if ($voiceMode -eq 'VOICE_REVIEWED') {
+    $reviewedScript = Join-Path $prod 'reviewed-subtitle-text.txt'
+    if (-not (Test-Path -LiteralPath $reviewedScript)) {
+        throw 'FROZEN_SCRIPT_SUBTITLE_ROUTE_BLOCKED: reviewed-subtitle-text.txt missing'
+    }
+    & python $buildCli --script $reviewedScript --asr $AsrEvidencePath --out $canonicalOut
+} else {
+    & python $buildCli --brief $BriefPath --asr $AsrEvidencePath --out $canonicalOut
+}
 if ($LASTEXITCODE -ne 0) {
     throw 'CANONICAL_SUBTITLE_BUILD_FAILED'
 }
 
-& python $gateCli --canonical $canonicalOut --brief $BriefPath --asr $AsrEvidencePath --out $gateOut
+$gateArgs = @($gateCli, '--canonical', $canonicalOut, '--asr', $AsrEvidencePath, '--out', $gateOut)
+if ($voiceMode -eq 'VOICE_REVIEWED') {
+    $gateArgs += @('--script', (Join-Path $prod 'reviewed-subtitle-text.txt'))
+} else {
+    $gateArgs += @('--brief', $BriefPath)
+}
+& python @gateArgs
 if ($LASTEXITCODE -ne 0) {
     throw 'SUBTITLE_CANONICAL_AUTHORITY_GATE_FAIL'
 }

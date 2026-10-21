@@ -70,4 +70,11 @@ output:
   filename: "" # Final deliverable filename (required)
   overwrite_existing: false # false = do not silently overwrite existing file
 
+# Task-level deliverable contract inputs (U2). See production-brief-reference.md § delivery.
+delivery:
+  ready: true # false = contract generation stays INCOMPLETE (e.g. pending voice subtitle review)
+  subtitle_renderer_route: "" # native_drt | external_ass (required when features.subtitles=true and ready)
+  external_ass_style_baseline_id: "" # Required when subtitle_renderer_route=external_ass
+  subtitle_series_style_ref: "" # Optional registry key → baseline (subtitle-series-style-registry.v1.json)
+
 notes: "" # Free-form Owner notes (optional)

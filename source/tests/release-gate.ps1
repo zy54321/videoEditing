@@ -46,6 +46,8 @@ function Run-PreBuild {
     Invoke-TestScript (Join-Path $Tests 'production-subtitle-canonical-orchestration.ps1') 'production-subtitle-canonical-orchestration'
     Invoke-TestScript (Join-Path $Tests 'production-subtitle-external-ass-baseline.ps1') 'production-subtitle-external-ass-baseline'
     Invoke-TestScript (Join-Path $Tests 'production-r3-static-portrait-reframe.ps1') 'production-r3-static-portrait-reframe'
+    Invoke-TestScript (Join-Path $Tests 'production-voice-subtitle-authority.ps1') 'production-voice-subtitle-authority'
+    Invoke-TestScript (Join-Path $Tests 'production-brief-final-render-contract.ps1') 'production-brief-final-render-contract'
     Invoke-TestScript (Join-Path $Tests 'production-orchestration-entry-smoke.ps1') 'production-orchestration-entry-smoke'
     Invoke-TestScript (Join-Path $Tests 'production-final-artifact-gate.ps1') 'production-final-artifact-gate'
     Invoke-TestScript (Join-Path $Tests 'production-subtitle-stroke-unblock.ps1') 'production-subtitle-stroke-unblock'

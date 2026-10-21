@@ -1,0 +1,107 @@
+# Astra V1 Final Audio Profile — narration_short_v1 (Repair Step 4A)
+# Internal production baseline for short-form narration-led vertical video.
+# Not claimed as the only valid standard for every social platform.
+
+schema_version: 1
+profile_id: narration_short_v1
+
+integrated_loudness:
+  target_lufs: -16
+  tolerance_lu: 1
+  accept_min_lufs: -17
+  accept_max_lufs: -15
+  # V1 engineering parameter — not claimed as universal platform LRA standard
+  lra: 7
+
+true_peak:
+  ceiling_dbtp: -1.0
+  # V1 engineering margin between loudnorm TP target and final encoded ceiling (not a universal standard)
+  encoder_safety_margin_dbtp: 0.5
+  repair_target_dbtp: -1.5
+
+output_audio:
+  sample_rate_hz: 48000
+  channels: 2
+
+priority:
+  voice: primary
+  music: supporting
+  original_sound: preserve_when_present
+  ambience: bed_only
+
+voice_first:
+  narration_clear: true
+  no_clipping: true
+  music_must_not_mask: true
+  music_supports_pacing: true
+
+music_level:
+  route: ffmpeg_pre_attenuation
+  verified_baseline_factor: 0.15
+  music_timeline_behavior: continuous_full_span
+  pause_behavior: keep_low_level_bed
+  not_dynamic_ducking: true
+  calibration:
+    reference_production: N02-V4
+    measured_integrated_lufs: -24.8
+    measured_true_peak_dbtp: -5.84
+    gap_to_target_lu: 8.8
+  strategy:
+    method: measure_then_attenuate
+    steps:
+      - probe voice integrated loudness on narration master
+      - probe music integrated loudness on selected READY asset
+      - compute attenuation so music sits ~14 LU below voice integrated level
+      - clamp factor between 0.08 and 0.35
+      - fall back to verified_baseline_factor when probes unavailable
+    music_below_voice_lu: 14
+    fallback_factor: 0.15
+
+bgm_continuity:
+  cover_narration_gaps: true
+  allow_head_tail_fade: true
+  do_not_gate_with_voice: true
+  note: "N02 V4 ~0.6–0.8s narration pauses need continuous low BGM — not dynamic ducking."
+
+qa:
+  tool: audio-loudness-qa.py
+  integrated_field: integrated_lufs
+  true_peak_field: true_peak_dbtp
+  verdicts:
+    pass: PASS
+    too_low: LOUDNESS_TOO_LOW
+    too_high: LOUDNESS_TOO_HIGH
+    peak: TRUE_PEAK_EXCEEDED
+    no_audio: NO_AUDIO
+
+auto_repair:
+  final_audio_auto_repair: VERIFIED
+  max_retries: 1
+  route: ffmpeg_loudnorm_two_pass
+  tool: final-audio-loudness-repair.py
+  orchestrator: final-artifact-audio-qa-repair.ps1
+  policy:
+    repairable_verdicts:
+      - LOUDNESS_TOO_LOW
+      - LOUDNESS_TOO_HIGH
+      - TRUE_PEAK_EXCEEDED
+    non_repairable_verdicts:
+      - NO_AUDIO
+    no_op_verdict: NO_REPAIR_REQUIRED
+    fail_closed_verdict: FINAL_AUDIO_REPAIR_FAILED
+  candidate_routes:
+    ffmpeg_loudnorm_two_pass:
+      status: VERIFIED
+      note: "Post-render loudnorm two-pass on rendered artifact; video stream copy for MP4."
+    resolve_fairlight_loudness_normalization:
+      status: AVAILABLE_UNVERIFIED
+      note: "Resolve/Fairlight may support loudness tools manually; Samuel MCP automation not evidenced."
+
+verification:
+  required_evidence:
+    - ffprobe_audio_stream_present
+    - ffmpeg_ebur128_integrated_lufs
+    - ffmpeg_ebur128_true_peak
+  insufficient_evidence:
+    - mean_volume_only
+    - timeline_state_without_rendered_artifact

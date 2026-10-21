@@ -18,6 +18,8 @@
 | `burnin_method` | `resolve_export_burn_in` \| `ffmpeg_libass` |
 | `resolve_subtitle_export_mode` | `burn_into_video` \| `separate_subtitle_file` (Native DRT) |
 | `canonical_subtitle_cues_path` | R1 `canonical-subtitle-cues.json` |
+| `external_ass_style_baseline_id` | When `external_ass` — verified baseline id (e.g. `astra-external-ass-n02prod-v1`) |
+| `subtitle_series_style_ref` | Optional Brief registry key echoed for traceability |
 | `sidecar_subtitle_paths` | TTML/SRT paths if any (N03 regression guard) |
 
 ## Native DRT

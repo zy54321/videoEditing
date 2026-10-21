@@ -590,7 +590,13 @@ When **READY**, the Agent **MUST**:
 
 1. Output Preparation Summary
 2. Create and save Brief
-3. Automatically enter L3 Stage 0 Preflight
+3. When `features.subtitles` is enabled and `content.authority.type` is `voice`, run `invoke-voice-subtitle-review-route.ps1` (mechanical). `NEEDS_OWNER_REVIEW` requires `record-voice-subtitle-owner-approval.py` before render-prep contract PASS.
+4. Run `video-workflow/tools/invoke-production-preparation-contract.ps1 -WorkspaceRoot <workspace>` (mechanical — not optional)
+   - `BLOCKED` → **PREPARATION_GATE** must not claim READY (invalid contract inputs)
+   - `INCOMPLETE` → Intake may still reach READY for editorial start; `render_preparation_contract` stays **PENDING** (e.g. voice subtitle authority pending U1)
+   - `CONTRACT_READY` → writes `final-render-contract.json` + `preparation-contract-result.json` with `render_preparation_contract: PASS`
+5. Before **Render**, run `assert-render-preparation-contract.ps1` (exit non-zero blocks render-prep complete; does not run FINAL_ARTIFACT_GATE)
+6. Automatically enter L3 Stage 0 Preflight
 
 **MUST NOT** ask “是否继续？” / “要不要开始？” / “是否进入下一步？” / “请发送继续”
 

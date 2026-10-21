@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "description": "Resolvable subtitle_series_style_ref keys → external_ass_style_baseline_id. Natural-language series references are not accepted.",
+  "refs": {
+    "xinjian-kouwen:ep01_subtitle": "astra-external-ass-n02prod-v1"
+  }
+}
