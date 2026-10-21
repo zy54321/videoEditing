@@ -11,6 +11,7 @@ from assembly_shot_utils import (
     is_editorial_exempt,
     is_micro_fragment,
     shot_timeline_duration_sec,
+    source_join_decision,
 )
 from shared_asset_library import load_catalog_file
 
@@ -98,9 +99,11 @@ def analyze_assembly_plan(
                 "shot_id": shot.get("shot_id"),
                 "beat_id": beat_id,
                 "duration_sec": duration,
-                "verdict": VERDICT_REPAIR,
-                "reason": "duration_exceeds_repair_threshold",
-                "repair_route": ["clip.source_range", "clip.assemble"],
+                "verdict": VERDICT_WARNING,
+                "reason": "long_take_hold",
+                "blocking": False,
+                "repair_route": [],
+                "note": "A continuous hold is not repaired by swapping the asset.",
             })
         elif duration >= profile.warning_duration_sec:
             findings.append({
@@ -152,22 +155,49 @@ def analyze_assembly_plan(
         span_duration = sum(shot_timeline_duration_sec(s) for s in span_shots)
         if len(span_shots) >= 2 and span_duration >= profile.repair_review_duration_sec:
             if not any(is_editorial_exempt(s) for s in span_shots):
+                joins = [
+                    source_join_decision(span_shots[k], span_shots[k + 1], fps)
+                    for k in range(len(span_shots) - 1)
+                ]
+                gaps = [join.get("gap_sec") for join in joins if "gap_sec" in join]
+                decisions = [join.get("decision") for join in joins]
+                if joins and all(decision == "merge" for decision in decisions):
+                    reason = "continuous_long_take_split"
+                    route = ["clip.merge_continuous_source"]
+                    route_role = "executable_by_apply_repair"
+                elif any(decision in {"timeline_gap", "timeline_overlap", "timeline_position_unproven"} for decision in decisions):
+                    reason = "timeline_gap_blocks_continuous_merge"
+                    route = []
+                    route_role = "not_a_source_replan"
+                elif any(decision in {"source_gap", "source_overlap", "frame_inconsistent", "source_fps_conflict"} for decision in decisions):
+                    reason = "source_gap_blocks_continuous_merge"
+                    route = ["replan_continuous_source_range"]
+                    route_role = "suggestion"
+                else:
+                    reason = "same_source_asset_span"
+                    route = ["replan_continuous_source_range"]
+                    route_role = "suggestion"
                 findings.append({
                     "shot_id": span_shots[0].get("shot_id"),
                     "beat_id": ",".join(str(s.get("beat_id") or "") for s in span_shots),
                     "duration_sec": span_duration,
                     "verdict": VERDICT_REPAIR,
-                    "reason": "same_source_asset_span",
+                    "reason": reason,
                     "span_shot_ids": [s.get("shot_id") for s in span_shots],
                     "source_asset": span_shots[0].get("source_asset"),
-                    "repair_route": ["clip.source_range", "clip.assemble"],
+                    "source_gaps_sec": gaps,
+                    "joins": joins,
+                    "repair_route": route,
+                    "repair_route_role": route_role,
+                    "repair_route_executed": False,
+                    "source_range_replanned": False,
                 })
         i = j
 
     overall = VERDICT_PASS
     if any(f["verdict"] in (VERDICT_REPAIR, VERDICT_MICRO) for f in findings):
         overall = VERDICT_REPAIR
-    elif any(f["verdict"] == VERDICT_WARNING for f in findings):
+    elif any(f["verdict"] == VERDICT_WARNING and f.get("blocking", True) for f in findings):
         overall = VERDICT_WARNING
 
     micro_count = sum(1 for f in findings if f["verdict"] == VERDICT_MICRO)

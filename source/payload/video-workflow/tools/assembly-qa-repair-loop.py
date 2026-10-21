@@ -12,7 +12,7 @@ _LIB = _TOOLS / "lib"
 if str(_LIB) not in sys.path:
     sys.path.insert(0, str(_LIB))
 
-from assembly_repair import repair_assembly_plan  # noqa: E402
+from assembly_repair import preserve_continuous_shots, repair_assembly_plan  # noqa: E402
 from pacing_qa import analyze_assembly_plan, load_pacing_profile  # noqa: E402
 from shot_reuse_qa import analyze_shot_reuse, load_shot_reuse_profile  # noqa: E402
 
@@ -38,10 +38,13 @@ def main() -> int:
         "repair_applied": False,
     }
 
-    needs_repair = (
-        not pacing_before.get("ok")
-        or not reuse_before.get("ok")
-    )
+    preservation_preview = preserve_continuous_shots(assembly)
+    pending_merges = preservation_preview["action_count"] > 0
+    qa_ok = bool(pacing_before.get("ok")) and bool(reuse_before.get("ok"))
+    needs_repair = (not qa_ok) or pending_merges
+    result["preservation_candidate_count"] = preservation_preview["action_count"]
+    result["source_range_replanned"] = False
+    result["qa_ok"] = qa_ok
 
     if args.apply_repair and needs_repair:
         repaired = repair_assembly_plan(
@@ -50,17 +53,36 @@ def main() -> int:
             reuse_profile_path=args.reuse_profile,
         )
         result["repair_applied"] = True
+        result["normalization_applied"] = True
+        result["normalization_complete"] = True
         result["repair"] = repaired
         result["after_qa"] = repaired["after"]
         result["assembly_plan"] = repaired["assembly_plan"]
         result["ok"] = repaired["ok"]
+        result["qa_ok"] = repaired["ok"]
         result["converged"] = repaired.get("converged", False)
         result["status"] = repaired.get("status")
+        result["source_range_replanned"] = False
     else:
+        result["repair_applied"] = False
+        result["normalization_applied"] = False
+        result["assembly_plan"] = assembly
         result["after_qa"] = result["before_qa"]
-        result["ok"] = pacing_before["ok"] and reuse_before["ok"]
-        result["converged"] = result["ok"]
-        result["status"] = "ASSEMBLY_REPAIR_CONVERGED" if result["ok"] else "ASSEMBLY_REPAIR_NOT_CONVERGED"
+        result["source_range_replanned"] = False
+        if pending_merges:
+            result["normalization_complete"] = False
+            result["ok"] = False
+            result["converged"] = False
+            result["status"] = "CONTINUOUS_SHOT_NORMALIZATION_PENDING"
+            result["note"] = (
+                "Preview only. Adjacent shots can be joined, but --apply-repair was not run, "
+                "so normalization is not complete."
+            )
+        else:
+            result["normalization_complete"] = True
+            result["ok"] = qa_ok
+            result["converged"] = qa_ok
+            result["status"] = "ASSEMBLY_REPAIR_CONVERGED" if qa_ok else "ASSEMBLY_REPAIR_NOT_CONVERGED"
 
     out = json.dumps(result, indent=2, ensure_ascii=False)
     if args.out:

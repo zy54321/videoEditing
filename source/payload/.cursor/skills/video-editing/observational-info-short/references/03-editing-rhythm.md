@@ -47,6 +47,8 @@ Historical range hints — adapt to narration cadence, asset motion, and beat fu
 
 These are **SOFT_GUIDANCE** only. A beat may run shorter or longer when narration, motion, or **BREATH** function demands it. Never enforce timers over semantic completeness.
 
+The ranges suggest how often the picture may change. They do not require one Clip per Beat or per narration sentence. When the same action is still playing and no cut has a purpose, keep that passage as one continuous Clip across the beat change.
+
 ## Prefer When
 
 - Cut on narration semantic turn or new evidence requirement

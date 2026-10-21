@@ -10,12 +10,18 @@ authority:
 
 rules:
   - beat_is_primary_rhythm_authority
+  - narration_or_beat_change_is_not_a_mandatory_picture_cut
+  - continuous_shot_preservation
   - no_single_visual_across_unrelated_semantic_beats_without_reason
   - on_beat_change_prefer:
-      - new_source_range
-      - alternate_asset
-      - same_asset_new_range
-      - static_reframe_variation
+      - continue_current_shot_when_source_time_abuts
+      - new_source_only_when_picture_intent_changes
+  - long_take_is_not_repaired_by_asset_swap
+  - long_take_hold_does_not_block_when_nothing_else_fails
+  - timeline_positions_must_abut_before_merge
+  - resolve_clip_info_frames_must_match_before_and_after_merge
+  - replan_continuous_source_range_is_a_suggestion_not_an_executed_replan
+  - do_not_fill_source_gaps_when_joining_trims
   - do_not_auto_escalate_to:
       - visual.motion.push_in
       - visual.motion.pan
@@ -32,6 +38,8 @@ thresholds:
   notes: "V1 heuristic only — editorial_reason / intentional_flash may exempt."
 
 repair_priority:
+  - clip.merge_continuous_source
+  - replan_continuous_source_range
   - clip.source_range
   - clip.assemble
   - visual.reframe.static

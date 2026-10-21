@@ -787,8 +787,10 @@ audio.music.level_under_voice
 - pacing profile: `runtime/informational-short-pacing-v1-profile.yaml`
 - black-bar profile: `runtime/black-bar-reframe-qa-profile.yaml`
 - Blueprint `assembly_plan.shots[]` must carry `beat_id`, `shot_id`, `source_asset`, `source_range`, `timeline_duration_sec`, `reframe`
-- pacing: `pacing-qa.py` — `>6s` warning, `>10s` unchanged cross-beat span → `PACING_REPAIR_CANDIDATE`
-- repair priority: `clip.source_range` + `clip.assemble` — **not** push-in / pan / ResolveFX first
+- pacing: `pacing-qa.py` — `>6s` warning, `>10s` unchanged cross-beat span → `PACING_REPAIR_CANDIDATE`. A single `long_take_hold` (`>=10s`, no other fault) is a non-blocking note
+- continuous-shot closure: `assembly-qa-repair-loop.py --apply-repair`. This is the production entry that actually joins legal adjacent shots. `pacing-qa.py`, or the loop without `--apply-repair`, is preview only. Preview that still has merge candidates is `CONTINUOUS_SHOT_NORMALIZATION_PENDING` and is not normalization complete
+- `replan_continuous_source_range` is a suggestion. It must not be reported as an executed source-range rewrite
+- repair priority: `clip.merge_continuous_source` when timeline and Resolve source frames abut → otherwise `clip.source_range` + `clip.assemble` — **not** push-in / pan / ResolveFX first
 - black-bar loop: assemble → `visual.reframe.static` → `black-bar-qa.py` → `REPAIR_REQUIRED` → adjust scale/position → **re-QA** (max 3 attempts)
 - **R3 static portrait apply (landscape → 9:16):** MCP `timeline.probe_timeline_structure` → `production/timeline-probe.json` → `invoke-static-portrait-reframe.ps1` (`-Apply` writes zoom-only `static-portrait-reframe.v1` via `apply-static-portrait-reframe-bulk.py` or MCP `bulk_set_item_properties`). **MUST NOT** use ad-hoc `build_reframe_bulk.py` crop+zoom scripts.
 - post-render: `final-artifact-qa.ps1` embeds `black-bar-qa.py` — `REPAIR_REQUIRED` / `REFRAME_OWNER_REVIEW_REQUIRED` = fail-closed

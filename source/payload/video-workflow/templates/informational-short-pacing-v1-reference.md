@@ -30,8 +30,10 @@ Profile: `runtime/informational-short-pacing-v1-profile.yaml`
 | **> 10s** + unchanged visual across semantic beats | `PACING_REPAIR_CANDIDATE` |
 | `editorial_reason` / `pacing_exempt` | `PACING_EXEMPT` |
 
-Repair priority: `clip.source_range` → `clip.assemble` → `visual.reframe.static`  
-**Forbidden first:** push-in, pan, ResolveFX, Fusion motion.
+Repair priority: `clip.merge_continuous_source` only when the finished timeline abuts and Resolve `clip_info` source frames match before and after the join → `replan_continuous_source_range` is a suggestion when a source-frame gap must not be filled, and it does not rewrite in/out by itself → `clip.source_range` → `clip.assemble` → `visual.reframe.static`  
+A continuous long take is a non-blocking hold when nothing else fails. It is not an automatic asset swap.  
+**Forbidden first:** push-in, pan, ResolveFX, Fusion motion. Filling skipped source frames to hide a gap.  
+Production closure for a legal join is `assembly-qa-repair-loop.py --apply-repair`. Without that flag the loop is a preview and must not report normalization as complete.
 
 ---
 

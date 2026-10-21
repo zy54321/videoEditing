@@ -41,6 +41,7 @@ beats: []
 #   color_effect_intent: natural
 #   asset_selection_guidance: ""
 #   shot_plan: null # optional list — expand only when beat requires detail
+#   A beat or narration sentence change does not by itself start a new clip.
 #   capability_requirements:
 #     required:
 #       - visual.reframe.static

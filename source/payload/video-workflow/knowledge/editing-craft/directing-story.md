@@ -70,4 +70,6 @@ Default planning unit: **Beat**.
 
 Shots are expanded **on demand** when a beat requires detailed continuity or special treatment.
 
+A new beat does not require a new clip. Continuous action stays on the shot already playing until the picture itself needs to change.
+
 See: `templates/edit-blueprint.yaml`
